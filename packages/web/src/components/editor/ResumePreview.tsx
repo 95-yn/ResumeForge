@@ -8,27 +8,28 @@ const EDIT_SCRIPT = `
   document.querySelectorAll('[data-field]').forEach(function(el) {
     el.style.cursor = 'text';
     el.style.outline = 'none';
-    el.style.transition = 'box-shadow 0.15s';
+    el.style.borderRadius = '2px';
+    el.style.transition = 'background 0.15s';
     el.addEventListener('mouseenter', function() {
-      if (el !== activeEl) el.style.boxShadow = 'inset 0 0 0 1px rgba(59,130,246,0.3)';
+      if (el !== activeEl) el.style.background = 'rgba(0,0,0,0.04)';
     });
     el.addEventListener('mouseleave', function() {
-      if (el !== activeEl) el.style.boxShadow = 'none';
+      if (el !== activeEl) el.style.background = '';
     });
     el.addEventListener('dblclick', function(e) {
       e.stopPropagation();
       if (activeEl && activeEl !== el) {
         activeEl.contentEditable = 'false';
-        activeEl.style.boxShadow = 'none';
+        activeEl.style.background = '';
       }
       activeEl = el;
       el.contentEditable = 'true';
-      el.style.boxShadow = 'inset 0 0 0 2px rgba(59,130,246,0.5)';
+      el.style.background = 'rgba(0,0,0,0.04)';
       el.focus();
     });
     el.addEventListener('blur', function() {
       el.contentEditable = 'false';
-      el.style.boxShadow = 'none';
+      el.style.background = '';
       activeEl = null;
       parent.postMessage({
         type: 'resume-field-update',
