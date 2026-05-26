@@ -7,7 +7,9 @@ export function FieldPanel() {
   const { schema, resume, activeSection, updateField, updateArrayItem, addArrayItem, removeArrayItem } = useEditorStore();
 
   if (!schema || !resume || !activeSection) {
-    return <div style={{ width: 320, borderLeft: '1px solid #e8e8e8', padding: 16 }}><p style={{ color: '#999' }}>点击左侧模块开始编辑</p></div>;
+    return <div style={{ width: 340, borderLeft: '1px solid #e8e8e8', padding: 24, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <p style={{ color: '#bbb', fontSize: 14 }}>← 点击左侧模块开始编辑</p>
+    </div>;
   }
 
   const section = schema.sections.find((s) => s.key === activeSection);
@@ -18,8 +20,8 @@ export function FieldPanel() {
   const sectionData = resume[activeSection] as Record<string, unknown>;
 
   return (
-    <div style={{ width: 320, borderLeft: '1px solid #e8e8e8', padding: 16, overflowY: 'auto' }}>
-      <h3 style={{ marginBottom: 16 }}>{section.label}</h3>
+    <div style={{ width: 340, borderLeft: '1px solid #e8e8e8', padding: 20, overflowY: 'auto', height: '100%' }}>
+      <h3 style={{ marginBottom: 16, fontSize: 16, fontWeight: 600 }}>{section.label}</h3>
       {section.fields.map((field) => (
         <div key={field.key} style={{ marginBottom: 12 }}>
           <label style={{ display: 'block', marginBottom: 4, fontSize: 13, color: '#555' }}>{field.label} {field.required && <span style={{ color: 'red' }}>*</span>}</label>
@@ -41,9 +43,9 @@ function ArrayFieldPanel({ section }: { section: SectionSchema }) {
   const items = (resume![activeSection!] as Record<string, unknown>[]) || [];
 
   return (
-    <div style={{ width: 320, borderLeft: '1px solid #e8e8e8', padding: 16, overflowY: 'auto' }}>
+    <div style={{ width: 340, borderLeft: '1px solid #e8e8e8', padding: 20, overflowY: 'auto', height: '100%' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <h3 style={{ margin: 0 }}>{section.label}</h3>
+        <h3 style={{ margin: 0, fontSize: 16, fontWeight: 600 }}>{section.label}</h3>
         <Button size="small" icon={<PlusOutlined />} onClick={() => addArrayItem(activeSection!)}>添加</Button>
       </div>
       {items.map((item, index) => (
