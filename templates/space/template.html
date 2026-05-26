@@ -1,0 +1,69 @@
+<div class="resume space">
+  <header class="sp-header">
+    <h1 data-field="basics.name">{{basics.name}}</h1>
+    {{#if basics.title}}<p class="sp-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+    <div class="sp-contacts">
+      {{#if basics.email}}<span data-field="basics.email">{{basics.email}}</span>{{/if}}
+      {{#if basics.phone}}<span data-field="basics.phone">{{basics.phone}}</span>{{/if}}
+      {{#if basics.location}}<span data-field="basics.location">{{basics.location}}</span>{{/if}}
+    </div>
+  </header>
+  {{#if basics.summary}}
+  <section class="sp-section">
+    <h2 class="sp-heading">Summary</h2>
+    <p class="sp-body" data-field="basics.summary">{{{basics.summary}}}</p>
+  </section>
+  {{/if}}
+  {{#if experience.length}}
+  <section class="sp-section">
+    <h2 class="sp-heading">Experience</h2>
+    {{#each experience}}
+    <div class="sp-entry">
+      <div class="sp-entry-row">
+        <span class="sp-org" data-field="experience.{{@index}}.company">{{company}}</span>
+        <span class="sp-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> — <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+      </div>
+      <p class="sp-pos" data-field="experience.{{@index}}.position">{{position}}</p>
+      {{#if highlights.length}}<ul class="sp-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+  {{#if education.length}}
+  <section class="sp-section">
+    <h2 class="sp-heading">Education</h2>
+    {{#each education}}
+    <div class="sp-entry">
+      <div class="sp-entry-row">
+        <span class="sp-org" data-field="education.{{@index}}.institution">{{institution}}</span>
+        <span class="sp-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> — <span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+      </div>
+      <p class="sp-pos"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></p>
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+  {{#if skills.length}}
+  <section class="sp-section">
+    <h2 class="sp-heading">Skills</h2>
+    <div class="sp-skills">
+      {{#each skills}}<span class="sp-skill"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="sp-lv" data-field="skills.{{@index}}.level"> / {{level}}</span>{{/if}}</span>{{/each}}
+    </div>
+  </section>
+  {{/if}}
+  {{#if projects.length}}
+  <section class="sp-section">
+    <h2 class="sp-heading">Projects</h2>
+    {{#each projects}}
+    <div class="sp-entry">
+      <div class="sp-entry-row">
+        <span class="sp-org" data-field="projects.{{@index}}.name">{{name}}</span>
+        {{#if role}}<span class="sp-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+      </div>
+      {{#if description}}<p class="sp-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if highlights.length}}<ul class="sp-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+</div>

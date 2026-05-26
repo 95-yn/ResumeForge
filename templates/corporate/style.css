@@ -1,0 +1,22 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+.resume.corporate { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Helvetica Neue", "Arial", "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 10pt; line-height: 1.6; color: #1E293B; background: #fff; }
+.corp-header { background: #1E40AF; color: #fff; padding: 18mm 22mm 14mm; }
+.corp-header h1 { font-size: 22pt; font-weight: 700; letter-spacing: 1px; color: #fff; }
+.corp-title { font-size: 11pt; color: rgba(255,255,255,0.8); margin-top: 4px; }
+.corp-contacts { margin-top: 10px; display: flex; gap: 18px; flex-wrap: wrap; }
+.corp-contact { font-size: 9pt; color: rgba(255,255,255,0.85); }
+.corp-section { padding: 0 22mm; margin-top: 14px; }
+.corp-section-title { font-size: 9pt; font-weight: 700; color: #1E40AF; text-transform: uppercase; letter-spacing: 2px; border-bottom: 2px solid #1E40AF; padding-bottom: 4px; margin-bottom: 8px; }
+.corp-entry { margin-bottom: 10px; }
+.corp-table { width: 100%; border-collapse: collapse; }
+.corp-td-company { font-size: 10.5pt; font-weight: 700; color: #1E293B; width: 40%; }
+.corp-td-pos { font-size: 9.5pt; color: #475569; width: 35%; }
+.corp-td-date { font-size: 9pt; color: #64748B; text-align: right; white-space: nowrap; }
+.corp-body { font-size: 9.5pt; color: #475569; margin-top: 4px; line-height: 1.6; }
+.corp-list { margin-top: 5px; padding-left: 18px; }
+.corp-list li { font-size: 9.5pt; color: #374151; margin-bottom: 3px; }
+.corp-skills { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; }
+.corp-skill-row { display: flex; justify-content: space-between; font-size: 9.5pt; border-bottom: 1px solid #F1F5F9; padding: 3px 0; }
+.corp-skill-name { color: #1E293B; font-weight: 500; }
+.corp-skill-level { color: #1E40AF; font-size: 9pt; }
+@media print { .resume.corporate { margin: 0; } .corp-section { padding: 0 20mm; } .corp-header { padding: 16mm 20mm 12mm; } }

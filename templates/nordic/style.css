@@ -1,0 +1,22 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+.resume.nordic { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 24mm 24mm; font-family: "Helvetica Neue", "Arial", "PingFang SC", sans-serif; font-size: 10pt; line-height: 1.7; color: #334155; background: #F8FAFC; }
+.nd-header { margin-bottom: 24px; }
+.nd-header h1 { font-size: 24pt; font-weight: 300; color: #1E293B; letter-spacing: 1px; }
+.nd-title { font-size: 10.5pt; color: #94A3B8; margin-top: 4px; font-weight: 300; letter-spacing: 1px; }
+.nd-contacts { margin-top: 8px; display: flex; gap: 16px; flex-wrap: wrap; font-size: 9pt; color: #94A3B8; }
+.nd-section { margin-bottom: 20px; }
+.nd-summary { font-size: 10pt; color: #475569; line-height: 1.8; }
+.nd-heading { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; color: #94A3B8; margin-bottom: 14px; }
+.nd-entry { display: grid; grid-template-columns: 80px 1fr; gap: 0 16px; margin-bottom: 14px; }
+.nd-date-col { font-size: 8.5pt; color: #94A3B8; display: flex; flex-direction: column; gap: 0; padding-top: 2px; }
+.nd-dash { color: #CBD5E1; }
+.nd-entry-body { }
+.nd-main { font-size: 10.5pt; font-weight: 600; color: #1E293B; }
+.nd-sub { font-size: 9.5pt; color: #64748B; margin-top: 1px; }
+.nd-text { font-size: 9.5pt; color: #475569; margin-top: 4px; }
+.nd-list { margin-top: 5px; padding-left: 14px; }
+.nd-list li { font-size: 9.5pt; color: #475569; margin-bottom: 3px; }
+.nd-skills { display: flex; flex-wrap: wrap; gap: 8px; }
+.nd-skill { font-size: 9.5pt; color: #475569; border: 1px solid #CBD5E1; padding: 3px 12px; border-radius: 4px; }
+.nd-skill-lv { color: #94A3B8; }
+@media print { .resume.nordic { margin: 0; padding: 22mm 22mm; background: #fff; } }

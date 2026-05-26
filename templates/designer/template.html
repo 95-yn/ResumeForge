@@ -1,0 +1,74 @@
+<div class="resume designer">
+  <aside class="ds-sidebar">
+    {{#if basics.avatar}}<img class="ds-avatar" src="{{basics.avatar}}" alt="" />{{/if}}
+    <h1 data-field="basics.name">{{basics.name}}</h1>
+    {{#if basics.title}}<p class="ds-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+    <div class="ds-divider"></div>
+    <div class="ds-contact-section">
+      {{#if basics.email}}<div class="ds-contact-item" data-field="basics.email">{{basics.email}}</div>{{/if}}
+      {{#if basics.phone}}<div class="ds-contact-item" data-field="basics.phone">{{basics.phone}}</div>{{/if}}
+      {{#if basics.location}}<div class="ds-contact-item" data-field="basics.location">{{basics.location}}</div>{{/if}}
+    </div>
+    {{#if skills.length}}
+    <div class="ds-skill-section">
+      <h3 class="ds-sidebar-title">技能</h3>
+      {{#each skills}}<div class="ds-skill"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="ds-skill-dot" data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</div>{{/each}}
+    </div>
+    {{/if}}
+    {{#if education.length}}
+    <div class="ds-edu-section">
+      <h3 class="ds-sidebar-title">教育</h3>
+      {{#each education}}
+      <div class="ds-edu-item">
+        <span class="ds-edu-school" data-field="education.{{@index}}.institution">{{institution}}</span>
+        <span class="ds-edu-major"><span data-field="education.{{@index}}.area">{{area}}</span></span>
+        <span class="ds-edu-deg" data-field="education.{{@index}}.studyType">{{studyType}}</span>
+        <span class="ds-edu-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> — <span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+      </div>
+      {{/each}}
+    </div>
+    {{/if}}
+  </aside>
+  <main class="ds-main">
+    {{#if basics.summary}}
+    <section class="ds-section">
+      <h2 class="ds-section-title">关于我</h2>
+      <p class="ds-body" data-field="basics.summary">{{{basics.summary}}}</p>
+    </section>
+    {{/if}}
+    {{#if experience.length}}
+    <section class="ds-section">
+      <h2 class="ds-section-title">工作经历</h2>
+      {{#each experience}}
+      <div class="ds-entry">
+        <div class="ds-entry-head">
+          <div>
+            <span class="ds-company" data-field="experience.{{@index}}.company">{{company}}</span>
+            <span class="ds-position" data-field="experience.{{@index}}.position">{{position}}</span>
+          </div>
+          <span class="ds-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> — <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+        </div>
+        {{#if highlights.length}}<ul class="ds-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+      </div>
+      {{/each}}
+    </section>
+    {{/if}}
+    {{#if projects.length}}
+    <section class="ds-section">
+      <h2 class="ds-section-title">项目经历</h2>
+      {{#each projects}}
+      <div class="ds-entry">
+        <div class="ds-entry-head">
+          <div>
+            <span class="ds-company" data-field="projects.{{@index}}.name">{{name}}</span>
+            {{#if role}}<span class="ds-position" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+          </div>
+        </div>
+        {{#if description}}<p class="ds-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+        {{#if highlights.length}}<ul class="ds-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+      </div>
+      {{/each}}
+    </section>
+    {{/if}}
+  </main>
+</div>

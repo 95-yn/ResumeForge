@@ -1,0 +1,70 @@
+<div class="resume banking">
+  <header class="bk-header">
+    <h1 data-field="basics.name">{{basics.name}}</h1>
+    {{#if basics.title}}<p class="bk-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+    <div class="bk-divider"></div>
+    <div class="bk-contacts">
+      {{#if basics.email}}<span class="bk-contact" data-field="basics.email">{{basics.email}}</span>{{/if}}
+      {{#if basics.phone}}<span class="bk-contact" data-field="basics.phone">{{basics.phone}}</span>{{/if}}
+      {{#if basics.location}}<span class="bk-contact" data-field="basics.location">{{basics.location}}</span>{{/if}}
+    </div>
+  </header>
+  {{#if basics.summary}}
+  <section class="bk-section">
+    <h2 class="bk-section-title">个人陈述</h2>
+    <p class="bk-body" data-field="basics.summary">{{{basics.summary}}}</p>
+  </section>
+  {{/if}}
+  {{#if experience.length}}
+  <section class="bk-section">
+    <h2 class="bk-section-title">工作经历</h2>
+    {{#each experience}}
+    <div class="bk-entry">
+      <div class="bk-entry-top">
+        <span class="bk-company" data-field="experience.{{@index}}.company">{{company}}</span>
+        <span class="bk-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> — <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+      </div>
+      <p class="bk-position" data-field="experience.{{@index}}.position">{{position}}</p>
+      {{#if highlights.length}}<ul class="bk-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+  {{#if education.length}}
+  <section class="bk-section">
+    <h2 class="bk-section-title">教育背景</h2>
+    {{#each education}}
+    <div class="bk-entry">
+      <div class="bk-entry-top">
+        <span class="bk-company" data-field="education.{{@index}}.institution">{{institution}}</span>
+        <span class="bk-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> — <span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+      </div>
+      <p class="bk-position"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></p>
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+  {{#if skills.length}}
+  <section class="bk-section">
+    <h2 class="bk-section-title">专业技能</h2>
+    <div class="bk-skills">
+      {{#each skills}}<div class="bk-skill"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}} — <span data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</div>{{/each}}
+    </div>
+  </section>
+  {{/if}}
+  {{#if projects.length}}
+  <section class="bk-section">
+    <h2 class="bk-section-title">主要项目</h2>
+    {{#each projects}}
+    <div class="bk-entry">
+      <div class="bk-entry-top">
+        <span class="bk-company" data-field="projects.{{@index}}.name">{{name}}</span>
+        {{#if role}}<span class="bk-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+      </div>
+      {{#if description}}<p class="bk-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if highlights.length}}<ul class="bk-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+</div>

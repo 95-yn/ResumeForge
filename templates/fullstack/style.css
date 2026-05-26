@@ -1,0 +1,24 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+.resume.fullstack { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Inter", "Helvetica Neue", "Arial", "PingFang SC", sans-serif; font-size: 10pt; line-height: 1.6; color: #1E293B; background: #fff; }
+.fs-header { background: #1E293B; color: #fff; padding: 16mm 22mm 14mm; }
+.fs-header-inner h1 { font-size: 22pt; font-weight: 800; color: #F1F5F9; letter-spacing: -0.5px; }
+.fs-title { font-size: 10.5pt; color: #64748B; margin-top: 4px; }
+.fs-contacts { margin-top: 10px; display: flex; gap: 16px; flex-wrap: wrap; }
+.fs-contacts span { font-size: 9pt; color: #94A3B8; }
+.fs-body { padding: 0 22mm; }
+.fs-section { margin-top: 16px; }
+.fs-section-title { font-size: 8.5pt; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #334155; border-bottom: 1px solid #E2E8F0; padding-bottom: 4px; margin-bottom: 10px; }
+.fs-entry { margin-bottom: 12px; }
+.fs-entry-head { display: flex; justify-content: space-between; align-items: flex-start; }
+.fs-entry-main { display: flex; flex-direction: column; }
+.fs-company { font-size: 10.5pt; font-weight: 700; color: #0F172A; }
+.fs-pos { font-size: 9.5pt; color: #64748B; }
+.fs-date { font-size: 9pt; color: #94A3B8; white-space: nowrap; }
+.fs-text { font-size: 9.5pt; color: #475569; margin-top: 4px; }
+.fs-list { margin-top: 5px; padding-left: 16px; }
+.fs-list li { font-size: 9.5pt; color: #475569; margin-bottom: 3px; }
+.fs-bottom { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+.fs-skills { display: flex; flex-wrap: wrap; gap: 6px; }
+.fs-skill { font-size: 9pt; color: #334155; background: #F1F5F9; border: 1px solid #E2E8F0; padding: 2px 10px; border-radius: 4px; }
+.fs-lv { color: #64748B; font-size: 8.5pt; }
+@media print { .resume.fullstack { margin: 0; } .fs-header { padding: 14mm 20mm 12mm; } .fs-body { padding: 0 20mm; } }

@@ -1,0 +1,37 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+.resume.terminal { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Menlo", "Monaco", "Courier New", "Consolas", monospace; font-size: 9pt; line-height: 1.6; color: #4ADE80; background: #0A0A0A; }
+.tm-title-bar { background: #1C1C1C; border-bottom: 1px solid #2D2D2D; padding: 8px 14px; display: flex; align-items: center; gap: 6px; }
+.tm-dot { width: 12px; height: 12px; border-radius: 50%; }
+.tm-red { background: #FF5F56; }
+.tm-yellow { background: #FEBC2E; }
+.tm-green { background: #28C840; }
+.tm-bar-title { font-size: 9pt; color: #888; margin-left: 6px; }
+.tm-body { padding: 16px 20mm 20mm; }
+.tm-prompt { color: #888; margin-bottom: 5px; font-size: 9pt; }
+.tm-user { color: #4ADE80; }
+.tm-at { color: #888; }
+.tm-path { color: #60A5FA; }
+.tm-dollar { color: #E2E8F0; margin: 0 4px; }
+.tm-cmd { color: #FDE68A; }
+.tm-block { margin-bottom: 14px; padding-left: 0; }
+.tm-label { font-size: 8pt; color: #6B7280; margin-bottom: 6px; }
+.tm-name { font-size: 16pt; font-weight: 700; color: #4ADE80; letter-spacing: 1px; }
+.tm-title-text { font-size: 9.5pt; color: #60A5FA; margin-top: 3px; }
+.tm-contacts { margin-top: 6px; display: flex; gap: 14px; flex-wrap: wrap; }
+.tm-contact { font-size: 8.5pt; color: #A1A1AA; }
+.tm-text { font-size: 9pt; color: #D4D4D8; }
+.tm-entry { margin-bottom: 10px; }
+.tm-entry-row { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0; }
+.tm-green-text { color: #4ADE80; font-weight: 700; }
+.tm-cyan-text { color: #67E8F9; }
+.tm-gray-text { color: #6B7280; margin-left: 8px; font-size: 8.5pt; }
+.tm-separator { color: #3F3F46; margin: 0 4px; }
+.tm-list { list-style: none; padding-left: 12px; margin-top: 4px; }
+.tm-list li { font-size: 9pt; color: #D4D4D8; margin-bottom: 3px; }
+.tm-bullet { color: #4ADE80; margin-right: 4px; }
+.tm-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tm-tag { font-size: 8.5pt; color: #0A0A0A; background: #4ADE80; padding: 1px 8px; border-radius: 2px; }
+.tm-tag-lv { color: #065F46; }
+.tm-cursor { color: #4ADE80; animation: blink 1s step-end infinite; font-size: 11pt; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+@media print { .resume.terminal { margin: 0; } .tm-body { padding: 14px 18mm 18mm; } .tm-cursor { display: none; } }

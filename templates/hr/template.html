@@ -1,0 +1,80 @@
+<div class="resume hr">
+  <header class="hr-header">
+    <div class="hr-avatar-area">
+      {{#if basics.avatar}}<img class="hr-avatar" src="{{basics.avatar}}" alt="" />{{/if}}
+    </div>
+    <div class="hr-header-info">
+      <h1 data-field="basics.name">{{basics.name}}</h1>
+      {{#if basics.title}}<p class="hr-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+      <div class="hr-contacts">
+        {{#if basics.email}}<span class="hr-contact" data-field="basics.email">{{basics.email}}</span>{{/if}}
+        {{#if basics.phone}}<span class="hr-contact" data-field="basics.phone">{{basics.phone}}</span>{{/if}}
+        {{#if basics.location}}<span class="hr-contact" data-field="basics.location">{{basics.location}}</span>{{/if}}
+      </div>
+    </div>
+  </header>
+  {{#if basics.summary}}
+  <section class="hr-section">
+    <h2 class="hr-section-title">个人简介</h2>
+    <p class="hr-body" data-field="basics.summary">{{{basics.summary}}}</p>
+  </section>
+  {{/if}}
+  {{#if experience.length}}
+  <section class="hr-section">
+    <h2 class="hr-section-title">工作经历</h2>
+    {{#each experience}}
+    <div class="hr-entry">
+      <div class="hr-entry-head">
+        <div class="hr-entry-meta">
+          <span class="hr-company" data-field="experience.{{@index}}.company">{{company}}</span>
+          <span class="hr-position" data-field="experience.{{@index}}.position">{{position}}</span>
+        </div>
+        <span class="hr-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> — <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+      </div>
+      {{#if highlights.length}}<ul class="hr-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+  {{#if education.length}}
+  <section class="hr-section">
+    <h2 class="hr-section-title">教育背景</h2>
+    {{#each education}}
+    <div class="hr-entry">
+      <div class="hr-entry-head">
+        <div class="hr-entry-meta">
+          <span class="hr-company" data-field="education.{{@index}}.institution">{{institution}}</span>
+          <span class="hr-position"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></span>
+        </div>
+        <span class="hr-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> — <span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+      </div>
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+  {{#if skills.length}}
+  <section class="hr-section">
+    <h2 class="hr-section-title">专业技能</h2>
+    <div class="hr-skills">
+      {{#each skills}}<div class="hr-skill-chip"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="hr-skill-level" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</div>{{/each}}
+    </div>
+  </section>
+  {{/if}}
+  {{#if projects.length}}
+  <section class="hr-section">
+    <h2 class="hr-section-title">项目经历</h2>
+    {{#each projects}}
+    <div class="hr-entry">
+      <div class="hr-entry-head">
+        <div class="hr-entry-meta">
+          <span class="hr-company" data-field="projects.{{@index}}.name">{{name}}</span>
+          {{#if role}}<span class="hr-position" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+        </div>
+      </div>
+      {{#if description}}<p class="hr-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if highlights.length}}<ul class="hr-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+</div>

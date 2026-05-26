@@ -1,0 +1,87 @@
+<div class="resume devops">
+  <header class="dv-header">
+    <div class="dv-header-inner">
+      <h1 data-field="basics.name">{{basics.name}}</h1>
+      {{#if basics.title}}<p class="dv-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+      <div class="dv-contacts">
+        {{#if basics.email}}<span data-field="basics.email">{{basics.email}}</span>{{/if}}
+        {{#if basics.phone}}<span data-field="basics.phone">{{basics.phone}}</span>{{/if}}
+        {{#if basics.location}}<span data-field="basics.location">{{basics.location}}</span>{{/if}}
+      </div>
+    </div>
+  </header>
+  {{#if basics.summary}}
+  <section class="dv-section">
+    <h2 class="dv-section-title">OVERVIEW</h2>
+    <p class="dv-body" data-field="basics.summary">{{{basics.summary}}}</p>
+  </section>
+  {{/if}}
+  {{#if experience.length}}
+  <section class="dv-section">
+    <h2 class="dv-section-title">PIPELINE · EXPERIENCE</h2>
+    {{#each experience}}
+    <div class="dv-pipeline-entry">
+      <div class="dv-pipe-left">
+        <div class="dv-pipe-dot"></div>
+        <div class="dv-pipe-line"></div>
+      </div>
+      <div class="dv-pipe-content">
+        <div class="dv-pipe-head">
+          <span class="dv-company" data-field="experience.{{@index}}.company">{{company}}</span>
+          <span class="dv-pos" data-field="experience.{{@index}}.position">{{position}}</span>
+          <span class="dv-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span>–<span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+        </div>
+        {{#if highlights.length}}<ul class="dv-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+      </div>
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+  {{#if projects.length}}
+  <section class="dv-section">
+    <h2 class="dv-section-title">DEPLOYMENTS · PROJECTS</h2>
+    {{#each projects}}
+    <div class="dv-pipeline-entry">
+      <div class="dv-pipe-left">
+        <div class="dv-pipe-dot dv-dot-green"></div>
+        <div class="dv-pipe-line"></div>
+      </div>
+      <div class="dv-pipe-content">
+        <div class="dv-pipe-head">
+          <span class="dv-company" data-field="projects.{{@index}}.name">{{name}}</span>
+          {{#if role}}<span class="dv-pos" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+        </div>
+        {{#if description}}<p class="dv-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+        {{#if highlights.length}}<ul class="dv-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+      </div>
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+  <div class="dv-two-col">
+    <div>
+      {{#if education.length}}
+      <section class="dv-section">
+        <h2 class="dv-section-title">EDUCATION</h2>
+        {{#each education}}
+        <div class="dv-edu">
+          <span class="dv-company" data-field="education.{{@index}}.institution">{{institution}}</span>
+          <span class="dv-pos"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></span>
+          <span class="dv-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span>–<span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+        </div>
+        {{/each}}
+      </section>
+      {{/if}}
+    </div>
+    <div>
+      {{#if skills.length}}
+      <section class="dv-section">
+        <h2 class="dv-section-title">STACK · SKILLS</h2>
+        <div class="dv-tags">
+          {{#each skills}}<span class="dv-tag"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="dv-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
+        </div>
+      </section>
+      {{/if}}
+    </div>
+  </div>
+</div>

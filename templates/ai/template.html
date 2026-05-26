@@ -1,0 +1,75 @@
+<div class="resume ai">
+  <header class="ai-header">
+    <div class="ai-header-inner">
+      <h1 data-field="basics.name">{{basics.name}}</h1>
+      {{#if basics.title}}<p class="ai-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+      <div class="ai-contacts">
+        {{#if basics.email}}<span data-field="basics.email">{{basics.email}}</span>{{/if}}
+        {{#if basics.phone}}<span data-field="basics.phone">{{basics.phone}}</span>{{/if}}
+        {{#if basics.location}}<span data-field="basics.location">{{basics.location}}</span>{{/if}}
+      </div>
+    </div>
+  </header>
+  <div class="ai-body">
+    {{#if basics.summary}}
+    <section class="ai-section">
+      <h2 class="ai-section-title">Overview</h2>
+      <p class="ai-text" data-field="basics.summary">{{{basics.summary}}}</p>
+    </section>
+    {{/if}}
+    {{#if experience.length}}
+    <section class="ai-section">
+      <h2 class="ai-section-title">Experience</h2>
+      {{#each experience}}
+      <div class="ai-entry">
+        <div class="ai-entry-head">
+          <div>
+            <span class="ai-company" data-field="experience.{{@index}}.company">{{company}}</span>
+            <span class="ai-pos" data-field="experience.{{@index}}.position">{{position}}</span>
+          </div>
+          <span class="ai-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span>–<span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+        </div>
+        {{#if highlights.length}}<ul class="ai-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+      </div>
+      {{/each}}
+    </section>
+    {{/if}}
+    {{#if projects.length}}
+    <section class="ai-section">
+      <h2 class="ai-section-title">Research & Projects</h2>
+      {{#each projects}}
+      <div class="ai-entry">
+        <div class="ai-entry-head">
+          <span class="ai-company" data-field="projects.{{@index}}.name">{{name}}</span>
+          {{#if role}}<span class="ai-pos" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+        </div>
+        {{#if description}}<p class="ai-text" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+        {{#if highlights.length}}<ul class="ai-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+      </div>
+      {{/each}}
+    </section>
+    {{/if}}
+    <div class="ai-bottom">
+      {{#if education.length}}
+      <section class="ai-section">
+        <h2 class="ai-section-title">Education</h2>
+        {{#each education}}
+        <div class="ai-edu">
+          <span class="ai-company" data-field="education.{{@index}}.institution">{{institution}}</span>
+          <span class="ai-pos"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></span>
+          <span class="ai-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span>–<span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+        </div>
+        {{/each}}
+      </section>
+      {{/if}}
+      {{#if skills.length}}
+      <section class="ai-section">
+        <h2 class="ai-section-title">Technical Stack</h2>
+        <div class="ai-skills">
+          {{#each skills}}<span class="ai-skill"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="ai-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
+        </div>
+      </section>
+      {{/if}}
+    </div>
+  </div>
+</div>

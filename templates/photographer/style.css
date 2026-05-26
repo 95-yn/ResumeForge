@@ -1,0 +1,24 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+.resume.photographer { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Georgia", "Times New Roman", serif; font-size: 10pt; line-height: 1.7; color: #1a1a1a; background: #fff; }
+.ph-header { background: #1C1C1C; color: #fff; padding: 24mm 22mm 18mm; }
+.ph-header-inner h1 { font-size: 30pt; font-weight: 400; color: #fff; letter-spacing: 3px; font-family: "Georgia", serif; line-height: 1.1; }
+.ph-title { font-size: 11pt; color: rgba(255,255,255,0.65); margin-top: 8px; letter-spacing: 3px; text-transform: uppercase; font-family: "Helvetica Neue", sans-serif; font-weight: 300; }
+.ph-contacts { margin-top: 14px; display: flex; gap: 20px; flex-wrap: wrap; }
+.ph-contact { font-size: 9pt; color: rgba(255,255,255,0.55); font-family: "Helvetica Neue", sans-serif; letter-spacing: 0.5px; }
+.ph-content { padding: 20px 22mm; }
+.ph-section { margin-bottom: 18px; }
+.ph-section-title { font-size: 8pt; font-weight: 400; text-transform: uppercase; letter-spacing: 3px; color: #888; border-bottom: 1px solid #E5E5E5; padding-bottom: 6px; margin-bottom: 12px; font-family: "Helvetica Neue", sans-serif; }
+.ph-entry { margin-bottom: 12px; }
+.ph-entry-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.ph-entry-head h3 { font-size: 11pt; font-weight: 700; color: #1a1a1a; }
+.ph-sep { color: #ccc; }
+.ph-pos { font-weight: 400; font-size: 10.5pt; color: #555; font-style: italic; }
+.ph-date { font-size: 9pt; color: #999; white-space: nowrap; font-family: "Helvetica Neue", sans-serif; }
+.ph-body { font-size: 10pt; color: #444; margin-top: 5px; }
+.ph-list { margin-top: 5px; padding-left: 18px; }
+.ph-list li { font-size: 9.5pt; color: #444; margin-bottom: 3px; }
+.ph-skills { display: flex; flex-wrap: wrap; gap: 8px; }
+.ph-skill { font-size: 9pt; color: #555; font-family: "Helvetica Neue", sans-serif; }
+.ph-skill + .ph-skill::before { content: "/"; margin-right: 8px; color: #ccc; }
+.ph-skill-lv { color: #999; }
+@media print { .resume.photographer { margin: 0; } .ph-header { padding: 20mm 20mm 16mm; } .ph-content { padding: 18px 20mm; } }

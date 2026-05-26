@@ -1,0 +1,26 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+.resume.swiss { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Helvetica Neue", "Helvetica", "Arial", sans-serif; font-size: 9.5pt; line-height: 1.5; color: #111; background: #fff; }
+.sw-header { display: flex; align-items: flex-start; gap: 0; padding: 16mm 20mm 14px; border-bottom: 2px solid #DC2626; }
+.sw-header-left { display: flex; align-items: center; gap: 10px; flex: 1; }
+.sw-red-block { width: 5px; height: 44px; background: #DC2626; flex-shrink: 0; }
+.sw-header-left h1 { font-size: 22pt; font-weight: 900; color: #111; letter-spacing: -1px; line-height: 1; }
+.sw-header-right { text-align: right; }
+.sw-title { font-size: 9.5pt; font-weight: 700; color: #DC2626; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; }
+.sw-contacts { font-size: 8.5pt; color: #555; line-height: 1.8; }
+.sw-body { padding: 16px 20mm 20mm; }
+.sw-row { display: grid; grid-template-columns: 60px 1fr; gap: 0 20px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid #F0F0F0; }
+.sw-row:last-child { border-bottom: none; }
+.sw-label { font-size: 7.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #DC2626; padding-top: 2px; }
+.sw-content { }
+.sw-entry { margin-bottom: 10px; }
+.sw-entry:last-child { margin-bottom: 0; }
+.sw-entry-row { display: flex; justify-content: space-between; align-items: baseline; }
+.sw-bold { font-size: 10pt; font-weight: 700; color: #111; }
+.sw-gray { font-size: 8.5pt; color: #888; }
+.sw-pos { font-size: 9pt; color: #555; margin-top: 1px; }
+.sw-text { font-size: 9.5pt; color: #444; }
+.sw-list { margin-top: 4px; padding-left: 14px; }
+.sw-list li { font-size: 9pt; color: #444; margin-bottom: 2px; }
+.sw-skills { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.sw-skill-item { font-size: 9pt; color: #333; }
+@media print { .resume.swiss { margin: 0; } .sw-header { padding: 14mm 18mm 12px; } .sw-body { padding: 14px 18mm 18mm; } }

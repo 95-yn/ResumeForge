@@ -1,0 +1,21 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+.resume.legal { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 22mm 24mm; font-family: "Times New Roman", "Georgia", serif; font-size: 11pt; line-height: 1.7; color: #000; background: #fff; }
+.lg-header { text-align: center; margin-bottom: 8px; }
+.lg-header h1 { font-size: 22pt; font-weight: 700; color: #000; letter-spacing: 2px; text-transform: uppercase; font-family: "Times New Roman", serif; }
+.lg-title { font-size: 10.5pt; color: #333; margin-top: 4px; letter-spacing: 1px; }
+.lg-contacts { margin-top: 6px; font-size: 9.5pt; color: #333; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+.lg-rule { height: 1px; background: #000; margin: 10px 0; }
+.lg-section { margin-bottom: 14px; }
+.lg-section-title { font-size: 9.5pt; font-weight: 700; letter-spacing: 2px; color: #000; border-bottom: 1px solid #000; padding-bottom: 3px; margin-bottom: 8px; font-family: "Times New Roman", serif; }
+.lg-entry { margin-bottom: 10px; }
+.lg-entry-head { display: flex; justify-content: space-between; align-items: baseline; }
+.lg-entry-main { display: flex; flex-direction: column; }
+.lg-org { font-size: 11pt; font-weight: 700; color: #000; }
+.lg-pos { font-size: 10.5pt; color: #333; font-style: italic; }
+.lg-date { font-size: 9.5pt; color: #444; white-space: nowrap; }
+.lg-body { font-size: 10.5pt; color: #222; margin-top: 5px; text-align: justify; }
+.lg-list { margin-top: 5px; padding-left: 22px; }
+.lg-list li { font-size: 10.5pt; color: #222; margin-bottom: 3px; }
+.lg-skills { columns: 2; gap: 24px; }
+.lg-skill { display: block; font-size: 10.5pt; color: #333; margin-bottom: 4px; break-inside: avoid; }
+@media print { .resume.legal { margin: 0; padding: 20mm 22mm; } }

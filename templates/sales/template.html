@@ -1,0 +1,78 @@
+<div class="resume sales">
+  <header class="sl-header">
+    <div class="sl-accent-bar"></div>
+    <div class="sl-header-inner">
+      <h1 data-field="basics.name">{{basics.name}}</h1>
+      {{#if basics.title}}<p class="sl-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+      <div class="sl-contacts">
+        {{#if basics.email}}<span class="sl-contact" data-field="basics.email">{{basics.email}}</span>{{/if}}
+        {{#if basics.phone}}<span class="sl-contact" data-field="basics.phone">{{basics.phone}}</span>{{/if}}
+        {{#if basics.location}}<span class="sl-contact" data-field="basics.location">{{basics.location}}</span>{{/if}}
+      </div>
+    </div>
+  </header>
+  {{#if basics.summary}}
+  <section class="sl-section">
+    <h2 class="sl-section-title">个人简介</h2>
+    <p class="sl-body" data-field="basics.summary">{{{basics.summary}}}</p>
+  </section>
+  {{/if}}
+  {{#if experience.length}}
+  <section class="sl-section">
+    <h2 class="sl-section-title">工作经历</h2>
+    {{#each experience}}
+    <div class="sl-entry">
+      <div class="sl-entry-head">
+        <div>
+          <span class="sl-company" data-field="experience.{{@index}}.company">{{company}}</span>
+          <span class="sl-sep"> · </span>
+          <span class="sl-position" data-field="experience.{{@index}}.position">{{position}}</span>
+        </div>
+        <span class="sl-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> — <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+      </div>
+      {{#if highlights.length}}<ul class="sl-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+  {{#if education.length}}
+  <section class="sl-section">
+    <h2 class="sl-section-title">教育背景</h2>
+    {{#each education}}
+    <div class="sl-entry">
+      <div class="sl-entry-head">
+        <div>
+          <span class="sl-company" data-field="education.{{@index}}.institution">{{institution}}</span>
+          <span class="sl-sep"> · </span>
+          <span data-field="education.{{@index}}.area">{{area}}</span> <span data-field="education.{{@index}}.studyType">{{studyType}}</span>
+        </div>
+        <span class="sl-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> — <span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+      </div>
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+  {{#if skills.length}}
+  <section class="sl-section">
+    <h2 class="sl-section-title">专业技能</h2>
+    <div class="sl-skills">
+      {{#each skills}}<span class="sl-tag"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}} · <span data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</span>{{/each}}
+    </div>
+  </section>
+  {{/if}}
+  {{#if projects.length}}
+  <section class="sl-section">
+    <h2 class="sl-section-title">项目经历</h2>
+    {{#each projects}}
+    <div class="sl-entry">
+      <div class="sl-entry-head">
+        <span class="sl-company" data-field="projects.{{@index}}.name">{{name}}</span>
+        {{#if role}}<span class="sl-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+      </div>
+      {{#if description}}<p class="sl-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if highlights.length}}<ul class="sl-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+</div>

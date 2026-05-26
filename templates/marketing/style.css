@@ -1,0 +1,26 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+.resume.marketing { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Helvetica Neue", "Arial", "PingFang SC", sans-serif; font-size: 10pt; line-height: 1.6; color: #1a2233; background: #fff; }
+.mk-header-bg { background: linear-gradient(135deg, #DBEAFE 0%, #DCFCE7 100%); padding: 18mm 22mm 16mm; }
+.mk-header-bg h1 { font-size: 24pt; font-weight: 800; color: #1E3A5F; }
+.mk-title { font-size: 11pt; color: #2D6A4F; margin-top: 4px; font-weight: 500; }
+.mk-contacts { margin-top: 10px; display: flex; gap: 16px; flex-wrap: wrap; }
+.mk-contact { font-size: 9pt; color: #374151; }
+.mk-body { display: flex; gap: 0; padding: 0 22mm; }
+.mk-main { flex: 2; padding-right: 20px; padding-top: 16px; }
+.mk-side { flex: 1; padding-left: 20px; padding-top: 16px; border-left: 1px solid #E5E7EB; }
+.mk-section { margin-bottom: 16px; }
+.mk-section-title { font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #1E3A5F; border-bottom: 2px solid #BFDBFE; padding-bottom: 4px; margin-bottom: 10px; }
+.mk-entry { margin-bottom: 12px; }
+.mk-entry-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.mk-company { display: block; font-size: 10.5pt; font-weight: 700; color: #1a2233; }
+.mk-position { display: block; font-size: 9.5pt; color: #4B5563; }
+.mk-date { font-size: 9pt; color: #6B7280; white-space: nowrap; }
+.mk-text { font-size: 9.5pt; color: #374151; margin-top: 4px; }
+.mk-list { margin-top: 5px; padding-left: 16px; }
+.mk-list li { font-size: 9.5pt; color: #374151; margin-bottom: 3px; }
+.mk-edu { display: flex; flex-direction: column; gap: 2px; margin-bottom: 10px; font-size: 9.5pt; }
+.mk-edu strong { color: #1a2233; }
+.mk-skill-bar { display: flex; justify-content: space-between; font-size: 9.5pt; padding: 5px 0; border-bottom: 1px solid #F3F4F6; }
+.mk-skill-name { color: #1a2233; font-weight: 500; }
+.mk-skill-level { color: #059669; font-size: 9pt; }
+@media print { .resume.marketing { margin: 0; } .mk-header-bg { padding: 16mm 20mm 14mm; } .mk-body { padding: 0 20mm; } }

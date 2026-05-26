@@ -1,0 +1,81 @@
+<div class="resume marketing">
+  <header class="mk-header">
+    <div class="mk-header-bg">
+      <h1 data-field="basics.name">{{basics.name}}</h1>
+      {{#if basics.title}}<p class="mk-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+      <div class="mk-contacts">
+        {{#if basics.email}}<span class="mk-contact" data-field="basics.email">{{basics.email}}</span>{{/if}}
+        {{#if basics.phone}}<span class="mk-contact" data-field="basics.phone">{{basics.phone}}</span>{{/if}}
+        {{#if basics.location}}<span class="mk-contact" data-field="basics.location">{{basics.location}}</span>{{/if}}
+      </div>
+    </div>
+  </header>
+  <div class="mk-body">
+    <div class="mk-main">
+      {{#if basics.summary}}
+      <section class="mk-section">
+        <h2 class="mk-section-title">个人简介</h2>
+        <p class="mk-text" data-field="basics.summary">{{{basics.summary}}}</p>
+      </section>
+      {{/if}}
+      {{#if experience.length}}
+      <section class="mk-section">
+        <h2 class="mk-section-title">工作经历</h2>
+        {{#each experience}}
+        <div class="mk-entry">
+          <div class="mk-entry-head">
+            <div>
+              <span class="mk-company" data-field="experience.{{@index}}.company">{{company}}</span>
+              <span class="mk-position" data-field="experience.{{@index}}.position">{{position}}</span>
+            </div>
+            <span class="mk-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> — <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+          </div>
+          {{#if highlights.length}}<ul class="mk-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+        </div>
+        {{/each}}
+      </section>
+      {{/if}}
+      {{#if projects.length}}
+      <section class="mk-section">
+        <h2 class="mk-section-title">营销案例</h2>
+        {{#each projects}}
+        <div class="mk-entry">
+          <div class="mk-entry-head">
+            <span class="mk-company" data-field="projects.{{@index}}.name">{{name}}</span>
+            {{#if role}}<span class="mk-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+          </div>
+          {{#if description}}<p class="mk-text" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+          {{#if highlights.length}}<ul class="mk-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+        </div>
+        {{/each}}
+      </section>
+      {{/if}}
+    </div>
+    <div class="mk-side">
+      {{#if education.length}}
+      <section class="mk-section">
+        <h2 class="mk-section-title">教育背景</h2>
+        {{#each education}}
+        <div class="mk-edu">
+          <strong data-field="education.{{@index}}.institution">{{institution}}</strong>
+          <span data-field="education.{{@index}}.area">{{area}}</span>
+          <span data-field="education.{{@index}}.studyType">{{studyType}}</span>
+          <span class="mk-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span>–<span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+        </div>
+        {{/each}}
+      </section>
+      {{/if}}
+      {{#if skills.length}}
+      <section class="mk-section">
+        <h2 class="mk-section-title">专业技能</h2>
+        {{#each skills}}
+        <div class="mk-skill-bar">
+          <span class="mk-skill-name" data-field="skills.{{@index}}.name">{{name}}</span>
+          {{#if level}}<span class="mk-skill-level" data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}
+        </div>
+        {{/each}}
+      </section>
+      {{/if}}
+    </div>
+  </div>
+</div>

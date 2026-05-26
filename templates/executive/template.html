@@ -1,0 +1,78 @@
+<div class="resume executive">
+  <header class="ex-header">
+    <div class="ex-header-main">
+      <h1 data-field="basics.name">{{basics.name}}</h1>
+      {{#if basics.title}}<p class="ex-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+    </div>
+    <div class="ex-header-contact">
+      {{#if basics.email}}<div class="ex-contact-item" data-field="basics.email">{{basics.email}}</div>{{/if}}
+      {{#if basics.phone}}<div class="ex-contact-item" data-field="basics.phone">{{basics.phone}}</div>{{/if}}
+      {{#if basics.location}}<div class="ex-contact-item" data-field="basics.location">{{basics.location}}</div>{{/if}}
+    </div>
+  </header>
+  <div class="ex-gold-line"></div>
+  {{#if basics.summary}}
+  <section class="ex-section">
+    <h2 class="ex-section-title">个人简介</h2>
+    <p class="ex-summary" data-field="basics.summary">{{{basics.summary}}}</p>
+  </section>
+  {{/if}}
+  {{#if experience.length}}
+  <section class="ex-section">
+    <h2 class="ex-section-title">工作经历</h2>
+    {{#each experience}}
+    <div class="ex-entry">
+      <div class="ex-entry-header">
+        <div class="ex-entry-left">
+          <span class="ex-company" data-field="experience.{{@index}}.company">{{company}}</span>
+          <span class="ex-position" data-field="experience.{{@index}}.position">{{position}}</span>
+        </div>
+        <span class="ex-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> — <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+      </div>
+      {{#if highlights.length}}<ul class="ex-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+  {{#if education.length}}
+  <section class="ex-section">
+    <h2 class="ex-section-title">教育背景</h2>
+    {{#each education}}
+    <div class="ex-entry">
+      <div class="ex-entry-header">
+        <div class="ex-entry-left">
+          <span class="ex-company" data-field="education.{{@index}}.institution">{{institution}}</span>
+          <span class="ex-position"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></span>
+        </div>
+        <span class="ex-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> — <span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+      </div>
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+  {{#if skills.length}}
+  <section class="ex-section">
+    <h2 class="ex-section-title">专业技能</h2>
+    <div class="ex-skills">
+      {{#each skills}}<span class="ex-skill-tag"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}} · <span data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</span>{{/each}}
+    </div>
+  </section>
+  {{/if}}
+  {{#if projects.length}}
+  <section class="ex-section">
+    <h2 class="ex-section-title">项目经历</h2>
+    {{#each projects}}
+    <div class="ex-entry">
+      <div class="ex-entry-header">
+        <div class="ex-entry-left">
+          <span class="ex-company" data-field="projects.{{@index}}.name">{{name}}</span>
+          {{#if role}}<span class="ex-position" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+        </div>
+      </div>
+      {{#if description}}<p class="ex-desc" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if highlights.length}}<ul class="ex-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+</div>

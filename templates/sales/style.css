@@ -1,0 +1,23 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+.resume.sales { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Helvetica Neue", "Arial", "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 10pt; line-height: 1.6; color: #1C1917; background: #fff; }
+.sl-accent-bar { height: 5px; background: #EA580C; }
+.sl-header-inner { padding: 14px 22mm 14px; border-bottom: 1px solid #E7E5E4; }
+.sl-header-inner h1 { font-size: 22pt; font-weight: 800; color: #1C1917; }
+.sl-title { font-size: 11pt; color: #EA580C; margin-top: 3px; font-weight: 600; }
+.sl-contacts { margin-top: 8px; display: flex; gap: 16px; flex-wrap: wrap; }
+.sl-contact { font-size: 9pt; color: #57534E; }
+.sl-section { padding: 14px 22mm 0; }
+.sl-section-title { font-size: 9pt; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #EA580C; border-bottom: 2px solid #FED7AA; padding-bottom: 4px; margin-bottom: 10px; }
+.sl-entry { margin-bottom: 12px; }
+.sl-entry-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 4px; }
+.sl-company { font-size: 10.5pt; font-weight: 700; color: #1C1917; }
+.sl-sep { color: #EA580C; }
+.sl-position { font-size: 10pt; color: #44403C; }
+.sl-date { font-size: 9pt; color: #78716C; white-space: nowrap; }
+.sl-body { font-size: 9.5pt; color: #44403C; margin-top: 4px; }
+.sl-list { margin-top: 5px; padding-left: 18px; }
+.sl-list li { font-size: 9.5pt; color: #44403C; margin-bottom: 3px; }
+.sl-list li::marker { color: #EA580C; }
+.sl-skills { display: flex; flex-wrap: wrap; gap: 6px; }
+.sl-tag { background: #FFF7ED; color: #EA580C; border: 1px solid #FED7AA; padding: 2px 10px; border-radius: 3px; font-size: 9pt; font-weight: 500; }
+@media print { .resume.sales { margin: 0; } .sl-header-inner { padding: 12px 20mm 12px; } .sl-section { padding: 12px 20mm 0; } }

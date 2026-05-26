@@ -1,0 +1,22 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+.resume.consulting { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Helvetica Neue", "Arial", "PingFang SC", sans-serif; font-size: 10pt; line-height: 1.6; color: #111; background: #fff; }
+.cs-header { display: flex; justify-content: space-between; align-items: flex-end; padding: 20mm 22mm 12px; border-bottom: 3px solid #111; }
+.cs-header-left h1 { font-size: 22pt; font-weight: 900; color: #111; letter-spacing: -0.5px; }
+.cs-title { font-size: 10.5pt; color: #555; margin-top: 3px; }
+.cs-header-right { text-align: right; font-size: 9pt; color: #444; line-height: 1.8; }
+.cs-body { display: flex; gap: 0; padding: 0 22mm 20mm; }
+.cs-left { flex: 1.8; padding-right: 24px; padding-top: 16px; border-right: 1px solid #ddd; }
+.cs-right { flex: 1; padding-left: 24px; padding-top: 16px; }
+.cs-section { margin-bottom: 16px; }
+.cs-section-title { font-size: 8pt; font-weight: 700; text-transform: uppercase; letter-spacing: 2.5px; color: #111; border-bottom: 1px solid #111; padding-bottom: 4px; margin-bottom: 10px; }
+.cs-entry { margin-bottom: 11px; }
+.cs-entry-head { display: flex; justify-content: space-between; align-items: baseline; }
+.cs-entry-head strong { font-size: 10.5pt; font-weight: 700; color: #111; }
+.cs-date { font-size: 9pt; color: #666; }
+.cs-pos { font-size: 9.5pt; color: #444; margin-top: 2px; font-style: italic; }
+.cs-body-text { font-size: 9.5pt; color: #333; margin-top: 4px; }
+.cs-list { margin-top: 5px; padding-left: 15px; }
+.cs-list li { font-size: 9.5pt; color: #333; margin-bottom: 3px; }
+.cs-skill { display: flex; justify-content: space-between; font-size: 9.5pt; padding: 3px 0; border-bottom: 1px solid #eee; }
+.cs-level { font-size: 9pt; color: #666; }
+@media print { .resume.consulting { margin: 0; } .cs-header { padding: 18mm 20mm 12px; } .cs-body { padding: 0 20mm 18mm; } }
