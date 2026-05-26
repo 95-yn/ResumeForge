@@ -17,10 +17,10 @@
   </section>
   {{/if}}
   {{#if experience.length}}
-  <section class="pro-section">
+  <section class="pro-section" data-section="experience">
     <h2 class="pro-section-title">工作经历</h2>
     {{#each experience}}
-    <div class="pro-entry">
+    <div class="pro-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="pro-entry-header">
         <div class="pro-entry-main">
           <span class="pro-company" data-field="experience.{{@index}}.company">{{company}}</span>
@@ -35,10 +35,10 @@
   </section>
   {{/if}}
   {{#if education.length}}
-  <section class="pro-section">
+  <section class="pro-section" data-section="education">
     <h2 class="pro-section-title">教育背景</h2>
     {{#each education}}
-    <div class="pro-entry">
+    <div class="pro-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="pro-entry-header">
         <div class="pro-entry-main">
           <span class="pro-company" data-field="education.{{@index}}.institution">{{institution}}</span>
@@ -54,18 +54,18 @@
   </section>
   {{/if}}
   {{#if skills.length}}
-  <section class="pro-section">
+  <section class="pro-section" data-section="skills">
     <h2 class="pro-section-title">专业技能</h2>
     <div class="pro-skills">
-      {{#each skills}}<span class="pro-skill-tag"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}} · <span data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</span>{{/each}}
+      {{#each skills}}<span class="pro-skill-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}} · <span data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</span>{{/each}}
     </div>
   </section>
   {{/if}}
   {{#if projects.length}}
-  <section class="pro-section">
+  <section class="pro-section" data-section="projects">
     <h2 class="pro-section-title">项目经历</h2>
     {{#each projects}}
-    <div class="pro-entry">
+    <div class="pro-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="pro-entry-header">
         <div class="pro-entry-main">
           <span class="pro-company" data-field="projects.{{@index}}.name">{{name}}</span>

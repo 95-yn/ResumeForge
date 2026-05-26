@@ -17,6 +17,7 @@ interface EditorStore {
   saveStatus: 'saved' | 'saving' | 'unsaved';
   history: ResumeData[];
   historyIndex: number;
+  zoom: number;
 
   loadResume: (resumeId: string) => Promise<void>;
   loadTemplate: (templateSlug: string) => Promise<void>;
@@ -27,6 +28,7 @@ interface EditorStore {
   setActiveSection: (key: string | null) => void;
   reorderSections: (order: string[]) => void;
   updateByPath: (path: string, value: unknown) => void;
+  setZoom: (zoom: number) => void;
   undo: () => void;
   redo: () => void;
   save: () => Promise<void>;
@@ -54,7 +56,7 @@ function pushHistory(state: EditorStore, newData: ResumeData): Partial<EditorSto
 
 export const useEditorStore = create<EditorStore>((set, get) => ({
   mode: 'guest', resumeId: null, resume: null, templateId: null, templateHtml: null, templateCss: null, schema: null,
-  sectionOrder: [], activeSection: null, isDirty: false, saveStatus: 'saved', history: [], historyIndex: -1,
+  sectionOrder: [], activeSection: null, isDirty: false, saveStatus: 'saved', history: [], historyIndex: -1, zoom: 1,
 
   loadResume: async (resumeId) => {
     const { data: resumeRes } = await api.get(`/resumes/${resumeId}`);
@@ -128,6 +130,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 
   setActiveSection: (key) => set({ activeSection: key }),
   reorderSections: (order) => set({ sectionOrder: order, isDirty: true, saveStatus: 'unsaved' }),
+  setZoom: (zoom) => set({ zoom: Math.max(0.5, Math.min(2, zoom)) }),
 
   updateByPath: (path, value) => {
     const state = get();

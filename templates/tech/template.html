@@ -17,10 +17,10 @@
   </section>
   {{/if}}
   {{#if experience.length}}
-  <section class="tc-section">
+  <section class="tc-section" data-section="experience">
     <h2 class="tc-section-title">// EXPERIENCE</h2>
     {{#each experience}}
-    <div class="tc-entry">
+    <div class="tc-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="tc-entry-head">
         <span class="tc-company" data-field="experience.{{@index}}.company">{{company}}</span>
         <span class="tc-pipe"> | </span>
@@ -33,10 +33,10 @@
   </section>
   {{/if}}
   {{#if education.length}}
-  <section class="tc-section">
+  <section class="tc-section" data-section="education">
     <h2 class="tc-section-title">// EDUCATION</h2>
     {{#each education}}
-    <div class="tc-entry">
+    <div class="tc-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="tc-entry-head">
         <span class="tc-company" data-field="education.{{@index}}.institution">{{institution}}</span>
         <span class="tc-pipe"> | </span>
@@ -50,18 +50,18 @@
   </section>
   {{/if}}
   {{#if skills.length}}
-  <section class="tc-section">
+  <section class="tc-section" data-section="skills">
     <h2 class="tc-section-title">// SKILLS</h2>
     <div class="tc-tags">
-      {{#each skills}}<span class="tc-tag"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="tc-tag-level" data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</span>{{/each}}
+      {{#each skills}}<span class="tc-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="tc-tag-level" data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</span>{{/each}}
     </div>
   </section>
   {{/if}}
   {{#if projects.length}}
-  <section class="tc-section">
+  <section class="tc-section" data-section="projects">
     <h2 class="tc-section-title">// PROJECTS</h2>
     {{#each projects}}
-    <div class="tc-entry">
+    <div class="tc-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="tc-entry-head">
         <span class="tc-company" data-field="projects.{{@index}}.name">{{name}}</span>
         {{#if role}}<span class="tc-pipe"> | </span><span data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}

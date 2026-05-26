@@ -1,25 +1,26 @@
 import { Button, Tooltip } from 'antd';
-import { ArrowLeftOutlined, DownloadOutlined, UndoOutlined, RedoOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, PrinterOutlined, UndoOutlined, RedoOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import Handlebars from 'handlebars';
 import { useEditorStore } from '../../stores/editor.store';
-import { api } from '../../api/client';
 
 export function TopBar() {
   const navigate = useNavigate();
-  const { save, saveStatus, undo, redo, historyIndex, history, resumeId, mode, templateId, resume } = useEditorStore();
+  const { save, saveStatus, undo, redo, historyIndex, history, templateHtml, templateCss, resume } = useEditorStore();
 
-  const handleExportPdf = async () => {
-    let response;
-    if (mode === 'guest') {
-      response = await api.post('/guest/export/pdf', { templateSlug: templateId, data: resume }, { responseType: 'blob' });
-    } else {
-      if (!resumeId) return;
-      response = await api.post(`/resumes/${resumeId}/export/pdf`, {}, { responseType: 'blob' });
-    }
-    const url = window.URL.createObjectURL(new Blob([response.data]));
-    const a = document.createElement('a');
-    a.href = url; a.download = 'resume.pdf'; a.click();
-    window.URL.revokeObjectURL(url);
+  const handlePrint = () => {
+    if (!templateHtml || !templateCss || !resume) return;
+    const compiled = Handlebars.compile(templateHtml);
+    const body = compiled(resume);
+    const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
+<style>${templateCss}
+@media print { @page { margin: 0; } body { margin: 0; } }
+</style></head><body style="margin:0">${body}</body></html>`;
+    const win = window.open('', '_blank');
+    if (!win) return;
+    win.document.write(html);
+    win.document.close();
+    win.onload = () => { win.print(); };
   };
 
   const statusText = saveStatus === 'saved' ? '已保存' : saveStatus === 'saving' ? '保存中' : '未保存';
@@ -47,9 +48,9 @@ export function TopBar() {
           <Button type="text" icon={<RedoOutlined />} disabled={historyIndex >= history.length - 1} onClick={redo} style={{ color: '#6B7280' }} />
         </Tooltip>
         <div style={{ width: 1, height: 20, background: '#E5E7EB', margin: '0 6px' }} />
-        <Button icon={<DownloadOutlined />} onClick={handleExportPdf}
+        <Button icon={<PrinterOutlined />} onClick={handlePrint}
           style={{ borderRadius: 7, fontWeight: 500, fontSize: 13, background: '#111827', color: '#fff', borderColor: '#111827', height: 34 }}>
-          导出 PDF
+          打印 / 导出
         </Button>
         <Button onClick={save} disabled={saveStatus === 'saved'}
           style={{ borderRadius: 7, fontSize: 13, height: 34 }}>

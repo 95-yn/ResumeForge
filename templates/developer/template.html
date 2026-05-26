@@ -16,10 +16,10 @@
   </section>
   {{/if}}
   {{#if experience.length}}
-  <section class="dev-section">
+  <section class="dev-section" data-section="experience">
     <h2 class="dev-section-title"><span class="dev-hash">#</span> experience</h2>
     {{#each experience}}
-    <div class="dev-entry">
+    <div class="dev-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="dev-entry-head">
         <span class="dev-company" data-field="experience.{{@index}}.company">{{company}}</span>
         <span class="dev-at"> @ </span>
@@ -32,10 +32,10 @@
   </section>
   {{/if}}
   {{#if education.length}}
-  <section class="dev-section">
+  <section class="dev-section" data-section="education">
     <h2 class="dev-section-title"><span class="dev-hash">#</span> education</h2>
     {{#each education}}
-    <div class="dev-entry">
+    <div class="dev-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="dev-entry-head">
         <span class="dev-company" data-field="education.{{@index}}.institution">{{institution}}</span>
         <span class="dev-at"> / </span>
@@ -49,18 +49,18 @@
   </section>
   {{/if}}
   {{#if skills.length}}
-  <section class="dev-section">
+  <section class="dev-section" data-section="skills">
     <h2 class="dev-section-title"><span class="dev-hash">#</span> skills</h2>
     <div class="dev-tags">
-      {{#each skills}}<code class="dev-skill-tag"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="dev-skill-level" data-field="skills.{{@index}}.level">:{{level}}</span>{{/if}}</code>{{/each}}
+      {{#each skills}}<code class="dev-skill-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="dev-skill-level" data-field="skills.{{@index}}.level">:{{level}}</span>{{/if}}</code>{{/each}}
     </div>
   </section>
   {{/if}}
   {{#if projects.length}}
-  <section class="dev-section">
+  <section class="dev-section" data-section="projects">
     <h2 class="dev-section-title"><span class="dev-hash">#</span> projects</h2>
     {{#each projects}}
-    <div class="dev-entry">
+    <div class="dev-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="dev-entry-head">
         <span class="dev-company" data-field="projects.{{@index}}.name">{{name}}</span>
         {{#if role}}<span class="dev-at"> · </span><span data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}

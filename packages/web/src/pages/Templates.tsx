@@ -11,53 +11,54 @@ interface TemplateMeta {
   tc: string;
   accent?: string;
   layout?: 'two-col' | 'dark-header' | 'single';
+  profession: string;
 }
 
 const TEMPLATE_META: Record<string, TemplateMeta> = {
   // Business
-  classic:      { desc: '标准单栏布局，适合大多数行业', bg: '#F9FAFB', tc: '#374151' },
-  professional: { desc: '深色顶部 header，商务专业感强', bg: '#1F2937', tc: '#F9FAFB', layout: 'dark-header' },
-  executive:    { desc: '高管风格，大气稳重，金色分隔线点缀', bg: '#FFFFFF', tc: '#1C1C1C', accent: '#C9A84C' },
-  corporate:    { desc: '企业标准配色，蓝色主调，规整表格感', bg: '#1E40AF', tc: '#FFFFFF', layout: 'dark-header' },
-  banking:      { desc: '金融行业，保守配色，衬线标题字体', bg: '#FFFFFF', tc: '#111111' },
-  consulting:   { desc: '咨询风格，左右对称双栏，黑白为主', bg: '#FFFFFF', tc: '#111111', layout: 'two-col' },
-  sales:        { desc: '销售商务，突出业绩数字，橙色点缀', bg: '#FFF7ED', tc: '#EA580C', accent: '#EA580C' },
-  hr:           { desc: '人力资源，温暖色调，柔和圆角标签', bg: '#FFFBEB', tc: '#B45309', accent: '#D97706' },
-  manager:      { desc: '项目经理，时间线布局，蓝灰色调', bg: '#F8FAFC', tc: '#475569' },
-  legal:        { desc: '法律行业，严肃衬线字体，全黑白无彩色', bg: '#FFFFFF', tc: '#000000' },
+  classic:      { desc: '标准单栏布局，适合大多数行业', bg: '#F9FAFB', tc: '#374151', profession: '通用' },
+  professional: { desc: '深色顶部 header，商务专业感强', bg: '#1F2937', tc: '#F9FAFB', layout: 'dark-header', profession: '通用' },
+  executive:    { desc: '高管风格，大气稳重，金色分隔线点缀', bg: '#FFFFFF', tc: '#1C1C1C', accent: '#C9A84C', profession: '金融财会' },
+  corporate:    { desc: '企业标准配色，蓝色主调，规整表格感', bg: '#1E40AF', tc: '#FFFFFF', layout: 'dark-header', profession: '通用' },
+  banking:      { desc: '金融行业，保守配色，衬线标题字体', bg: '#FFFFFF', tc: '#111111', profession: '金融财会' },
+  consulting:   { desc: '咨询风格，左右对称双栏，黑白为主', bg: '#FFFFFF', tc: '#111111', layout: 'two-col', profession: '金融财会' },
+  sales:        { desc: '销售商务，突出业绩数字，橙色点缀', bg: '#FFF7ED', tc: '#EA580C', accent: '#EA580C', profession: '市场营销' },
+  hr:           { desc: '人力资源，温暖色调，柔和圆角标签', bg: '#FFFBEB', tc: '#B45309', accent: '#D97706', profession: '通用' },
+  manager:      { desc: '项目经理，时间线布局，蓝灰色调', bg: '#F8FAFC', tc: '#475569', profession: 'IT互联网' },
+  legal:        { desc: '法律行业，严肃衬线字体，全黑白无彩色', bg: '#FFFFFF', tc: '#000000', profession: '通用' },
   // Creative
-  modern:       { desc: '双栏布局，深色侧边栏突出个人品牌', bg: '#1F2937', tc: '#F9FAFB', layout: 'two-col' },
-  fresh:        { desc: '蓝色竖条装饰，清新活力，年轻感十足', bg: '#EFF6FF', tc: '#1E40AF', accent: '#3B82F6' },
-  creative:     { desc: '渐变色 header，进度条技能，设计感满满', bg: '#7C3AED', tc: '#fff', layout: 'dark-header' },
-  designer:     { desc: '设计师风格，深色侧边栏，大量留白', bg: '#18181B', tc: '#FAFAFA', layout: 'two-col' },
-  photographer: { desc: '摄影师风格，全宽深色 header，衬线大标题', bg: '#1C1C1C', tc: '#FFFFFF', layout: 'dark-header' },
-  writer:       { desc: '书籍排版风格，Garamond 字体，文学气质', bg: '#FFFFFF', tc: '#1a1a1a' },
-  marketing:    { desc: '市场营销，渐变标题底色，数据可视化风格', bg: '#DBEAFE', tc: '#1E3A5F', layout: 'two-col' },
-  media:        { desc: '新媒体运营，卡片式布局，圆角边框', bg: '#111827', tc: '#F9FAFB', layout: 'dark-header' },
-  artist:       { desc: '艺术家，大标题左对齐，棕色调', bg: '#FFFFFF', tc: '#78350F', accent: '#78350F' },
-  architect:    { desc: '建筑师，极细线条，网格感布局，灰色调', bg: '#FFFFFF', tc: '#1A1A1A', layout: 'two-col' },
+  modern:       { desc: '双栏布局，深色侧边栏突出个人品牌', bg: '#1F2937', tc: '#F9FAFB', layout: 'two-col', profession: '通用' },
+  fresh:        { desc: '蓝色竖条装饰，清新活力，年轻感十足', bg: '#EFF6FF', tc: '#1E40AF', accent: '#3B82F6', profession: '通用' },
+  creative:     { desc: '渐变色 header，进度条技能，设计感满满', bg: '#7C3AED', tc: '#fff', layout: 'dark-header', profession: '设计创意' },
+  designer:     { desc: '设计师风格，深色侧边栏，大量留白', bg: '#18181B', tc: '#FAFAFA', layout: 'two-col', profession: '设计创意' },
+  photographer: { desc: '摄影师风格，全宽深色 header，衬线大标题', bg: '#1C1C1C', tc: '#FFFFFF', layout: 'dark-header', profession: '设计创意' },
+  writer:       { desc: '书籍排版风格，Garamond 字体，文学气质', bg: '#FFFFFF', tc: '#1a1a1a', profession: '教育学术' },
+  marketing:    { desc: '市场营销，渐变标题底色，数据可视化风格', bg: '#DBEAFE', tc: '#1E3A5F', layout: 'two-col', profession: '市场营销' },
+  media:        { desc: '新媒体运营，卡片式布局，圆角边框', bg: '#111827', tc: '#F9FAFB', layout: 'dark-header', profession: '市场营销' },
+  artist:       { desc: '艺术家，大标题左对齐，棕色调', bg: '#FFFFFF', tc: '#78350F', accent: '#78350F', profession: '设计创意' },
+  architect:    { desc: '建筑师，极细线条，网格感布局，灰色调', bg: '#FFFFFF', tc: '#1A1A1A', layout: 'two-col', profession: '设计创意' },
   // Minimal
-  minimal:      { desc: '衬线字体，极简排版，适合学术与创意行业', bg: '#FFFBEB', tc: '#92400E' },
-  elegant:      { desc: '居中布局，衬线大标题，优雅简约风', bg: '#FAF8F5', tc: '#2D2D2D', accent: '#C4A882' },
-  clean:        { desc: '纯净白，只用黑色和灰色，无任何装饰线', bg: '#FFFFFF', tc: '#111111' },
-  swiss:        { desc: '瑞士排版风格，网格对齐，红色点缀', bg: '#FFFFFF', tc: '#111111', accent: '#DC2626' },
-  nordic:       { desc: '北欧风，大量留白，浅蓝灰配色', bg: '#F8FAFC', tc: '#1E293B', accent: '#94A3B8' },
-  japanese:     { desc: '日式简约，竖线分隔，留白极多', bg: '#FFFFFF', tc: '#1C1917' },
-  paper:        { desc: '纸质感，微黄背景，打字机字体', bg: '#FEFCE8', tc: '#292524' },
-  mono:         { desc: '单色风格，只用灰色深浅变化', bg: '#FFFFFF', tc: '#525252' },
-  line:         { desc: '线条艺术，所有分隔都用细线装饰', bg: '#FFFFFF', tc: '#1a1a1a' },
-  space:        { desc: '呼吸感设计，超大行距与section间距', bg: '#FFFFFF', tc: '#222222' },
+  minimal:      { desc: '衬线字体，极简排版，适合学术与创意行业', bg: '#FFFBEB', tc: '#92400E', profession: '通用' },
+  elegant:      { desc: '居中布局，衬线大标题，优雅简约风', bg: '#FAF8F5', tc: '#2D2D2D', accent: '#C4A882', profession: '通用' },
+  clean:        { desc: '纯净白，只用黑色和灰色，无任何装饰线', bg: '#FFFFFF', tc: '#111111', profession: '通用' },
+  swiss:        { desc: '瑞士排版风格，网格对齐，红色点缀', bg: '#FFFFFF', tc: '#111111', accent: '#DC2626', profession: '设计创意' },
+  nordic:       { desc: '北欧风，大量留白，浅蓝灰配色', bg: '#F8FAFC', tc: '#1E293B', accent: '#94A3B8', profession: '通用' },
+  japanese:     { desc: '日式简约，竖线分隔，留白极多', bg: '#FFFFFF', tc: '#1C1917', profession: '通用' },
+  paper:        { desc: '纸质感，微黄背景，打字机字体', bg: '#FEFCE8', tc: '#292524', profession: '教育学术' },
+  mono:         { desc: '单色风格，只用灰色深浅变化', bg: '#FFFFFF', tc: '#525252', profession: '通用' },
+  line:         { desc: '线条艺术，所有分隔都用细线装饰', bg: '#FFFFFF', tc: '#1a1a1a', profession: '通用' },
+  space:        { desc: '呼吸感设计，超大行距与section间距', bg: '#FFFFFF', tc: '#222222', profession: '教育学术' },
   // Tech
-  tech:         { desc: '等宽字体，tag 技能，暗色调技术风格', bg: '#0F172A', tc: '#CBD5E1', layout: 'dark-header' },
-  developer:    { desc: '终端风格，绿色 # 前缀，代码感设计', bg: '#1E1E1E', tc: '#D4D4D4', layout: 'dark-header' },
-  github:       { desc: 'GitHub Profile 风格，绿色点缀', bg: '#FFFFFF', tc: '#24292F', accent: '#166534' },
-  terminal:     { desc: '完整终端风格，黑底绿字，仿真命令行', bg: '#0A0A0A', tc: '#4ADE80', layout: 'dark-header' },
-  vscode:       { desc: 'VS Code 深色主题配色，侧边栏布局', bg: '#1E1E1E', tc: '#D4D4D4', layout: 'two-col' },
-  data:         { desc: '数据科学家，表格风格展示技能，深蓝暗色', bg: '#0F172A', tc: '#E2E8F0', layout: 'dark-header' },
-  devops:       { desc: 'DevOps 工程师，pipeline 时间线样式', bg: '#172554', tc: '#E2E8F0', layout: 'dark-header' },
-  mobile:       { desc: '移动开发，圆角卡片，iOS 设计语言', bg: '#F2F2F7', tc: '#1C1C1E' },
-  fullstack:    { desc: '全栈工程师，上深下白分栏布局', bg: '#1E293B', tc: '#F1F5F9', layout: 'dark-header' },
-  ai:           { desc: 'AI/ML 工程师，蓝紫渐变 header', bg: '#1E1B4B', tc: '#E0E7FF', layout: 'dark-header' },
+  tech:         { desc: '等宽字体，tag 技能，暗色调技术风格', bg: '#0F172A', tc: '#CBD5E1', layout: 'dark-header', profession: 'IT互联网' },
+  developer:    { desc: '终端风格，绿色 # 前缀，代码感设计', bg: '#1E1E1E', tc: '#D4D4D4', layout: 'dark-header', profession: 'IT互联网' },
+  github:       { desc: 'GitHub Profile 风格，绿色点缀', bg: '#FFFFFF', tc: '#24292F', accent: '#166534', profession: 'IT互联网' },
+  terminal:     { desc: '完整终端风格，黑底绿字，仿真命令行', bg: '#0A0A0A', tc: '#4ADE80', layout: 'dark-header', profession: 'IT互联网' },
+  vscode:       { desc: 'VS Code 深色主题配色，侧边栏布局', bg: '#1E1E1E', tc: '#D4D4D4', layout: 'two-col', profession: 'IT互联网' },
+  data:         { desc: '数据科学家，表格风格展示技能，深蓝暗色', bg: '#0F172A', tc: '#E2E8F0', layout: 'dark-header', profession: 'IT互联网' },
+  devops:       { desc: 'DevOps 工程师，pipeline 时间线样式', bg: '#172554', tc: '#E2E8F0', layout: 'dark-header', profession: 'IT互联网' },
+  mobile:       { desc: '移动开发，圆角卡片，iOS 设计语言', bg: '#F2F2F7', tc: '#1C1C1E', profession: 'IT互联网' },
+  fullstack:    { desc: '全栈工程师，上深下白分栏布局', bg: '#1E293B', tc: '#F1F5F9', layout: 'dark-header', profession: 'IT互联网' },
+  ai:           { desc: 'AI/ML 工程师，蓝紫渐变 header', bg: '#1E1B4B', tc: '#E0E7FF', layout: 'dark-header', profession: 'IT互联网' },
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -158,7 +159,7 @@ function TemplatePreview({ slug, meta }: { slug: string; meta: TemplateMeta }) {
   );
 }
 
-const categories = [
+const styleCategories = [
   { key: 'all', label: '全部' },
   { key: 'business', label: '商务' },
   { key: 'creative', label: '创意' },
@@ -166,9 +167,66 @@ const categories = [
   { key: 'tech', label: '技术' },
 ];
 
+const professionCategories = [
+  { key: 'all', label: '全部' },
+  { key: 'IT互联网', label: 'IT互联网' },
+  { key: '金融财会', label: '金融财会' },
+  { key: '设计创意', label: '设计创意' },
+  { key: '教育学术', label: '教育学术' },
+  { key: '市场营销', label: '市场营销' },
+  { key: '医疗健康', label: '医疗健康' },
+];
+
+function FilterBar({
+  label,
+  categories,
+  selected,
+  onSelect,
+  templates,
+  filterKey,
+}: {
+  label: string;
+  categories: { key: string; label: string }[];
+  selected: string;
+  onSelect: (key: string) => void;
+  templates: TemplateSummary[];
+  filterKey: 'category' | 'profession';
+}) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+      <span style={{ fontSize: 13, color: '#6B7280', fontWeight: 500, flexShrink: 0 }}>{label}：</span>
+      {categories.map(cat => {
+        const count = filterKey === 'category'
+          ? (cat.key !== 'all' ? templates.filter(t => t.category === cat.key).length : 0)
+          : (cat.key !== 'all' ? Object.values(TEMPLATE_META).filter(m => m.profession === cat.key).length : 0);
+        return (
+          <button
+            key={cat.key}
+            onClick={() => onSelect(cat.key)}
+            style={{
+              padding: '6px 18px', borderRadius: 20, border: '1px solid',
+              borderColor: selected === cat.key ? '#111827' : '#E5E7EB',
+              background: selected === cat.key ? '#111827' : '#fff',
+              color: selected === cat.key ? '#fff' : '#374151',
+              fontSize: 13, fontWeight: selected === cat.key ? 600 : 400,
+              cursor: 'pointer', transition: 'all 0.15s',
+            }}
+          >
+            {cat.label}
+            {cat.key !== 'all' && count > 0 && (
+              <span style={{ marginLeft: 5, fontSize: 11, opacity: 0.7 }}>({count})</span>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 export function Templates() {
   const [templates, setTemplates] = useState<TemplateSummary[]>([]);
   const [category, setCategory] = useState<string>('all');
+  const [profession, setProfession] = useState<string>('all');
   const navigate = useNavigate();
 
   useEffect(() => { api.get('/templates').then(({ data }) => setTemplates(data.data)); }, []);
@@ -185,7 +243,12 @@ export function Templates() {
     }
   };
 
-  const filtered = category === 'all' ? templates : templates.filter(t => t.category === category);
+  const filtered = templates.filter(t => {
+    const categoryMatch = category === 'all' || t.category === category;
+    const meta = TEMPLATE_META[t.slug];
+    const professionMatch = profession === 'all' || (meta && meta.profession === profession);
+    return categoryMatch && professionMatch;
+  });
 
   return (
     <div style={{ minHeight: '100vh', background: '#F9FAFB' }}>
@@ -202,34 +265,35 @@ export function Templates() {
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: '#111827' }}>选择模板</h1>
           <p style={{ margin: '4px 0 0', fontSize: 14, color: '#6B7280' }}>挑一个适合你的模板，随时可以更换</p>
         </div>
-        {/* Category tabs */}
-        <div style={{ display: 'flex', gap: 8, marginBottom: 24, flexWrap: 'wrap' }}>
-          {categories.map(cat => (
-            <button
-              key={cat.key}
-              onClick={() => setCategory(cat.key)}
-              style={{
-                padding: '6px 18px', borderRadius: 20, border: '1px solid',
-                borderColor: category === cat.key ? '#111827' : '#E5E7EB',
-                background: category === cat.key ? '#111827' : '#fff',
-                color: category === cat.key ? '#fff' : '#374151',
-                fontSize: 13, fontWeight: category === cat.key ? 600 : 400,
-                cursor: 'pointer', transition: 'all 0.15s',
-              }}
-            >
-              {cat.label}
-              {cat.key !== 'all' && (
-                <span style={{ marginLeft: 5, fontSize: 11, opacity: 0.7 }}>
-                  ({templates.filter(t => t.category === cat.key).length})
-                </span>
-              )}
-            </button>
-          ))}
+
+        {/* Style category tabs */}
+        <div style={{ marginBottom: 12 }}>
+          <FilterBar
+            label="风格"
+            categories={styleCategories}
+            selected={category}
+            onSelect={setCategory}
+            templates={templates}
+            filterKey="category"
+          />
         </div>
+
+        {/* Profession category tabs */}
+        <div style={{ marginBottom: 28 }}>
+          <FilterBar
+            label="职业"
+            categories={professionCategories}
+            selected={profession}
+            onSelect={setProfession}
+            templates={templates}
+            filterKey="profession"
+          />
+        </div>
+
         {/* Template grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 }}>
           {filtered.map((t) => {
-            const meta = TEMPLATE_META[t.slug] ?? { bg: '#F3F4F6', tc: '#374151', desc: '' };
+            const meta = TEMPLATE_META[t.slug] ?? { bg: '#F3F4F6', tc: '#374151', desc: '', profession: '通用' };
             return (
               <div key={t.id}
                 style={{ background: '#fff', border: '1px solid #E5E7EB', borderRadius: 10, overflow: 'hidden', transition: 'box-shadow 0.15s' }}
@@ -237,7 +301,7 @@ export function Templates() {
                 onMouseLeave={(e) => { e.currentTarget.style.boxShadow = 'none'; }}>
                 <TemplatePreview slug={t.slug} meta={meta} />
                 <div style={{ padding: '14px 18px 18px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, flexWrap: 'wrap' }}>
                     <span style={{ fontSize: 15, fontWeight: 600, color: '#111827' }}>{t.name}</span>
                     {t.category && (
                       <span style={{
@@ -245,6 +309,14 @@ export function Templates() {
                         background: '#F3F4F6', color: '#6B7280', border: '1px solid #E5E7EB',
                       }}>
                         {CATEGORY_LABELS[t.category] ?? t.category}
+                      </span>
+                    )}
+                    {meta.profession && meta.profession !== '通用' && (
+                      <span style={{
+                        fontSize: 10, padding: '1px 7px', borderRadius: 10, fontWeight: 500,
+                        background: '#EFF6FF', color: '#2563EB', border: '1px solid #BFDBFE',
+                      }}>
+                        {meta.profession}
                       </span>
                     )}
                   </div>

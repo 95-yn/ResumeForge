@@ -16,10 +16,10 @@
   </section>
   {{/if}}
   {{#if experience.length}}
-  <section class="eg-section">
+  <section class="eg-section" data-section="experience">
     <h2 class="eg-section-title">工作经历</h2>
     {{#each experience}}
-    <div class="eg-entry">
+    <div class="eg-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="eg-entry-head">
         <div class="eg-entry-left">
           <span class="eg-primary" data-field="experience.{{@index}}.company">{{company}}</span>
@@ -33,10 +33,10 @@
   </section>
   {{/if}}
   {{#if education.length}}
-  <section class="eg-section">
+  <section class="eg-section" data-section="education">
     <h2 class="eg-section-title">教育背景</h2>
     {{#each education}}
-    <div class="eg-entry">
+    <div class="eg-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="eg-entry-head">
         <div class="eg-entry-left">
           <span class="eg-primary" data-field="education.{{@index}}.institution">{{institution}}</span>
@@ -49,16 +49,16 @@
   </section>
   {{/if}}
   {{#if skills.length}}
-  <section class="eg-section">
+  <section class="eg-section" data-section="skills">
     <h2 class="eg-section-title">技能</h2>
-    <p class="eg-skills-line">{{#each skills}}<span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}} (<span data-field="skills.{{@index}}.level">{{level}}</span>){{/if}}{{#unless @last}} &ensp;·&ensp; {{/unless}}{{/each}}</p>
+    <p class="eg-skills-line">{{#each skills}}<span data-entry="skills" data-entry-index="{{@index}}" data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}} (<span data-field="skills.{{@index}}.level">{{level}}</span>){{/if}}{{#unless @last}} &ensp;·&ensp; {{/unless}}{{/each}}</p>
   </section>
   {{/if}}
   {{#if projects.length}}
-  <section class="eg-section">
+  <section class="eg-section" data-section="projects">
     <h2 class="eg-section-title">项目经历</h2>
     {{#each projects}}
-    <div class="eg-entry">
+    <div class="eg-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="eg-entry-head">
         <div class="eg-entry-left">
           <span class="eg-primary" data-field="projects.{{@index}}.name">{{name}}</span>
