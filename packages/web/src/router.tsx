@@ -11,11 +11,12 @@ export const router = createBrowserRouter([
     path: '/',
     element: <App />,
     children: [
+      { index: true, element: <Templates /> },
       { path: 'login', element: <Login /> },
       { path: 'dashboard', element: <ProtectedRoute><Dashboard /></ProtectedRoute> },
-      { path: 'templates', element: <ProtectedRoute><Templates /></ProtectedRoute> },
+      { path: 'templates', element: <Templates /> },
+      { path: 'editor', element: <Editor /> },
       { path: 'editor/:resumeId', element: <ProtectedRoute><Editor /></ProtectedRoute> },
-      { index: true, element: <ProtectedRoute><Dashboard /></ProtectedRoute> },
     ],
   },
 ]);

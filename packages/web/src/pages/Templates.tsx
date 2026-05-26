@@ -54,17 +54,27 @@ export function Templates() {
   const navigate = useNavigate();
   useEffect(() => { api.get('/templates').then(({ data }) => setTemplates(data.data)); }, []);
 
+  const isLoggedIn = !!localStorage.getItem('accessToken');
+
   const handleUse = async (slug: string) => {
-    const { data } = await api.post('/resumes', { templateId: slug });
-    message.success('简历已创建');
-    navigate(`/editor/${data.data.id}`);
+    if (isLoggedIn) {
+      const { data } = await api.post('/resumes', { templateId: slug });
+      message.success('简历已创建');
+      navigate(`/editor/${data.data.id}`);
+    } else {
+      navigate(`/editor?template=${slug}`);
+    }
   };
 
   return (
     <div style={{ minHeight: '100vh', background: '#F9FAFB' }}>
       <header style={{ background: '#fff', borderBottom: '1px solid #E5E7EB', padding: '0 32px', height: 56, display: 'flex', alignItems: 'center', gap: 16, position: 'sticky', top: 0, zIndex: 10 }}>
-        <Button type="text" icon={<ArrowLeftOutlined />} onClick={() => navigate('/dashboard')} style={{ color: '#6B7280' }} />
-        <span style={{ fontSize: 16, fontWeight: 700, color: '#111827' }}>模板市场</span>
+        <span style={{ fontSize: 16, fontWeight: 700, color: '#111827' }}>ResumeForge</span>
+        <div style={{ flex: 1 }} />
+        {isLoggedIn
+          ? <Button type="text" onClick={() => navigate('/dashboard')} style={{ color: '#6B7280', fontSize: 13 }}>我的简历</Button>
+          : <Button type="text" onClick={() => navigate('/login')} style={{ color: '#6B7280', fontSize: 13 }}>登录</Button>
+        }
       </header>
       <div style={{ maxWidth: 960, margin: '0 auto', padding: '40px 24px' }}>
         <div style={{ marginBottom: 28 }}>

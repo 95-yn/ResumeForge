@@ -6,11 +6,16 @@ import { api } from '../../api/client';
 
 export function TopBar() {
   const navigate = useNavigate();
-  const { save, saveStatus, undo, redo, historyIndex, history, resumeId } = useEditorStore();
+  const { save, saveStatus, undo, redo, historyIndex, history, resumeId, mode, templateId, resume } = useEditorStore();
 
   const handleExportPdf = async () => {
-    if (!resumeId) return;
-    const response = await api.post(`/resumes/${resumeId}/export/pdf`, {}, { responseType: 'blob' });
+    let response;
+    if (mode === 'guest') {
+      response = await api.post('/guest/export/pdf', { templateSlug: templateId, data: resume }, { responseType: 'blob' });
+    } else {
+      if (!resumeId) return;
+      response = await api.post(`/resumes/${resumeId}/export/pdf`, {}, { responseType: 'blob' });
+    }
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const a = document.createElement('a');
     a.href = url; a.download = 'resume.pdf'; a.click();
@@ -27,7 +32,7 @@ export function TopBar() {
       borderBottom: '1px solid #E5E7EB', flexShrink: 0,
     }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-        <Button type="text" icon={<ArrowLeftOutlined />} onClick={() => navigate('/dashboard')} style={{ color: '#6B7280' }} />
+        <Button type="text" icon={<ArrowLeftOutlined />} onClick={() => navigate('/')} style={{ color: '#6B7280' }} />
         <span style={{ fontSize: 14, fontWeight: 600, color: '#111827' }}>简历编辑器</span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginLeft: 4 }}>
           <div style={{ width: 6, height: 6, borderRadius: '50%', background: dotColor, transition: 'background 0.2s' }} />

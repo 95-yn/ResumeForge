@@ -3,7 +3,7 @@ import cors from 'cors';
 import { errorHandler } from './middleware/error-handler';
 import { authRouter } from './routes/auth';
 import { resumeRouter } from './routes/resume';
-import { exportRouter } from './routes/export';
+import { exportRouter, guestExportRouter } from './routes/export';
 import { templateRouter } from './routes/template';
 
 export const app = express();
@@ -18,6 +18,7 @@ app.get('/api/health', (_req, res) => {
 app.use('/api/auth', authRouter);
 app.use('/api/resumes', resumeRouter);
 app.use('/api/resumes', exportRouter);
+app.use('/api', guestExportRouter);
 app.use('/api/templates', templateRouter);
 
 app.use(errorHandler);

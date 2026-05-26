@@ -1,8 +1,10 @@
 import { create } from 'zustand';
 import type { ResumeData, TemplateSchema } from '@resume/shared';
+import { DEFAULT_RESUME_DATA, DEFAULT_SECTION_ORDER } from '@resume/shared';
 import { api } from '../api/client';
 
 interface EditorStore {
+  mode: 'guest' | 'cloud';
   resumeId: string | null;
   resume: ResumeData | null;
   templateId: string | null;
@@ -17,6 +19,7 @@ interface EditorStore {
   historyIndex: number;
 
   loadResume: (resumeId: string) => Promise<void>;
+  loadTemplate: (templateSlug: string) => Promise<void>;
   updateField: (sectionKey: string, fieldKey: string, value: unknown) => void;
   updateArrayItem: (sectionKey: string, index: number, fieldKey: string, value: unknown) => void;
   addArrayItem: (sectionKey: string) => void;
@@ -28,6 +31,19 @@ interface EditorStore {
   save: () => Promise<void>;
 }
 
+const GUEST_KEY = 'resumeforge_guest';
+
+function saveToLocal(templateId: string, data: ResumeData, sectionOrder: string[]) {
+  try { localStorage.setItem(GUEST_KEY, JSON.stringify({ templateId, data, sectionOrder })); } catch {}
+}
+
+function loadFromLocal(): { templateId: string; data: ResumeData; sectionOrder: string[] } | null {
+  try {
+    const raw = localStorage.getItem(GUEST_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch { return null; }
+}
+
 function pushHistory(state: EditorStore, newData: ResumeData): Partial<EditorStore> {
   const history = state.history.slice(0, state.historyIndex + 1);
   history.push(structuredClone(newData));
@@ -36,7 +52,7 @@ function pushHistory(state: EditorStore, newData: ResumeData): Partial<EditorSto
 }
 
 export const useEditorStore = create<EditorStore>((set, get) => ({
-  resumeId: null, resume: null, templateId: null, templateHtml: null, templateCss: null, schema: null,
+  mode: 'guest', resumeId: null, resume: null, templateId: null, templateHtml: null, templateCss: null, schema: null,
   sectionOrder: [], activeSection: null, isDirty: false, saveStatus: 'saved', history: [], historyIndex: -1,
 
   loadResume: async (resumeId) => {
@@ -46,9 +62,23 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     const tpl = tplRes.data;
     const resumeData = resume.data as ResumeData;
     set({
-      resumeId, resume: resumeData, templateId: resume.templateId,
+      mode: 'cloud', resumeId, resume: resumeData, templateId: resume.templateId,
       templateHtml: tpl.html, templateCss: tpl.css, schema: tpl.schema as TemplateSchema,
       sectionOrder: resume.sectionOrder, history: [structuredClone(resumeData)], historyIndex: 0,
+      isDirty: false, saveStatus: 'saved',
+    });
+  },
+
+  loadTemplate: async (templateSlug) => {
+    const { data: tplRes } = await api.get(`/templates/${templateSlug}`);
+    const tpl = tplRes.data;
+    const local = loadFromLocal();
+    const resumeData = (local && local.templateId === templateSlug) ? local.data : (DEFAULT_RESUME_DATA as ResumeData);
+    const sectionOrder = (local && local.templateId === templateSlug) ? local.sectionOrder : DEFAULT_SECTION_ORDER;
+    set({
+      mode: 'guest', resumeId: null, resume: resumeData, templateId: templateSlug,
+      templateHtml: tpl.html, templateCss: tpl.css, schema: tpl.schema as TemplateSchema,
+      sectionOrder, history: [structuredClone(resumeData)], historyIndex: 0,
       isDirty: false, saveStatus: 'saved',
     });
   },
@@ -114,9 +144,13 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 
   save: async () => {
     const state = get();
-    if (!state.resumeId || !state.isDirty) return;
+    if (!state.isDirty || !state.resume) return;
     set({ saveStatus: 'saving' });
-    await api.patch(`/resumes/${state.resumeId}`, { data: state.resume, sectionOrder: state.sectionOrder });
+    if (state.mode === 'guest' && state.templateId) {
+      saveToLocal(state.templateId, state.resume, state.sectionOrder);
+    } else if (state.resumeId) {
+      await api.patch(`/resumes/${state.resumeId}`, { data: state.resume, sectionOrder: state.sectionOrder });
+    }
     set({ isDirty: false, saveStatus: 'saved' });
   },
 }));

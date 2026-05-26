@@ -15,13 +15,21 @@ export async function exportPdf(resumeId: string, userId: string, options: PdfEx
   const resume = await prisma.resume.findUnique({ where: { id: resumeId } });
   if (!resume || resume.userId !== userId) throw new AppError(404, '简历不存在', 'RESUME_NOT_FOUND');
 
-  // Try by id first, then by slug
   let template = await prisma.template.findUnique({ where: { id: resume.templateId } });
   if (!template) template = await prisma.template.findUnique({ where: { slug: resume.templateId } });
   if (!template) throw new AppError(404, '模板不存在', 'TEMPLATE_NOT_FOUND');
 
-  const fullHtml = renderResume({ html: template.html, css: template.css, data: resume.data as ResumeData });
+  return renderAndExportPdf(template.html, template.css, resume.data as ResumeData, options, resumeId);
+}
 
+export async function exportPdfDirect(input: { templateSlug: string; data: ResumeData }, options: PdfExportOptions = {}) {
+  const template = await prisma.template.findUnique({ where: { slug: input.templateSlug } });
+  if (!template) throw new AppError(404, '模板不存在', 'TEMPLATE_NOT_FOUND');
+  return renderAndExportPdf(template.html, template.css, input.data, options);
+}
+
+async function renderAndExportPdf(html: string, css: string, data: ResumeData, options: PdfExportOptions, resumeId?: string) {
+  const fullHtml = renderResume({ html, css, data });
   const browser = await getBrowser();
   const page = await browser.newPage();
 
@@ -32,10 +40,10 @@ export async function exportPdf(resumeId: string, userId: string, options: PdfEx
       margin: options.margin ?? DEFAULT_MARGIN,
       printBackground: true,
     });
-    const exportRecord = await prisma.export.create({
-      data: { resumeId, format: 'pdf', fileUrl: '', fileSize: pdfBuffer.length },
-    });
-    return { id: exportRecord.id, buffer: Buffer.from(pdfBuffer), fileSize: pdfBuffer.length };
+    if (resumeId) {
+      await prisma.export.create({ data: { resumeId, format: 'pdf', fileUrl: '', fileSize: pdfBuffer.length } });
+    }
+    return { buffer: Buffer.from(pdfBuffer), fileSize: pdfBuffer.length };
   } finally {
     await page.close();
   }
