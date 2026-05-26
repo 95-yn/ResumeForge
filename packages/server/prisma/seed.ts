@@ -6,9 +6,15 @@ const prisma = new PrismaClient();
 const templatesDir = join(__dirname, '../../../templates');
 
 const templates = [
-  { slug: 'classic', dir: 'classic', category: 'classic' },
-  { slug: 'modern', dir: 'modern', category: 'modern' },
+  { slug: 'classic', dir: 'classic', category: 'business' },
+  { slug: 'modern', dir: 'modern', category: 'creative' },
   { slug: 'minimal', dir: 'minimal', category: 'minimal' },
+  { slug: 'professional', dir: 'professional', category: 'business' },
+  { slug: 'fresh', dir: 'fresh', category: 'creative' },
+  { slug: 'creative', dir: 'creative', category: 'creative' },
+  { slug: 'elegant', dir: 'elegant', category: 'minimal' },
+  { slug: 'tech', dir: 'tech', category: 'tech' },
+  { slug: 'developer', dir: 'developer', category: 'tech' },
 ];
 
 async function main() {

@@ -1,19 +1,19 @@
 <div class="resume modern">
   <aside class="sidebar">
     {{#if basics.avatar}}<img class="avatar" src="{{basics.avatar}}" alt="" />{{/if}}
-    <h1>{{basics.name}}</h1>
-    {{#if basics.title}}<p class="title">{{basics.title}}</p>{{/if}}
+    <h1 data-field="basics.name">{{basics.name}}</h1>
+    {{#if basics.title}}<p class="title" data-field="basics.title">{{basics.title}}</p>{{/if}}
     <div class="contact-list">
-      {{#if basics.email}}<div class="contact-item">{{basics.email}}</div>{{/if}}
-      {{#if basics.phone}}<div class="contact-item">{{basics.phone}}</div>{{/if}}
-      {{#if basics.location}}<div class="contact-item">{{basics.location}}</div>{{/if}}
+      {{#if basics.email}}<div class="contact-item" data-field="basics.email">{{basics.email}}</div>{{/if}}
+      {{#if basics.phone}}<div class="contact-item" data-field="basics.phone">{{basics.phone}}</div>{{/if}}
+      {{#if basics.location}}<div class="contact-item" data-field="basics.location">{{basics.location}}</div>{{/if}}
     </div>
-    {{#if skills.length}}<div class="sidebar-section"><h2>专业技能</h2>{{#each skills}}<div class="skill-item"><span class="skill-name">{{name}}</span>{{#if level}}<span class="skill-level">{{level}}</span>{{/if}}</div>{{/each}}</div>{{/if}}
+    {{#if skills.length}}<div class="sidebar-section"><h2>专业技能</h2>{{#each skills}}<div class="skill-item"><span class="skill-name" data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="skill-level" data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</div>{{/each}}</div>{{/if}}
   </aside>
   <main class="main-content">
-    {{#if basics.summary}}<section class="section"><h2>个人简介</h2><p>{{{basics.summary}}}</p></section>{{/if}}
-    {{#if experience.length}}<section class="section"><h2>工作经历</h2>{{#each experience}}<div class="entry"><h3>{{position}} <span class="at">@</span> {{company}}</h3><span class="date">{{startDate}} - {{endDate}}</span>{{#if highlights.length}}<ul>{{#each highlights}}<li>{{this}}</li>{{/each}}</ul>{{/if}}</div>{{/each}}</section>{{/if}}
-    {{#if education.length}}<section class="section"><h2>教育背景</h2>{{#each education}}<div class="entry"><h3>{{institution}}</h3><p>{{area}} · {{studyType}} · {{startDate}} - {{endDate}}</p></div>{{/each}}</section>{{/if}}
-    {{#if projects.length}}<section class="section"><h2>项目经历</h2>{{#each projects}}<div class="entry"><h3>{{name}}{{#if role}} — {{role}}{{/if}}</h3>{{#if description}}<p>{{{description}}}</p>{{/if}}{{#if highlights.length}}<ul>{{#each highlights}}<li>{{this}}</li>{{/each}}</ul>{{/if}}</div>{{/each}}</section>{{/if}}
+    {{#if basics.summary}}<section class="section"><h2>个人简介</h2><p data-field="basics.summary">{{{basics.summary}}}</p></section>{{/if}}
+    {{#if experience.length}}<section class="section"><h2>工作经历</h2>{{#each experience}}<div class="entry"><h3><span data-field="experience.{{@index}}.position">{{position}}</span> <span class="at">@</span> <span data-field="experience.{{@index}}.company">{{company}}</span></h3><span class="date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> - <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>{{#if highlights.length}}<ul>{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}</div>{{/each}}</section>{{/if}}
+    {{#if education.length}}<section class="section"><h2>教育背景</h2>{{#each education}}<div class="entry"><h3 data-field="education.{{@index}}.institution">{{institution}}</h3><p><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span> · <span data-field="education.{{@index}}.startDate">{{startDate}}</span> - <span data-field="education.{{@index}}.endDate">{{endDate}}</span></p></div>{{/each}}</section>{{/if}}
+    {{#if projects.length}}<section class="section"><h2>项目经历</h2>{{#each projects}}<div class="entry"><h3><span data-field="projects.{{@index}}.name">{{name}}</span>{{#if role}} — <span data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}</h3>{{#if description}}<p data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}{{#if highlights.length}}<ul>{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}</div>{{/each}}</section>{{/if}}
   </main>
 </div>

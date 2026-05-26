@@ -1,0 +1,22 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+.resume.elegant { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 22mm 26mm; font-family: "Source Han Serif SC", Georgia, "Times New Roman", serif; font-size: 10pt; line-height: 1.7; color: #2D2D2D; background: #fff; }
+.eg-header { text-align: center; margin-bottom: 24px; }
+.eg-header h1 { font-size: 26pt; font-weight: 400; letter-spacing: 4px; color: #1A1A1A; font-family: "Source Han Serif SC", Georgia, serif; }
+.eg-title { font-size: 11pt; color: #777; margin-top: 6px; font-style: italic; font-family: "Source Han Sans SC", sans-serif; letter-spacing: 1px; }
+.eg-divider { width: 60px; height: 1px; background: #C4A882; margin: 12px auto; }
+.eg-contacts { display: flex; justify-content: center; flex-wrap: wrap; gap: 4px 16px; }
+.eg-contact { font-size: 9pt; color: #777; font-family: "Source Han Sans SC", sans-serif; }
+.eg-section { margin-bottom: 18px; }
+.eg-section-title { font-size: 9pt; text-transform: uppercase; letter-spacing: 3px; color: #C4A882; border-bottom: 1px solid #E5DDD0; padding-bottom: 4px; margin-bottom: 10px; font-family: "Source Han Sans SC", sans-serif; font-weight: 600; }
+.eg-entry { margin-bottom: 10px; }
+.eg-entry:last-child { margin-bottom: 0; }
+.eg-entry-head { display: flex; justify-content: space-between; align-items: flex-start; }
+.eg-entry-left { display: flex; flex-direction: column; }
+.eg-primary { font-size: 10.5pt; font-weight: 700; color: #1A1A1A; }
+.eg-secondary { font-size: 9.5pt; color: #666; margin-top: 1px; font-family: "Source Han Sans SC", sans-serif; }
+.eg-date { font-size: 9pt; color: #999; white-space: nowrap; margin-left: 12px; font-family: "Source Han Sans SC", sans-serif; padding-top: 2px; }
+.eg-body { font-size: 9.5pt; color: #555; margin-top: 4px; font-family: "Source Han Sans SC", sans-serif; }
+.eg-list { padding-left: 16px; margin-top: 4px; }
+.eg-list li { font-size: 9.5pt; color: #444; margin-bottom: 2px; font-family: "Source Han Sans SC", sans-serif; }
+.eg-skills-line { font-size: 9.5pt; color: #555; font-family: "Source Han Sans SC", sans-serif; line-height: 1.8; }
+@media print { .resume.elegant { margin: 0; padding: 20mm 22mm; } }

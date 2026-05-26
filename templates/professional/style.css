@@ -1,0 +1,25 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+.resume.professional { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Source Han Sans SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 10pt; line-height: 1.6; color: #374151; background: #fff; }
+.pro-header { background: #1F2937; color: #fff; padding: 20px 28px; display: flex; justify-content: space-between; align-items: center; }
+.pro-header h1 { font-size: 22pt; font-weight: 700; color: #fff; letter-spacing: 1px; }
+.pro-title { font-size: 11pt; color: #9CA3AF; margin-top: 4px; }
+.pro-header-right { text-align: right; }
+.pro-contact-item { font-size: 9pt; color: #D1D5DB; margin-bottom: 3px; }
+.pro-section { padding: 14px 28px; border-bottom: 1px solid #E5E7EB; }
+.pro-section:last-child { border-bottom: none; }
+.pro-section-title { font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; color: #1F2937; margin-bottom: 10px; }
+.pro-entry { margin-bottom: 10px; }
+.pro-entry:last-child { margin-bottom: 0; }
+.pro-entry-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+.pro-entry-main { font-size: 10.5pt; }
+.pro-company { font-weight: 700; color: #111827; }
+.pro-position { color: #374151; }
+.pro-sep { color: #9CA3AF; }
+.pro-date { font-size: 9pt; color: #6B7280; white-space: nowrap; margin-left: 12px; }
+.pro-summary { font-size: 9.5pt; color: #4B5563; }
+.pro-highlights { padding-left: 18px; margin-top: 4px; }
+.pro-highlights li { font-size: 9.5pt; color: #374151; margin-bottom: 2px; }
+.pro-desc { font-size: 9.5pt; color: #4B5563; margin-top: 4px; }
+.pro-skills { display: flex; flex-wrap: wrap; gap: 6px; }
+.pro-skill-tag { background: #F3F4F6; border: 1px solid #E5E7EB; padding: 2px 10px; border-radius: 4px; font-size: 9pt; color: #374151; }
+@media print { .resume.professional { margin: 0; } }

@@ -1,0 +1,26 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+.resume.fresh { max-width: 210mm; min-height: 297mm; margin: 0 auto; display: flex; font-family: "Source Han Sans SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 10pt; line-height: 1.6; color: #1F2937; background: #fff; }
+.fresh-sidebar { width: 6px; background: linear-gradient(180deg, #3B82F6 0%, #60A5FA 50%, #93C5FD 100%); flex-shrink: 0; }
+.fresh-content { flex: 1; padding: 20mm 20px 20px 22px; }
+.fresh-header { margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid #DBEAFE; }
+.fresh-header h1 { font-size: 24pt; font-weight: 800; color: #1E40AF; letter-spacing: 1px; }
+.fresh-title { font-size: 11pt; color: #3B82F6; font-weight: 500; margin-top: 2px; }
+.fresh-contacts { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 4px 14px; }
+.fresh-contact { font-size: 9pt; color: #6B7280; }
+.fresh-section { margin-bottom: 14px; }
+.fresh-section-title { font-size: 11pt; font-weight: 700; color: #1D4ED8; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+.fresh-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #3B82F6; flex-shrink: 0; }
+.fresh-entry { margin-bottom: 10px; padding-left: 8px; border-left: 2px solid #BFDBFE; }
+.fresh-entry:last-child { margin-bottom: 0; }
+.fresh-entry-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px; }
+.fresh-company { font-weight: 700; color: #111827; font-size: 10.5pt; }
+.fresh-pos { color: #374151; font-size: 10pt; }
+.fresh-arrow { color: #93C5FD; font-weight: 400; }
+.fresh-date { font-size: 9pt; color: #9CA3AF; white-space: nowrap; margin-left: 10px; }
+.fresh-text { font-size: 9.5pt; color: #4B5563; }
+.fresh-list { padding-left: 16px; margin-top: 4px; }
+.fresh-list li { font-size: 9.5pt; color: #374151; margin-bottom: 2px; }
+.fresh-skills { display: flex; flex-wrap: wrap; gap: 6px; }
+.fresh-skill-badge { background: #EFF6FF; border: 1px solid #BFDBFE; color: #1D4ED8; padding: 3px 10px; border-radius: 20px; font-size: 9pt; font-weight: 500; }
+.fresh-skill-level { color: #60A5FA; font-weight: 400; }
+@media print { .resume.fresh { margin: 0; } }

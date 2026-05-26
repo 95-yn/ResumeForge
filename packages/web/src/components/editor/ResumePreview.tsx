@@ -2,9 +2,52 @@ import { useEffect, useRef, useMemo } from 'react';
 import Handlebars from 'handlebars';
 import { useEditorStore } from '../../stores/editor.store';
 
+const EDIT_SCRIPT = `
+(function() {
+  var activeEl = null;
+  document.querySelectorAll('[data-field]').forEach(function(el) {
+    el.style.cursor = 'text';
+    el.style.outline = 'none';
+    el.style.transition = 'box-shadow 0.15s';
+    el.addEventListener('mouseenter', function() {
+      if (el !== activeEl) el.style.boxShadow = 'inset 0 0 0 1px rgba(59,130,246,0.3)';
+    });
+    el.addEventListener('mouseleave', function() {
+      if (el !== activeEl) el.style.boxShadow = 'none';
+    });
+    el.addEventListener('dblclick', function(e) {
+      e.stopPropagation();
+      if (activeEl && activeEl !== el) {
+        activeEl.contentEditable = 'false';
+        activeEl.style.boxShadow = 'none';
+      }
+      activeEl = el;
+      el.contentEditable = 'true';
+      el.style.boxShadow = 'inset 0 0 0 2px rgba(59,130,246,0.5)';
+      el.focus();
+    });
+    el.addEventListener('blur', function() {
+      el.contentEditable = 'false';
+      el.style.boxShadow = 'none';
+      activeEl = null;
+      parent.postMessage({
+        type: 'resume-field-update',
+        field: el.dataset.field,
+        value: el.innerHTML.replace(/<br\\s*\\/?>/g, '\\n').replace(/<[^>]*>/g, '').trim()
+      }, '*');
+    });
+    el.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); el.blur(); }
+      if (e.key === 'Escape') { el.blur(); }
+    });
+  });
+})();
+`;
+
 export function ResumePreview() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
-  const { resume, templateHtml, templateCss } = useEditorStore();
+  const isEditingRef = useRef(false);
+  const { resume, templateHtml, templateCss, updateByPath } = useEditorStore();
 
   const isEmpty = !resume?.basics?.name && !resume?.basics?.email;
 
@@ -25,12 +68,53 @@ export function ResumePreview() {
     } catch { return '<html><body><p style="color:red;padding:20px">模板渲染错误</p></body></html>'; }
   }, [resume, templateHtml, templateCss, isEmpty]);
 
+  // Inject editing script after rendering
   useEffect(() => {
-    if (iframeRef.current) {
-      const doc = iframeRef.current.contentDocument;
-      if (doc) { doc.open(); doc.write(renderedHtml); doc.close(); }
+    if (isEditingRef.current) return;
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+    const doc = iframe.contentDocument;
+    if (doc) {
+      doc.open();
+      doc.write(renderedHtml);
+      doc.close();
+      // Inject edit script after document is written
+      try {
+        const scriptEl = doc.createElement('script');
+        scriptEl.textContent = EDIT_SCRIPT;
+        doc.body.appendChild(scriptEl);
+      } catch {}
     }
   }, [renderedHtml]);
+
+  // Listen to postMessage from iframe
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      if (event.data?.type !== 'resume-field-update') return;
+      const { field, value } = event.data as { field: string; value: string };
+      if (!field) return;
+      isEditingRef.current = false;
+      updateByPath(field, value);
+    };
+
+    window.addEventListener('message', handleMessage);
+    return () => window.removeEventListener('message', handleMessage);
+  }, [updateByPath]);
+
+  // Mark as editing when iframe gets a dblclick (prevents re-render mid-edit)
+  useEffect(() => {
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+    const handleLoad = () => {
+      const iframeDoc = iframe.contentDocument;
+      if (!iframeDoc) return;
+      iframeDoc.addEventListener('dblclick', () => {
+        isEditingRef.current = true;
+      });
+    };
+    iframe.addEventListener('load', handleLoad);
+    return () => iframe.removeEventListener('load', handleLoad);
+  }, []);
 
   return (
     <div style={{

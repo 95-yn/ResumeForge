@@ -1,0 +1,28 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+.resume.developer { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 20px 28px; font-family: "Courier New", "Fira Code", "JetBrains Mono", monospace; font-size: 9.5pt; line-height: 1.7; color: #D4D4D4; background: #1E1E1E; }
+.dev-header { border-bottom: 1px solid #3C3C3C; padding-bottom: 16px; margin-bottom: 16px; }
+.dev-prompt { font-size: 8.5pt; color: #608B4E; margin-bottom: 6px; }
+.dev-header h1 { font-size: 22pt; font-weight: 700; color: #9CDCFE; letter-spacing: 1px; }
+.dev-title { font-size: 10pt; color: #608B4E; margin-top: 4px; }
+.dev-contacts { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px 20px; }
+.dev-contact { font-size: 9pt; }
+.dev-key { color: #9CDCFE; }
+.dev-sep { color: #CE9178; }
+.dev-section { margin-bottom: 14px; }
+.dev-section-title { font-size: 10pt; font-weight: 700; color: #4EC9B0; margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
+.dev-hash { color: #4EC9B0; font-weight: 900; font-size: 12pt; }
+.dev-entry { margin-bottom: 10px; padding-left: 4px; border-left: 2px solid #3C3C3C; }
+.dev-entry:last-child { margin-bottom: 0; }
+.dev-entry-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 4px; margin-bottom: 3px; }
+.dev-company { font-weight: 700; color: #4FC1FF; }
+.dev-pos { color: #CE9178; }
+.dev-at { color: #858585; }
+.dev-date { font-size: 8.5pt; color: #608B4E; margin-left: auto; }
+.dev-body { font-size: 9pt; color: #9D9D9D; margin-top: 4px; }
+.dev-list { padding-left: 16px; margin-top: 4px; list-style-type: none; }
+.dev-list li { font-size: 9pt; color: #9D9D9D; margin-bottom: 2px; }
+.dev-list li::before { content: "> "; color: #4EC9B0; }
+.dev-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.dev-skill-tag { background: #2D2D2D; border: 1px solid #3C3C3C; color: #D4D4D4; padding: 2px 8px; border-radius: 2px; font-size: 8.5pt; }
+.dev-skill-level { color: #4EC9B0; }
+@media print { .resume.developer { margin: 0; background: #1E1E1E; -webkit-print-color-adjust: exact; print-color-adjust: exact; } }

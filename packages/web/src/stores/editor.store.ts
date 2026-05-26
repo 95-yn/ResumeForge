@@ -26,6 +26,7 @@ interface EditorStore {
   removeArrayItem: (sectionKey: string, index: number) => void;
   setActiveSection: (key: string | null) => void;
   reorderSections: (order: string[]) => void;
+  updateByPath: (path: string, value: unknown) => void;
   undo: () => void;
   redo: () => void;
   save: () => Promise<void>;
@@ -127,6 +128,22 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 
   setActiveSection: (key) => set({ activeSection: key }),
   reorderSections: (order) => set({ sectionOrder: order, isDirty: true, saveStatus: 'unsaved' }),
+
+  updateByPath: (path, value) => {
+    const state = get();
+    if (!state.resume) return;
+    const newData = structuredClone(state.resume);
+    const parts = path.split('.');
+    let target: any = newData;
+    for (let i = 0; i < parts.length - 1; i++) {
+      const key = /^\d+$/.test(parts[i]) ? parseInt(parts[i]) : parts[i];
+      target = target[key];
+      if (target == null) return;
+    }
+    const lastKey = /^\d+$/.test(parts[parts.length - 1]) ? parseInt(parts[parts.length - 1]) : parts[parts.length - 1];
+    target[lastKey] = value;
+    set(pushHistory(state, newData));
+  },
 
   undo: () => {
     const state = get();

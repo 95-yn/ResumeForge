@@ -1,0 +1,83 @@
+<div class="resume creative">
+  <header class="cr-header">
+    <h1 data-field="basics.name">{{basics.name}}</h1>
+    {{#if basics.title}}<p class="cr-tagline" data-field="basics.title">{{basics.title}}</p>{{/if}}
+    <div class="cr-contacts">
+      {{#if basics.email}}<span class="cr-contact" data-field="basics.email">{{basics.email}}</span>{{/if}}
+      {{#if basics.phone}}<span class="cr-contact" data-field="basics.phone">{{basics.phone}}</span>{{/if}}
+      {{#if basics.location}}<span class="cr-contact" data-field="basics.location">{{basics.location}}</span>{{/if}}
+    </div>
+  </header>
+  {{#if basics.summary}}
+  <section class="cr-section">
+    <h2 class="cr-section-title">个人简介</h2>
+    <p class="cr-body" data-field="basics.summary">{{{basics.summary}}}</p>
+  </section>
+  {{/if}}
+  {{#if experience.length}}
+  <section class="cr-section">
+    <h2 class="cr-section-title">工作经历</h2>
+    {{#each experience}}
+    <div class="cr-entry">
+      <div class="cr-entry-head">
+        <div class="cr-meta">
+          <span class="cr-entity" data-field="experience.{{@index}}.company">{{company}}</span>
+          <span class="cr-role" data-field="experience.{{@index}}.position">{{position}}</span>
+        </div>
+        <span class="cr-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> — <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+      </div>
+      {{#if highlights.length}}<ul class="cr-highlights">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+  {{#if education.length}}
+  <section class="cr-section">
+    <h2 class="cr-section-title">教育背景</h2>
+    {{#each education}}
+    <div class="cr-entry">
+      <div class="cr-entry-head">
+        <div class="cr-meta">
+          <span class="cr-entity" data-field="education.{{@index}}.institution">{{institution}}</span>
+          <span class="cr-role"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></span>
+        </div>
+        <span class="cr-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> — <span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+      </div>
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+  {{#if skills.length}}
+  <section class="cr-section">
+    <h2 class="cr-section-title">专业技能</h2>
+    <div class="cr-skills-grid">
+      {{#each skills}}
+      <div class="cr-skill-row">
+        <span class="cr-skill-name" data-field="skills.{{@index}}.name">{{name}}</span>
+        <div class="cr-skill-bar">
+          <div class="cr-skill-fill cr-level-{{level}}"></div>
+        </div>
+        <span class="cr-skill-level" data-field="skills.{{@index}}.level">{{level}}</span>
+      </div>
+      {{/each}}
+    </div>
+  </section>
+  {{/if}}
+  {{#if projects.length}}
+  <section class="cr-section">
+    <h2 class="cr-section-title">项目经历</h2>
+    {{#each projects}}
+    <div class="cr-entry">
+      <div class="cr-entry-head">
+        <div class="cr-meta">
+          <span class="cr-entity" data-field="projects.{{@index}}.name">{{name}}</span>
+          {{#if role}}<span class="cr-role" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+        </div>
+      </div>
+      {{#if description}}<p class="cr-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if highlights.length}}<ul class="cr-highlights">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+    </div>
+    {{/each}}
+  </section>
+  {{/if}}
+</div>
