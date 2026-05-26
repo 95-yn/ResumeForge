@@ -1,39 +1,46 @@
-import { Input, Select, Button, Divider } from 'antd';
+import { Input, Select, Button } from 'antd';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useEditorStore } from '../../stores/editor.store';
 import type { SectionSchema } from '@resume/shared';
+
+const lbl: React.CSSProperties = { display: 'block', marginBottom: 4, fontSize: 12, fontWeight: 500, color: '#6B7280' };
 
 export function FieldPanel() {
   const { schema, resume, activeSection, updateField, updateArrayItem, addArrayItem, removeArrayItem } = useEditorStore();
 
   if (!schema || !resume || !activeSection) {
-    return <div style={{ width: 340, borderLeft: '1px solid #e8e8e8', padding: 24, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <p style={{ color: '#bbb', fontSize: 14 }}>← 点击左侧模块开始编辑</p>
-    </div>;
+    return (
+      <div style={{ width: 320, borderLeft: '1px solid #E5E7EB', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#fff' }}>
+        <p style={{ color: '#D1D5DB', fontSize: 13 }}>← 选择模块开始编辑</p>
+      </div>
+    );
   }
 
   const section = schema.sections.find((s) => s.key === activeSection);
   if (!section) return null;
-
   if (section.type === 'array') return <ArrayFieldPanel section={section} />;
 
   const sectionData = resume[activeSection] as Record<string, unknown>;
 
   return (
-    <div style={{ width: 340, borderLeft: '1px solid #e8e8e8', padding: 20, overflowY: 'auto', height: '100%' }}>
-      <h3 style={{ marginBottom: 16, fontSize: 16, fontWeight: 600 }}>{section.label}</h3>
-      {section.fields.map((field) => (
-        <div key={field.key} style={{ marginBottom: 12 }}>
-          <label style={{ display: 'block', marginBottom: 4, fontSize: 13, color: '#555' }}>{field.label} {field.required && <span style={{ color: 'red' }}>*</span>}</label>
-          {field.type === 'select' ? (
-            <Select style={{ width: '100%' }} value={(sectionData?.[field.key] as string) || undefined} onChange={(val) => updateField(activeSection, field.key, val)} options={field.options?.map((o) => ({ label: o, value: o }))} allowClear />
-          ) : field.type === 'richtext' ? (
-            <Input.TextArea rows={4} value={(sectionData?.[field.key] as string) || ''} onChange={(e) => updateField(activeSection, field.key, e.target.value)} />
-          ) : (
-            <Input value={(sectionData?.[field.key] as string) || ''} onChange={(e) => updateField(activeSection, field.key, e.target.value)} placeholder={`请输入${field.label}`} />
-          )}
-        </div>
-      ))}
+    <div style={{ width: 320, borderLeft: '1px solid #E5E7EB', overflowY: 'auto', height: '100%', background: '#fff' }}>
+      <div style={{ padding: '14px 18px', borderBottom: '1px solid #F3F4F6' }}>
+        <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#111827' }}>{section.label}</h3>
+      </div>
+      <div style={{ padding: '14px 18px' }}>
+        {section.fields.map((field) => (
+          <div key={field.key} style={{ marginBottom: 14 }}>
+            <label style={lbl}>{field.label}{field.required && <span style={{ color: '#EF4444', marginLeft: 2 }}>*</span>}</label>
+            {field.type === 'select' ? (
+              <Select style={{ width: '100%' }} value={(sectionData?.[field.key] as string) || undefined} onChange={(val) => updateField(activeSection, field.key, val)} options={field.options?.map((o) => ({ label: o, value: o }))} allowClear />
+            ) : field.type === 'richtext' ? (
+              <Input.TextArea rows={3} value={(sectionData?.[field.key] as string) || ''} onChange={(e) => updateField(activeSection, field.key, e.target.value)} style={{ fontSize: 13 }} />
+            ) : (
+              <Input value={(sectionData?.[field.key] as string) || ''} onChange={(e) => updateField(activeSection, field.key, e.target.value)} placeholder={`输入${field.label}`} style={{ fontSize: 13 }} />
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -43,45 +50,54 @@ function ArrayFieldPanel({ section }: { section: SectionSchema }) {
   const items = (resume![activeSection!] as Record<string, unknown>[]) || [];
 
   return (
-    <div style={{ width: 340, borderLeft: '1px solid #e8e8e8', padding: 20, overflowY: 'auto', height: '100%' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <h3 style={{ margin: 0, fontSize: 16, fontWeight: 600 }}>{section.label}</h3>
-        <Button size="small" icon={<PlusOutlined />} onClick={() => addArrayItem(activeSection!)}>添加</Button>
+    <div style={{ width: 320, borderLeft: '1px solid #E5E7EB', overflowY: 'auto', height: '100%', background: '#fff' }}>
+      <div style={{ padding: '14px 18px', borderBottom: '1px solid #F3F4F6', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <h3 style={{ margin: 0, fontSize: 14, fontWeight: 600, color: '#111827' }}>{section.label}</h3>
+        <Button size="small" type="dashed" icon={<PlusOutlined />} onClick={() => addArrayItem(activeSection!)} style={{ fontSize: 12, borderRadius: 6 }}>添加</Button>
       </div>
-      {items.map((item, index) => (
-        <div key={index} style={{ marginBottom: 16, padding: 12, border: '1px solid #e8e8e8', borderRadius: 6 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-            <span style={{ fontWeight: 500 }}>#{index + 1}</span>
-            <Button size="small" danger icon={<DeleteOutlined />} onClick={() => removeArrayItem(activeSection!, index)} />
+      <div style={{ padding: '10px 14px' }}>
+        {items.length === 0 && (
+          <div style={{ textAlign: 'center', padding: '24px 0', color: '#D1D5DB', fontSize: 13 }}>
+            暂无记录，点击上方添加
           </div>
-          {section.fields.map((field) => {
-            if (field.type === 'array:text') {
-              const highlights = (item[field.key] as string[]) || [];
+        )}
+        {items.map((item, index) => (
+          <div key={index} style={{ marginBottom: 12, padding: 14, border: '1px solid #F3F4F6', borderRadius: 8, background: '#FAFAFA' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+              <span style={{ fontSize: 12, fontWeight: 600, color: '#9CA3AF' }}>#{index + 1}</span>
+              <Button size="small" type="text" danger icon={<DeleteOutlined />} onClick={() => removeArrayItem(activeSection!, index)} />
+            </div>
+            {section.fields.map((field) => {
+              if (field.type === 'array:text') {
+                const highlights = (item[field.key] as string[]) || [];
+                return (
+                  <div key={field.key} style={{ marginBottom: 8 }}>
+                    <label style={lbl}>{field.label}</label>
+                    {highlights.map((h, hi) => (
+                      <Input key={hi} size="small" value={h} style={{ marginTop: 3, fontSize: 12 }}
+                        onChange={(e) => { const nh = [...highlights]; nh[hi] = e.target.value; updateArrayItem(activeSection!, index, field.key, nh); }}
+                        addonAfter={<DeleteOutlined style={{ cursor: 'pointer', color: '#D1D5DB' }} onClick={() => updateArrayItem(activeSection!, index, field.key, highlights.filter((_, i) => i !== hi))} />}
+                      />
+                    ))}
+                    <Button size="small" type="dashed" block style={{ marginTop: 4, fontSize: 12, borderRadius: 6 }}
+                      onClick={() => updateArrayItem(activeSection!, index, field.key, [...highlights, ''])}>+ 添加</Button>
+                  </div>
+                );
+              }
               return (
                 <div key={field.key} style={{ marginBottom: 8 }}>
-                  <label style={{ fontSize: 13, color: '#555' }}>{field.label}</label>
-                  {highlights.map((h, hi) => (
-                    <Input key={hi} size="small" value={h} style={{ marginTop: 4 }}
-                      onChange={(e) => { const nh = [...highlights]; nh[hi] = e.target.value; updateArrayItem(activeSection!, index, field.key, nh); }}
-                      addonAfter={<DeleteOutlined onClick={() => { const nh = highlights.filter((_, i) => i !== hi); updateArrayItem(activeSection!, index, field.key, nh); }} />} />
-                  ))}
-                  <Button size="small" type="dashed" block style={{ marginTop: 4 }} onClick={() => updateArrayItem(activeSection!, index, field.key, [...highlights, ''])}>+ 添加条目</Button>
+                  <label style={lbl}>{field.label}</label>
+                  {field.type === 'select' ? (
+                    <Select style={{ width: '100%' }} size="small" value={(item[field.key] as string) || undefined} onChange={(val) => updateArrayItem(activeSection!, index, field.key, val)} options={field.options?.map((o) => ({ label: o, value: o }))} allowClear />
+                  ) : (
+                    <Input size="small" value={(item[field.key] as string) || ''} onChange={(e) => updateArrayItem(activeSection!, index, field.key, e.target.value)} style={{ fontSize: 12 }} />
+                  )}
                 </div>
               );
-            }
-            return (
-              <div key={field.key} style={{ marginBottom: 8 }}>
-                <label style={{ fontSize: 13, color: '#555' }}>{field.label}</label>
-                {field.type === 'select' ? (
-                  <Select style={{ width: '100%' }} size="small" value={(item[field.key] as string) || undefined} onChange={(val) => updateArrayItem(activeSection!, index, field.key, val)} options={field.options?.map((o) => ({ label: o, value: o }))} allowClear />
-                ) : (
-                  <Input size="small" value={(item[field.key] as string) || ''} onChange={(e) => updateArrayItem(activeSection!, index, field.key, e.target.value)} />
-                )}
-              </div>
-            );
-          })}
-        </div>
-      ))}
+            })}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
