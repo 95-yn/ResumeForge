@@ -1,0 +1,10 @@
+<div class="resume minimal">
+  <header><h1>{{basics.name}}</h1>
+    <div class="contact-line">{{#if basics.email}}<span>{{basics.email}}</span>{{/if}}{{#if basics.phone}}<span>{{basics.phone}}</span>{{/if}}{{#if basics.location}}<span>{{basics.location}}</span>{{/if}}</div>
+  </header>
+  {{#if basics.summary}}<p class="summary">{{{basics.summary}}}</p>{{/if}}
+  {{#if experience.length}}<section><h2>工作经历</h2>{{#each experience}}<div class="item"><div class="row"><strong>{{company}}</strong><span>{{startDate}} - {{endDate}}</span></div><div class="role">{{position}}</div>{{#if highlights.length}}<ul>{{#each highlights}}<li>{{this}}</li>{{/each}}</ul>{{/if}}</div>{{/each}}</section>{{/if}}
+  {{#if education.length}}<section><h2>教育背景</h2>{{#each education}}<div class="item"><div class="row"><strong>{{institution}}</strong><span>{{startDate}} - {{endDate}}</span></div><div class="role">{{area}} · {{studyType}}</div></div>{{/each}}</section>{{/if}}
+  {{#if skills.length}}<section><h2>技能</h2><p class="inline-list">{{#each skills}}{{name}}{{#unless @last}}, {{/unless}}{{/each}}</p></section>{{/if}}
+  {{#if projects.length}}<section><h2>项目经历</h2>{{#each projects}}<div class="item"><div class="row"><strong>{{name}}</strong>{{#if role}}<span>{{role}}</span>{{/if}}</div>{{#if description}}<p>{{{description}}}</p>{{/if}}{{#if highlights.length}}<ul>{{#each highlights}}<li>{{this}}</li>{{/each}}</ul>{{/if}}</div>{{/each}}</section>{{/if}}
+</div>

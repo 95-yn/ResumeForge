@@ -1,0 +1,23 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+.resume.modern { max-width: 210mm; min-height: 297mm; margin: 0 auto; display: flex; font-family: "Source Han Sans SC", "PingFang SC", sans-serif; font-size: 10pt; color: #333; }
+.sidebar { width: 200px; background: #1a1a2e; color: #eee; padding: 24mm 16px 20px; flex-shrink: 0; }
+.sidebar h1 { font-size: 18pt; color: #fff; margin-bottom: 4px; }
+.sidebar .title { font-size: 10pt; color: #a0a0c0; margin-bottom: 16px; }
+.avatar { width: 80px; height: 80px; border-radius: 50%; margin-bottom: 12px; object-fit: cover; }
+.contact-list { margin-bottom: 20px; }
+.contact-item { font-size: 8.5pt; margin-bottom: 6px; color: #c0c0d0; }
+.sidebar-section { margin-top: 16px; }
+.sidebar-section h2 { font-size: 10pt; color: #fff; border-bottom: 1px solid #444; padding-bottom: 4px; margin-bottom: 8px; }
+.skill-item { display: flex; justify-content: space-between; font-size: 8.5pt; margin-bottom: 4px; }
+.skill-level { color: #a0a0c0; }
+.main-content { flex: 1; padding: 24mm 20px 20px 24px; }
+.main-content .section { margin-bottom: 16px; }
+.main-content h2 { font-size: 12pt; color: #1a1a2e; border-bottom: 2px solid #1a1a2e; padding-bottom: 4px; margin-bottom: 8px; }
+.entry { margin-bottom: 10px; }
+.entry h3 { font-size: 10.5pt; font-weight: 600; }
+.at { color: #888; font-weight: 400; }
+.date { font-size: 8.5pt; color: #888; }
+.entry ul { margin-top: 4px; padding-left: 18px; }
+.entry li { font-size: 9pt; margin-bottom: 2px; }
+.entry p { font-size: 9pt; color: #555; margin-top: 2px; }
+@media print { .resume.modern { margin: 0; } }
