@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import { errorHandler } from './middleware/error-handler';
 import { authRouter } from './routes/auth';
+import { resumeRouter } from './routes/resume';
+import { templateRouter } from './routes/template';
 
 export const app = express();
 
@@ -13,5 +15,7 @@ app.get('/api/health', (_req, res) => {
 });
 
 app.use('/api/auth', authRouter);
+app.use('/api/resumes', resumeRouter);
+app.use('/api/templates', templateRouter);
 
 app.use(errorHandler);
