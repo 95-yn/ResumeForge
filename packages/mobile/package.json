@@ -1,0 +1,36 @@
+{
+  "name": "@resume/mobile",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev:h5": "taro build --type h5 --watch",
+    "build:h5": "taro build --type h5",
+    "dev:weapp": "taro build --type weapp --watch",
+    "build:weapp": "taro build --type weapp"
+  },
+  "dependencies": {
+    "@resume/shared": "workspace:*",
+    "@tarojs/components": "3.6.35",
+    "@tarojs/runtime": "3.6.35",
+    "@tarojs/taro": "3.6.35",
+    "@tarojs/plugin-framework-react": "3.6.35",
+    "@tarojs/plugin-platform-h5": "3.6.35",
+    "@tarojs/plugin-platform-weapp": "3.6.35",
+    "@tarojs/helper": "3.6.35",
+    "@tarojs/shared": "3.6.35",
+    "@tarojs/service": "3.6.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "zustand": "^5.0.5"
+  },
+  "devDependencies": {
+    "@tarojs/cli": "3.6.35",
+    "@tarojs/webpack5-runner": "3.6.35",
+    "@types/react": "^18.3.18",
+    "typescript": "^5.8.3",
+    "sass": "^1.89.0",
+    "webpack": "5.78.0",
+    "babel-preset-taro": "3.6.35",
+    "@babel/core": "^7.29.7"
+  }
+}

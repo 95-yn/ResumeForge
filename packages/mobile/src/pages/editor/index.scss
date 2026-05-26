@@ -1,0 +1,8 @@
+.editor-page { display: flex; flex-direction: column; height: 100vh; background: #f5f5f5; }
+.section-group { background: #fff; margin: 12px 16px; border-radius: 12px; overflow: hidden; }
+.section-header { display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; font-size: 30px; font-weight: 600; }
+.section-label { font-size: 30px; }
+.section-body { padding: 0 24px 20px; }
+.bottom-bar { display: flex; gap: 16px; padding: 16px 24px; background: #fff; border-top: 1px solid #eee; }
+.btn { flex: 1; text-align: center; padding: 20px; border-radius: 8px; font-size: 28px; background: #f0f0f0; }
+.btn.primary { background: #1890ff; color: #fff; }
