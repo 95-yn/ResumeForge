@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import type { ResumeData, TemplateSchema } from '@resume/shared';
-import { DEFAULT_RESUME_DATA, DEFAULT_SECTION_ORDER } from '@resume/shared';
+import { DEFAULT_RESUME_DATA, DEFAULT_SECTION_ORDER, PROFESSION_RESUME_DATA } from '@resume/shared';
 import { api } from '../api/client';
 
 interface EditorStore {
@@ -21,7 +21,7 @@ interface EditorStore {
   zoom: number;
 
   loadResume: (resumeId: string) => Promise<void>;
-  loadTemplate: (templateSlug: string) => Promise<void>;
+  loadTemplate: (templateSlug: string, profession?: string) => Promise<void>;
   updateField: (sectionKey: string, fieldKey: string, value: unknown) => void;
   updateArrayItem: (sectionKey: string, index: number, fieldKey: string, value: unknown) => void;
   addArrayItem: (sectionKey: string) => void;
@@ -76,7 +76,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     });
   },
 
-  loadTemplate: async (templateSlug) => {
+  loadTemplate: async (templateSlug, profession) => {
     const { data: tplRes } = await api.get(`/templates/${templateSlug}`);
     const tpl = tplRes.data;
 
@@ -91,7 +91,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       sectionOrder = state.sectionOrder;
     } else {
       const local = loadFromLocal();
-      resumeData = local ? local.data : (DEFAULT_RESUME_DATA as ResumeData);
+      resumeData = local ? local.data : ((PROFESSION_RESUME_DATA[profession || '通用'] || DEFAULT_RESUME_DATA) as ResumeData);
       sectionOrder = local ? local.sectionOrder : DEFAULT_SECTION_ORDER;
     }
 

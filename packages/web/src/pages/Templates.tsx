@@ -228,12 +228,13 @@ export function Templates() {
   const isLoggedIn = !!localStorage.getItem('accessToken');
 
   const handleUse = async (slug: string) => {
+    const meta = TEMPLATE_META[slug];
     if (isLoggedIn) {
       const { data } = await api.post('/resumes', { templateId: slug });
       message.success('简历已创建');
       navigate(`/editor/${data.data.id}`);
     } else {
-      navigate(`/editor?template=${slug}`);
+      navigate(`/editor?template=${slug}&profession=${encodeURIComponent(meta?.profession || '通用')}`);
     }
   };
 
