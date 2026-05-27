@@ -1,29 +1,159 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
-.resume.developer { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 20px 28px; font-family: "Courier New", "Fira Code", "JetBrains Mono", monospace; font-size: 9.5pt; line-height: 1.7; color: #D4D4D4; background: #1E1E1E; }
-.dev-header { border-bottom: 1px solid #3C3C3C; padding-bottom: 12px; margin-bottom: 12px; }
-.dev-prompt { font-size: 8.5pt; color: #608B4E; margin-bottom: 6px; }
-.dev-header h1 { font-size: 22pt; font-weight: 700; color: #9CDCFE; letter-spacing: 1px; }
-.dev-title { font-size: 10pt; color: #608B4E; margin-top: 4px; }
-.dev-contacts { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px 20px; }
-.dev-contact { font-size: 9pt; }
+
+.resume.developer {
+  max-width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 20px 28px;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace, 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  font-size: 9.5pt;
+  line-height: 1.65;
+  color: #D4D4D4;
+  background: #0A0A0A;
+}
+
+/* ── Header ── */
+.dev-header {
+  border-bottom: 1px solid #1E1E1E;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+}
+
+.dev-prompt {
+  font-size: 8.5pt;
+  color: #4EC9B0;
+  margin-bottom: 6px;
+}
+
+.dev-header h1 {
+  font-size: 20pt;
+  font-weight: 700;
+  color: #D4D4D4;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.dev-title {
+  font-size: 9.5pt;
+  color: #6A9955;
+  margin-top: 4px;
+}
+
+.dev-contacts {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+}
+
+.dev-contact { font-size: 9pt; color: #9CDCFE; }
 .dev-key { color: #9CDCFE; }
-.dev-sep { color: #CE9178; }
+.dev-sep { color: #808080; margin: 0 2px; }
+
+/* ── Section ── */
 .dev-section { margin-bottom: 12px; }
-.dev-section-title { font-size: 10pt; font-weight: 700; color: #4EC9B0; margin-bottom: 6px; display: flex; align-items: center; gap: 4px; }
-.dev-hash { color: #4EC9B0; font-weight: 900; font-size: 12pt; }
-.dev-entry { margin-bottom: 8px; padding-left: 4px; border-left: 2px solid #3C3C3C; }
+
+.dev-section-title {
+  font-size: 9.5pt;
+  font-weight: 700;
+  color: #4EC9B0;
+  margin-bottom: 7px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dev-hash {
+  color: #4EC9B0;
+  font-weight: 900;
+  font-size: 12pt;
+}
+
+/* ── Entry ── */
+.dev-entry {
+  margin-bottom: 8px;
+  padding-left: 4px;
+  border-left: 2px solid #252525;
+}
+
 .dev-entry:last-child { margin-bottom: 0; }
-.dev-entry-head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0 4px; margin-bottom: 3px; }
-.dev-company { font-weight: 700; color: #4FC1FF; }
+
+.dev-entry-head {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0 4px;
+  margin-bottom: 3px;
+}
+
+.dev-company {
+  font-weight: 700;
+  color: #4FC1FF;
+}
+
 .dev-pos { color: #CE9178; }
-.dev-at { color: #858585; }
-.dev-date { font-size: 8.5pt; color: #608B4E; margin-left: auto; }
-.dev-body { font-size: 9pt; color: #9D9D9D; margin-top: 4px; }
-.dev-list { padding-left: 16px; margin-top: 4px; list-style-type: none; }
-.dev-list li { font-size: 9pt; color: #9D9D9D; margin-bottom: 2px; }
-.dev-list li::before { content: "> "; color: #4EC9B0; }
-.dev-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.dev-skill-tag { background: #2D2D2D; border: 1px solid #3C3C3C; color: #D4D4D4; padding: 2px 8px; border-radius: 2px; font-size: 8.5pt; }
-.dev-skill-level { color: #4EC9B0; }
+.dev-at { color: #808080; }
+
+.dev-date {
+  font-size: 8.5pt;
+  color: #6A9955;
+  margin-left: auto;
+}
+
+.dev-body {
+  font-size: 9pt;
+  color: #9D9D9D;
+  margin-top: 3px;
+  line-height: 1.6;
+}
+
+.dev-list {
+  padding-left: 0;
+  margin-top: 4px;
+  list-style-type: none;
+}
+
+.dev-list li {
+  font-size: 9pt;
+  color: #9D9D9D;
+  margin-bottom: 2px;
+  line-height: 1.5;
+}
+
+.dev-list li::before {
+  content: '> ';
+  color: #4EC9B0;
+}
+
+/* ── Tags ── */
+.dev-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.dev-skill-tag {
+  background: #252525;
+  border: 1px solid #1E1E1E;
+  color: #D4D4D4;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 8.5pt;
+}
+
+.dev-skill-level {
+  color: #4EC9B0;
+  margin-left: 4px;
+}
+
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.developer { margin: 0; background: #1E1E1E; -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+
+@media print {
+  .resume.developer {
+    margin: 0;
+    background: #0A0A0A;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  @page { margin: 0; size: A4; }
+}
