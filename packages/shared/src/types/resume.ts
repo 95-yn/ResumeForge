@@ -60,3 +60,12 @@ export interface ResumeData {
   }>;
   [key: string]: unknown;
 }
+
+export interface ResumeSnapshot {
+  id: string;
+  resumeId: string;
+  data: ResumeData;
+  source: 'auto' | 'manual' | 'ai' | 'export';
+  label?: string;
+  createdAt: string;
+}

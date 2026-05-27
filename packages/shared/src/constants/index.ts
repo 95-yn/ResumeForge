@@ -64,3 +64,10 @@ export const DEFAULT_RESUME_DATA = {
     },
   ],
 };
+
+export const PLAN_TYPES = ['free', 'pro', 'premium'] as const;
+export const EXPORT_STATUSES = ['pending', 'processing', 'done', 'failed'] as const;
+export const AI_SESSION_TYPES = ['rewrite', 'polish', 'translate', 'jd-match'] as const;
+export const SNAPSHOT_SOURCES = ['auto', 'manual', 'ai', 'export'] as const;
+export const SUPPORTED_LANGUAGES = ['zh', 'en', 'ja'] as const;
+export const DEVICES = ['web', 'h5', 'miniapp', 'app'] as const;

@@ -51,6 +51,7 @@ export interface UpdateResumeRequest {
   templateId?: string;
   data?: Partial<ResumeData>;
   sectionOrder?: string[];
+  version: number;
 }
 
 export interface ResumeResponse {
@@ -59,6 +60,10 @@ export interface ResumeResponse {
   templateId: string;
   data: ResumeData;
   sectionOrder: string[];
+  language: string;
+  isPublic: boolean;
+  shareToken?: string;
+  version: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -78,4 +83,35 @@ export interface TemplateListQuery {
   category?: string;
   page?: number;
   pageSize?: number;
+}
+
+export interface CreateSnapshotRequest {
+  label?: string;
+}
+
+export interface SnapshotResponse {
+  id: string;
+  resumeId: string;
+  data: import('./resume').ResumeData;
+  source: string;
+  label?: string;
+  createdAt: string;
+}
+
+export interface ShareResumeRequest {
+  isPublic: boolean;
+}
+
+export interface ShareResumeResponse {
+  isPublic: boolean;
+  shareToken: string | null;
+  shareUrl: string;
+}
+
+export interface ConflictResponse {
+  success: false;
+  code: 'VERSION_CONFLICT';
+  message: string;
+  serverVersion: number;
+  serverData: import('./resume').ResumeData;
 }

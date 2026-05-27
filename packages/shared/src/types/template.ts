@@ -1,4 +1,4 @@
-export type TemplateCategory = 'classic' | 'modern' | 'creative' | 'minimal';
+export type TemplateCategory = 'business' | 'creative' | 'minimal' | 'tech';
 
 export interface Template {
   id: string;
@@ -6,10 +6,13 @@ export interface Template {
   slug: string;
   description?: string;
   category: TemplateCategory;
+  industry?: string;
   html: string;
   css: string;
   schema: import('./resume').TemplateSchema;
   thumbnail: string;
   isPremium: boolean;
+  isBuiltin: boolean;
   downloads: number;
+  version: string;
 }
