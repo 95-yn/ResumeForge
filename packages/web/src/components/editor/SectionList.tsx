@@ -1,20 +1,53 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Modal } from 'antd';
+import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { useEditorStore } from '../../stores/editor.store';
 
 const SECTION_ICONS: Record<string, string> = {
   basics: '👤', experience: '💼', education: '🎓', skills: '✦', projects: '📁',
 };
 
+const SECTION_ADD_LABELS: Record<string, string> = {
+  experience: '添加工作经历',
+  education: '添加教育经历',
+  skills: '添加技能',
+  projects: '添加项目',
+};
+
 // Sections that can be reordered (basics is always fixed at top)
 const DRAGGABLE_SECTIONS = new Set(['experience', 'education', 'skills', 'projects']);
+const ARRAY_SECTIONS = new Set(['experience', 'education', 'skills', 'projects']);
+
+/** Returns a single-line summary string for a section item */
+function getItemSummary(sectionKey: string, item: Record<string, unknown>): string {
+  switch (sectionKey) {
+    case 'experience':
+      return [item.company, item.position].filter(Boolean).join(' - ') || '未填写';
+    case 'education':
+      return (item.institution as string) || '未填写';
+    case 'skills':
+      return [item.name, item.level ? `· ${item.level}` : ''].filter(Boolean).join(' ') || '未填写';
+    case 'projects':
+      return (item.name as string) || '未填写';
+    default:
+      return '条目';
+  }
+}
 
 export function SectionList() {
-  const { schema, sectionOrder, activeSection, setActiveSection, reorderSections, zoom, setZoom, templateId } = useEditorStore();
+  const {
+    schema, sectionOrder, activeSection, setActiveSection,
+    reorderSections, zoom, setZoom, templateId, resume,
+    addArrayItem, removeArrayItem,
+  } = useEditorStore();
+
   const [hovered, setHovered] = useState<string | null>(null);
   const [dragKey, setDragKey] = useState<string | null>(null);
   const [dropTarget, setDropTarget] = useState<string | null>(null);
   const [dropPosition, setDropPosition] = useState<'before' | 'after' | null>(null);
+  // Track which sections are expanded (showing items)
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(ARRAY_SECTIONS));
   const navigate = useNavigate();
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
@@ -32,7 +65,6 @@ export function SectionList() {
     setDragKey(key);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', key);
-    // Make drag image slightly transparent
     const el = e.currentTarget as HTMLElement;
     requestAnimationFrame(() => { el.style.opacity = '0.4'; });
   }, []);
@@ -46,12 +78,9 @@ export function SectionList() {
   }, []);
 
   const handleDragOver = useCallback((e: React.DragEvent, key: string) => {
-    if (!dragKey || !DRAGGABLE_SECTIONS.has(key) || key === dragKey) {
-      return;
-    }
+    if (!dragKey || !DRAGGABLE_SECTIONS.has(key) || key === dragKey) return;
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
-    // Determine if mouse is in top half or bottom half of the element
     const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
     const midY = rect.top + rect.height / 2;
     const pos = e.clientY < midY ? 'before' : 'after';
@@ -60,7 +89,6 @@ export function SectionList() {
   }, [dragKey]);
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
-    // Only clear if leaving the actual element, not entering a child
     const related = e.relatedTarget as HTMLElement | null;
     if (related && (e.currentTarget as HTMLElement).contains(related)) return;
     setDropTarget(null);
@@ -76,9 +104,7 @@ export function SectionList() {
     const targetIdx = currentOrder.indexOf(targetKey);
     if (dragIdx === -1 || targetIdx === -1) return;
 
-    // Remove dragged item
     currentOrder.splice(dragIdx, 1);
-    // Find new position of target (after removal)
     const newTargetIdx = currentOrder.indexOf(targetKey);
     const insertIdx = dropPosition === 'after' ? newTargetIdx + 1 : newTargetIdx;
     currentOrder.splice(insertIdx, 0, dragKey);
@@ -95,11 +121,46 @@ export function SectionList() {
 
   const handleSectionClick = (key: string) => {
     setActiveSection(key);
+    // Toggle expanded state for array sections
+    if (ARRAY_SECTIONS.has(key)) {
+      setExpandedSections(prev => {
+        const next = new Set(prev);
+        if (next.has(key)) {
+          // Keep expanded - just navigate
+        } else {
+          next.add(key);
+        }
+        return next;
+      });
+    }
     // Post message to iframe to scroll to section
     const iframe = document.querySelector('iframe[title="preview"]') as HTMLIFrameElement | null;
     if (iframe?.contentWindow) {
       iframe.contentWindow.postMessage({ type: 'scroll-to-section', sectionKey: key }, '*');
     }
+  };
+
+  const handleDeleteItem = (sectionKey: string, index: number, summary: string) => {
+    Modal.confirm({
+      title: '确认删除',
+      content: `确定要删除「${summary}」吗？此操作不可恢复。`,
+      okText: '删除',
+      cancelText: '取消',
+      okButtonProps: { danger: true },
+      onOk: () => {
+        removeArrayItem(sectionKey, index);
+      },
+    });
+  };
+
+  const handleAddItem = (sectionKey: string) => {
+    addArrayItem(sectionKey);
+    // Ensure section is expanded
+    setExpandedSections(prev => {
+      const next = new Set(prev);
+      next.add(sectionKey);
+      return next;
+    });
   };
 
   const zoomPct = Math.round(zoom * 100);
@@ -138,7 +199,7 @@ export function SectionList() {
       </div>
 
       {/* Modules section */}
-      <div style={{ borderBottom: '1px solid #F3F4F6' }}>
+      <div style={{ borderBottom: '1px solid #F3F4F6', flex: 1 }}>
         <div style={{ padding: '10px 14px 6px' }}>
           <span style={{ fontSize: 11, fontWeight: 600, color: '#9CA3AF', letterSpacing: 1, textTransform: 'uppercase' }}>模块</span>
         </div>
@@ -149,43 +210,102 @@ export function SectionList() {
             const hover = hovered === key;
             const isDragging = dragKey === key;
             const isDraggable = DRAGGABLE_SECTIONS.has(key);
+            const isArraySection = ARRAY_SECTIONS.has(key);
             const isDropTarget = dropTarget === key;
+            const isExpanded = expandedSections.has(key);
+
+            // Get items for array sections
+            const items = isArraySection && resume
+              ? (resume[key as keyof typeof resume] as Record<string, unknown>[] | undefined) ?? []
+              : [];
 
             return (
-              <div
-                key={key}
-                draggable={isDraggable}
-                onDragStart={(e) => handleDragStart(e, key)}
-                onDragEnd={handleDragEnd}
-                onDragOver={(e) => handleDragOver(e, key)}
-                onDragLeave={handleDragLeave}
-                onDrop={(e) => handleDrop(e, key)}
-                onClick={() => handleSectionClick(key)}
-                onMouseEnter={() => setHovered(key)}
-                onMouseLeave={() => setHovered(null)}
-                style={{
-                  position: 'relative',
-                  display: 'flex', alignItems: 'center', gap: 8,
-                  padding: '9px 14px', margin: '1px 6px', borderRadius: 6,
-                  cursor: isDraggable ? 'grab' : 'pointer',
-                  transition: 'background 0.1s, opacity 0.15s',
-                  background: active ? '#F3F4F6' : hover ? '#F9FAFB' : 'transparent',
-                  opacity: isDragging ? 0.4 : 1,
-                  borderTop: isDropTarget && dropPosition === 'before' ? '2px solid #3B82F6' : '2px solid transparent',
-                  borderBottom: isDropTarget && dropPosition === 'after' ? '2px solid #3B82F6' : '2px solid transparent',
-                }}
-              >
-                {isDraggable && (
-                  <span style={{ fontSize: 10, color: '#D1D5DB', flexShrink: 0, marginRight: -4, cursor: 'grab', userSelect: 'none' }}>
-                    ⠿
+              <div key={key}>
+                {/* Section header row */}
+                <div
+                  draggable={isDraggable}
+                  onDragStart={(e) => handleDragStart(e, key)}
+                  onDragEnd={handleDragEnd}
+                  onDragOver={(e) => handleDragOver(e, key)}
+                  onDragLeave={handleDragLeave}
+                  onDrop={(e) => handleDrop(e, key)}
+                  onClick={() => handleSectionClick(key)}
+                  onMouseEnter={() => setHovered(key)}
+                  onMouseLeave={() => setHovered(null)}
+                  style={{
+                    position: 'relative',
+                    display: 'flex', alignItems: 'center', gap: 8,
+                    padding: '9px 14px', margin: '1px 6px', borderRadius: 6,
+                    cursor: isDraggable ? 'grab' : 'pointer',
+                    transition: 'background 0.1s, opacity 0.15s',
+                    background: active ? '#F3F4F6' : hover ? '#F9FAFB' : 'transparent',
+                    opacity: isDragging ? 0.4 : 1,
+                    borderTop: isDropTarget && dropPosition === 'before' ? '2px solid #3B82F6' : '2px solid transparent',
+                    borderBottom: isDropTarget && dropPosition === 'after' ? '2px solid #3B82F6' : '2px solid transparent',
+                  }}
+                >
+                  {isDraggable && (
+                    <span style={{ fontSize: 10, color: '#D1D5DB', flexShrink: 0, marginRight: -4, cursor: 'grab', userSelect: 'none' }}>
+                      ⠿
+                    </span>
+                  )}
+                  <span style={{ fontSize: 13, opacity: active ? 1 : 0.5, width: 18, textAlign: 'center', flexShrink: 0 }}>
+                    {SECTION_ICONS[key] ?? '📋'}
                   </span>
+                  <span style={{ fontSize: 13, fontWeight: active ? 600 : 400, color: active ? '#111827' : '#6B7280', flex: 1 }}>
+                    {section!.label}
+                    {isArraySection && items.length > 0 && (
+                      <span style={{ fontSize: 11, color: '#9CA3AF', fontWeight: 400, marginLeft: 4 }}>
+                        ({items.length})
+                      </span>
+                    )}
+                  </span>
+                  {/* Collapse/expand toggle for array sections */}
+                  {isArraySection && (
+                    <span
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setExpandedSections(prev => {
+                          const next = new Set(prev);
+                          if (next.has(key)) next.delete(key);
+                          else next.add(key);
+                          return next;
+                        });
+                      }}
+                      style={{
+                        fontSize: 10, color: '#9CA3AF', cursor: 'pointer',
+                        transform: isExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+                        transition: 'transform 0.15s',
+                        display: 'inline-block',
+                        padding: '0 2px',
+                      }}
+                    >
+                      ▶
+                    </span>
+                  )}
+                </div>
+
+                {/* Sub-items for array sections */}
+                {isArraySection && isExpanded && (
+                  <div style={{ paddingLeft: 28, paddingRight: 10, paddingBottom: 4 }}>
+                    {(items as Record<string, unknown>[]).map((item, itemIdx) => {
+                      const summary = getItemSummary(key, item);
+                      return (
+                        <ItemRow
+                          key={itemIdx}
+                          summary={summary}
+                          onDelete={() => handleDeleteItem(key, itemIdx, summary)}
+                        />
+                      );
+                    })}
+
+                    {/* Add button */}
+                    <AddButton
+                      label={SECTION_ADD_LABELS[key] ?? '添加条目'}
+                      onClick={() => handleAddItem(key)}
+                    />
+                  </div>
                 )}
-                <span style={{ fontSize: 13, opacity: active ? 1 : 0.5, width: 18, textAlign: 'center', flexShrink: 0 }}>
-                  {SECTION_ICONS[key] ?? '📋'}
-                </span>
-                <span style={{ fontSize: 13, fontWeight: active ? 600 : 400, color: active ? '#111827' : '#6B7280' }}>
-                  {section!.label}
-                </span>
               </div>
             );
           })}
@@ -226,14 +346,104 @@ export function SectionList() {
         )}
       </div>
 
-      {/* Tips section */}
-      <div style={{ padding: '12px 14px', flex: 1 }}>
-        <span style={{ fontSize: 11, fontWeight: 600, color: '#9CA3AF', letterSpacing: 1, textTransform: 'uppercase', display: 'block', marginBottom: 8 }}>提示</span>
-        <p style={{ fontSize: 11, color: '#9CA3AF', lineHeight: 1.6, margin: 0 }}>双击内容可直接编辑</p>
-        <p style={{ fontSize: 11, color: '#9CA3AF', lineHeight: 1.6, margin: '4px 0 0' }}>点击模块名跳转到对应区域</p>
-        <p style={{ fontSize: 11, color: '#9CA3AF', lineHeight: 1.6, margin: '4px 0 0' }}>拖拽模块名可调整顺序</p>
-      </div>
-
     </div>
+  );
+}
+
+/* ---- Sub-components ---- */
+
+function ItemRow({ summary, onDelete }: { summary: string; onDelete: () => void }) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <div
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '3px 0',
+        borderRadius: 4,
+        background: hovered ? '#F9FAFB' : 'transparent',
+        transition: 'background 0.1s',
+      }}
+    >
+      <span
+        style={{
+          fontSize: 12,
+          color: '#6B7280',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'nowrap',
+          flex: 1,
+          paddingRight: 4,
+        }}
+        title={summary}
+      >
+        {summary}
+      </span>
+      <button
+        onClick={(e) => { e.stopPropagation(); onDelete(); }}
+        title="删除此条目"
+        style={{
+          flexShrink: 0,
+          width: 20,
+          height: 20,
+          border: 'none',
+          borderRadius: 4,
+          background: 'transparent',
+          color: hovered ? '#9CA3AF' : 'transparent',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontSize: 12,
+          padding: 0,
+          transition: 'color 0.1s, background 0.1s',
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.color = '#EF4444';
+          e.currentTarget.style.background = 'rgba(239,68,68,0.08)';
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.color = hovered ? '#9CA3AF' : 'transparent';
+          e.currentTarget.style.background = 'transparent';
+        }}
+      >
+        <DeleteOutlined />
+      </button>
+    </div>
+  );
+}
+
+function AddButton({ label, onClick }: { label: string; onClick: () => void }) {
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 4,
+        width: '100%',
+        marginTop: 4,
+        padding: '5px 0',
+        border: `1.5px dashed ${hovered ? '#6B7280' : '#D1D5DB'}`,
+        borderRadius: 5,
+        background: hovered ? 'rgba(0,0,0,0.02)' : 'transparent',
+        color: hovered ? '#6B7280' : '#9CA3AF',
+        fontSize: 12,
+        cursor: 'pointer',
+        transition: 'all 0.15s',
+      }}
+    >
+      <PlusOutlined style={{ fontSize: 10 }} />
+      {label}
+    </button>
   );
 }
