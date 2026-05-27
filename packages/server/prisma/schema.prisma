@@ -7,6 +7,8 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ─── 用户系统 ───
+
 model User {
   id         String   @id @default(cuid())
   email      String?  @unique
@@ -16,10 +18,44 @@ model User {
   avatar     String?
   provider   String   @default("local")
   providerId String?
+  plan       String   @default("free")
+  planExpiry DateTime?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
-  resumes    Resume[]
+
+  resumes       Resume[]
+  aiSessions    AiSession[]
+  refreshTokens RefreshToken[]
+
+  @@unique([provider, providerId])
 }
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  device    String?
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model VerifyCode {
+  id        String   @id @default(cuid())
+  target    String
+  code      String
+  type      String
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([target, type])
+}
+
+// ─── 简历核心 ───
 
 model Resume {
   id           String   @id @default(cuid())
@@ -30,13 +66,34 @@ model Resume {
   data         Json     @default("{}")
   sectionOrder String[] @default(["basics", "experience", "education", "skills", "projects"])
   customCss    String?
+  language     String   @default("zh")
   isPublic     Boolean  @default(false)
+  shareToken   String?  @unique
+  lastDevice   String?
+  version      Int      @default(1)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  exports      Export[]
+
+  exports   Export[]
+  snapshots ResumeSnapshot[]
 
   @@index([userId])
+  @@index([shareToken])
 }
+
+model ResumeSnapshot {
+  id        String   @id @default(cuid())
+  resumeId  String
+  resume    Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
+  data      Json
+  source    String
+  label     String?
+  createdAt DateTime @default(now())
+
+  @@index([resumeId, createdAt])
+}
+
+// ─── 模板系统 ───
 
 model Template {
   id          String   @id @default(cuid())
@@ -44,25 +101,81 @@ model Template {
   slug        String   @unique
   description String?
   category    String
+  industry    String?
   html        String
   css         String
   schema      Json
   thumbnail   String   @default("")
   isPremium   Boolean  @default(false)
+  isBuiltin   Boolean  @default(true)
   authorId    String?
   downloads   Int      @default(0)
+  version     String   @default("1.0.0")
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([industry])
 }
+
+// ─── 导出 & 文件 ───
 
 model Export {
   id        String   @id @default(cuid())
   resumeId  String
   resume    Resume   @relation(fields: [resumeId], references: [id], onDelete: Cascade)
   format    String
-  fileUrl   String
-  fileSize  Int
+  status    String   @default("pending")
+  fileUrl   String?
+  fileSize  Int?
+  options   Json?
+  error     String?
   createdAt DateTime @default(now())
 
   @@index([resumeId])
+  @@index([status])
+}
+
+model FileUpload {
+  id        String   @id @default(cuid())
+  userId    String
+  key       String   @unique
+  url       String
+  mimeType  String
+  size      Int
+  purpose   String
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// ─── AI 会话 (Phase 2) ───
+
+model AiSession {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  resumeId  String?
+  type      String
+  status    String   @default("active")
+  context   Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages AiMessage[]
+
+  @@index([userId])
+  @@index([resumeId])
+}
+
+model AiMessage {
+  id        String   @id @default(cuid())
+  sessionId String
+  session   AiSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  role      String
+  content   String
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([sessionId, createdAt])
 }
