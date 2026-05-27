@@ -41,7 +41,16 @@ async function renderAndExportPdf(html: string, css: string, data: ResumeData, o
       printBackground: true,
     });
     if (resumeId) {
-      await prisma.export.create({ data: { resumeId, format: 'pdf', fileUrl: '', fileSize: pdfBuffer.length } });
+      await prisma.export.create({
+        data: {
+          resumeId,
+          format: 'pdf',
+          status: 'done',
+          fileUrl: '',
+          fileSize: pdfBuffer.length,
+          options: { format: options.format ?? 'A4', margin: options.margin ?? DEFAULT_MARGIN },
+        },
+      });
     }
     return { buffer: Buffer.from(pdfBuffer), fileSize: pdfBuffer.length };
   } finally {
