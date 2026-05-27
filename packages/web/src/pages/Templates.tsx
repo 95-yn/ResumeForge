@@ -105,134 +105,29 @@ const CATEGORY_LABELS: Record<string, string> = {
   profession: '职能',
 };
 
-function isColorDark(hex: string): boolean {
-  const h = hex.replace('#', '');
-  if (h.length < 6) return false;
-  const r = parseInt(h.slice(0, 2), 16);
-  const g = parseInt(h.slice(2, 4), 16);
-  const b = parseInt(h.slice(4, 6), 16);
-  const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  return luminance < 0.5;
-}
-
-function TemplatePreview({ slug, meta }: { slug: string; meta: TemplateMeta }) {
-  const isDark = isColorDark(meta.bg);
-  const isTwoCol = meta.layout === 'two-col';
-  const isDarkHeader = meta.layout === 'dark-header';
-
-  const lineH = isDark ? 'rgba(255,255,255,' : 'rgba(0,0,0,';
-  const titleA = lineH + (isDark ? '0.9)' : '0.75)');
-  const titleB = lineH + (isDark ? '0.5)' : '0.35)');
-  const lineA  = lineH + (isDark ? '0.2)' : '0.12)');
-  const lineB  = lineH + (isDark ? '0.1)' : '0.06)');
-  const tagBg  = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.06)';
-  const accentColor = meta.accent ?? (isDark ? 'rgba(255,255,255,0.6)' : '#1C1917');
-
-  const gradientMask = `linear-gradient(to bottom, transparent 60%, ${meta.bg === '#FFFFFF' ? '#fff' : meta.bg} 100%)`;
-
-  if (isTwoCol) {
-    const sidebarBg = isDark ? 'rgba(0,0,0,0.35)' : 'rgba(0,0,0,0.06)';
-    const sideTitle = isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)';
-    const sideLine  = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)';
-    return (
-      <div style={{ height: 220, background: meta.bg, borderRadius: '10px 10px 0 0', display: 'flex', overflow: 'hidden', position: 'relative' }}>
-        {/* Sidebar */}
-        <div style={{ width: 62, background: sidebarBg, padding: '20px 10px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 0 }}>
-          {/* Avatar circle */}
-          <div style={{ width: 28, height: 28, borderRadius: '50%', background: sideTitle, margin: '0 auto 14px', opacity: 0.7 }} />
-          {/* Name lines */}
-          <div style={{ height: 4, background: sideTitle, borderRadius: 2, width: '80%', marginBottom: 4 }} />
-          <div style={{ height: 3, background: sideLine, borderRadius: 2, width: '60%', marginBottom: 14 }} />
-          {/* Skill tags */}
-          {[70, 85, 55, 75, 65].map((w, i) => (
-            <div key={i} style={{ height: 3, background: sideLine, borderRadius: 2, width: `${w}%`, marginBottom: 5 }} />
-          ))}
-          {/* Tags */}
-          <div style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap', gap: 3 }}>
-            {[38, 32, 36].map((w, i) => (
-              <div key={i} style={{ height: 8, width: w, background: sideLine, borderRadius: 3 }} />
-            ))}
-          </div>
-        </div>
-        {/* Main */}
-        <div style={{ flex: 1, padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 0 }}>
-          <div style={{ height: 6, background: titleA, borderRadius: 3, width: '55%', marginBottom: 5 }} />
-          <div style={{ height: 3, background: lineA, borderRadius: 2, width: '70%', marginBottom: 12 }} />
-          <div style={{ height: 2, background: lineB, marginBottom: 10 }} />
-          {/* Section */}
-          <div style={{ height: 4, background: accentColor, borderRadius: 2, width: '30%', marginBottom: 6 }} />
-          {[90, 75, 85, 60].map((w, i) => (
-            <div key={i} style={{ height: 3, background: i % 2 === 0 ? lineA : lineB, borderRadius: 2, width: `${w}%`, marginBottom: 4 }} />
-          ))}
-        </div>
-        {/* Gradient mask */}
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 60, background: gradientMask, pointerEvents: 'none' }} />
-      </div>
-    );
-  }
-
-  if (isDarkHeader) {
-    const headerBg = meta.bg;
-    const bodyBg = isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF';
-    const hTitleA = 'rgba(255,255,255,0.9)';
-    const hLineA  = 'rgba(255,255,255,0.45)';
-    const hLineB  = 'rgba(255,255,255,0.2)';
-    const bLineA  = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.12)';
-    const bLineB  = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
-    const bodyGradient = `linear-gradient(to bottom, transparent 50%, ${isDark ? headerBg : '#fff'} 100%)`;
-    return (
-      <div style={{ height: 220, background: isDark ? headerBg : '#fff', borderRadius: '10px 10px 0 0', overflow: 'hidden', position: 'relative' }}>
-        {/* Header */}
-        <div style={{ background: headerBg, padding: '18px 20px 14px' }}>
-          <div style={{ height: 8, background: hTitleA, borderRadius: 3, width: '42%', marginBottom: 6 }} />
-          <div style={{ height: 3, background: hLineA, borderRadius: 2, width: '58%', marginBottom: 4 }} />
-          <div style={{ height: 3, background: hLineB, borderRadius: 2, width: '40%' }} />
-        </div>
-        {/* Body */}
-        <div style={{ background: bodyBg, padding: '14px 20px', display: 'flex', flexDirection: 'column', gap: 0 }}>
-          <div style={{ height: 4, background: bLineA, borderRadius: 2, width: '28%', marginBottom: 8 }} />
-          {[88, 70, 94, 55, 75].map((w, i) => (
-            <div key={i} style={{ height: 3, background: i % 2 === 0 ? bLineA : bLineB, borderRadius: 2, width: `${w}%`, marginBottom: 4 }} />
-          ))}
-        </div>
-        {/* Gradient mask */}
-        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 70, background: bodyGradient, pointerEvents: 'none' }} />
-      </div>
-    );
-  }
-
-  // Single column
+function TemplatePreview({ slug }: { slug: string; meta: TemplateMeta }) {
   return (
-    <div style={{ height: 220, background: meta.bg, borderRadius: '10px 10px 0 0', padding: '22px 22px', overflow: 'hidden', position: 'relative' }}>
-      {/* Name */}
-      <div style={{ height: 8, background: titleA, borderRadius: 3, width: '40%', marginBottom: 5 }} />
-      {/* Subtitle */}
-      <div style={{ height: 3, background: titleB, borderRadius: 2, width: '55%', marginBottom: 4 }} />
-      {/* Contact row */}
-      <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
-        {[42, 36, 48].map((w, i) => (
-          <div key={i} style={{ height: 3, background: lineB, borderRadius: 2, width: w }} />
-        ))}
-      </div>
-      {/* Divider */}
-      <div style={{ height: 1, background: lineB, marginBottom: 10 }} />
-      {/* Section title */}
-      <div style={{ height: 4, background: meta.accent ? meta.accent : lineA, borderRadius: 2, width: '30%', marginBottom: 7 }} />
-      {/* Body lines */}
-      {[88, 70, 95, 58, 80].map((w, i) => (
-        <div key={i} style={{
-          height: 3, background: i % 2 === 0 ? lineA : lineB,
-          borderRadius: 2, width: `${w}%`, marginBottom: i === 2 ? 10 : 4,
-        }} />
-      ))}
-      {/* Skills tags */}
-      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-        {[32, 40, 28, 36].map((w, i) => (
-          <div key={i} style={{ height: 10, width: w, background: tagBg, borderRadius: 4 }} />
-        ))}
-      </div>
-      {/* Gradient mask */}
-      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 60, background: gradientMask, pointerEvents: 'none' }} />
+    <div style={{
+      height: 220, borderRadius: '10px 10px 0 0', overflow: 'hidden',
+      position: 'relative', background: '#F5F5F4',
+    }}>
+      <img
+        src={`/thumbnails/${slug}.png`}
+        alt={slug}
+        loading="lazy"
+        style={{
+          width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top',
+          display: 'block',
+        }}
+        onError={(e) => {
+          (e.target as HTMLImageElement).style.display = 'none';
+        }}
+      />
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0, height: 40,
+        background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.9))',
+        pointerEvents: 'none',
+      }} />
     </div>
   );
 }
