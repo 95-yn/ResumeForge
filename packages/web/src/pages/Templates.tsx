@@ -59,6 +59,42 @@ const TEMPLATE_META: Record<string, TemplateMeta> = {
   mobile:       { desc: '移动开发，圆角卡片，iOS 设计语言', bg: '#F2F2F7', tc: '#1C1C1E', profession: 'IT互联网' },
   fullstack:    { desc: '全栈工程师，上深下白分栏布局', bg: '#1E293B', tc: '#F1F5F9', layout: 'dark-header', profession: 'IT互联网' },
   ai:           { desc: 'AI/ML 工程师，蓝紫渐变 header', bg: '#1E1B4B', tc: '#E0E7FF', layout: 'dark-header', profession: 'IT互联网' },
+  // IT互联网职能
+  'it-frontend':    { desc: '技能标签突出位置，深蓝 header，前端工程师专属', bg: '#1E293B', tc: '#F1F5F9', layout: 'dark-header', profession: 'IT互联网' },
+  'it-backend':     { desc: '纯白底，技能分组，代码风格标签，后端工程师专属', bg: '#FFFFFF', tc: '#1E293B', profession: 'IT互联网' },
+  'it-fullstack':   { desc: '双栏布局，深色侧边栏，全栈工程师专属', bg: '#0F172A', tc: '#F1F5F9', layout: 'two-col', profession: 'IT互联网' },
+  // 金融财会职能
+  'finance-analyst':    { desc: '深蓝 section 标题，资质证书突出，金融分析师专属', bg: '#FFFFFF', tc: '#1E3A5F', profession: '金融财会' },
+  'finance-accounting': { desc: '纯黑白衬线标题，极严谨，会计审计专属', bg: '#FFFFFF', tc: '#111111', profession: '金融财会' },
+  'finance-banking':    { desc: '深灰 header，白底正文，银行保险专属', bg: '#1F2937', tc: '#F9FAFB', layout: 'dark-header', profession: '金融财会' },
+  // 设计创意职能
+  'design-ui':      { desc: '双栏深色侧边栏，UI设计师专属', bg: '#18181B', tc: '#FAFAFA', layout: 'two-col', profession: '设计创意' },
+  'design-graphic': { desc: '全黑白，排版层次感，平面设计专属', bg: '#FFFFFF', tc: '#111111', profession: '设计创意' },
+  'design-video':   { desc: '深黑 header，视频动画专属', bg: '#0A0A0A', tc: '#FFFFFF', layout: 'dark-header', profession: '设计创意' },
+  // 教育学术职能
+  'edu-teacher':    { desc: '深蓝 section 标题，教育经历置前，中小学教师专属', bg: '#FFFFFF', tc: '#1E3A5F', profession: '教育学术' },
+  'edu-professor':  { desc: '衬线字体，学术风格，大学教授专属', bg: '#FEFCE8', tc: '#1A1A1A', profession: '教育学术' },
+  'edu-trainer':    { desc: '灰色标题，温暖色调，培训讲师专属', bg: '#FFFBF7', tc: '#44403C', profession: '教育学术' },
+  // 市场营销职能
+  'mkt-digital':  { desc: '深色 header，数据突出，数字营销专属', bg: '#0F172A', tc: '#F1F5F9', layout: 'dark-header', profession: '市场营销' },
+  'mkt-brand':    { desc: 'Editorial 杂志感，纯黑白，品牌营销专属', bg: '#FFFFFF', tc: '#111111', profession: '市场营销' },
+  'mkt-content':  { desc: '左侧 4px 装饰线，内容运营专属', bg: '#FFFFFF', tc: '#44403C', profession: '市场营销' },
+  // 医疗健康职能
+  'med-doctor':  { desc: '深蓝极保守，严谨专业，医生专属', bg: '#FFFFFF', tc: '#1E3A5F', profession: '医疗健康' },
+  'med-nurse':   { desc: '暖灰标题，柔和色调，护士专属', bg: '#FFFBF7', tc: '#44403C', profession: '医疗健康' },
+  'med-pharma':  { desc: '深灰 header，白底正文，药学专属', bg: '#1F2937', tc: '#F9FAFB', layout: 'dark-header', profession: '医疗健康' },
+  // 产品运营职能
+  'pm-product':   { desc: '细线分隔，简洁克制，产品经理专属', bg: '#FFFFFF', tc: '#1C1917', profession: '产品运营' },
+  'pm-operation': { desc: '浅灰左栏，白底主栏，运营经理专属', bg: '#F5F5F4', tc: '#44403C', layout: 'two-col', profession: '产品运营' },
+  'pm-growth':    { desc: '深色 header，增长策略专属', bg: '#0F172A', tc: '#F1F5F9', layout: 'dark-header', profession: '产品运营' },
+  // 人力行政职能
+  'hr-recruiter': { desc: '暖灰标题，温暖亲和，招聘HRBP专属', bg: '#FFFBF7', tc: '#44403C', profession: '人力行政' },
+  'hr-training':  { desc: '纯黑白简洁，培训发展专属', bg: '#FFFFFF', tc: '#111111', profession: '人力行政' },
+  'hr-admin':     { desc: '深灰 section 标题，行政管理专属', bg: '#FFFFFF', tc: '#1F2937', profession: '人力行政' },
+  // 法律合规职能
+  'legal-lawyer':     { desc: '全黑白衬线字体，严肃正式，律师专属', bg: '#FFFFFF', tc: '#000000', profession: '法律合规' },
+  'legal-compliance': { desc: '深蓝标题，合规专员专属', bg: '#FFFFFF', tc: '#1E3A5F', profession: '法律合规' },
+  'legal-ip':         { desc: '深灰标题，知识产权专属', bg: '#FFFFFF', tc: '#292524', profession: '法律合规' },
 };
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -66,6 +102,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   creative: '创意',
   minimal: '极简',
   tech: '技术',
+  profession: '职能',
 };
 
 function isColorDark(hex: string): boolean {
@@ -206,6 +243,7 @@ const styleCategories = [
   { key: 'creative', label: '创意' },
   { key: 'minimal', label: '极简' },
   { key: 'tech', label: '技术' },
+  { key: 'profession', label: '职能' },
 ];
 
 const professionCategories = [
@@ -216,6 +254,9 @@ const professionCategories = [
   { key: '教育学术', label: '教育学术' },
   { key: '市场营销', label: '市场营销' },
   { key: '医疗健康', label: '医疗健康' },
+  { key: '产品运营', label: '产品运营' },
+  { key: '人力行政', label: '人力行政' },
+  { key: '法律合规', label: '法律合规' },
 ];
 
 function FilterBar({

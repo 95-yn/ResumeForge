@@ -50,6 +50,42 @@ const templates = [
   { slug: 'mobile', dir: 'mobile', category: 'tech' },
   { slug: 'fullstack', dir: 'fullstack', category: 'tech' },
   { slug: 'ai', dir: 'ai', category: 'tech' },
+  // IT互联网职能
+  { slug: 'it-frontend', dir: 'it-frontend', category: 'profession' },
+  { slug: 'it-backend', dir: 'it-backend', category: 'profession' },
+  { slug: 'it-fullstack', dir: 'it-fullstack', category: 'profession' },
+  // 金融财会职能
+  { slug: 'finance-analyst', dir: 'finance-analyst', category: 'profession' },
+  { slug: 'finance-accounting', dir: 'finance-accounting', category: 'profession' },
+  { slug: 'finance-banking', dir: 'finance-banking', category: 'profession' },
+  // 设计创意职能
+  { slug: 'design-ui', dir: 'design-ui', category: 'profession' },
+  { slug: 'design-graphic', dir: 'design-graphic', category: 'profession' },
+  { slug: 'design-video', dir: 'design-video', category: 'profession' },
+  // 教育学术职能
+  { slug: 'edu-teacher', dir: 'edu-teacher', category: 'profession' },
+  { slug: 'edu-professor', dir: 'edu-professor', category: 'profession' },
+  { slug: 'edu-trainer', dir: 'edu-trainer', category: 'profession' },
+  // 市场营销职能
+  { slug: 'mkt-digital', dir: 'mkt-digital', category: 'profession' },
+  { slug: 'mkt-brand', dir: 'mkt-brand', category: 'profession' },
+  { slug: 'mkt-content', dir: 'mkt-content', category: 'profession' },
+  // 医疗健康职能
+  { slug: 'med-doctor', dir: 'med-doctor', category: 'profession' },
+  { slug: 'med-nurse', dir: 'med-nurse', category: 'profession' },
+  { slug: 'med-pharma', dir: 'med-pharma', category: 'profession' },
+  // 产品运营职能
+  { slug: 'pm-product', dir: 'pm-product', category: 'profession' },
+  { slug: 'pm-operation', dir: 'pm-operation', category: 'profession' },
+  { slug: 'pm-growth', dir: 'pm-growth', category: 'profession' },
+  // 人力行政职能
+  { slug: 'hr-recruiter', dir: 'hr-recruiter', category: 'profession' },
+  { slug: 'hr-training', dir: 'hr-training', category: 'profession' },
+  { slug: 'hr-admin', dir: 'hr-admin', category: 'profession' },
+  // 法律合规职能
+  { slug: 'legal-lawyer', dir: 'legal-lawyer', category: 'profession' },
+  { slug: 'legal-compliance', dir: 'legal-compliance', category: 'profession' },
+  { slug: 'legal-ip', dir: 'legal-ip', category: 'profession' },
 ];
 
 async function main() {

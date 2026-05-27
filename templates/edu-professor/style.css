@@ -1,0 +1,136 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+.resume.edu-professor {
+  max-width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 18mm 20mm;
+  font-family: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', -apple-system, sans-serif;
+  font-size: 10pt;
+  line-height: 1.55;
+  color: #2D2D2D;
+  background: #FEFCE8;
+}
+
+.resume.edu-professor .resume-header {
+  text-align: center;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid #333333;
+}
+
+.resume.edu-professor .resume-header h1 {
+  font-family: Georgia, 'Times New Roman', 'SimSun', serif;
+  font-size: 24pt;
+  font-weight: 700;
+  color: #1A1A1A;
+  letter-spacing: 1px;
+  line-height: 1.2;
+}
+
+.resume.edu-professor .resume-header .title {
+  font-family: Georgia, 'Times New Roman', 'SimSun', serif;
+  font-size: 10pt;
+  color: #78716C;
+  margin-top: 4px;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.resume.edu-professor .contact {
+  margin-top: 8px;
+  font-size: 9pt;
+  color: #78716C;
+}
+
+.resume.edu-professor .contact-item { margin: 0 6px; }
+.resume.edu-professor .contact-item + .contact-item::before {
+  content: "·";
+  margin-right: 6px;
+  color: #D6D3D1;
+}
+
+.resume.edu-professor .section { margin-bottom: 12px; }
+
+.resume.edu-professor .section-title {
+  font-family: Georgia, 'Times New Roman', 'SimSun', serif;
+  font-size: 10pt;
+  font-weight: 700;
+  color: #1A1A1A;
+  letter-spacing: 0.5px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #333333;
+  margin-bottom: 8px;
+}
+
+.resume.edu-professor .entry { margin-bottom: 8px; }
+.resume.edu-professor .entry:last-child { margin-bottom: 0; }
+
+.resume.edu-professor .entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.resume.edu-professor .entry-header h3 {
+  font-size: 10pt;
+  font-weight: 600;
+  color: #1A1A1A;
+  flex: 1;
+}
+
+.resume.edu-professor .separator { color: #A8A29E; }
+
+.resume.edu-professor .date {
+  font-size: 9pt;
+  color: #78716C;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.resume.edu-professor .sub {
+  font-size: 9pt;
+  color: #78716C;
+  margin-top: 2px;
+}
+
+.resume.edu-professor .summary {
+  font-size: 9.5pt;
+  color: #2D2D2D;
+  line-height: 1.6;
+}
+
+.resume.edu-professor .highlights {
+  margin-top: 4px;
+  padding-left: 15px;
+}
+
+.resume.edu-professor .highlights li {
+  font-size: 9.5pt;
+  color: #2D2D2D;
+  margin-bottom: 2px;
+  line-height: 1.5;
+}
+
+.resume.edu-professor .skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+}
+
+.resume.edu-professor .tag {
+  background: transparent;
+  border: 1px solid #333333;
+  padding: 2px 9px;
+  border-radius: 1px;
+  font-size: 9pt;
+  color: #2D2D2D;
+}
+
+li p, li div { margin: 0; padding: 0; display: inline; }
+
+@media print {
+  .resume.edu-professor { margin: 0; padding: 16mm 18mm; }
+  @page { margin: 0; size: A4; }
+}

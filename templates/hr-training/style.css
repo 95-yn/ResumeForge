@@ -1,0 +1,112 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+.resume.hr-training {
+  max-width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 18mm 20mm;
+  font-family: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', -apple-system, sans-serif;
+  font-size: 10pt;
+  line-height: 1.55;
+  color: #44403C;
+  background: #fff;
+}
+.resume.hr-training .resume-header {
+  text-align: center;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 2px solid #D1D5DB;
+}
+.resume.hr-training .resume-header h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  color: #111111;
+  letter-spacing: 1.5px;
+  line-height: 1.2;
+}
+.resume.hr-training .resume-header .title {
+  font-size: 10pt;
+  color: #78716C;
+  margin-top: 4px;
+}
+.resume.hr-training .contact {
+  margin-top: 8px;
+  font-size: 9pt;
+  color: #78716C;
+}
+.resume.hr-training .contact-item { margin: 0 6px; }
+.resume.hr-training .contact-item + .contact-item::before {
+  content: "|";
+  margin-right: 6px;
+  color: #D6D3D1;
+}
+.resume.hr-training .section { margin-bottom: 12px; }
+.resume.hr-training .section-title {
+  font-size: 9pt;
+  font-weight: 700;
+  color: #111111;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #D1D5DB;
+  margin-bottom: 8px;
+}
+.resume.hr-training .entry { margin-bottom: 8px; }
+.resume.hr-training .entry:last-child { margin-bottom: 0; }
+.resume.hr-training .entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.resume.hr-training .entry-header h3 {
+  font-size: 10pt;
+  font-weight: 600;
+  color: #111111;
+  flex: 1;
+}
+.resume.hr-training .separator { color: #A8A29E; }
+.resume.hr-training .date {
+  font-size: 9pt;
+  color: #78716C;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.resume.hr-training .sub {
+  font-size: 9pt;
+  color: #78716C;
+  margin-top: 2px;
+}
+.resume.hr-training .summary {
+  font-size: 9.5pt;
+  color: #44403C;
+  line-height: 1.6;
+}
+.resume.hr-training .highlights {
+  margin-top: 4px;
+  padding-left: 15px;
+}
+.resume.hr-training .highlights li {
+  font-size: 9.5pt;
+  color: #44403C;
+  margin-bottom: 2px;
+  line-height: 1.5;
+}
+.resume.hr-training .skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+}
+.resume.hr-training .tag {
+  background: transparent;
+  border: 1px solid #D1D5DB;
+  padding: 2px 9px;
+  border-radius: 2px;
+  font-size: 9pt;
+  color: #111111;
+}
+li p, li div { margin: 0; padding: 0; display: inline; }
+@media print {
+  .resume.hr-training { margin: 0; padding: 16mm 18mm; }
+  @page { margin: 0; size: A4; }
+}

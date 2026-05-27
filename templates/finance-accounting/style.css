@@ -1,0 +1,136 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+.resume.finance-accounting {
+  max-width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 18mm 20mm;
+  font-family: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', -apple-system, sans-serif;
+  font-size: 10pt;
+  line-height: 1.55;
+  color: #1A1A1A;
+  background: #FFFFFF;
+}
+
+.resume.finance-accounting .resume-header {
+  text-align: center;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid #111111;
+}
+
+.resume.finance-accounting .resume-header h1 {
+  font-family: Georgia, 'Times New Roman', 'SimSun', serif;
+  font-size: 24pt;
+  font-weight: 700;
+  color: #111111;
+  letter-spacing: 1px;
+  line-height: 1.2;
+}
+
+.resume.finance-accounting .resume-header .title {
+  font-family: Georgia, 'Times New Roman', 'SimSun', serif;
+  font-size: 10pt;
+  color: #78716C;
+  margin-top: 4px;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.resume.finance-accounting .contact {
+  margin-top: 8px;
+  font-size: 9pt;
+  color: #78716C;
+}
+
+.resume.finance-accounting .contact-item { margin: 0 6px; }
+.resume.finance-accounting .contact-item + .contact-item::before {
+  content: "·";
+  margin-right: 6px;
+  color: #D6D3D1;
+}
+
+.resume.finance-accounting .section { margin-bottom: 12px; }
+
+.resume.finance-accounting .section-title {
+  font-family: Georgia, 'Times New Roman', 'SimSun', serif;
+  font-size: 10pt;
+  font-weight: 700;
+  color: #111111;
+  letter-spacing: 0.5px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #111111;
+  margin-bottom: 8px;
+}
+
+.resume.finance-accounting .entry { margin-bottom: 8px; }
+.resume.finance-accounting .entry:last-child { margin-bottom: 0; }
+
+.resume.finance-accounting .entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.resume.finance-accounting .entry-header h3 {
+  font-size: 10pt;
+  font-weight: 600;
+  color: #111111;
+  flex: 1;
+}
+
+.resume.finance-accounting .separator { color: #A8A29E; }
+
+.resume.finance-accounting .date {
+  font-size: 9pt;
+  color: #78716C;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.resume.finance-accounting .sub {
+  font-size: 9pt;
+  color: #78716C;
+  margin-top: 2px;
+}
+
+.resume.finance-accounting .summary {
+  font-size: 9.5pt;
+  color: #1A1A1A;
+  line-height: 1.6;
+}
+
+.resume.finance-accounting .highlights {
+  margin-top: 4px;
+  padding-left: 15px;
+}
+
+.resume.finance-accounting .highlights li {
+  font-size: 9.5pt;
+  color: #1A1A1A;
+  margin-bottom: 2px;
+  line-height: 1.5;
+}
+
+.resume.finance-accounting .skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+}
+
+.resume.finance-accounting .tag {
+  background: transparent;
+  border: 1px solid #111111;
+  padding: 2px 9px;
+  border-radius: 1px;
+  font-size: 9pt;
+  color: #1A1A1A;
+}
+
+li p, li div { margin: 0; padding: 0; display: inline; }
+
+@media print {
+  .resume.finance-accounting { margin: 0; padding: 16mm 18mm; }
+  @page { margin: 0; size: A4; }
+}

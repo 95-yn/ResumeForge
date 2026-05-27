@@ -1,0 +1,112 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+.resume.legal-compliance {
+  max-width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 18mm 20mm;
+  font-family: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', -apple-system, sans-serif;
+  font-size: 10pt;
+  line-height: 1.55;
+  color: #44403C;
+  background: #fff;
+}
+.resume.legal-compliance .resume-header {
+  text-align: center;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 2px solid #1E3A5F;
+}
+.resume.legal-compliance .resume-header h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  color: #1E3A5F;
+  letter-spacing: 1.5px;
+  line-height: 1.2;
+}
+.resume.legal-compliance .resume-header .title {
+  font-size: 10pt;
+  color: #78716C;
+  margin-top: 4px;
+}
+.resume.legal-compliance .contact {
+  margin-top: 8px;
+  font-size: 9pt;
+  color: #78716C;
+}
+.resume.legal-compliance .contact-item { margin: 0 6px; }
+.resume.legal-compliance .contact-item + .contact-item::before {
+  content: "|";
+  margin-right: 6px;
+  color: #D6D3D1;
+}
+.resume.legal-compliance .section { margin-bottom: 12px; }
+.resume.legal-compliance .section-title {
+  font-size: 9pt;
+  font-weight: 700;
+  color: #1E3A5F;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #1E3A5F;
+  margin-bottom: 8px;
+}
+.resume.legal-compliance .entry { margin-bottom: 8px; }
+.resume.legal-compliance .entry:last-child { margin-bottom: 0; }
+.resume.legal-compliance .entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.resume.legal-compliance .entry-header h3 {
+  font-size: 10pt;
+  font-weight: 600;
+  color: #1E3A5F;
+  flex: 1;
+}
+.resume.legal-compliance .separator { color: #A8A29E; }
+.resume.legal-compliance .date {
+  font-size: 9pt;
+  color: #78716C;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.resume.legal-compliance .sub {
+  font-size: 9pt;
+  color: #78716C;
+  margin-top: 2px;
+}
+.resume.legal-compliance .summary {
+  font-size: 9.5pt;
+  color: #44403C;
+  line-height: 1.6;
+}
+.resume.legal-compliance .highlights {
+  margin-top: 4px;
+  padding-left: 15px;
+}
+.resume.legal-compliance .highlights li {
+  font-size: 9.5pt;
+  color: #44403C;
+  margin-bottom: 2px;
+  line-height: 1.5;
+}
+.resume.legal-compliance .skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+}
+.resume.legal-compliance .tag {
+  background: transparent;
+  border: 1px solid #1E3A5F;
+  padding: 2px 9px;
+  border-radius: 2px;
+  font-size: 9pt;
+  color: #1E3A5F;
+}
+li p, li div { margin: 0; padding: 0; display: inline; }
+@media print {
+  .resume.legal-compliance { margin: 0; padding: 16mm 18mm; }
+  @page { margin: 0; size: A4; }
+}

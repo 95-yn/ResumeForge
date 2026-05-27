@@ -1,0 +1,113 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+.resume.mkt-content {
+  max-width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 18mm 20mm;
+  font-family: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', -apple-system, sans-serif;
+  font-size: 10pt;
+  line-height: 1.55;
+  color: #44403C;
+  background: #fff;
+}
+.resume.mkt-content .resume-header {
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  padding-left: 12px;
+  border-left: 4px solid #44403C;
+}
+.resume.mkt-content .resume-header h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  color: #1C1917;
+  letter-spacing: 1px;
+  line-height: 1.2;
+}
+.resume.mkt-content .resume-header .title {
+  font-size: 10pt;
+  color: #78716C;
+  margin-top: 4px;
+}
+.resume.mkt-content .contact {
+  margin-top: 8px;
+  font-size: 9pt;
+  color: #78716C;
+}
+.resume.mkt-content .contact-item { margin: 0 6px 0 0; }
+.resume.mkt-content .contact-item + .contact-item::before {
+  content: "|";
+  margin-right: 6px;
+  color: #D6D3D1;
+}
+.resume.mkt-content .section { margin-bottom: 12px; }
+.resume.mkt-content .section-title {
+  font-size: 9pt;
+  font-weight: 700;
+  color: #44403C;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-bottom: 4px;
+  padding-left: 8px;
+  border-left: 3px solid #44403C;
+  margin-bottom: 8px;
+}
+.resume.mkt-content .entry { margin-bottom: 8px; }
+.resume.mkt-content .entry:last-child { margin-bottom: 0; }
+.resume.mkt-content .entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.resume.mkt-content .entry-header h3 {
+  font-size: 10pt;
+  font-weight: 600;
+  color: #1C1917;
+  flex: 1;
+}
+.resume.mkt-content .separator { color: #A8A29E; }
+.resume.mkt-content .date {
+  font-size: 9pt;
+  color: #78716C;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.resume.mkt-content .sub {
+  font-size: 9pt;
+  color: #78716C;
+  margin-top: 2px;
+}
+.resume.mkt-content .summary {
+  font-size: 9.5pt;
+  color: #44403C;
+  line-height: 1.6;
+}
+.resume.mkt-content .highlights {
+  margin-top: 4px;
+  padding-left: 15px;
+}
+.resume.mkt-content .highlights li {
+  font-size: 9.5pt;
+  color: #44403C;
+  margin-bottom: 2px;
+  line-height: 1.5;
+}
+.resume.mkt-content .skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+}
+.resume.mkt-content .tag {
+  background: transparent;
+  border: 1px solid #44403C;
+  padding: 2px 9px;
+  border-radius: 2px;
+  font-size: 9pt;
+  color: #44403C;
+}
+li p, li div { margin: 0; padding: 0; display: inline; }
+@media print {
+  .resume.mkt-content { margin: 0; padding: 16mm 18mm; }
+  @page { margin: 0; size: A4; }
+}
