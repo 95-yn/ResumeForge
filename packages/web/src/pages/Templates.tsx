@@ -59,6 +59,12 @@ const TEMPLATE_META: Record<string, TemplateMeta> = {
   mobile:       { desc: '移动开发，圆角卡片，iOS 设计语言', bg: '#F2F2F7', tc: '#1C1C1E', profession: 'IT互联网' },
   fullstack:    { desc: '全栈工程师，上深下白分栏布局', bg: '#1E293B', tc: '#F1F5F9', layout: 'dark-header', profession: 'IT互联网' },
   ai:           { desc: 'AI/ML 工程师，蓝紫渐变 header', bg: '#1E1B4B', tc: '#E0E7FF', layout: 'dark-header', profession: 'IT互联网' },
+  // 校招
+  'campus-general': { desc: '简洁单栏，教育置前，通用校招首选', bg: '#FFFFFF', tc: '#1C1917', profession: '通用' },
+  'campus-tech':    { desc: '深色 header，技能和项目突出，技术校招专属', bg: '#0F172A', tc: '#F1F5F9', layout: 'dark-header', profession: 'IT互联网' },
+  'campus-finance': { desc: '保守正式，衬线字体，金融校招专属', bg: '#FFFFFF', tc: '#1E3A5F', profession: '金融财会' },
+  'campus-design':  { desc: '有设计感的全黑白排版，设计校招专属', bg: '#FFFFFF', tc: '#111111', profession: '设计创意' },
+  'campus-intern':  { desc: '简洁明快，左侧蓝色装饰线，实习生专属', bg: '#FFFFFF', tc: '#374151', profession: '通用' },
   // IT互联网职能
   'it-frontend':    { desc: '技能标签突出位置，深蓝 header，前端工程师专属', bg: '#1E293B', tc: '#F1F5F9', layout: 'dark-header', profession: 'IT互联网' },
   'it-backend':     { desc: '纯白底，技能分组，代码风格标签，后端工程师专属', bg: '#FFFFFF', tc: '#1E293B', profession: 'IT互联网' },
@@ -103,6 +109,7 @@ const CATEGORY_LABELS: Record<string, string> = {
   minimal: '极简',
   tech: '技术',
   profession: '职能',
+  campus: '校招',
 };
 
 function TemplatePreview({ slug }: { slug: string; meta: TemplateMeta }) {
@@ -139,6 +146,7 @@ const styleCategories = [
   { key: 'minimal', label: '极简' },
   { key: 'tech', label: '技术' },
   { key: 'profession', label: '职能' },
+  { key: 'campus', label: '校招' },
 ];
 
 const professionCategories = [

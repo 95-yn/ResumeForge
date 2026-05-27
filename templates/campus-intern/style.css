@@ -1,0 +1,140 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+.resume.campus-intern {
+  max-width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  padding: 18mm 20mm;
+  font-family: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', -apple-system, sans-serif;
+  font-size: 10pt;
+  line-height: 1.55;
+  color: #374151;
+  background: #fff;
+}
+
+/* ── Header ── */
+.resume-header {
+  text-align: center;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+}
+
+.resume-header h1 {
+  font-size: 21pt;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: 1.5px;
+  line-height: 1.2;
+}
+
+.resume-header .title {
+  font-size: 10pt;
+  color: #6B7280;
+  margin-top: 4px;
+  font-weight: 400;
+}
+
+.contact {
+  margin-top: 8px;
+  font-size: 9pt;
+  color: #6B7280;
+}
+
+.contact-item { margin: 0 6px; }
+
+.contact-item + .contact-item::before {
+  content: "|";
+  margin-right: 6px;
+  color: #D1D5DB;
+}
+
+/* ── Section ── */
+.section { margin-bottom: 12px; }
+
+.section-title {
+  font-size: 9pt;
+  font-weight: 700;
+  color: #111827;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-bottom: 4px;
+  border-bottom: none;
+  border-left: 4px solid #2563EB;
+  padding-left: 8px;
+  margin-bottom: 8px;
+  line-height: 1.3;
+}
+
+/* ── Entry ── */
+.entry { margin-bottom: 9px; }
+.entry:last-child { margin-bottom: 0; }
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.entry-header h3 {
+  font-size: 10pt;
+  font-weight: 600;
+  color: #111827;
+  flex: 1;
+}
+
+.separator { color: #9CA3AF; }
+
+.date {
+  font-size: 9pt;
+  color: #6B7280;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sub {
+  font-size: 9pt;
+  color: #6B7280;
+  margin-top: 2px;
+}
+
+.summary {
+  font-size: 9.5pt;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.highlights {
+  margin-top: 4px;
+  padding-left: 15px;
+}
+
+.highlights li {
+  font-size: 9.5pt;
+  color: #374151;
+  margin-bottom: 2px;
+  line-height: 1.5;
+}
+
+/* ── Skills ── */
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 6px;
+}
+
+.tag {
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  padding: 2px 9px;
+  border-radius: 3px;
+  font-size: 9pt;
+  color: #1D4ED8;
+}
+
+li p, li div { margin: 0; padding: 0; display: inline; }
+
+@media print {
+  .resume.campus-intern { margin: 0; padding: 16mm 18mm; }
+  @page { margin: 0; size: A4; }
+}

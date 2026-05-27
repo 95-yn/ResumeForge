@@ -1,0 +1,151 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+.resume.campus-tech {
+  max-width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  font-family: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', -apple-system, sans-serif;
+  font-size: 10pt;
+  line-height: 1.55;
+  color: #CBD5E1;
+  background: #fff;
+}
+
+/* ── Dark Header ── */
+.resume-header {
+  background: #0F172A;
+  padding: 16mm 20mm 14mm;
+  margin-bottom: 0;
+}
+
+.header-inner {}
+
+.resume-header h1 {
+  font-size: 22pt;
+  font-weight: 700;
+  color: #F1F5F9;
+  letter-spacing: 1.5px;
+  line-height: 1.2;
+}
+
+.resume-header .title {
+  font-size: 10pt;
+  color: #94A3B8;
+  margin-top: 4px;
+  font-weight: 400;
+}
+
+.contact {
+  margin-top: 8px;
+  font-size: 9pt;
+  color: #64748B;
+}
+
+.contact-item { margin: 0 8px 0 0; }
+
+.contact-item + .contact-item::before {
+  content: "|";
+  margin-right: 8px;
+  color: #334155;
+}
+
+/* ── Body ── */
+.section { margin: 0 20mm 12px; padding-top: 14px; color: #1E293B; }
+
+.section-title {
+  font-size: 8.5pt;
+  font-weight: 700;
+  color: #0F172A;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  padding-bottom: 4px;
+  border-bottom: 1.5px solid #0F172A;
+  margin-bottom: 8px;
+}
+
+/* ── Entry ── */
+.entry { margin-bottom: 9px; }
+.entry:last-child { margin-bottom: 0; }
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.entry-header h3 {
+  font-size: 10pt;
+  font-weight: 600;
+  color: #0F172A;
+  flex: 1;
+}
+
+.separator { color: #94A3B8; }
+
+.date {
+  font-size: 9pt;
+  color: #64748B;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.sub {
+  font-size: 9pt;
+  color: #64748B;
+  margin-top: 2px;
+}
+
+.summary {
+  font-size: 9.5pt;
+  color: #334155;
+  line-height: 1.6;
+}
+
+.highlights {
+  margin-top: 4px;
+  padding-left: 15px;
+}
+
+.highlights li {
+  font-size: 9.5pt;
+  color: #334155;
+  margin-bottom: 2px;
+  line-height: 1.5;
+}
+
+/* ── Skills ── */
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 6px;
+}
+
+.tag {
+  background: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  padding: 3px 10px;
+  border-radius: 3px;
+  font-size: 9pt;
+  color: #1E293B;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.level-badge {
+  font-size: 8pt;
+  background: #0F172A;
+  color: #94A3B8;
+  padding: 1px 5px;
+  border-radius: 2px;
+}
+
+li p, li div { margin: 0; padding: 0; display: inline; }
+
+@media print {
+  .resume.campus-tech { margin: 0; }
+  .section { margin-left: 18mm; margin-right: 18mm; }
+  .resume-header { padding: 14mm 18mm 12mm; }
+  @page { margin: 0; size: A4; }
+}

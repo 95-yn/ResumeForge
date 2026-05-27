@@ -50,6 +50,12 @@ const templates = [
   { slug: 'mobile', dir: 'mobile', category: 'tech' },
   { slug: 'fullstack', dir: 'fullstack', category: 'tech' },
   { slug: 'ai', dir: 'ai', category: 'tech' },
+  // Campus (5)
+  { slug: 'campus-general', dir: 'campus-general', category: 'campus' },
+  { slug: 'campus-tech', dir: 'campus-tech', category: 'campus' },
+  { slug: 'campus-finance', dir: 'campus-finance', category: 'campus' },
+  { slug: 'campus-design', dir: 'campus-design', category: 'campus' },
+  { slug: 'campus-intern', dir: 'campus-intern', category: 'campus' },
   // IT互联网职能
   { slug: 'it-frontend', dir: 'it-frontend', category: 'profession' },
   { slug: 'it-backend', dir: 'it-backend', category: 'profession' },
