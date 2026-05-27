@@ -270,6 +270,8 @@ function FilterBar({
   );
 }
 
+const FEATURED_ORDER = ['classic', 'professional', 'elegant', 'modern', 'fresh', 'clean', 'swiss', 'minimal', 'tech', 'developer'];
+
 export function Templates() {
   const [templates, setTemplates] = useState<TemplateSummary[]>([]);
   const [category, setCategory] = useState<string>('all');
@@ -291,12 +293,21 @@ export function Templates() {
     }
   };
 
-  const filtered = templates.filter(t => {
-    const categoryMatch = category === 'all' || t.category === category;
-    const meta = TEMPLATE_META[t.slug];
-    const professionMatch = profession === 'all' || (meta && meta.profession === profession);
-    return categoryMatch && professionMatch;
-  });
+  const filtered = templates
+    .filter(t => {
+      const categoryMatch = category === 'all' || t.category === category;
+      const meta = TEMPLATE_META[t.slug];
+      const professionMatch = profession === 'all' || (meta && meta.profession === profession);
+      return categoryMatch && professionMatch;
+    })
+    .sort((a, b) => {
+      const ai = FEATURED_ORDER.indexOf(a.slug);
+      const bi = FEATURED_ORDER.indexOf(b.slug);
+      if (ai !== -1 && bi !== -1) return ai - bi;
+      if (ai !== -1) return -1;
+      if (bi !== -1) return 1;
+      return 0;
+    });
 
   return (
     <div style={{ minHeight: '100vh', background: '#FAFAF9' }}>
@@ -364,7 +375,7 @@ export function Templates() {
             选择一个适合你的模板
           </h1>
           <p style={{ margin: 0, fontSize: 14, color: '#78716C', lineHeight: 1.6, fontFamily: 'inherit' }}>
-            免费使用，即时编辑，直接打印
+            免费使用 · 即时编辑 · 直接打印
           </p>
         </div>
 
@@ -430,7 +441,7 @@ export function Templates() {
                     {meta.profession && meta.profession !== '通用' && (
                       <span style={{
                         fontSize: 10, padding: '2px 7px', borderRadius: 20, fontWeight: 500,
-                        background: '#F0F9FF', color: '#0369A1', border: '1px solid #BAE6FD',
+                        background: '#F5F5F4', color: '#78716C', border: '1px solid #E7E5E4',
                         fontFamily: 'inherit',
                       }}>
                         {meta.profession}

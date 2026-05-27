@@ -210,12 +210,12 @@ export function SectionList() {
             })}
             style={{
               width: '100%', padding: '4px 0', borderRadius: 5,
-              border: '1px dashed #D6D3D1', background: 'transparent',
-              color: '#A8A29E', cursor: 'pointer', fontSize: 11,
-              transition: 'color 0.12s, border-color 0.12s', fontFamily: 'inherit',
+              border: '1px solid #E7E5E4', background: '#FFFFFF',
+              color: '#78716C', cursor: 'pointer', fontSize: 11, fontWeight: 500,
+              transition: 'all 0.12s', fontFamily: 'inherit',
             }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#78716C'; e.currentTarget.style.borderColor = '#A8A29E'; }}
-            onMouseLeave={e => { e.currentTarget.style.color = '#A8A29E'; e.currentTarget.style.borderColor = '#D6D3D1'; }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.color = '#78716C'; }}
           >
             还原默认内容
           </button>
@@ -289,7 +289,7 @@ export function SectionList() {
                     </span>
                   )}
 
-                  <span style={{ fontSize: 12, opacity: active ? 1 : 0.55, width: 16, textAlign: 'center', flexShrink: 0 }}>
+                  <span style={{ fontSize: 14, opacity: active ? 1 : 0.55, width: 16, textAlign: 'center', flexShrink: 0 }}>
                     {SECTION_ICONS[key] ?? '📋'}
                   </span>
 
@@ -411,7 +411,7 @@ export function SectionList() {
                         iframe?.contentWindow?.postMessage({ type: 'scroll-to-section', sectionKey: 'basics' }, '*');
                       }}
                     >
-                      <span style={{ fontSize: 12, opacity: 0.55, width: 16, textAlign: 'center' }}>📝</span>
+                      <span style={{ fontSize: 14, opacity: 0.55, width: 16, textAlign: 'center' }}>📝</span>
                       <span style={{
                         fontSize: 13, fontWeight: activeSection === 'summary' ? 600 : 400,
                         color: activeSection === 'summary' ? '#1C1917' : '#78716C',

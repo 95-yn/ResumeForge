@@ -25,8 +25,8 @@ const EDIT_SCRIPT = `
 
     el.addEventListener('mouseenter', function() {
       if (el !== activeEl) {
-        el.style.background = 'rgba(59,130,246,0.05)';
-        el.style.boxShadow = 'inset 0 0 0 1px rgba(59,130,246,0.12)';
+        el.style.background = 'rgba(28,25,23,0.05)';
+        el.style.boxShadow = '';
       }
     });
     el.addEventListener('mouseleave', function() {
@@ -44,8 +44,8 @@ const EDIT_SCRIPT = `
         activeEl.style.boxShadow = '';
       }
       activeEl = el;
-      el.style.background = 'rgba(59,130,246,0.06)';
-      el.style.boxShadow = 'inset 0 0 0 1.5px rgba(59,130,246,0.25)';
+      el.style.background = 'rgba(28,25,23,0.08)';
+      el.style.boxShadow = 'inset 0 0 0 1.5px rgba(28,25,23,0.2)';
       // Notify parent
       var rect = el.getBoundingClientRect();
       parent.postMessage({
