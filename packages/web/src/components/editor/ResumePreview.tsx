@@ -231,17 +231,28 @@ export function ResumePreview() {
       }
 
       if (event.data.type === 'field-clicked') {
-        const { field, value, rect } = event.data as {
+        const { field, rect } = event.data as {
           field: string; value: string;
           rect: { top: number; left: number; width: number; height: number };
         };
         if (!field) return;
-        // Capture iframe position in viewport
+        // 从 store 取最新值而非 iframe DOM
+        const currentResume = useEditorStore.getState().resume;
+        let storeValue = '';
+        if (currentResume) {
+          const parts = field.split('.');
+          let target: unknown = currentResume;
+          for (const p of parts) {
+            if (target == null) break;
+            target = (target as Record<string, unknown>)[/^\d+$/.test(p) ? parseInt(p) : p];
+          }
+          storeValue = typeof target === 'string' ? target : '';
+        }
         if (iframeRef.current) {
           const ir = iframeRef.current.getBoundingClientRect();
           setIframeRect({ top: ir.top, left: ir.left, width: ir.width, height: ir.height });
         }
-        setEditingField({ field, value, rect });
+        setEditingField({ field, value: storeValue, rect });
         return;
       }
 
