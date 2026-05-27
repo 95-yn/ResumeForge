@@ -1,5 +1,5 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
-.resume.banking { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 22mm 22mm; font-family: "Times New Roman", "Georgia", "SimSun", serif; font-size: 10.5pt; line-height: 1.65; color: #1a1a1a; background: #fff; }
+.resume.banking { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 22mm 22mm; font-family: "Times New Roman", "Georgia", "SimSun", "PingFang SC", "Microsoft YaHei", serif; font-size: 10.5pt; line-height: 1.65; color: #1a1a1a; background: #fff; }
 .bk-header { text-align: center; margin-bottom: 20px; }
 .bk-header h1 { font-size: 24pt; font-weight: 700; color: #111; letter-spacing: 2px; font-family: "Times New Roman", serif; }
 .bk-title { font-size: 11pt; color: #555; margin-top: 5px; font-style: italic; }

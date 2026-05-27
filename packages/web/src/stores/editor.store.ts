@@ -75,9 +75,22 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   loadTemplate: async (templateSlug) => {
     const { data: tplRes } = await api.get(`/templates/${templateSlug}`);
     const tpl = tplRes.data;
-    const local = loadFromLocal();
-    const resumeData = (local && local.templateId === templateSlug) ? local.data : (DEFAULT_RESUME_DATA as ResumeData);
-    const sectionOrder = (local && local.templateId === templateSlug) ? local.sectionOrder : DEFAULT_SECTION_ORDER;
+
+    const state = get();
+    // 如果当前已有编辑数据，保留它；否则从 localStorage 或默认数据加载
+    let resumeData: ResumeData;
+    let sectionOrder: string[];
+
+    if (state.resume && state.resume.basics?.name) {
+      // 有已编辑的数据，保留
+      resumeData = state.resume;
+      sectionOrder = state.sectionOrder;
+    } else {
+      const local = loadFromLocal();
+      resumeData = local ? local.data : (DEFAULT_RESUME_DATA as ResumeData);
+      sectionOrder = local ? local.sectionOrder : DEFAULT_SECTION_ORDER;
+    }
+
     set({
       mode: 'guest', resumeId: null, resume: resumeData, templateId: templateSlug,
       templateHtml: tpl.html, templateCss: tpl.css, schema: tpl.schema as TemplateSchema,

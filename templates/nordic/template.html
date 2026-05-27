@@ -14,10 +14,10 @@
   </section>
   {{/if}}
   {{#if experience.length}}
-  <section class="nd-section">
+  <section class="nd-section" data-section="experience">
     <h2 class="nd-heading">工作经历</h2>
     {{#each experience}}
-    <div class="nd-entry">
+    <div class="nd-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="nd-date-col">
         <span data-field="experience.{{@index}}.startDate">{{startDate}}</span>
         <span class="nd-dash">—</span>
@@ -33,10 +33,10 @@
   </section>
   {{/if}}
   {{#if education.length}}
-  <section class="nd-section">
+  <section class="nd-section" data-section="education">
     <h2 class="nd-heading">教育背景</h2>
     {{#each education}}
-    <div class="nd-entry">
+    <div class="nd-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="nd-date-col">
         <span data-field="education.{{@index}}.startDate">{{startDate}}</span>
         <span class="nd-dash">—</span>
@@ -51,18 +51,18 @@
   </section>
   {{/if}}
   {{#if skills.length}}
-  <section class="nd-section">
+  <section class="nd-section" data-section="skills">
     <h2 class="nd-heading">专业技能</h2>
     <div class="nd-skills">
-      {{#each skills}}<span class="nd-skill"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="nd-skill-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
+      {{#each skills}}<span class="nd-skill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="nd-skill-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
     </div>
   </section>
   {{/if}}
   {{#if projects.length}}
-  <section class="nd-section">
+  <section class="nd-section" data-section="projects">
     <h2 class="nd-heading">项目经历</h2>
     {{#each projects}}
-    <div class="nd-entry">
+    <div class="nd-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="nd-date-col"></div>
       <div class="nd-entry-body">
         <p class="nd-main" data-field="projects.{{@index}}.name">{{name}}</p>

@@ -18,10 +18,10 @@
     </section>
     {{/if}}
     {{#if experience.length}}
-    <section class="fs-section">
+    <section class="fs-section" data-section="experience">
       <h2 class="fs-section-title">Experience</h2>
       {{#each experience}}
-      <div class="fs-entry">
+      <div class="fs-entry" data-entry="experience" data-entry-index="{{@index}}">
         <div class="fs-entry-head">
           <div class="fs-entry-main">
             <span class="fs-company" data-field="experience.{{@index}}.company">{{company}}</span>
@@ -35,10 +35,10 @@
     </section>
     {{/if}}
     {{#if projects.length}}
-    <section class="fs-section">
+    <section class="fs-section" data-section="projects">
       <h2 class="fs-section-title">Projects</h2>
       {{#each projects}}
-      <div class="fs-entry">
+      <div class="fs-entry" data-entry="projects" data-entry-index="{{@index}}">
         <div class="fs-entry-head">
           <div class="fs-entry-main">
             <span class="fs-company" data-field="projects.{{@index}}.name">{{name}}</span>
@@ -53,10 +53,10 @@
     {{/if}}
     <div class="fs-bottom">
       {{#if education.length}}
-      <section class="fs-section">
+      <section class="fs-section" data-section="education">
         <h2 class="fs-section-title">Education</h2>
         {{#each education}}
-        <div class="fs-entry">
+        <div class="fs-entry" data-entry="education" data-entry-index="{{@index}}">
           <div class="fs-entry-head">
             <span class="fs-company" data-field="education.{{@index}}.institution">{{institution}}</span>
             <span class="fs-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span>–<span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
@@ -67,10 +67,10 @@
       </section>
       {{/if}}
       {{#if skills.length}}
-      <section class="fs-section">
+      <section class="fs-section" data-section="skills">
         <h2 class="fs-section-title">Skills</h2>
         <div class="fs-skills">
-          {{#each skills}}<span class="fs-skill"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="fs-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
+          {{#each skills}}<span class="fs-skill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="fs-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
         </div>
       </section>
       {{/if}}

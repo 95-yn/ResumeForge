@@ -17,10 +17,10 @@
   </section>
   {{/if}}
   {{#if experience.length}}
-  <section class="dv-section">
+  <section class="dv-section" data-section="experience">
     <h2 class="dv-section-title">PIPELINE · EXPERIENCE</h2>
     {{#each experience}}
-    <div class="dv-pipeline-entry">
+    <div class="dv-pipeline-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="dv-pipe-left">
         <div class="dv-pipe-dot"></div>
         <div class="dv-pipe-line"></div>
@@ -38,10 +38,10 @@
   </section>
   {{/if}}
   {{#if projects.length}}
-  <section class="dv-section">
+  <section class="dv-section" data-section="projects">
     <h2 class="dv-section-title">DEPLOYMENTS · PROJECTS</h2>
     {{#each projects}}
-    <div class="dv-pipeline-entry">
+    <div class="dv-pipeline-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="dv-pipe-left">
         <div class="dv-pipe-dot dv-dot-green"></div>
         <div class="dv-pipe-line"></div>
@@ -61,10 +61,10 @@
   <div class="dv-two-col">
     <div>
       {{#if education.length}}
-      <section class="dv-section">
+      <section class="dv-section" data-section="education">
         <h2 class="dv-section-title">EDUCATION</h2>
         {{#each education}}
-        <div class="dv-edu">
+        <div class="dv-edu" data-entry="education" data-entry-index="{{@index}}">
           <span class="dv-company" data-field="education.{{@index}}.institution">{{institution}}</span>
           <span class="dv-pos"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></span>
           <span class="dv-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span>–<span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
@@ -75,10 +75,10 @@
     </div>
     <div>
       {{#if skills.length}}
-      <section class="dv-section">
+      <section class="dv-section" data-section="skills">
         <h2 class="dv-section-title">STACK · SKILLS</h2>
         <div class="dv-tags">
-          {{#each skills}}<span class="dv-tag"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="dv-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
+          {{#each skills}}<span class="dv-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="dv-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
         </div>
       </section>
       {{/if}}

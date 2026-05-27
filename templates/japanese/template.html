@@ -18,10 +18,10 @@
   </section>
   {{/if}}
   {{#if experience.length}}
-  <section class="jp-section">
+  <section class="jp-section" data-section="experience">
     <div class="jp-section-bar"><span class="jp-section-title">职务经历</span></div>
     {{#each experience}}
-    <div class="jp-entry">
+    <div class="jp-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="jp-vert-line"></div>
       <div class="jp-entry-content">
         <div class="jp-entry-head">
@@ -36,10 +36,10 @@
   </section>
   {{/if}}
   {{#if education.length}}
-  <section class="jp-section">
+  <section class="jp-section" data-section="education">
     <div class="jp-section-bar"><span class="jp-section-title">学历</span></div>
     {{#each education}}
-    <div class="jp-entry">
+    <div class="jp-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="jp-vert-line"></div>
       <div class="jp-entry-content">
         <div class="jp-entry-head">
@@ -53,18 +53,18 @@
   </section>
   {{/if}}
   {{#if skills.length}}
-  <section class="jp-section">
+  <section class="jp-section" data-section="skills">
     <div class="jp-section-bar"><span class="jp-section-title">スキル</span></div>
     <div class="jp-skills">
-      {{#each skills}}<div class="jp-skill"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="jp-lv" data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</div>{{/each}}
+      {{#each skills}}<div class="jp-skill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="jp-lv" data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</div>{{/each}}
     </div>
   </section>
   {{/if}}
   {{#if projects.length}}
-  <section class="jp-section">
+  <section class="jp-section" data-section="projects">
     <div class="jp-section-bar"><span class="jp-section-title">プロジェクト</span></div>
     {{#each projects}}
-    <div class="jp-entry">
+    <div class="jp-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="jp-vert-line"></div>
       <div class="jp-entry-content">
         <div class="jp-entry-head">

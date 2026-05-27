@@ -16,10 +16,10 @@
     </section>
     {{/if}}
     {{#if experience.length}}
-    <section class="md-card">
+    <section class="md-card" data-section="experience">
       <h2 class="md-card-title">工作经历</h2>
       {{#each experience}}
-      <div class="md-entry">
+      <div class="md-entry" data-entry="experience" data-entry-index="{{@index}}">
         <div class="md-entry-head">
           <div>
             <span class="md-org" data-field="experience.{{@index}}.company">{{company}}</span>
@@ -33,10 +33,10 @@
     </section>
     {{/if}}
     {{#if projects.length}}
-    <section class="md-card">
+    <section class="md-card" data-section="projects">
       <h2 class="md-card-title">内容作品</h2>
       {{#each projects}}
-      <div class="md-entry">
+      <div class="md-entry" data-entry="projects" data-entry-index="{{@index}}">
         <div class="md-entry-head">
           <span class="md-org" data-field="projects.{{@index}}.name">{{name}}</span>
           {{#if role}}<span class="md-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
@@ -49,10 +49,10 @@
     {{/if}}
     <div class="md-two-col">
       {{#if education.length}}
-      <section class="md-card">
+      <section class="md-card" data-section="education">
         <h2 class="md-card-title">教育背景</h2>
         {{#each education}}
-        <div class="md-edu">
+        <div class="md-edu" data-entry="education" data-entry-index="{{@index}}">
           <strong data-field="education.{{@index}}.institution">{{institution}}</strong>
           <span><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></span>
           <span class="md-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span>–<span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
@@ -61,10 +61,10 @@
       </section>
       {{/if}}
       {{#if skills.length}}
-      <section class="md-card">
+      <section class="md-card" data-section="skills">
         <h2 class="md-card-title">专业技能</h2>
         <div class="md-tags">
-          {{#each skills}}<span class="md-tag"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
+          {{#each skills}}<span class="md-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
         </div>
       </section>
       {{/if}}

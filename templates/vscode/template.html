@@ -34,10 +34,10 @@
       </div>
       {{/if}}
       {{#if experience.length}}
-      <div class="vs-section">
+      <div class="vs-section" data-section="experience">
         <div class="vs-section-title"><span class="vs-keyword">const</span> <span class="vs-fn">experience</span> = [</div>
         {{#each experience}}
-        <div class="vs-entry">
+        <div class="vs-entry" data-entry="experience" data-entry-index="{{@index}}">
           <div class="vs-entry-head">
             <span class="vs-company" data-field="experience.{{@index}}.company">{{company}}</span>
             <span class="vs-sep"> · </span>
@@ -51,10 +51,10 @@
       </div>
       {{/if}}
       {{#if education.length}}
-      <div class="vs-section">
+      <div class="vs-section" data-section="education">
         <div class="vs-section-title"><span class="vs-keyword">const</span> <span class="vs-fn">education</span> = [</div>
         {{#each education}}
-        <div class="vs-entry">
+        <div class="vs-entry" data-entry="education" data-entry-index="{{@index}}">
           <span class="vs-company" data-field="education.{{@index}}.institution">{{institution}}</span>
           <span class="vs-sep"> · </span>
           <span class="vs-pos"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></span>
@@ -65,17 +65,17 @@
       </div>
       {{/if}}
       {{#if skills.length}}
-      <div class="vs-section">
+      <div class="vs-section" data-section="skills">
         <div class="vs-section-title"><span class="vs-keyword">const</span> <span class="vs-fn">skills</span> = [</div>
-        <div class="vs-tags">{{#each skills}}<span class="vs-tag"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="vs-tag-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}</div>
+        <div class="vs-tags">{{#each skills}}<span class="vs-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="vs-tag-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}</div>
         <div class="vs-close">]</div>
       </div>
       {{/if}}
       {{#if projects.length}}
-      <div class="vs-section">
+      <div class="vs-section" data-section="projects">
         <div class="vs-section-title"><span class="vs-keyword">const</span> <span class="vs-fn">projects</span> = [</div>
         {{#each projects}}
-        <div class="vs-entry">
+        <div class="vs-entry" data-entry="projects" data-entry-index="{{@index}}">
           <span class="vs-company" data-field="projects.{{@index}}.name">{{name}}</span>
           {{#if role}}<span class="vs-sep"> · </span><span class="vs-pos" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
           {{#if description}}<p class="vs-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}

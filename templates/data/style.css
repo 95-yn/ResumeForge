@@ -1,5 +1,5 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
-.resume.data { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 16mm 20mm; font-family: "Menlo", "Consolas", "Monaco", "Courier New", monospace; font-size: 9.5pt; line-height: 1.6; color: #E2E8F0; background: #0F172A; }
+.resume.data { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 16mm 20mm; font-family: "Menlo", "Consolas", "Monaco", "Courier New", "PingFang SC", "Microsoft YaHei", monospace; font-size: 9.5pt; line-height: 1.6; color: #E2E8F0; background: #0F172A; }
 .dt-header { border-bottom: 1px solid #1E40AF; padding-bottom: 12px; margin-bottom: 16px; }
 .dt-header h1 { font-size: 20pt; font-weight: 700; color: #F1F5F9; letter-spacing: 1px; }
 .dt-title { font-size: 10pt; color: #60A5FA; margin-top: 3px; }
@@ -20,4 +20,4 @@
 .dt-body { font-size: 9pt; color: #CBD5E1; margin-top: 4px; }
 .dt-list { margin-top: 5px; padding-left: 16px; }
 .dt-list li { font-size: 9pt; color: #CBD5E1; margin-bottom: 3px; }
-@media print { .resume.data { margin: 0; padding: 14mm 18mm; } }
+@media print { .resume.data { margin: 0; padding: 14mm 18mm; print-color-adjust: exact; -webkit-print-color-adjust: exact; } }

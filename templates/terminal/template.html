@@ -26,10 +26,10 @@
     {{/if}}
     {{#if experience.length}}
     <div class="tm-prompt"><span class="tm-user">guest@resume</span><span class="tm-at">:</span><span class="tm-path">~</span><span class="tm-dollar">$</span> <span class="tm-cmd">ls -la experience/</span></div>
-    <div class="tm-block">
+    <div class="tm-block" data-section="experience">
       <div class="tm-label"># EXPERIENCE</div>
       {{#each experience}}
-      <div class="tm-entry">
+      <div class="tm-entry" data-entry="experience" data-entry-index="{{@index}}">
         <div class="tm-entry-row">
           <span class="tm-green-text" data-field="experience.{{@index}}.company">{{company}}</span>
           <span class="tm-separator"> | </span>
@@ -43,10 +43,10 @@
     {{/if}}
     {{#if education.length}}
     <div class="tm-prompt"><span class="tm-user">guest@resume</span><span class="tm-at">:</span><span class="tm-path">~</span><span class="tm-dollar">$</span> <span class="tm-cmd">cat education.log</span></div>
-    <div class="tm-block">
+    <div class="tm-block" data-section="education">
       <div class="tm-label"># EDUCATION</div>
       {{#each education}}
-      <div class="tm-entry">
+      <div class="tm-entry" data-entry="education" data-entry-index="{{@index}}">
         <span class="tm-green-text" data-field="education.{{@index}}.institution">{{institution}}</span>
         <span class="tm-separator"> | </span>
         <span class="tm-text" data-field="education.{{@index}}.area">{{area}}</span>
@@ -59,17 +59,17 @@
     {{/if}}
     {{#if skills.length}}
     <div class="tm-prompt"><span class="tm-user">guest@resume</span><span class="tm-at">:</span><span class="tm-path">~</span><span class="tm-dollar">$</span> <span class="tm-cmd">./list-skills.sh</span></div>
-    <div class="tm-block">
+    <div class="tm-block" data-section="skills">
       <div class="tm-label"># SKILLS</div>
-      <div class="tm-tags">{{#each skills}}<span class="tm-tag"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="tm-tag-lv" data-field="skills.{{@index}}.level">:{{level}}</span>{{/if}}</span>{{/each}}</div>
+      <div class="tm-tags">{{#each skills}}<span class="tm-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="tm-tag-lv" data-field="skills.{{@index}}.level">:{{level}}</span>{{/if}}</span>{{/each}}</div>
     </div>
     {{/if}}
     {{#if projects.length}}
     <div class="tm-prompt"><span class="tm-user">guest@resume</span><span class="tm-at">:</span><span class="tm-path">~</span><span class="tm-dollar">$</span> <span class="tm-cmd">git log --oneline projects/</span></div>
-    <div class="tm-block">
+    <div class="tm-block" data-section="projects">
       <div class="tm-label"># PROJECTS</div>
       {{#each projects}}
-      <div class="tm-entry">
+      <div class="tm-entry" data-entry="projects" data-entry-index="{{@index}}">
         <div class="tm-entry-row">
           <span class="tm-green-text" data-field="projects.{{@index}}.name">{{name}}</span>
           {{#if role}}<span class="tm-separator"> | </span><span class="tm-cyan-text" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}

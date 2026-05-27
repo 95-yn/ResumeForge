@@ -18,10 +18,10 @@
     </section>
     {{/if}}
     {{#if experience.length}}
-    <section class="ph-section">
+    <section class="ph-section" data-section="experience">
       <h2 class="ph-section-title">工作经历</h2>
       {{#each experience}}
-      <div class="ph-entry">
+      <div class="ph-entry" data-entry="experience" data-entry-index="{{@index}}">
         <div class="ph-entry-head">
           <h3><span data-field="experience.{{@index}}.company">{{company}}</span> <span class="ph-sep">·</span> <span class="ph-pos" data-field="experience.{{@index}}.position">{{position}}</span></h3>
           <span class="ph-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> — <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
@@ -32,10 +32,10 @@
     </section>
     {{/if}}
     {{#if projects.length}}
-    <section class="ph-section">
+    <section class="ph-section" data-section="projects">
       <h2 class="ph-section-title">作品项目</h2>
       {{#each projects}}
-      <div class="ph-entry">
+      <div class="ph-entry" data-entry="projects" data-entry-index="{{@index}}">
         <div class="ph-entry-head">
           <h3><span data-field="projects.{{@index}}.name">{{name}}</span>{{#if role}} <span class="ph-sep">·</span> <span class="ph-pos" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}</h3>
         </div>
@@ -46,10 +46,10 @@
     </section>
     {{/if}}
     {{#if education.length}}
-    <section class="ph-section">
+    <section class="ph-section" data-section="education">
       <h2 class="ph-section-title">教育背景</h2>
       {{#each education}}
-      <div class="ph-entry">
+      <div class="ph-entry" data-entry="education" data-entry-index="{{@index}}">
         <div class="ph-entry-head">
           <h3 data-field="education.{{@index}}.institution">{{institution}}</h3>
           <span class="ph-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> — <span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
@@ -60,10 +60,10 @@
     </section>
     {{/if}}
     {{#if skills.length}}
-    <section class="ph-section">
+    <section class="ph-section" data-section="skills">
       <h2 class="ph-section-title">专业技能</h2>
       <div class="ph-skills">
-        {{#each skills}}<span class="ph-skill"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="ph-skill-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
+        {{#each skills}}<span class="ph-skill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="ph-skill-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
       </div>
     </section>
     {{/if}}

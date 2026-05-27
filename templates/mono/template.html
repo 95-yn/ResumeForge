@@ -15,10 +15,10 @@
   </section>
   {{/if}}
   {{#if experience.length}}
-  <section class="mn-section">
+  <section class="mn-section" data-section="experience">
     <h2 class="mn-heading">工作经历</h2>
     {{#each experience}}
-    <div class="mn-entry">
+    <div class="mn-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="mn-row">
         <span class="mn-strong" data-field="experience.{{@index}}.company">{{company}}</span>
         <span class="mn-light"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span>–<span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
@@ -30,10 +30,10 @@
   </section>
   {{/if}}
   {{#if education.length}}
-  <section class="mn-section">
+  <section class="mn-section" data-section="education">
     <h2 class="mn-heading">教育背景</h2>
     {{#each education}}
-    <div class="mn-entry">
+    <div class="mn-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="mn-row">
         <span class="mn-strong" data-field="education.{{@index}}.institution">{{institution}}</span>
         <span class="mn-light"><span data-field="education.{{@index}}.startDate">{{startDate}}</span>–<span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
@@ -44,18 +44,18 @@
   </section>
   {{/if}}
   {{#if skills.length}}
-  <section class="mn-section">
+  <section class="mn-section" data-section="skills">
     <h2 class="mn-heading">专业技能</h2>
     <div class="mn-skills">
-      {{#each skills}}<span class="mn-tag"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="mn-light"> · <span data-field="skills.{{@index}}.level">{{level}}</span></span>{{/if}}</span>{{/each}}
+      {{#each skills}}<span class="mn-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="mn-light"> · <span data-field="skills.{{@index}}.level">{{level}}</span></span>{{/if}}</span>{{/each}}
     </div>
   </section>
   {{/if}}
   {{#if projects.length}}
-  <section class="mn-section">
+  <section class="mn-section" data-section="projects">
     <h2 class="mn-heading">项目经历</h2>
     {{#each projects}}
-    <div class="mn-entry">
+    <div class="mn-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="mn-row">
         <span class="mn-strong" data-field="projects.{{@index}}.name">{{name}}</span>
         {{#if role}}<span class="mn-light" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}

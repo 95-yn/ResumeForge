@@ -15,10 +15,10 @@
   </section>
   {{/if}}
   {{#if experience.length}}
-  <section class="sp-section">
+  <section class="sp-section" data-section="experience">
     <h2 class="sp-heading">Experience</h2>
     {{#each experience}}
-    <div class="sp-entry">
+    <div class="sp-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="sp-entry-row">
         <span class="sp-org" data-field="experience.{{@index}}.company">{{company}}</span>
         <span class="sp-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> — <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
@@ -30,10 +30,10 @@
   </section>
   {{/if}}
   {{#if education.length}}
-  <section class="sp-section">
+  <section class="sp-section" data-section="education">
     <h2 class="sp-heading">Education</h2>
     {{#each education}}
-    <div class="sp-entry">
+    <div class="sp-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="sp-entry-row">
         <span class="sp-org" data-field="education.{{@index}}.institution">{{institution}}</span>
         <span class="sp-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> — <span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
@@ -44,18 +44,18 @@
   </section>
   {{/if}}
   {{#if skills.length}}
-  <section class="sp-section">
+  <section class="sp-section" data-section="skills">
     <h2 class="sp-heading">Skills</h2>
     <div class="sp-skills">
-      {{#each skills}}<span class="sp-skill"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="sp-lv" data-field="skills.{{@index}}.level"> / {{level}}</span>{{/if}}</span>{{/each}}
+      {{#each skills}}<span class="sp-skill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="sp-lv" data-field="skills.{{@index}}.level"> / {{level}}</span>{{/if}}</span>{{/each}}
     </div>
   </section>
   {{/if}}
   {{#if projects.length}}
-  <section class="sp-section">
+  <section class="sp-section" data-section="projects">
     <h2 class="sp-heading">Projects</h2>
     {{#each projects}}
-    <div class="sp-entry">
+    <div class="sp-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="sp-entry-row">
         <span class="sp-org" data-field="projects.{{@index}}.name">{{name}}</span>
         {{#if role}}<span class="sp-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}

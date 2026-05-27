@@ -1,5 +1,5 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
-.resume.executive { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 20mm 22mm; font-family: "Georgia", "Times New Roman", serif; font-size: 10pt; line-height: 1.65; color: #1a1a1a; background: #fff; }
+.resume.executive { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 20mm 22mm; font-family: "Georgia", "Times New Roman", "PingFang SC", "Microsoft YaHei", serif; font-size: 10pt; line-height: 1.65; color: #1a1a1a; background: #fff; }
 .ex-header { display: flex; justify-content: space-between; align-items: flex-end; padding-bottom: 14px; }
 .ex-header-main h1 { font-size: 26pt; font-weight: 700; color: #1C1C1C; letter-spacing: 1px; font-family: "Georgia", serif; }
 .ex-title { font-size: 11pt; color: #555; margin-top: 4px; font-style: italic; letter-spacing: 0.5px; }

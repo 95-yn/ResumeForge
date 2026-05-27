@@ -16,10 +16,10 @@
   </section>
   {{/if}}
   {{#if experience.length}}
-  <section class="lg-section">
+  <section class="lg-section" data-section="experience">
     <h2 class="lg-section-title">PROFESSIONAL EXPERIENCE</h2>
     {{#each experience}}
-    <div class="lg-entry">
+    <div class="lg-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="lg-entry-head">
         <div class="lg-entry-main">
           <span class="lg-org" data-field="experience.{{@index}}.company">{{company}}</span>
@@ -33,10 +33,10 @@
   </section>
   {{/if}}
   {{#if education.length}}
-  <section class="lg-section">
+  <section class="lg-section" data-section="education">
     <h2 class="lg-section-title">EDUCATION</h2>
     {{#each education}}
-    <div class="lg-entry">
+    <div class="lg-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="lg-entry-head">
         <div class="lg-entry-main">
           <span class="lg-org" data-field="education.{{@index}}.institution">{{institution}}</span>
@@ -49,18 +49,18 @@
   </section>
   {{/if}}
   {{#if skills.length}}
-  <section class="lg-section">
+  <section class="lg-section" data-section="skills">
     <h2 class="lg-section-title">AREAS OF PRACTICE</h2>
     <div class="lg-skills">
-      {{#each skills}}<span class="lg-skill"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}} (<span data-field="skills.{{@index}}.level">{{level}}</span>){{/if}}</span>{{/each}}
+      {{#each skills}}<span class="lg-skill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}} (<span data-field="skills.{{@index}}.level">{{level}}</span>){{/if}}</span>{{/each}}
     </div>
   </section>
   {{/if}}
   {{#if projects.length}}
-  <section class="lg-section">
+  <section class="lg-section" data-section="projects">
     <h2 class="lg-section-title">NOTABLE MATTERS</h2>
     {{#each projects}}
-    <div class="lg-entry">
+    <div class="lg-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="lg-entry-head">
         <div class="lg-entry-main">
           <span class="lg-org" data-field="projects.{{@index}}.name">{{name}}</span>

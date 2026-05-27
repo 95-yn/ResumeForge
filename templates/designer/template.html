@@ -10,16 +10,16 @@
       {{#if basics.location}}<div class="ds-contact-item" data-field="basics.location">{{basics.location}}</div>{{/if}}
     </div>
     {{#if skills.length}}
-    <div class="ds-skill-section">
+    <div class="ds-skill-section" data-section="skills">
       <h3 class="ds-sidebar-title">技能</h3>
-      {{#each skills}}<div class="ds-skill"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="ds-skill-dot" data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</div>{{/each}}
+      {{#each skills}}<div class="ds-skill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="ds-skill-dot" data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</div>{{/each}}
     </div>
     {{/if}}
     {{#if education.length}}
-    <div class="ds-edu-section">
+    <div class="ds-edu-section" data-section="education">
       <h3 class="ds-sidebar-title">教育</h3>
       {{#each education}}
-      <div class="ds-edu-item">
+      <div class="ds-edu-item" data-entry="education" data-entry-index="{{@index}}">
         <span class="ds-edu-school" data-field="education.{{@index}}.institution">{{institution}}</span>
         <span class="ds-edu-major"><span data-field="education.{{@index}}.area">{{area}}</span></span>
         <span class="ds-edu-deg" data-field="education.{{@index}}.studyType">{{studyType}}</span>
@@ -37,10 +37,10 @@
     </section>
     {{/if}}
     {{#if experience.length}}
-    <section class="ds-section">
+    <section class="ds-section" data-section="experience">
       <h2 class="ds-section-title">工作经历</h2>
       {{#each experience}}
-      <div class="ds-entry">
+      <div class="ds-entry" data-entry="experience" data-entry-index="{{@index}}">
         <div class="ds-entry-head">
           <div>
             <span class="ds-company" data-field="experience.{{@index}}.company">{{company}}</span>
@@ -54,10 +54,10 @@
     </section>
     {{/if}}
     {{#if projects.length}}
-    <section class="ds-section">
+    <section class="ds-section" data-section="projects">
       <h2 class="ds-section-title">项目经历</h2>
       {{#each projects}}
-      <div class="ds-entry">
+      <div class="ds-entry" data-entry="projects" data-entry-index="{{@index}}">
         <div class="ds-entry-head">
           <div>
             <span class="ds-company" data-field="projects.{{@index}}.name">{{name}}</span>

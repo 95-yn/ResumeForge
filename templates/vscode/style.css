@@ -1,5 +1,5 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
-.resume.vscode { max-width: 210mm; min-height: 297mm; margin: 0 auto; display: flex; font-family: "Menlo", "Monaco", "Consolas", monospace; font-size: 9pt; line-height: 1.6; color: #D4D4D4; background: #1E1E1E; }
+.resume.vscode { max-width: 210mm; min-height: 297mm; margin: 0 auto; display: flex; font-family: "Menlo", "Monaco", "Consolas", "PingFang SC", "Microsoft YaHei", monospace; font-size: 9pt; line-height: 1.6; color: #D4D4D4; background: #1E1E1E; }
 .vs-activity-bar { width: 44px; background: #333333; display: flex; flex-direction: column; align-items: center; padding: 8px 0; gap: 8px; flex-shrink: 0; }
 .vs-ab-icon { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; color: #858585; font-size: 14pt; cursor: default; }
 .vs-explorer { width: 160px; background: #252526; border-right: 1px solid #1E1E1E; padding: 0; flex-shrink: 0; }
@@ -34,4 +34,4 @@
 .vs-tags { display: flex; flex-wrap: wrap; gap: 5px; padding-left: 14px; margin-bottom: 4px; }
 .vs-tag { font-size: 8.5pt; color: #1E1E1E; background: #4EC9B0; padding: 1px 7px; border-radius: 2px; }
 .vs-tag-lv { color: #0A3D3D; }
-@media print { .resume.vscode { margin: 0; } .vs-activity-bar { display: none; } }
+@media print { .resume.vscode { margin: 0; print-color-adjust: exact; -webkit-print-color-adjust: exact; } .vs-activity-bar { display: none; } }

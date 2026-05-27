@@ -17,10 +17,10 @@
   </section>
   {{/if}}
   {{#if experience.length}}
-  <section class="corp-section">
+  <section class="corp-section" data-section="experience">
     <h2 class="corp-section-title">工作经历</h2>
     {{#each experience}}
-    <div class="corp-entry">
+    <div class="corp-entry" data-entry="experience" data-entry-index="{{@index}}">
       <table class="corp-table">
         <tr>
           <td class="corp-td-company"><span data-field="experience.{{@index}}.company">{{company}}</span></td>
@@ -34,10 +34,10 @@
   </section>
   {{/if}}
   {{#if education.length}}
-  <section class="corp-section">
+  <section class="corp-section" data-section="education">
     <h2 class="corp-section-title">教育背景</h2>
     {{#each education}}
-    <div class="corp-entry">
+    <div class="corp-entry" data-entry="education" data-entry-index="{{@index}}">
       <table class="corp-table">
         <tr>
           <td class="corp-td-company"><span data-field="education.{{@index}}.institution">{{institution}}</span></td>
@@ -50,18 +50,18 @@
   </section>
   {{/if}}
   {{#if skills.length}}
-  <section class="corp-section">
+  <section class="corp-section" data-section="skills">
     <h2 class="corp-section-title">专业技能</h2>
     <div class="corp-skills">
-      {{#each skills}}<div class="corp-skill-row"><span class="corp-skill-name" data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="corp-skill-level" data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</div>{{/each}}
+      {{#each skills}}<div class="corp-skill-row" data-entry="skills" data-entry-index="{{@index}}"><span class="corp-skill-name" data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="corp-skill-level" data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</div>{{/each}}
     </div>
   </section>
   {{/if}}
   {{#if projects.length}}
-  <section class="corp-section">
+  <section class="corp-section" data-section="projects">
     <h2 class="corp-section-title">项目经历</h2>
     {{#each projects}}
-    <div class="corp-entry">
+    <div class="corp-entry" data-entry="projects" data-entry-index="{{@index}}">
       <table class="corp-table">
         <tr>
           <td class="corp-td-company"><span data-field="projects.{{@index}}.name">{{name}}</span></td>

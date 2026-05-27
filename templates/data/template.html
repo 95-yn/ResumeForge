@@ -15,12 +15,12 @@
   </section>
   {{/if}}
   {{#if skills.length}}
-  <section class="dt-section">
+  <section class="dt-section" data-section="skills">
     <h2 class="dt-heading">Technical Skills</h2>
     <table class="dt-table">
       <tbody>
         {{#each skills}}
-        <tr class="dt-tr">
+        <tr class="dt-tr" data-entry="skills" data-entry-index="{{@index}}">
           <td class="dt-td-name"><span data-field="skills.{{@index}}.name">{{name}}</span></td>
           <td class="dt-td-level">{{#if level}}<span class="dt-level" data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</td>
         </tr>
@@ -30,10 +30,10 @@
   </section>
   {{/if}}
   {{#if experience.length}}
-  <section class="dt-section">
+  <section class="dt-section" data-section="experience">
     <h2 class="dt-heading">Experience</h2>
     {{#each experience}}
-    <div class="dt-entry">
+    <div class="dt-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="dt-entry-head">
         <span class="dt-org" data-field="experience.{{@index}}.company">{{company}}</span>
         <span class="dt-pos" data-field="experience.{{@index}}.position">{{position}}</span>
@@ -45,10 +45,10 @@
   </section>
   {{/if}}
   {{#if projects.length}}
-  <section class="dt-section">
+  <section class="dt-section" data-section="projects">
     <h2 class="dt-heading">Projects</h2>
     {{#each projects}}
-    <div class="dt-entry">
+    <div class="dt-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="dt-entry-head">
         <span class="dt-org" data-field="projects.{{@index}}.name">{{name}}</span>
         {{#if role}}<span class="dt-pos" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
@@ -60,10 +60,10 @@
   </section>
   {{/if}}
   {{#if education.length}}
-  <section class="dt-section">
+  <section class="dt-section" data-section="education">
     <h2 class="dt-heading">Education</h2>
     {{#each education}}
-    <div class="dt-entry">
+    <div class="dt-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="dt-entry-head">
         <span class="dt-org" data-field="education.{{@index}}.institution">{{institution}}</span>
         <span class="dt-pos"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></span>

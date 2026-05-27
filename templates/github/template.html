@@ -20,10 +20,10 @@
   </section>
   {{/if}}
   {{#if experience.length}}
-  <section class="gh-section">
+  <section class="gh-section" data-section="experience">
     <h2 class="gh-section-title">Experience</h2>
     {{#each experience}}
-    <div class="gh-entry">
+    <div class="gh-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="gh-entry-head">
         <span class="gh-org" data-field="experience.{{@index}}.company">{{company}}</span>
         <span class="gh-pos" data-field="experience.{{@index}}.position">{{position}}</span>
@@ -35,10 +35,10 @@
   </section>
   {{/if}}
   {{#if projects.length}}
-  <section class="gh-section">
+  <section class="gh-section" data-section="projects">
     <h2 class="gh-section-title">Projects</h2>
     {{#each projects}}
-    <div class="gh-repo-card">
+    <div class="gh-repo-card" data-entry="projects" data-entry-index="{{@index}}">
       <div class="gh-repo-head">
         <span class="gh-repo-icon">⬡</span>
         <span class="gh-repo-name" data-field="projects.{{@index}}.name">{{name}}</span>
@@ -51,10 +51,10 @@
   </section>
   {{/if}}
   {{#if education.length}}
-  <section class="gh-section">
+  <section class="gh-section" data-section="education">
     <h2 class="gh-section-title">Education</h2>
     {{#each education}}
-    <div class="gh-entry">
+    <div class="gh-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="gh-entry-head">
         <span class="gh-org" data-field="education.{{@index}}.institution">{{institution}}</span>
         <span class="gh-pos"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></span>
@@ -65,10 +65,10 @@
   </section>
   {{/if}}
   {{#if skills.length}}
-  <section class="gh-section">
+  <section class="gh-section" data-section="skills">
     <h2 class="gh-section-title">Skills</h2>
     <div class="gh-skills">
-      {{#each skills}}<span class="gh-skill-tag"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="gh-skill-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
+      {{#each skills}}<span class="gh-skill-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="gh-skill-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
     </div>
   </section>
   {{/if}}
