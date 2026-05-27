@@ -71,6 +71,7 @@
           <span class="pro-company" data-field="projects.{{@index}}.name">{{name}}</span>
           {{#if role}}<span class="pro-sep"> · </span><span data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
         </div>
+        <span class="pro-date"><span data-field="projects.{{@index}}.startDate">{{startDate}}</span> – <span data-field="projects.{{@index}}.endDate">{{endDate}}</span></span>
       </div>
       {{#if description}}<div class="pro-desc" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="pro-highlights">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}

@@ -65,6 +65,7 @@
       <div class="tc-entry-head">
         <span class="tc-company" data-field="projects.{{@index}}.name">{{name}}</span>
         {{#if role}}<span class="tc-pipe"> | </span><span data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+        <span class="tc-date tc-pull"><span data-field="projects.{{@index}}.startDate">{{startDate}}</span> ~ <span data-field="projects.{{@index}}.endDate">{{endDate}}</span></span>
       </div>
       {{#if description}}<div class="tc-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="tc-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}

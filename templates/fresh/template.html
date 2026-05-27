@@ -71,6 +71,7 @@
             <span class="fresh-company" data-field="projects.{{@index}}.name">{{name}}</span>
             {{#if role}}<span class="fresh-arrow"> › </span><span data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
           </div>
+          <span class="fresh-date"><span data-field="projects.{{@index}}.startDate">{{startDate}}</span> - <span data-field="projects.{{@index}}.endDate">{{endDate}}</span></span>
         </div>
         {{#if description}}<div class="fresh-text" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
         {{#if highlights.length}}<ul class="fresh-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}

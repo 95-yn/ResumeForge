@@ -64,6 +64,7 @@
       <div class="dev-entry-head">
         <span class="dev-company" data-field="projects.{{@index}}.name">{{name}}</span>
         {{#if role}}<span class="dev-at"> · </span><span data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+        <span class="dev-date">[<span data-field="projects.{{@index}}.startDate">{{startDate}}</span> → <span data-field="projects.{{@index}}.endDate">{{endDate}}</span>]</span>
       </div>
       {{#if description}}<div class="dev-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="dev-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
