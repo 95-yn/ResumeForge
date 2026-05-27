@@ -1,0 +1,112 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-27T00:00:00Z",
+  "title": "Design System: ResumeForge",
+  "extensions": {
+    "colorMeta": {
+      "warm-ink":      { "role": "primary",   "displayName": "Warm Ink",      "canonical": "oklch(17% 0.01 60)" },
+      "warm-stone":    { "role": "neutral",   "displayName": "Warm Stone",    "canonical": "oklch(52% 0.01 60)" },
+      "warm-ash":      { "role": "neutral",   "displayName": "Warm Ash",      "canonical": "oklch(69% 0.008 60)" },
+      "stone-border":  { "role": "neutral",   "displayName": "Stone Border",  "canonical": "oklch(92% 0.005 60)" },
+      "stone-hover":   { "role": "neutral",   "displayName": "Stone Hover",   "canonical": "oklch(96% 0.003 60)" },
+      "warm-canvas":   { "role": "neutral",   "displayName": "Warm Canvas",   "canonical": "oklch(98% 0.002 60)" },
+      "ocean-accent":  { "role": "secondary", "displayName": "Ocean Accent",  "canonical": "oklch(48% 0.14 230)" },
+      "safe-green":    { "role": "semantic",  "displayName": "Safe Green",    "canonical": "oklch(58% 0.17 145)" },
+      "alert-amber":   { "role": "semantic",  "displayName": "Alert Amber",   "canonical": "oklch(63% 0.16 70)" },
+      "danger-red":    { "role": "semantic",  "displayName": "Danger Red",    "canonical": "oklch(53% 0.2 25)" }
+    },
+    "typographyMeta": {
+      "display":  { "displayName": "Display",  "purpose": "Page titles only." },
+      "headline": { "displayName": "Headline", "purpose": "Section headers in sidebar and content." },
+      "title":    { "displayName": "Title",    "purpose": "Card titles, template names." },
+      "body":     { "displayName": "Body",     "purpose": "All body text, 65ch max." },
+      "label":    { "displayName": "Label",    "purpose": "Category headers, uppercase." }
+    },
+    "shadows": [
+      { "name": "float",      "value": "0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)", "purpose": "Sticky headers, resume card at rest." },
+      { "name": "card-hover",  "value": "0 8px 25px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04)", "purpose": "Cards on hover." },
+      { "name": "modal",      "value": "0 16px 50px rgba(0,0,0,0.12)", "purpose": "Floating TipTap editor." }
+    ],
+    "motion": [
+      { "name": "ease-standard", "value": "cubic-bezier(0.16, 1, 0.3, 1)", "purpose": "Ease-out-expo for state transitions." },
+      { "name": "duration-fast", "value": "120ms", "purpose": "Button hover, input focus." },
+      { "name": "duration-normal", "value": "200ms", "purpose": "Card hover, panel expand." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The only filled button. Used for primary actions: create, save, export.",
+      "html": "<button class=\"ds-btn-primary\">新建简历</button>",
+      "css": ".ds-btn-primary { background: #1C1917; color: #FAFAF9; padding: 9px 18px; font-size: 13px; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif; border: none; border-radius: 6px; cursor: pointer; transition: background 120ms cubic-bezier(0.16,1,0.3,1); box-shadow: 0 1px 3px rgba(0,0,0,0.12); } .ds-btn-primary:hover { background: #292524; } .ds-btn-primary:focus-visible { outline: 2px solid #1C1917; outline-offset: 2px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary actions: navigation, cancel, filter toggles.",
+      "html": "<button class=\"ds-btn-ghost\">模板</button>",
+      "css": ".ds-btn-ghost { background: transparent; color: #78716C; padding: 6px 14px; font-size: 13px; font-weight: 500; font-family: 'Plus Jakarta Sans', sans-serif; border: 1px solid #E7E5E4; border-radius: 6px; cursor: pointer; transition: all 120ms cubic-bezier(0.16,1,0.3,1); } .ds-btn-ghost:hover { background: #F5F5F4; color: #1C1917; } .ds-btn-ghost:focus-visible { outline: 2px solid #1C1917; outline-offset: 2px; }"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip-filter",
+      "description": "Template category filters. Binary: active or inactive.",
+      "html": "<button class=\"ds-chip\">商务 (10)</button><button class=\"ds-chip ds-chip-active\">全部</button>",
+      "css": ".ds-chip { background: #F5F5F4; color: #78716C; padding: 6px 16px; font-size: 13px; font-weight: 500; font-family: 'Plus Jakarta Sans', sans-serif; border: 1px solid #E7E5E4; border-radius: 20px; cursor: pointer; transition: all 120ms cubic-bezier(0.16,1,0.3,1); } .ds-chip:hover { color: #1C1917; border-color: #1C1917; } .ds-chip-active { background: #1C1917; color: #FAFAF9; border-color: #1C1917; } .ds-chip:focus-visible { outline: 2px solid #1C1917; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input-default",
+      "description": "All text inputs in the sidebar editor panel.",
+      "html": "<input class=\"ds-input\" placeholder=\"输入姓名\" value=\"张三\" />",
+      "css": ".ds-input { width: 100%; background: #FEFEFE; color: #1C1917; padding: 9px 12px; font-size: 13px; font-family: 'Plus Jakarta Sans', sans-serif; border: 1px solid #E7E5E4; border-radius: 10px; outline: none; transition: border-color 120ms cubic-bezier(0.16,1,0.3,1); box-sizing: border-box; } .ds-input:focus { border-color: #1C1917; } .ds-input::placeholder { color: #A8A29E; }"
+    },
+    {
+      "name": "Top Navigation",
+      "kind": "nav",
+      "refersTo": null,
+      "description": "Sticky header bar across all pages. Backdrop blur on scroll.",
+      "html": "<nav class=\"ds-nav\"><span class=\"ds-nav-logo\">ResumeForge</span><div class=\"ds-nav-actions\"><button class=\"ds-btn-ghost\">模板</button><button class=\"ds-btn-ghost\">退出</button></div></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; justify-content: space-between; height: 54px; padding: 0 32px; background: rgba(250,250,249,0.92); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid #E7E5E4; position: sticky; top: 0; z-index: 50; } .ds-nav-logo { font-size: 15px; font-weight: 700; color: #1C1917; letter-spacing: -0.4px; font-family: 'Plus Jakarta Sans', sans-serif; } .ds-nav-actions { display: flex; gap: 6px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Quiet Workshop",
+    "overview": "ResumeForge is a place where work gets done without the tool getting in the way. The interface is warm but quiet: stone-tinted neutrals create an atmosphere that's professional without being cold, confident without being loud. Every pixel of chrome exists to serve the document in the center of the screen.",
+    "keyCharacteristics": [
+      "Warm neutral palette with zero decorative color",
+      "Plus Jakarta Sans throughout, one family, multiple weights",
+      "Flat surfaces with tonal layering (no ambient shadows at rest)",
+      "Minimal chrome; the resume preview dominates the viewport",
+      "State transitions under 200ms; no choreographed motion"
+    ],
+    "rules": [
+      { "name": "The Warm Ink Rule", "body": "#1C1917 is the only color that carries visual weight. Everything else is support.", "section": "colors" },
+      { "name": "The No Cool Gray Rule", "body": "Every neutral is stone-tinted. Never reach for #6B7280 or #9CA3AF.", "section": "colors" },
+      { "name": "The One Family Rule", "body": "Plus Jakarta Sans only in the editor UI. Resume templates have their own typography.", "section": "typography" },
+      { "name": "The Flat-at-Rest Rule", "body": "No surface has a shadow in its default state except the resume preview iframe.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do use Warm Ink (#1C1917) as the only high-contrast color",
+      "Do vary spacing for rhythm",
+      "Do keep the resume preview center-stage",
+      "Do use Plus Jakarta Sans exclusively in the editor UI",
+      "Do use state-driven shadows only"
+    ],
+    "donts": [
+      "Don't use purple gradients, glassmorphism, or neon colors",
+      "Don't add decorative elements: stickers, emoji as design, colored blocks",
+      "Don't use cool grays (#6B7280 family)",
+      "Don't use border-left/right greater than 1px as colored accent stripes",
+      "Don't use gradient text (background-clip: text)",
+      "Don't use modals for editing",
+      "Don't animate layout properties",
+      "Don't use bounce or elastic easing"
+    ]
+  }
+}
