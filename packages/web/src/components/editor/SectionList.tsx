@@ -15,6 +15,15 @@ const SECTION_ADD_LABELS: Record<string, string> = {
   projects: '添加项目',
 };
 
+const BASICS_FIELDS = [
+  { key: 'name', label: '姓名' },
+  { key: 'title', label: '职位头衔' },
+  { key: 'email', label: '邮箱' },
+  { key: 'phone', label: '电话' },
+  { key: 'location', label: '所在城市' },
+  { key: 'summary', label: '个人简介' },
+];
+
 // Sections that can be reordered (basics is always fixed at top)
 const DRAGGABLE_SECTIONS = new Set(['experience', 'education', 'skills', 'projects']);
 const ARRAY_SECTIONS = new Set(['experience', 'education', 'skills', 'projects']);
@@ -39,7 +48,7 @@ export function SectionList() {
   const {
     schema, sectionOrder, activeSection, setActiveSection,
     reorderSections, zoom, setZoom, templateId, resume,
-    addArrayItem, removeArrayItem,
+    addArrayItem, removeArrayItem, updateField,
   } = useEditorStore();
 
   const [hovered, setHovered] = useState<string | null>(null);
@@ -47,7 +56,7 @@ export function SectionList() {
   const [dropTarget, setDropTarget] = useState<string | null>(null);
   const [dropPosition, setDropPosition] = useState<'before' | 'after' | null>(null);
   // Track which sections are expanded (showing items)
-  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(ARRAY_SECTIONS));
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set([...ARRAY_SECTIONS, 'basics']));
   const navigate = useNavigate();
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
@@ -260,8 +269,8 @@ export function SectionList() {
                       </span>
                     )}
                   </span>
-                  {/* Collapse/expand toggle for array sections */}
-                  {isArraySection && (
+                  {/* Collapse/expand toggle */}
+                  {(isArraySection || key === 'basics') && (
                     <span
                       onClick={(e) => {
                         e.stopPropagation();
@@ -284,6 +293,46 @@ export function SectionList() {
                     </span>
                   )}
                 </div>
+
+                {/* Basics fields */}
+                {key === 'basics' && isExpanded && resume?.basics && (
+                  <div style={{ paddingLeft: 28, paddingRight: 10, paddingBottom: 6 }}>
+                    {BASICS_FIELDS.map((f) => {
+                      const val = (resume.basics as Record<string, unknown>)[f.key] as string || '';
+                      return (
+                        <div key={f.key} style={{ marginBottom: 4 }}>
+                          <span style={{ fontSize: 11, color: '#9CA3AF', display: 'block', marginBottom: 2 }}>{f.label}</span>
+                          {f.key === 'summary' ? (
+                            <textarea
+                              value={val}
+                              onChange={(e) => updateField('basics', f.key, e.target.value)}
+                              rows={2}
+                              style={{
+                                width: '100%', fontSize: 12, color: '#374151', border: '1px solid #E5E7EB',
+                                borderRadius: 4, padding: '4px 6px', resize: 'vertical', outline: 'none',
+                                fontFamily: 'inherit', lineHeight: 1.5,
+                              }}
+                              onFocus={(e) => { e.currentTarget.style.borderColor = '#3B82F6'; }}
+                              onBlur={(e) => { e.currentTarget.style.borderColor = '#E5E7EB'; }}
+                            />
+                          ) : (
+                            <input
+                              value={val}
+                              onChange={(e) => updateField('basics', f.key, e.target.value)}
+                              style={{
+                                width: '100%', fontSize: 12, color: '#374151', border: '1px solid #E5E7EB',
+                                borderRadius: 4, padding: '3px 6px', outline: 'none',
+                              }}
+                              onFocus={(e) => { e.currentTarget.style.borderColor = '#3B82F6'; }}
+                              onBlur={(e) => { e.currentTarget.style.borderColor = '#E5E7EB'; }}
+                              placeholder={`输入${f.label}`}
+                            />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
 
                 {/* Sub-items for array sections */}
                 {isArraySection && isExpanded && (
