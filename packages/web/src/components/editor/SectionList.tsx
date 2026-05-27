@@ -4,6 +4,17 @@ import { Modal } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { useEditorStore } from '../../stores/editor.store';
 
+const RESUME_BG_COLORS = [
+  { color: '#FFFFFF', label: '白' },
+  { color: '#FAFAF9', label: '米白' },
+  { color: '#F5F5F4', label: '浅灰' },
+  { color: '#FFFBEB', label: '暖黄' },
+  { color: '#FFF1F2', label: '浅粉' },
+  { color: '#ECFDF5', label: '浅绿' },
+  { color: '#EFF6FF', label: '浅蓝' },
+  { color: '#FAF5FF', label: '浅紫' },
+];
+
 const SECTION_META: Record<string, { icon: string; label: string; addLabel: string }> = {
   basics: { icon: '👤', label: '基本信息', addLabel: '' },
   experience: { icon: '💼', label: '工作经历', addLabel: '添加经历' },
@@ -55,7 +66,7 @@ export function SectionList() {
   const {
     sectionOrder, activeSection, setActiveSection, resume,
     reorderSections, addArrayItem, removeArrayItem, updateField,
-    updateArrayItem, addCustomSection,
+    updateArrayItem, addCustomSection, updateSettings,
   } = useEditorStore();
 
   const navigate = useNavigate();
@@ -191,6 +202,44 @@ export function SectionList() {
             </div>
           );
         })}
+      </div>
+
+      {/* Background color panel */}
+      <div style={{ padding: '8px 12px', borderTop: '1px solid #F5F5F4' }}>
+        <div style={{ fontSize: 11, color: '#A8A29E', marginBottom: 6, fontWeight: 500, letterSpacing: 0.3 }}>简历背景色</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap' }}>
+          {RESUME_BG_COLORS.map(({ color, label }) => {
+            const current = (resume?.settings as Record<string, unknown> | undefined)?.backgroundColor as string | undefined;
+            const isActive = (current || '#FFFFFF') === color;
+            return (
+              <button
+                key={color}
+                title={label}
+                onClick={() => updateSettings('backgroundColor', color)}
+                style={{
+                  width: 20, height: 20, borderRadius: '50%',
+                  border: isActive ? '2px solid #1C1917' : '2px solid #E7E5E4',
+                  background: color,
+                  cursor: 'pointer', padding: 0, flexShrink: 0,
+                  transition: 'transform 0.1s, border-color 0.1s',
+                  boxShadow: isActive ? '0 0 0 2px #fff inset' : 'none',
+                }}
+                onMouseEnter={e => { if (!isActive) { (e.currentTarget as HTMLElement).style.transform = 'scale(1.2)'; (e.currentTarget as HTMLElement).style.borderColor = '#1C1917'; } }}
+                onMouseLeave={e => { if (!isActive) { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.borderColor = '#E7E5E4'; } }}
+              />
+            );
+          })}
+          <button
+            title="重置"
+            onClick={() => updateSettings('backgroundColor', '#FFFFFF')}
+            style={{
+              fontSize: 10, color: '#A8A29E', background: 'transparent', border: 'none',
+              cursor: 'pointer', padding: '2px 4px', borderRadius: 4, fontFamily: 'inherit',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = '#1C1917'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = '#A8A29E'; }}
+          >重置</button>
+        </div>
       </div>
 
       {/* Bottom actions */}

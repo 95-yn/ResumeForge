@@ -6,12 +6,14 @@ import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
 import TextAlign from '@tiptap/extension-text-align';
 import { TextStyle, FontSize } from '@tiptap/extension-text-style';
+import { Color } from '@tiptap/extension-color';
+import { Highlight } from '@tiptap/extension-highlight';
 import { Button, Dropdown } from 'antd';
 import {
   BoldOutlined, ItalicOutlined, UnderlineOutlined, StrikethroughOutlined,
   UnorderedListOutlined, OrderedListOutlined, LinkOutlined,
   AlignLeftOutlined, AlignCenterOutlined, AlignRightOutlined,
-  FontSizeOutlined,
+  FontSizeOutlined, FontColorsOutlined, BgColorsOutlined,
 } from '@ant-design/icons';
 
 export interface EditingField {
@@ -27,7 +29,7 @@ interface FloatingEditorProps {
   onCancel: () => void;
 }
 
-function isRichtextField(field: string): boolean {
+function isLongField(field: string): boolean {
   if (field === 'basics.summary') return true;
   if (/^projects\.\d+\.description$/.test(field)) return true;
   if (/^experience\.\d+\.description$/.test(field)) return true;
@@ -35,9 +37,86 @@ function isRichtextField(field: string): boolean {
   return false;
 }
 
+const TEXT_COLORS = [
+  { color: '#1C1917', label: '默认黑' },
+  { color: '#DC2626', label: '红' },
+  { color: '#EA580C', label: '橙' },
+  { color: '#CA8A04', label: '黄' },
+  { color: '#16A34A', label: '绿' },
+  { color: '#2563EB', label: '蓝' },
+  { color: '#7C3AED', label: '紫' },
+  { color: '#78716C', label: '灰' },
+];
+
+const BG_COLORS = [
+  { color: 'transparent', label: '无背景' },
+  { color: '#FEF2F2', label: '浅红' },
+  { color: '#FFF7ED', label: '浅橙' },
+  { color: '#FEFCE8', label: '浅黄' },
+  { color: '#F0FDF4', label: '浅绿' },
+  { color: '#EFF6FF', label: '浅蓝' },
+  { color: '#F5F3FF', label: '浅紫' },
+  { color: '#F5F5F4', label: '浅灰' },
+];
+
+interface ColorPickerProps {
+  colors: { color: string; label: string }[];
+  onSelect: (color: string) => void;
+  onReset: () => void;
+  onClose: () => void;
+}
+
+function ColorPicker({ colors, onSelect, onReset, onClose }: ColorPickerProps) {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
+    };
+    setTimeout(() => document.addEventListener('mousedown', handleClick), 50);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [onClose]);
+
+  return (
+    <div ref={ref} style={{
+      position: 'absolute', top: '100%', left: 0, marginTop: 4, zIndex: 10001,
+      background: '#FFFFFF', border: '1px solid #E7E5E4', borderRadius: 8,
+      boxShadow: '0 8px 24px rgba(0,0,0,0.12)', padding: '8px 10px', minWidth: 160,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 6 }}>
+        {colors.map(({ color, label }) => (
+          <button
+            key={color}
+            title={label}
+            onMouseDown={e => { e.preventDefault(); onSelect(color); onClose(); }}
+            style={{
+              width: 20, height: 20, borderRadius: '50%', border: '2px solid #E7E5E4',
+              background: color === 'transparent' ? 'linear-gradient(135deg, #fff 45%, #f44 45%, #f44 55%, #fff 55%)' : color,
+              cursor: 'pointer', padding: 0, flexShrink: 0,
+              transition: 'transform 0.1s, border-color 0.1s',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.2)'; (e.currentTarget as HTMLElement).style.borderColor = '#1C1917'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.borderColor = '#E7E5E4'; }}
+          />
+        ))}
+      </div>
+      <button
+        onMouseDown={e => { e.preventDefault(); onReset(); onClose(); }}
+        style={{
+          fontSize: 11, color: '#78716C', background: 'transparent', border: 'none',
+          cursor: 'pointer', padding: '2px 4px', borderRadius: 4, fontFamily: 'inherit',
+        }}
+        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#F5F5F4'; }}
+        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+      >重置</button>
+    </div>
+  );
+}
+
 export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }: FloatingEditorProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const richtext = isRichtextField(editingField.field);
+  const longField = isLongField(editingField.field);
+  const [colorPickerOpen, setColorPickerOpen] = useState<'text' | 'bg' | null>(null);
 
   const editor = useEditor({
     extensions: [
@@ -46,6 +125,8 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
       Underline,
       TextStyle,
       FontSize,
+      Color,
+      Highlight.configure({ multicolor: true }),
       Link.configure({ openOnClick: false, HTMLAttributes: { class: 'editor-link' } }),
       TextAlign.configure({ types: ['paragraph'] }),
     ],
@@ -55,12 +136,12 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
 
   useEffect(() => {
     if (editor && editingField.value !== undefined) {
-      const currentContent = richtext ? editor.getHTML() : editor.getText();
+      const currentContent = editor.getHTML();
       if (currentContent !== editingField.value) {
         editor.commands.setContent(editingField.value || '');
       }
     }
-  }, [editor, editingField.field, editingField.value, richtext]);
+  }, [editor, editingField.field, editingField.value]);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -81,7 +162,7 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
   const handleConfirm = useCallback(() => {
     if (!editor) return;
     onConfirm(editingField.field, editor.getHTML());
-  }, [editor, richtext, editingField.field, onConfirm]);
+  }, [editor, editingField.field, onConfirm]);
 
   const handleLink = useCallback(() => {
     if (!editor) return;
@@ -96,8 +177,8 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
   const l = iframeRect?.left ?? 0;
   const fieldTop = t + editingField.rect.top;
   const fieldLeft = l + editingField.rect.left;
-  const editorWidth = richtext ? 460 : Math.max(240, Math.min(420, editingField.rect.width + 60));
-  const editorH = richtext ? 240 : 100;
+  const editorWidth = longField ? 480 : Math.max(260, Math.min(420, editingField.rect.width + 60));
+  const editorH = longField ? 280 : 120;
   let top = fieldTop + editingField.rect.height + 8;
   if (top + editorH > window.innerHeight - 20) top = fieldTop - editorH - 8;
   let left = fieldLeft;
@@ -109,98 +190,154 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
     background: active ? '#F5F5F4' : 'transparent',
     color: active ? '#1C1917' : '#78716C',
     cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-    fontSize: 13, transition: 'all 0.1s', fontFamily: 'inherit',
+    fontSize: 13, transition: 'all 0.1s', fontFamily: 'inherit', position: 'relative' as const,
   });
 
   const sep = <div style={{ width: 1, height: 16, background: '#E7E5E4', margin: '0 2px', flexShrink: 0 }} />;
+
+  const hoverIn = (e: React.MouseEvent<HTMLButtonElement>, active: boolean) => {
+    if (!active) { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; }
+  };
+  const hoverOut = (e: React.MouseEvent<HTMLButtonElement>, active: boolean) => {
+    if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; }
+  };
+
+  // Compact toolbar: bold, italic, font size, text color
+  const compactToolbar = (
+    <>
+      {/* Font size */}
+      <Dropdown menu={{
+        items: [12, 13, 14, 16, 18, 20, 24].map(s => ({
+          key: s, label: <span style={{ fontFamily: 'inherit' }}>{s}px</span>,
+          onClick: () => editor?.chain().focus().setFontSize(`${s}px`).run(),
+        })),
+      }} trigger={['click']} overlayStyle={{ zIndex: 10000 }}>
+        <button style={toolBtnStyle(false)} title="字体大小"
+          onMouseEnter={e => hoverIn(e, false)} onMouseLeave={e => hoverOut(e, false)}
+        ><FontSizeOutlined /></button>
+      </Dropdown>
+      {sep}
+      <button style={toolBtnStyle(editor?.isActive('bold') ?? false)}
+        onMouseDown={e => { e.preventDefault(); editor?.chain().focus().toggleBold().run(); }} title="加粗 (Ctrl+B)"
+        onMouseEnter={e => hoverIn(e, editor?.isActive('bold') ?? false)}
+        onMouseLeave={e => hoverOut(e, editor?.isActive('bold') ?? false)}
+      ><BoldOutlined /></button>
+      <button style={toolBtnStyle(editor?.isActive('italic') ?? false)}
+        onMouseDown={e => { e.preventDefault(); editor?.chain().focus().toggleItalic().run(); }} title="斜体 (Ctrl+I)"
+        onMouseEnter={e => hoverIn(e, editor?.isActive('italic') ?? false)}
+        onMouseLeave={e => hoverOut(e, editor?.isActive('italic') ?? false)}
+      ><ItalicOutlined /></button>
+      {sep}
+      {/* Text color */}
+      <div style={{ position: 'relative' }}>
+        <button
+          style={toolBtnStyle(colorPickerOpen === 'text')}
+          title="文字颜色"
+          onMouseDown={e => { e.preventDefault(); setColorPickerOpen(colorPickerOpen === 'text' ? null : 'text'); }}
+          onMouseEnter={e => hoverIn(e, colorPickerOpen === 'text')}
+          onMouseLeave={e => hoverOut(e, colorPickerOpen === 'text')}
+        ><FontColorsOutlined /></button>
+        {colorPickerOpen === 'text' && (
+          <ColorPicker
+            colors={TEXT_COLORS}
+            onSelect={c => editor?.chain().focus().setColor(c).run()}
+            onReset={() => editor?.chain().focus().unsetColor().run()}
+            onClose={() => setColorPickerOpen(null)}
+          />
+        )}
+      </div>
+    </>
+  );
+
+  // Full toolbar: adds underline, strike, lists, align, bg color, link
+  const fullToolbar = (
+    <>
+      {compactToolbar}
+      <button style={toolBtnStyle(editor?.isActive('underline') ?? false)}
+        onMouseDown={e => { e.preventDefault(); editor?.chain().focus().toggleUnderline().run(); }} title="下划线 (Ctrl+U)"
+        onMouseEnter={e => hoverIn(e, editor?.isActive('underline') ?? false)}
+        onMouseLeave={e => hoverOut(e, editor?.isActive('underline') ?? false)}
+      ><UnderlineOutlined /></button>
+      <button style={toolBtnStyle(editor?.isActive('strike') ?? false)}
+        onMouseDown={e => { e.preventDefault(); editor?.chain().focus().toggleStrike().run(); }} title="删除线"
+        onMouseEnter={e => hoverIn(e, editor?.isActive('strike') ?? false)}
+        onMouseLeave={e => hoverOut(e, editor?.isActive('strike') ?? false)}
+      ><StrikethroughOutlined /></button>
+      {sep}
+      <button style={toolBtnStyle(editor?.isActive('bulletList') ?? false)}
+        onMouseDown={e => { e.preventDefault(); editor?.chain().focus().toggleBulletList().run(); }} title="无序列表"
+        onMouseEnter={e => hoverIn(e, editor?.isActive('bulletList') ?? false)}
+        onMouseLeave={e => hoverOut(e, editor?.isActive('bulletList') ?? false)}
+      ><UnorderedListOutlined /></button>
+      <button style={toolBtnStyle(editor?.isActive('orderedList') ?? false)}
+        onMouseDown={e => { e.preventDefault(); editor?.chain().focus().toggleOrderedList().run(); }} title="有序列表"
+        onMouseEnter={e => hoverIn(e, editor?.isActive('orderedList') ?? false)}
+        onMouseLeave={e => hoverOut(e, editor?.isActive('orderedList') ?? false)}
+      ><OrderedListOutlined /></button>
+      {sep}
+      <button style={toolBtnStyle(editor?.isActive({ textAlign: 'left' }) ?? false)}
+        onMouseDown={e => { e.preventDefault(); editor?.chain().focus().setTextAlign('left').run(); }} title="左对齐"
+        onMouseEnter={e => hoverIn(e, editor?.isActive({ textAlign: 'left' }) ?? false)}
+        onMouseLeave={e => hoverOut(e, editor?.isActive({ textAlign: 'left' }) ?? false)}
+      ><AlignLeftOutlined /></button>
+      <button style={toolBtnStyle(editor?.isActive({ textAlign: 'center' }) ?? false)}
+        onMouseDown={e => { e.preventDefault(); editor?.chain().focus().setTextAlign('center').run(); }} title="居中"
+        onMouseEnter={e => hoverIn(e, editor?.isActive({ textAlign: 'center' }) ?? false)}
+        onMouseLeave={e => hoverOut(e, editor?.isActive({ textAlign: 'center' }) ?? false)}
+      ><AlignCenterOutlined /></button>
+      <button style={toolBtnStyle(editor?.isActive({ textAlign: 'right' }) ?? false)}
+        onMouseDown={e => { e.preventDefault(); editor?.chain().focus().setTextAlign('right').run(); }} title="右对齐"
+        onMouseEnter={e => hoverIn(e, editor?.isActive({ textAlign: 'right' }) ?? false)}
+        onMouseLeave={e => hoverOut(e, editor?.isActive({ textAlign: 'right' }) ?? false)}
+      ><AlignRightOutlined /></button>
+      {sep}
+      {/* Background color */}
+      <div style={{ position: 'relative' }}>
+        <button
+          style={toolBtnStyle(colorPickerOpen === 'bg')}
+          title="背景色"
+          onMouseDown={e => { e.preventDefault(); setColorPickerOpen(colorPickerOpen === 'bg' ? null : 'bg'); }}
+          onMouseEnter={e => hoverIn(e, colorPickerOpen === 'bg')}
+          onMouseLeave={e => hoverOut(e, colorPickerOpen === 'bg')}
+        ><BgColorsOutlined /></button>
+        {colorPickerOpen === 'bg' && (
+          <ColorPicker
+            colors={BG_COLORS}
+            onSelect={c => editor?.chain().focus().setHighlight({ color: c }).run()}
+            onReset={() => editor?.chain().focus().unsetHighlight().run()}
+            onClose={() => setColorPickerOpen(null)}
+          />
+        )}
+      </div>
+      <button style={toolBtnStyle(editor?.isActive('link') ?? false)}
+        onMouseDown={e => { e.preventDefault(); handleLink(); }} title="插入链接"
+        onMouseEnter={e => hoverIn(e, editor?.isActive('link') ?? false)}
+        onMouseLeave={e => hoverOut(e, editor?.isActive('link') ?? false)}
+      ><LinkOutlined /></button>
+    </>
+  );
 
   return (
     <div ref={containerRef} style={{
       position: 'fixed', top, left, width: editorWidth, zIndex: 9999,
       background: '#FFFFFF', border: '1px solid #E7E5E4', borderRadius: 14,
       boxShadow: '0 16px 50px rgba(0,0,0,0.12)',
-      overflow: 'hidden',
+      overflow: 'visible',
       fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
     }}>
 
-      {/* Rich text toolbar */}
-      {richtext && (
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 1, padding: '6px 8px', flexWrap: 'wrap',
-          borderBottom: '1px solid #F5F5F4', background: '#FAFAF9',
-        }}>
-          {/* Font size dropdown */}
-          <Dropdown menu={{
-            items: [12, 13, 14, 16, 18, 20, 24].map(s => ({
-              key: s, label: <span style={{ fontFamily: 'inherit' }}>{s}px</span>,
-              onClick: () => editor?.chain().focus().setFontSize(`${s}px`).run(),
-            })),
-          }} trigger={['click']} overlayStyle={{ zIndex: 10000 }}>
-            <button style={toolBtnStyle(false)} title="字体大小"
-              onMouseEnter={e => { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; }}
-            ><FontSizeOutlined /></button>
-          </Dropdown>
-          {sep}
-          <button style={toolBtnStyle(editor?.isActive('bold') ?? false)}
-            onMouseDown={e => { e.preventDefault(); editor?.chain().focus().toggleBold().run(); }} title="加粗 (Ctrl+B)"
-            onMouseEnter={e => { if (!editor?.isActive('bold')) { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; } }}
-            onMouseLeave={e => { if (!editor?.isActive('bold')) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; } }}
-          ><BoldOutlined /></button>
-          <button style={toolBtnStyle(editor?.isActive('italic') ?? false)}
-            onMouseDown={e => { e.preventDefault(); editor?.chain().focus().toggleItalic().run(); }} title="斜体 (Ctrl+I)"
-            onMouseEnter={e => { if (!editor?.isActive('italic')) { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; } }}
-            onMouseLeave={e => { if (!editor?.isActive('italic')) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; } }}
-          ><ItalicOutlined /></button>
-          <button style={toolBtnStyle(editor?.isActive('underline') ?? false)}
-            onMouseDown={e => { e.preventDefault(); editor?.chain().focus().toggleUnderline().run(); }} title="下划线 (Ctrl+U)"
-            onMouseEnter={e => { if (!editor?.isActive('underline')) { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; } }}
-            onMouseLeave={e => { if (!editor?.isActive('underline')) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; } }}
-          ><UnderlineOutlined /></button>
-          <button style={toolBtnStyle(editor?.isActive('strike') ?? false)}
-            onMouseDown={e => { e.preventDefault(); editor?.chain().focus().toggleStrike().run(); }} title="删除线"
-            onMouseEnter={e => { if (!editor?.isActive('strike')) { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; } }}
-            onMouseLeave={e => { if (!editor?.isActive('strike')) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; } }}
-          ><StrikethroughOutlined /></button>
-          {sep}
-          <button style={toolBtnStyle(editor?.isActive('bulletList') ?? false)}
-            onMouseDown={e => { e.preventDefault(); editor?.chain().focus().toggleBulletList().run(); }} title="无序列表"
-            onMouseEnter={e => { if (!editor?.isActive('bulletList')) { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; } }}
-            onMouseLeave={e => { if (!editor?.isActive('bulletList')) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; } }}
-          ><UnorderedListOutlined /></button>
-          <button style={toolBtnStyle(editor?.isActive('orderedList') ?? false)}
-            onMouseDown={e => { e.preventDefault(); editor?.chain().focus().toggleOrderedList().run(); }} title="有序列表"
-            onMouseEnter={e => { if (!editor?.isActive('orderedList')) { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; } }}
-            onMouseLeave={e => { if (!editor?.isActive('orderedList')) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; } }}
-          ><OrderedListOutlined /></button>
-          {sep}
-          <button style={toolBtnStyle(editor?.isActive({ textAlign: 'left' }) ?? false)}
-            onMouseDown={e => { e.preventDefault(); editor?.chain().focus().setTextAlign('left').run(); }} title="左对齐"
-            onMouseEnter={e => { if (!editor?.isActive({ textAlign: 'left' })) { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; } }}
-            onMouseLeave={e => { if (!editor?.isActive({ textAlign: 'left' })) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; } }}
-          ><AlignLeftOutlined /></button>
-          <button style={toolBtnStyle(editor?.isActive({ textAlign: 'center' }) ?? false)}
-            onMouseDown={e => { e.preventDefault(); editor?.chain().focus().setTextAlign('center').run(); }} title="居中"
-            onMouseEnter={e => { if (!editor?.isActive({ textAlign: 'center' })) { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; } }}
-            onMouseLeave={e => { if (!editor?.isActive({ textAlign: 'center' })) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; } }}
-          ><AlignCenterOutlined /></button>
-          <button style={toolBtnStyle(editor?.isActive({ textAlign: 'right' }) ?? false)}
-            onMouseDown={e => { e.preventDefault(); editor?.chain().focus().setTextAlign('right').run(); }} title="右对齐"
-            onMouseEnter={e => { if (!editor?.isActive({ textAlign: 'right' })) { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; } }}
-            onMouseLeave={e => { if (!editor?.isActive({ textAlign: 'right' })) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; } }}
-          ><AlignRightOutlined /></button>
-          {sep}
-          <button style={toolBtnStyle(editor?.isActive('link') ?? false)}
-            onMouseDown={e => { e.preventDefault(); handleLink(); }} title="插入链接"
-            onMouseEnter={e => { if (!editor?.isActive('link')) { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; } }}
-            onMouseLeave={e => { if (!editor?.isActive('link')) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; } }}
-          ><LinkOutlined /></button>
-        </div>
-      )}
+      {/* Toolbar — always visible */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 1, padding: '6px 8px', flexWrap: 'wrap',
+        borderBottom: '1px solid #F5F5F4', background: '#FAFAF9',
+        borderRadius: '14px 14px 0 0', overflow: 'visible',
+      }}>
+        {longField ? fullToolbar : compactToolbar}
+      </div>
 
       {/* Editor area */}
       <div style={{
-        padding: '10px 14px', minHeight: richtext ? 100 : 38, maxHeight: 300, overflowY: 'auto',
+        padding: '10px 14px', minHeight: longField ? 100 : 38, maxHeight: 300, overflowY: 'auto',
         fontSize: 14, lineHeight: 1.7, color: '#1C1917',
       }}>
         <EditorContent editor={editor} />
@@ -210,9 +347,10 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
       <div style={{
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         padding: '8px 12px', borderTop: '1px solid #F5F5F4', background: '#FAFAF9',
+        borderRadius: '0 0 14px 14px',
       }}>
         <span style={{ fontSize: 11, color: '#A8A29E', fontFamily: 'inherit' }}>
-          {richtext ? '支持富文本格式' : 'Enter 确认 · Esc 取消'}
+          {longField ? '支持富文本格式' : 'Esc 取消'}
         </span>
         <div style={{ display: 'flex', gap: 6 }}>
           <Button
@@ -245,6 +383,7 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
         .tiptap a, .editor-link { color: #0369A1; text-decoration: underline; cursor: pointer; }
         .tiptap s { text-decoration: line-through; }
         .tiptap u { text-decoration: underline; }
+        .tiptap mark { padding: 0 2px; border-radius: 2px; }
       `}</style>
     </div>
   );

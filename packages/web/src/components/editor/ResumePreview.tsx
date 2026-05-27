@@ -152,7 +152,8 @@ export function ResumePreview() {
     try {
       const template = Handlebars.compile(templateHtml);
       const body = template(resume);
-      return `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>${templateCss}</style></head><body style="margin:0">${body}</body></html>`;
+      const bgColor = resume.settings?.backgroundColor || '#ffffff';
+      return `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>${templateCss}</style></head><body style="margin:0;background:${bgColor}">${body}</body></html>`;
     } catch { return '<html><body><p style="color:red;padding:20px">模板渲染错误</p></body></html>'; }
   }, [resume, templateHtml, templateCss, isEmpty]);
 

@@ -22,6 +22,11 @@ export interface TemplateSchema {
   sections: SectionSchema[];
 }
 
+export interface ResumeSettings {
+  backgroundColor?: string;
+  [key: string]: unknown;
+}
+
 export interface ResumeData {
   basics: {
     name: string;
@@ -58,6 +63,7 @@ export interface ResumeData {
     description?: string;
     highlights: string[];
   }>;
+  settings?: ResumeSettings;
   [key: string]: unknown;
 }
 
