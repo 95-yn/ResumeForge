@@ -12,6 +12,7 @@ interface EditorStore {
   templateCss: string | null;
   schema: TemplateSchema | null;
   sectionOrder: string[];
+  version: number;
   activeSection: string | null;
   isDirty: boolean;
   saveStatus: 'saved' | 'saving' | 'unsaved';
@@ -58,7 +59,7 @@ function pushHistory(state: EditorStore, newData: ResumeData): Partial<EditorSto
 
 export const useEditorStore = create<EditorStore>((set, get) => ({
   mode: 'guest', resumeId: null, resume: null, templateId: null, templateHtml: null, templateCss: null, schema: null,
-  sectionOrder: [], activeSection: null, isDirty: false, saveStatus: 'saved', history: [], historyIndex: -1, zoom: 1,
+  sectionOrder: [], version: 1, activeSection: null, isDirty: false, saveStatus: 'saved', history: [], historyIndex: -1, zoom: 1,
 
   loadResume: async (resumeId) => {
     const { data: resumeRes } = await api.get(`/resumes/${resumeId}`);
@@ -69,7 +70,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     set({
       mode: 'cloud', resumeId, resume: resumeData, templateId: resume.templateId,
       templateHtml: tpl.html, templateCss: tpl.css, schema: tpl.schema as TemplateSchema,
-      sectionOrder: resume.sectionOrder, history: [structuredClone(resumeData)], historyIndex: 0,
+      sectionOrder: resume.sectionOrder, version: resume.version ?? 1, history: [structuredClone(resumeData)], historyIndex: 0,
       isDirty: false, saveStatus: 'saved',
     });
   },
@@ -208,7 +209,8 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     if (state.mode === 'guest' && state.templateId) {
       saveToLocal(state.templateId, state.resume, state.sectionOrder);
     } else if (state.resumeId) {
-      await api.patch(`/resumes/${state.resumeId}`, { data: state.resume, sectionOrder: state.sectionOrder });
+      const res = await api.patch(`/resumes/${state.resumeId}`, { data: state.resume, sectionOrder: state.sectionOrder, version: state.version });
+      set({ version: res.data.data.version });
     }
     set({ isDirty: false, saveStatus: 'saved' });
   },
