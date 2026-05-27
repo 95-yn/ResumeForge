@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, message } from 'antd';
+import { message } from 'antd';
 import { api } from '../api/client';
 
 interface TemplateSummary { id: string; name: string; slug: string; category: string; }
@@ -74,87 +74,128 @@ function isColorDark(hex: string): boolean {
   const r = parseInt(h.slice(0, 2), 16);
   const g = parseInt(h.slice(2, 4), 16);
   const b = parseInt(h.slice(4, 6), 16);
-  // Relative luminance
   const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
   return luminance < 0.5;
 }
 
 function TemplatePreview({ slug, meta }: { slug: string; meta: TemplateMeta }) {
   const isDark = isColorDark(meta.bg);
-  const lineBase = isDark ? 'rgba(255,255,255,' : 'rgba(0,0,0,';
-  const accentColor = meta.accent ?? (isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.5)');
   const isTwoCol = meta.layout === 'two-col';
   const isDarkHeader = meta.layout === 'dark-header';
 
+  const lineH = isDark ? 'rgba(255,255,255,' : 'rgba(0,0,0,';
+  const titleA = lineH + (isDark ? '0.9)' : '0.75)');
+  const titleB = lineH + (isDark ? '0.5)' : '0.35)');
+  const lineA  = lineH + (isDark ? '0.2)' : '0.12)');
+  const lineB  = lineH + (isDark ? '0.1)' : '0.06)');
+  const tagBg  = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.06)';
+  const accentColor = meta.accent ?? (isDark ? 'rgba(255,255,255,0.6)' : '#1C1917');
+
+  const gradientMask = `linear-gradient(to bottom, transparent 60%, ${meta.bg === '#FFFFFF' ? '#fff' : meta.bg} 100%)`;
+
   if (isTwoCol) {
-    const sidebarBg = isDark ? 'rgba(0,0,0,0.3)' : 'rgba(0,0,0,0.08)';
-    const sideLineA = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.12)';
-    const sideLineB = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
-    const mainLineA = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.15)';
-    const mainLineB = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
+    const sidebarBg = isDark ? 'rgba(0,0,0,0.35)' : 'rgba(0,0,0,0.06)';
+    const sideTitle = isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.6)';
+    const sideLine  = isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)';
     return (
-      <div style={{ height: 200, background: meta.bg, borderRadius: '8px 8px 0 0', display: 'flex', overflow: 'hidden' }}>
-        <div style={{ width: 56, background: sidebarBg, padding: '24px 8px', flexShrink: 0 }}>
-          <div style={{ width: 24, height: 24, borderRadius: '50%', background: sideLineA, margin: '0 auto 12px' }} />
-          {[100, 70, 85, 60].map((w, i) => (
-            <div key={i} style={{ height: 3, background: i % 2 === 0 ? sideLineA : sideLineB, borderRadius: 2, width: `${w}%`, marginBottom: 5 }} />
+      <div style={{ height: 220, background: meta.bg, borderRadius: '10px 10px 0 0', display: 'flex', overflow: 'hidden', position: 'relative' }}>
+        {/* Sidebar */}
+        <div style={{ width: 62, background: sidebarBg, padding: '20px 10px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: 0 }}>
+          {/* Avatar circle */}
+          <div style={{ width: 28, height: 28, borderRadius: '50%', background: sideTitle, margin: '0 auto 14px', opacity: 0.7 }} />
+          {/* Name lines */}
+          <div style={{ height: 4, background: sideTitle, borderRadius: 2, width: '80%', marginBottom: 4 }} />
+          <div style={{ height: 3, background: sideLine, borderRadius: 2, width: '60%', marginBottom: 14 }} />
+          {/* Skill tags */}
+          {[70, 85, 55, 75, 65].map((w, i) => (
+            <div key={i} style={{ height: 3, background: sideLine, borderRadius: 2, width: `${w}%`, marginBottom: 5 }} />
+          ))}
+          {/* Tags */}
+          <div style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap', gap: 3 }}>
+            {[38, 32, 36].map((w, i) => (
+              <div key={i} style={{ height: 8, width: w, background: sideLine, borderRadius: 3 }} />
+            ))}
+          </div>
+        </div>
+        {/* Main */}
+        <div style={{ flex: 1, padding: '20px 16px', display: 'flex', flexDirection: 'column', gap: 0 }}>
+          <div style={{ height: 6, background: titleA, borderRadius: 3, width: '55%', marginBottom: 5 }} />
+          <div style={{ height: 3, background: lineA, borderRadius: 2, width: '70%', marginBottom: 12 }} />
+          <div style={{ height: 2, background: lineB, marginBottom: 10 }} />
+          {/* Section */}
+          <div style={{ height: 4, background: accentColor, borderRadius: 2, width: '30%', marginBottom: 6 }} />
+          {[90, 75, 85, 60].map((w, i) => (
+            <div key={i} style={{ height: 3, background: i % 2 === 0 ? lineA : lineB, borderRadius: 2, width: `${w}%`, marginBottom: 4 }} />
           ))}
         </div>
-        <div style={{ flex: 1, padding: '20px 14px' }}>
-          <div style={{ height: 7, background: mainLineA, borderRadius: 3, width: '50%', marginBottom: 6 }} />
-          <div style={{ height: 3, background: mainLineB, borderRadius: 2, width: '65%', marginBottom: 14 }} />
-          {[90, 70, 100, 60, 80].map((w, i) => (
-            <div key={i} style={{ height: 3, background: mainLineB, borderRadius: 2, width: `${w}%`, marginBottom: i === 1 ? 10 : 4 }} />
-          ))}
-        </div>
+        {/* Gradient mask */}
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 60, background: gradientMask, pointerEvents: 'none' }} />
       </div>
     );
   }
 
   if (isDarkHeader) {
-    // Dark background header + light body
-    const headerBg = isDark ? meta.bg : '#1F2937';
-    const bodyBg = isDark ? 'rgba(255,255,255,0.05)' : '#FFFFFF';
-    const headerLineA = 'rgba(255,255,255,0.25)';
-    const headerLineB = 'rgba(255,255,255,0.12)';
-    const bodyLineA = isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.12)';
-    const bodyLineB = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+    const headerBg = meta.bg;
+    const bodyBg = isDark ? 'rgba(255,255,255,0.04)' : '#FFFFFF';
+    const hTitleA = 'rgba(255,255,255,0.9)';
+    const hLineA  = 'rgba(255,255,255,0.45)';
+    const hLineB  = 'rgba(255,255,255,0.2)';
+    const bLineA  = isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.12)';
+    const bLineB  = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)';
+    const bodyGradient = `linear-gradient(to bottom, transparent 50%, ${isDark ? headerBg : '#fff'} 100%)`;
     return (
-      <div style={{ height: 200, background: bodyBg, borderRadius: '8px 8px 0 0', overflow: 'hidden' }}>
-        <div style={{ background: headerBg, padding: '16px 18px 12px' }}>
-          <div style={{ height: 7, background: headerLineA, borderRadius: 3, width: '40%', marginBottom: 5 }} />
-          <div style={{ height: 3, background: headerLineB, borderRadius: 2, width: '55%', marginBottom: 4 }} />
-          <div style={{ height: 3, background: headerLineB, borderRadius: 2, width: '70%' }} />
+      <div style={{ height: 220, background: isDark ? headerBg : '#fff', borderRadius: '10px 10px 0 0', overflow: 'hidden', position: 'relative' }}>
+        {/* Header */}
+        <div style={{ background: headerBg, padding: '18px 20px 14px' }}>
+          <div style={{ height: 8, background: hTitleA, borderRadius: 3, width: '42%', marginBottom: 6 }} />
+          <div style={{ height: 3, background: hLineA, borderRadius: 2, width: '58%', marginBottom: 4 }} />
+          <div style={{ height: 3, background: hLineB, borderRadius: 2, width: '40%' }} />
         </div>
-        <div style={{ padding: '12px 18px' }}>
-          {[90, 70, 100, 60].map((w, i) => (
-            <div key={i} style={{ height: i === 0 ? 5 : 3, background: i === 0 ? bodyLineA : bodyLineB, borderRadius: 2, width: `${w}%`, marginBottom: i === 0 ? 8 : 4 }} />
+        {/* Body */}
+        <div style={{ background: bodyBg, padding: '14px 20px', display: 'flex', flexDirection: 'column', gap: 0 }}>
+          <div style={{ height: 4, background: bLineA, borderRadius: 2, width: '28%', marginBottom: 8 }} />
+          {[88, 70, 94, 55, 75].map((w, i) => (
+            <div key={i} style={{ height: 3, background: i % 2 === 0 ? bLineA : bLineB, borderRadius: 2, width: `${w}%`, marginBottom: 4 }} />
           ))}
         </div>
+        {/* Gradient mask */}
+        <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 70, background: bodyGradient, pointerEvents: 'none' }} />
       </div>
     );
   }
 
-  // Single column: light or dark background
+  // Single column
   return (
-    <div style={{ height: 200, background: meta.bg, borderRadius: '8px 8px 0 0', padding: '24px 20px', overflow: 'hidden' }}>
-      <div style={{ height: 7, background: lineBase + '0.18)', borderRadius: 3, width: '38%', marginBottom: 5 }} />
-      <div style={{ height: 3, background: lineBase + '0.1)', borderRadius: 2, width: '50%', marginBottom: 4 }} />
-      <div style={{ height: 1, background: lineBase + '0.08)', marginBottom: 12 }} />
-      {[85, 65, 90, 55, 75].map((w, i) => (
+    <div style={{ height: 220, background: meta.bg, borderRadius: '10px 10px 0 0', padding: '22px 22px', overflow: 'hidden', position: 'relative' }}>
+      {/* Name */}
+      <div style={{ height: 8, background: titleA, borderRadius: 3, width: '40%', marginBottom: 5 }} />
+      {/* Subtitle */}
+      <div style={{ height: 3, background: titleB, borderRadius: 2, width: '55%', marginBottom: 4 }} />
+      {/* Contact row */}
+      <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
+        {[42, 36, 48].map((w, i) => (
+          <div key={i} style={{ height: 3, background: lineB, borderRadius: 2, width: w }} />
+        ))}
+      </div>
+      {/* Divider */}
+      <div style={{ height: 1, background: lineB, marginBottom: 10 }} />
+      {/* Section title */}
+      <div style={{ height: 4, background: meta.accent ? meta.accent : lineA, borderRadius: 2, width: '30%', marginBottom: 7 }} />
+      {/* Body lines */}
+      {[88, 70, 95, 58, 80].map((w, i) => (
         <div key={i} style={{
-          height: i === 0 ? 5 : 3,
-          background: i === 0 ? (meta.accent ? meta.accent : lineBase + '0.15)') : lineBase + '0.07)',
-          borderRadius: 2,
-          width: `${w}%`,
-          marginBottom: i === 0 ? 8 : i === 2 ? 12 : 4,
-          opacity: i === 0 ? 1 : 0.8,
+          height: 3, background: i % 2 === 0 ? lineA : lineB,
+          borderRadius: 2, width: `${w}%`, marginBottom: i === 2 ? 10 : 4,
         }} />
       ))}
-      <div style={{ height: 1, background: lineBase + '0.06)', marginBottom: 8 }} />
-      {[30, 80, 60].map((w, i) => (
-        <div key={i} style={{ height: i === 0 ? 4 : 3, background: lineBase + '0.07)', borderRadius: 2, width: `${w}%`, marginBottom: 4 }} />
-      ))}
+      {/* Skills tags */}
+      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+        {[32, 40, 28, 36].map((w, i) => (
+          <div key={i} style={{ height: 10, width: w, background: tagBg, borderRadius: 4 }} />
+        ))}
+      </div>
+      {/* Gradient mask */}
+      <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 60, background: gradientMask, pointerEvents: 'none' }} />
     </div>
   );
 }
@@ -193,28 +234,34 @@ function FilterBar({
   filterKey: 'category' | 'profession';
 }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-      <span style={{ fontSize: 13, color: '#6B7280', fontWeight: 500, flexShrink: 0 }}>{label}：</span>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+      <span style={{ fontSize: 12, color: '#A8A29E', fontWeight: 500, flexShrink: 0, minWidth: 28 }}>{label}</span>
       {categories.map(cat => {
         const count = filterKey === 'category'
           ? (cat.key !== 'all' ? templates.filter(t => t.category === cat.key).length : 0)
           : (cat.key !== 'all' ? Object.values(TEMPLATE_META).filter(m => m.profession === cat.key).length : 0);
+        const isActive = selected === cat.key;
         return (
           <button
             key={cat.key}
             onClick={() => onSelect(cat.key)}
             style={{
-              padding: '6px 18px', borderRadius: 20, border: '1px solid',
-              borderColor: selected === cat.key ? '#111827' : '#E5E7EB',
-              background: selected === cat.key ? '#111827' : '#fff',
-              color: selected === cat.key ? '#fff' : '#374151',
-              fontSize: 13, fontWeight: selected === cat.key ? 600 : 400,
-              cursor: 'pointer', transition: 'all 0.15s',
+              padding: '5px 14px',
+              borderRadius: 20,
+              border: `1px solid ${isActive ? '#1C1917' : '#E7E5E4'}`,
+              background: isActive ? '#1C1917' : '#FFFFFF',
+              color: isActive ? '#FFFFFF' : '#78716C',
+              fontSize: 12,
+              fontWeight: isActive ? 600 : 400,
+              cursor: 'pointer',
+              transition: 'all 0.12s ease',
+              fontFamily: 'inherit',
+              lineHeight: 1,
             }}
           >
             {cat.label}
             {cat.key !== 'all' && count > 0 && (
-              <span style={{ marginLeft: 5, fontSize: 11, opacity: 0.7 }}>({count})</span>
+              <span style={{ marginLeft: 4, fontSize: 11, opacity: 0.65 }}>({count})</span>
             )}
           </button>
         );
@@ -227,6 +274,7 @@ export function Templates() {
   const [templates, setTemplates] = useState<TemplateSummary[]>([]);
   const [category, setCategory] = useState<string>('all');
   const [profession, setProfession] = useState<string>('all');
+  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const navigate = useNavigate();
 
   useEffect(() => { api.get('/templates').then(({ data }) => setTemplates(data.data)); }, []);
@@ -251,23 +299,77 @@ export function Templates() {
   });
 
   return (
-    <div style={{ minHeight: '100vh', background: '#F9FAFB' }}>
-      <header style={{ background: '#fff', borderBottom: '1px solid #E5E7EB', padding: '0 32px', height: 56, display: 'flex', alignItems: 'center', gap: 16, position: 'sticky', top: 0, zIndex: 10 }}>
-        <span style={{ fontSize: 16, fontWeight: 700, color: '#111827' }}>ResumeForge</span>
+    <div style={{ minHeight: '100vh', background: '#FAFAF9' }}>
+      {/* Header */}
+      <header style={{
+        background: 'rgba(250,250,249,0.92)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        borderBottom: '1px solid #E7E5E4',
+        padding: '0 32px',
+        height: 54,
+        display: 'flex',
+        alignItems: 'center',
+        gap: 16,
+        position: 'sticky',
+        top: 0,
+        zIndex: 50,
+      }}>
+        <span style={{ fontSize: 15, fontWeight: 700, color: '#1C1917', letterSpacing: '-0.4px', fontFamily: 'inherit' }}>
+          ResumeForge
+        </span>
         <div style={{ flex: 1 }} />
-        {isLoggedIn
-          ? <Button type="text" onClick={() => navigate('/dashboard')} style={{ color: '#6B7280', fontSize: 13 }}>我的简历</Button>
-          : <Button type="text" onClick={() => navigate('/login')} style={{ color: '#6B7280', fontSize: 13 }}>登录</Button>
-        }
+        {isLoggedIn ? (
+          <button
+            onClick={() => navigate('/dashboard')}
+            style={{
+              padding: '6px 14px', borderRadius: 6, border: '1px solid #E7E5E4',
+              background: 'transparent', color: '#78716C', fontSize: 13, fontWeight: 500,
+              cursor: 'pointer', transition: 'all 0.12s', fontFamily: 'inherit',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; }}
+          >
+            我的简历
+          </button>
+        ) : (
+          <button
+            onClick={() => navigate('/login')}
+            style={{
+              padding: '6px 14px', borderRadius: 6, border: '1px solid #E7E5E4',
+              background: 'transparent', color: '#78716C', fontSize: 13, fontWeight: 500,
+              cursor: 'pointer', transition: 'all 0.12s', fontFamily: 'inherit',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; }}
+          >
+            登录
+          </button>
+        )}
       </header>
-      <div style={{ maxWidth: 1040, margin: '0 auto', padding: '40px 24px' }}>
-        <div style={{ marginBottom: 24 }}>
-          <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, color: '#111827' }}>选择模板</h1>
-          <p style={{ margin: '4px 0 0', fontSize: 14, color: '#6B7280' }}>挑一个适合你的模板，随时可以更换</p>
+
+      <div style={{ maxWidth: 1060, margin: '0 auto', padding: '48px 24px 80px' }}>
+
+        {/* Hero */}
+        <div style={{ marginBottom: 36 }}>
+          <h1 style={{
+            margin: '0 0 8px',
+            fontSize: 28,
+            fontWeight: 700,
+            color: '#1C1917',
+            letterSpacing: '-0.6px',
+            lineHeight: 1.25,
+            fontFamily: 'inherit',
+          }}>
+            选择一个适合你的模板
+          </h1>
+          <p style={{ margin: 0, fontSize: 14, color: '#78716C', lineHeight: 1.6, fontFamily: 'inherit' }}>
+            免费使用，即时编辑，直接打印
+          </p>
         </div>
 
-        {/* Style category tabs */}
-        <div style={{ marginBottom: 12 }}>
+        {/* Filter bars */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 32 }}>
           <FilterBar
             label="风格"
             categories={styleCategories}
@@ -276,10 +378,6 @@ export function Templates() {
             templates={templates}
             filterKey="category"
           />
-        </div>
-
-        {/* Profession category tabs */}
-        <div style={{ marginBottom: 28 }}>
           <FilterBar
             label="职业"
             categories={professionCategories}
@@ -291,49 +389,91 @@ export function Templates() {
         </div>
 
         {/* Template grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
           {filtered.map((t) => {
-            const meta = TEMPLATE_META[t.slug] ?? { bg: '#F3F4F6', tc: '#374151', desc: '', profession: '通用' };
+            const meta = TEMPLATE_META[t.slug] ?? { bg: '#F5F5F4', tc: '#374151', desc: '', profession: '通用' };
+            const isHovered = hoveredCard === t.id;
             return (
-              <div key={t.id}
-                style={{ background: '#fff', border: '1px solid #E5E7EB', borderRadius: 10, overflow: 'hidden', transition: 'box-shadow 0.15s' }}
-                onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.boxShadow = 'none'; }}>
+              <div
+                key={t.id}
+                style={{
+                  background: '#FFFFFF',
+                  border: '1px solid #E7E5E4',
+                  borderRadius: 10,
+                  overflow: 'hidden',
+                  transition: 'box-shadow 0.18s ease, transform 0.18s ease',
+                  boxShadow: isHovered
+                    ? '0 8px 25px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04)'
+                    : '0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)',
+                  transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
+                }}
+                onMouseEnter={() => setHoveredCard(t.id)}
+                onMouseLeave={() => setHoveredCard(null)}
+              >
                 <TemplatePreview slug={t.slug} meta={meta} />
-                <div style={{ padding: '14px 18px 18px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: 15, fontWeight: 600, color: '#111827' }}>{t.name}</span>
+
+                <div style={{ padding: '14px 16px 16px' }}>
+                  {/* Title row */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 5, flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: 14, fontWeight: 600, color: '#1C1917', fontFamily: 'inherit' }}>
+                      {t.name}
+                    </span>
                     {t.category && (
                       <span style={{
-                        fontSize: 10, padding: '1px 7px', borderRadius: 10, fontWeight: 500,
-                        background: '#F3F4F6', color: '#6B7280', border: '1px solid #E5E7EB',
+                        fontSize: 10, padding: '2px 7px', borderRadius: 20, fontWeight: 500,
+                        background: '#F5F5F4', color: '#78716C', border: '1px solid #E7E5E4',
+                        fontFamily: 'inherit',
                       }}>
                         {CATEGORY_LABELS[t.category] ?? t.category}
                       </span>
                     )}
                     {meta.profession && meta.profession !== '通用' && (
                       <span style={{
-                        fontSize: 10, padding: '1px 7px', borderRadius: 10, fontWeight: 500,
-                        background: '#EFF6FF', color: '#2563EB', border: '1px solid #BFDBFE',
+                        fontSize: 10, padding: '2px 7px', borderRadius: 20, fontWeight: 500,
+                        background: '#F0F9FF', color: '#0369A1', border: '1px solid #BAE6FD',
+                        fontFamily: 'inherit',
                       }}>
                         {meta.profession}
                       </span>
                     )}
                   </div>
-                  <div style={{ fontSize: 12, color: '#6B7280', marginBottom: 14, lineHeight: 1.5 }}>
+
+                  {/* Description */}
+                  <div style={{
+                    fontSize: 12, color: '#78716C', marginBottom: 14, lineHeight: 1.55,
+                    fontFamily: 'inherit',
+                  }}>
                     {meta.desc}
                   </div>
-                  <Button block onClick={() => handleUse(t.slug)}
-                    style={{ borderRadius: 8, height: 36, fontWeight: 500, background: '#111827', color: '#fff', borderColor: '#111827', fontSize: 13 }}>
+
+                  {/* CTA button */}
+                  <button
+                    onClick={() => handleUse(t.slug)}
+                    style={{
+                      width: '100%', padding: '8px 0', borderRadius: 6,
+                      border: 'none',
+                      background: isHovered ? '#292524' : '#1C1917',
+                      color: '#FFFFFF',
+                      fontSize: 13, fontWeight: 500,
+                      cursor: 'pointer',
+                      transition: 'background 0.12s ease, transform 0.1s ease',
+                      transform: isHovered ? 'scale(1.01)' : 'scale(1)',
+                      fontFamily: 'inherit',
+                    }}
+                  >
                     使用此模板
-                  </Button>
+                  </button>
                 </div>
               </div>
             );
           })}
         </div>
+
         {filtered.length === 0 && (
-          <div style={{ textAlign: 'center', color: '#9CA3AF', padding: '48px 0', fontSize: 14 }}>
+          <div style={{
+            textAlign: 'center', color: '#A8A29E', padding: '64px 0', fontSize: 14,
+            fontFamily: 'inherit',
+          }}>
             该分类暂无模板
           </div>
         )}

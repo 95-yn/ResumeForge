@@ -294,8 +294,8 @@ export function ResumePreview() {
 
   return (
     <div style={{
-      flex: 1, background: '#e8e8e8', display: 'flex', justifyContent: 'center',
-      alignItems: 'flex-start', padding: 24, overflowY: 'auto', height: '100%',
+      flex: 1, background: '#F5F5F4', display: 'flex', justifyContent: 'center',
+      alignItems: 'flex-start', padding: 28, overflowY: 'auto', height: '100%',
       position: 'relative',
     }}>
       <div style={{
@@ -309,7 +309,8 @@ export function ResumePreview() {
           title="preview"
           style={{
             width: '210mm', height: '297mm', background: '#fff', border: 'none',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.12)', display: 'block', borderRadius: 2,
+            boxShadow: '0 8px 40px rgba(0,0,0,0.08), 0 2px 10px rgba(0,0,0,0.04)',
+            display: 'block', borderRadius: 3,
           }}
         />
       </div>
