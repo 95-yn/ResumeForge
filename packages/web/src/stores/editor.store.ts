@@ -27,6 +27,7 @@ interface EditorStore {
   addArrayItem: (sectionKey: string) => void;
   removeArrayItem: (sectionKey: string, index: number) => void;
   addCustomSection: (key: string) => void;
+  removeSection: (key: string) => void;
   setActiveSection: (key: string | null) => void;
   reorderSections: (order: string[]) => void;
   updateByPath: (path: string, value: unknown) => void;
@@ -155,6 +156,12 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     if (!(key in newData)) newData[key] = [];
     const newOrder = state.sectionOrder.includes(key) ? state.sectionOrder : [...state.sectionOrder, key];
     set({ ...pushHistory(state, newData), sectionOrder: newOrder });
+  },
+
+  removeSection: (key) => {
+    const state = get();
+    const newOrder = state.sectionOrder.filter(k => k !== key);
+    set({ sectionOrder: newOrder, isDirty: true, saveStatus: 'unsaved' });
   },
 
   setActiveSection: (key) => set({ activeSection: key }),

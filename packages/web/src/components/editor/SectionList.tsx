@@ -62,11 +62,19 @@ const inputCss: React.CSSProperties = {
   transition: 'border-color 0.12s, background 0.12s',
 };
 
+const CONTENT_EDITABLE_STYLE = `
+  [data-placeholder]:empty::before {
+    content: attr(data-placeholder);
+    color: #A8A29E;
+    pointer-events: none;
+  }
+`;
+
 export function SectionList() {
   const {
     sectionOrder, activeSection, setActiveSection, resume,
     reorderSections, addArrayItem, removeArrayItem, updateField,
-    updateArrayItem, addCustomSection, updateSettings,
+    updateArrayItem, addCustomSection, updateSettings, removeSection,
   } = useEditorStore();
 
   const navigate = useNavigate();
@@ -126,6 +134,7 @@ export function SectionList() {
 
   return (
     <div style={{ borderRight: '1px solid #E7E5E4', height: '100%', background: '#FFF', display: 'flex', flexDirection: 'column', overflowY: 'auto', fontFamily: 'inherit' }}>
+      <style>{CONTENT_EDITABLE_STYLE}</style>
 
       {/* Section list */}
       <div style={{ flex: 1, padding: '8px 0' }}>
@@ -158,8 +167,16 @@ export function SectionList() {
                   borderBottom: isDrop && dropTarget?.pos === 'after' ? '2px solid #1C1917' : '2px solid transparent',
                   opacity: dragKey === key ? 0.4 : 1,
                 }}
-                onMouseEnter={e => { if (activeSection !== key) (e.currentTarget as HTMLElement).style.background = '#FAFAF9'; }}
-                onMouseLeave={e => { if (activeSection !== key) (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
+                onMouseEnter={e => {
+                  if (activeSection !== key) (e.currentTarget as HTMLElement).style.background = '#FAFAF9';
+                  const btn = (e.currentTarget as HTMLElement).querySelector<HTMLButtonElement>('.section-delete-btn');
+                  if (btn) btn.style.opacity = '0.5';
+                }}
+                onMouseLeave={e => {
+                  if (activeSection !== key) (e.currentTarget as HTMLElement).style.background = 'transparent';
+                  const btn = (e.currentTarget as HTMLElement).querySelector<HTMLButtonElement>('.section-delete-btn');
+                  if (btn) btn.style.opacity = '0';
+                }}
               >
                 {isDraggable && <span style={{ fontSize: 10, color: '#D6D3D1', cursor: 'grab', lineHeight: 1 }}>⠿</span>}
                 <span style={{ fontSize: 15, width: 20, textAlign: 'center', flexShrink: 0 }}>{icon}</span>
@@ -168,6 +185,30 @@ export function SectionList() {
                   <span style={{ fontSize: 11, color: '#78716C', background: '#F5F5F4', borderRadius: 10, padding: '1px 7px', fontWeight: 500 }}>
                     {items.length}
                   </span>
+                )}
+                {!isBasics && (
+                  <button
+                    onClick={e => {
+                      e.stopPropagation();
+                      Modal.confirm({
+                        title: '删除模块',
+                        content: `确定删除「${label}」模块？删除后可通过"添加模块"恢复。`,
+                        okText: '删除', cancelText: '取消', okButtonProps: { danger: true },
+                        onOk: () => removeSection(key),
+                      });
+                    }}
+                    title="删除模块"
+                    style={{
+                      border: 'none', background: 'none', color: '#D6D3D1', cursor: 'pointer',
+                      padding: '0 2px', fontSize: 12, opacity: 0, transition: 'opacity 0.15s, color 0.1s',
+                      lineHeight: 1, flexShrink: 0,
+                    }}
+                    className="section-delete-btn"
+                    onMouseEnter={e => { e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.opacity = '1'; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = '#D6D3D1'; e.currentTarget.style.opacity = '0'; }}
+                  >
+                    <DeleteOutlined style={{ fontSize: 11 }} />
+                  </button>
                 )}
                 <span style={{
                   fontSize: 11, color: '#A8A29E', transition: 'transform 0.15s',
@@ -209,7 +250,7 @@ export function SectionList() {
         <div style={{ fontSize: 11, color: '#A8A29E', marginBottom: 6, fontWeight: 500, letterSpacing: 0.3 }}>简历背景色</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap' }}>
           {RESUME_BG_COLORS.map(({ color, label }) => {
-            const current = (resume?.settings as Record<string, unknown> | undefined)?.backgroundColor as string | undefined;
+            const current = resume?.settings?.backgroundColor as string | undefined;
             const isActive = (current || '#FFFFFF') === color;
             return (
               <button
@@ -229,6 +270,35 @@ export function SectionList() {
               />
             );
           })}
+          {/* Custom color picker */}
+          <label
+            title="自定义颜色"
+            style={{
+              width: 20, height: 20, borderRadius: '50%',
+              border: '2px solid #E7E5E4',
+              background: (() => {
+                const c = resume?.settings?.backgroundColor as string | undefined;
+                const isPreset = RESUME_BG_COLORS.some(p => p.color === (c || '#FFFFFF'));
+                return isPreset ? 'conic-gradient(red,yellow,lime,cyan,blue,magenta,red)' : (c || '#FFFFFF');
+              })(),
+              cursor: 'pointer', padding: 0, flexShrink: 0,
+              display: 'inline-block', overflow: 'hidden',
+              transition: 'transform 0.1s, border-color 0.1s',
+              position: 'relative',
+            }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.2)'; (e.currentTarget as HTMLElement).style.borderColor = '#1C1917'; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.borderColor = '#E7E5E4'; }}
+          >
+            <input
+              type="color"
+              value={(resume?.settings?.backgroundColor as string | undefined) || '#ffffff'}
+              onChange={e => updateSettings('backgroundColor', e.target.value)}
+              style={{
+                position: 'absolute', inset: 0, width: '100%', height: '100%',
+                opacity: 0, cursor: 'pointer', border: 'none', padding: 0,
+              }}
+            />
+          </label>
           <button
             title="重置"
             onClick={() => updateSettings('backgroundColor', '#FFFFFF')}
@@ -306,6 +376,13 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
   updateField: (s: string, f: string, v: unknown) => void;
 }) {
   const basics = resume.basics || {};
+
+  const removeField = (fKey: string) => {
+    setVisibleFields(p => p.filter(k => k !== fKey));
+    // Clear the value in store too
+    updateField('basics', fKey, '');
+  };
+
   return (
     <div style={{ padding: '4px 12px' }}>
       {visibleFields.map(fKey => {
@@ -314,7 +391,22 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
         const val = (basics[fKey] as string) || '';
         return (
           <div key={fKey} style={{ marginBottom: 6 }}>
-            <label style={{ fontSize: 11, color: '#A8A29E', display: 'block', marginBottom: 2 }}>{def.label}</label>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
+              <label style={{ fontSize: 11, color: '#A8A29E' }}>{def.label}</label>
+              <button
+                onClick={() => removeField(fKey)}
+                title={`删除${def.label}`}
+                style={{
+                  border: 'none', background: 'none', color: '#D6D3D1', cursor: 'pointer',
+                  padding: 0, fontSize: 10, lineHeight: 1, opacity: 0.5,
+                  transition: 'opacity 0.1s, color 0.1s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.opacity = '1'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#D6D3D1'; e.currentTarget.style.opacity = '0.5'; }}
+              >
+                <DeleteOutlined style={{ fontSize: 10 }} />
+              </button>
+            </div>
             <input
               value={val}
               onChange={e => updateField('basics', fKey, e.target.value)}
@@ -328,15 +420,33 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
       })}
       {/* 个人简介 */}
       <div style={{ marginBottom: 6 }}>
-        <label style={{ fontSize: 11, color: '#A8A29E', display: 'block', marginBottom: 2 }}>个人简介</label>
-        <textarea
-          value={(basics.summary as string) || ''}
-          onChange={e => updateField('basics', 'summary', e.target.value)}
-          rows={3}
-          placeholder="输入个人简介..."
-          style={{ ...inputCss, resize: 'vertical' as const, lineHeight: 1.6 }}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
+          <label style={{ fontSize: 11, color: '#A8A29E' }}>个人简介</label>
+          <button
+            onClick={() => updateField('basics', 'summary', '')}
+            title="清空个人简介"
+            style={{
+              border: 'none', background: 'none', color: '#D6D3D1', cursor: 'pointer',
+              padding: 0, fontSize: 10, lineHeight: 1, opacity: 0.5,
+              transition: 'opacity 0.1s, color 0.1s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.opacity = '1'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = '#D6D3D1'; e.currentTarget.style.opacity = '0.5'; }}
+          >
+            <DeleteOutlined style={{ fontSize: 10 }} />
+          </button>
+        </div>
+        <div
+          contentEditable
+          suppressContentEditableWarning
+          dangerouslySetInnerHTML={{ __html: (basics.summary as string) || '' }}
+          onBlur={e => updateField('basics', 'summary', e.currentTarget.innerHTML)}
+          data-placeholder="输入个人简介..."
+          style={{
+            ...inputCss, minHeight: 60, resize: 'vertical' as const, lineHeight: 1.6,
+            display: 'block', whiteSpace: 'pre-wrap', wordBreak: 'break-word',
+          }}
           onFocus={e => { e.currentTarget.style.borderColor = '#1C1917'; e.currentTarget.style.background = '#FFF'; }}
-          onBlur={e => { e.currentTarget.style.borderColor = '#E7E5E4'; e.currentTarget.style.background = '#FAFAF9'; }}
         />
       </div>
       {/* Add field */}
@@ -357,7 +467,7 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
             background: '#FFF', border: '1px solid #E7E5E4', borderRadius: 6,
             boxShadow: '0 4px 12px rgba(0,0,0,0.08)', maxHeight: 150, overflowY: 'auto',
           }}>
-            {EXTRA_FIELDS.filter(o => !visibleFields.includes(o.key)).map(o => (
+            {[...BASICS_FIELDS, ...EXTRA_FIELDS].filter(o => !visibleFields.includes(o.key)).map(o => (
               <div
                 key={o.key}
                 onClick={() => { setVisibleFields(p => [...p, o.key]); setShowAddField(false); }}
@@ -368,6 +478,9 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
                 {o.label}
               </div>
             ))}
+            {[...BASICS_FIELDS, ...EXTRA_FIELDS].filter(o => !visibleFields.includes(o.key)).length === 0 && (
+              <div style={{ padding: '8px 10px', fontSize: 12, color: '#A8A29E' }}>所有字段已显示</div>
+            )}
           </div>
         )}
       </div>
