@@ -396,6 +396,9 @@ export function SectionList() {
                       return (
                         <ItemRow
                           key={itemIdx}
+                          sectionKey={key}
+                          index={itemIdx}
+                          item={item}
                           summary={summary}
                           onDelete={() => handleDeleteItem(key, itemIdx, summary)}
                         />
@@ -455,67 +458,93 @@ export function SectionList() {
 
 /* ---- Sub-components ---- */
 
-function ItemRow({ summary, onDelete }: { summary: string; onDelete: () => void }) {
+const ITEM_FIELDS: Record<string, { key: string; label: string; multiline?: boolean }[]> = {
+  experience: [
+    { key: 'company', label: '公司' }, { key: 'position', label: '职位' },
+    { key: 'startDate', label: '开始时间' }, { key: 'endDate', label: '结束时间' },
+    { key: 'highlights', label: '工作亮点', multiline: true },
+  ],
+  education: [
+    { key: 'institution', label: '学校' }, { key: 'area', label: '专业' },
+    { key: 'studyType', label: '学历' }, { key: 'startDate', label: '开始时间' }, { key: 'endDate', label: '结束时间' },
+  ],
+  skills: [{ key: 'name', label: '技能' }, { key: 'level', label: '水平' }],
+  projects: [
+    { key: 'name', label: '项目名称' }, { key: 'role', label: '角色' },
+    { key: 'description', label: '描述', multiline: true },
+    { key: 'highlights', label: '亮点', multiline: true },
+  ],
+};
+
+function ItemRow({ sectionKey, index, item, summary, onDelete }: {
+  sectionKey: string; index: number; item: Record<string, unknown>; summary: string; onDelete: () => void;
+}) {
   const [hovered, setHovered] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const updateArrayItem = useEditorStore((s) => s.updateArrayItem);
+  const fields = ITEM_FIELDS[sectionKey] || [];
 
   return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '3px 0',
-        borderRadius: 4,
-        background: hovered ? '#F9FAFB' : 'transparent',
-        transition: 'background 0.1s',
-      }}
-    >
-      <span
-        style={{
-          fontSize: 12,
-          color: '#6B7280',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
-          flex: 1,
-          paddingRight: 4,
-        }}
-        title={summary}
+    <div style={{ marginBottom: 2 }}>
+      <div
+        onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '3px 0', borderRadius: 4, background: hovered ? '#F9FAFB' : 'transparent', cursor: 'pointer' }}
+        onClick={() => setExpanded(!expanded)}
       >
-        {summary}
-      </span>
-      <button
-        onClick={(e) => { e.stopPropagation(); onDelete(); }}
-        title="删除此条目"
-        style={{
-          flexShrink: 0,
-          width: 20,
-          height: 20,
-          border: 'none',
-          borderRadius: 4,
-          background: 'transparent',
-          color: hovered ? '#9CA3AF' : 'transparent',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 12,
-          padding: 0,
-          transition: 'color 0.1s, background 0.1s',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.color = '#EF4444';
-          e.currentTarget.style.background = 'rgba(239,68,68,0.08)';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.color = hovered ? '#9CA3AF' : 'transparent';
-          e.currentTarget.style.background = 'transparent';
-        }}
-      >
-        <DeleteOutlined />
-      </button>
+        <span style={{ fontSize: 12, color: '#6B7280', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1, paddingRight: 4 }} title={summary}>
+          {expanded ? '▾ ' : '▸ '}{summary}
+        </span>
+        <button onClick={(e) => { e.stopPropagation(); onDelete(); }} title="删除"
+          style={{ flexShrink: 0, width: 20, height: 20, border: 'none', borderRadius: 4, background: 'transparent', color: hovered ? '#9CA3AF' : 'transparent', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, padding: 0 }}
+          onMouseEnter={(e) => { e.currentTarget.style.color = '#EF4444'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.color = hovered ? '#9CA3AF' : 'transparent'; }}>
+          <DeleteOutlined />
+        </button>
+      </div>
+      {expanded && (
+        <div style={{ paddingLeft: 10, paddingTop: 4, paddingBottom: 6 }}>
+          {fields.map((f) => {
+            const val = item[f.key];
+            if (f.key === 'highlights' && Array.isArray(val)) {
+              return (
+                <div key={f.key} style={{ marginBottom: 4 }}>
+                  <span style={{ fontSize: 11, color: '#9CA3AF' }}>{f.label}</span>
+                  {(val as string[]).map((h, hi) => (
+                    <div key={hi} style={{ display: 'flex', gap: 4, marginTop: 2 }}>
+                      <input value={h} onChange={(e) => { const arr = [...val as string[]]; arr[hi] = e.target.value; updateArrayItem(sectionKey, index, f.key, arr); }}
+                        style={{ flex: 1, fontSize: 11, border: '1px solid #E5E7EB', borderRadius: 3, padding: '2px 5px', outline: 'none' }}
+                        onFocus={(e) => { e.currentTarget.style.borderColor = '#3B82F6'; }}
+                        onBlur={(e) => { e.currentTarget.style.borderColor = '#E5E7EB'; }} />
+                      <button onClick={() => { const arr = (val as string[]).filter((_, i) => i !== hi); updateArrayItem(sectionKey, index, f.key, arr); }}
+                        style={{ border: 'none', background: 'none', color: '#D1D5DB', cursor: 'pointer', fontSize: 10, padding: '0 2px' }}>×</button>
+                    </div>
+                  ))}
+                  <button onClick={() => updateArrayItem(sectionKey, index, f.key, [...val as string[], ''])}
+                    style={{ marginTop: 3, border: '1px dashed #D1D5DB', borderRadius: 3, background: 'none', color: '#9CA3AF', fontSize: 10, padding: '2px 6px', cursor: 'pointer', width: '100%' }}>
+                    + 添加
+                  </button>
+                </div>
+              );
+            }
+            return (
+              <div key={f.key} style={{ marginBottom: 4 }}>
+                <span style={{ fontSize: 11, color: '#9CA3AF' }}>{f.label}</span>
+                {f.multiline ? (
+                  <textarea value={(val as string) || ''} onChange={(e) => updateArrayItem(sectionKey, index, f.key, e.target.value)}
+                    rows={2} style={{ width: '100%', fontSize: 11, border: '1px solid #E5E7EB', borderRadius: 3, padding: '3px 5px', outline: 'none', fontFamily: 'inherit', resize: 'vertical' }}
+                    onFocus={(e) => { e.currentTarget.style.borderColor = '#3B82F6'; }}
+                    onBlur={(e) => { e.currentTarget.style.borderColor = '#E5E7EB'; }} />
+                ) : (
+                  <input value={(val as string) || ''} onChange={(e) => updateArrayItem(sectionKey, index, f.key, e.target.value)}
+                    style={{ width: '100%', fontSize: 11, border: '1px solid #E5E7EB', borderRadius: 3, padding: '2px 5px', outline: 'none', boxSizing: 'border-box' }}
+                    onFocus={(e) => { e.currentTarget.style.borderColor = '#3B82F6'; }}
+                    onBlur={(e) => { e.currentTarget.style.borderColor = '#E5E7EB'; }} />
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

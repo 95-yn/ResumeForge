@@ -193,11 +193,11 @@ export function ResumePreview() {
   }, [reorderedHtml, isEmpty]);
 
   useEffect(() => {
-    if (isEditingRef.current) return;
+    if (editingField) return;
     if (iframeRef.current) {
       iframeRef.current.srcdoc = finalHtml;
     }
-  }, [finalHtml]);
+  }, [finalHtml, editingField]);
 
   const handleConfirm = useCallback((field: string, value: string) => {
     isEditingRef.current = false;
@@ -226,7 +226,6 @@ export function ResumePreview() {
       if (!event.data?.type) return;
 
       if (event.data.type === 'editing-started') {
-        isEditingRef.current = true;
         return;
       }
 
