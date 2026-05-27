@@ -5,8 +5,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 import Underline from '@tiptap/extension-underline';
 import Link from '@tiptap/extension-link';
 import TextAlign from '@tiptap/extension-text-align';
-import TextStyle from '@tiptap/extension-text-style';
-import FontSize from '@tiptap/extension-font-size';
+import { TextStyle, FontSize } from '@tiptap/extension-text-style';
 import { Button, Dropdown, InputNumber } from 'antd';
 import {
   BoldOutlined, ItalicOutlined, UnderlineOutlined, StrikethroughOutlined,
