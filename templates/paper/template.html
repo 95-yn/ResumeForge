@@ -12,7 +12,7 @@
   {{#if basics.summary}}
   <section class="pp-section">
     <h2 class="pp-heading">— 个人简介 —</h2>
-    <p class="pp-summary" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="pp-summary" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -59,7 +59,7 @@
         <span class="pp-bold" data-field="projects.{{@index}}.name">{{name}}</span>
         {{#if role}}<span class="pp-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
       </div>
-      {{#if description}}<p class="pp-summary" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if description}}<div class="pp-summary" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="pp-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}

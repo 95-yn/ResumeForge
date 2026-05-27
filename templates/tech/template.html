@@ -13,7 +13,7 @@
   {{#if basics.summary}}
   <section class="tc-section">
     <h2 class="tc-section-title">// SUMMARY</h2>
-    <p class="tc-body" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="tc-body" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -66,7 +66,7 @@
         <span class="tc-company" data-field="projects.{{@index}}.name">{{name}}</span>
         {{#if role}}<span class="tc-pipe"> | </span><span data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
       </div>
-      {{#if description}}<p class="tc-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if description}}<div class="tc-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="tc-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}

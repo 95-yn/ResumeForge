@@ -15,7 +15,7 @@
       {{#if basics.summary}}
       <section class="cs-section">
         <h2 class="cs-section-title">简介</h2>
-        <p class="cs-body-text" data-field="basics.summary">{{{basics.summary}}}</p>
+        <div class="cs-body-text" data-field="basics.summary">{{{basics.summary}}}</div>
       </section>
       {{/if}}
       {{#if experience.length}}
@@ -42,7 +42,7 @@
             <strong data-field="projects.{{@index}}.name">{{name}}</strong>
             {{#if role}}<span class="cs-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
           </div>
-          {{#if description}}<p class="cs-body-text" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+          {{#if description}}<div class="cs-body-text" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
           {{#if highlights.length}}<ul class="cs-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
         </div>
         {{/each}}

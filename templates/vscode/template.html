@@ -29,7 +29,7 @@
       {{#if basics.summary}}
       <div class="vs-section">
         <div class="vs-section-title"><span class="vs-keyword">const</span> <span class="vs-fn">summary</span> = {</div>
-        <p class="vs-body" data-field="basics.summary">{{{basics.summary}}}</p>
+        <div class="vs-body" data-field="basics.summary">{{{basics.summary}}}</div>
         <div class="vs-close">}</div>
       </div>
       {{/if}}
@@ -78,7 +78,7 @@
         <div class="vs-entry" data-entry="projects" data-entry-index="{{@index}}">
           <span class="vs-company" data-field="projects.{{@index}}.name">{{name}}</span>
           {{#if role}}<span class="vs-sep"> · </span><span class="vs-pos" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
-          {{#if description}}<p class="vs-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+          {{#if description}}<div class="vs-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
           {{#if highlights.length}}<ul class="vs-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
         </div>
         {{/each}}

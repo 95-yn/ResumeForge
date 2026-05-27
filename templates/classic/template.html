@@ -9,7 +9,7 @@
     </div>
   </header>
   {{#if basics.summary}}
-  <section class="section"><h2 class="section-title">个人简介</h2><p class="summary" data-field="basics.summary">{{{basics.summary}}}</p></section>
+  <section class="section"><h2 class="section-title">个人简介</h2><div class="summary" data-field="basics.summary">{{{basics.summary}}}</div></section>
   {{/if}}
   {{#if experience.length}}
   <section class="section" data-section="experience"><h2 class="section-title">工作经历</h2>
@@ -29,7 +29,7 @@
   {{/if}}
   {{#if projects.length}}
   <section class="section" data-section="projects"><h2 class="section-title">项目经历</h2>
-    {{#each projects}}<div class="entry" data-entry="projects" data-entry-index="{{@index}}"><div class="entry-header"><h3><span data-field="projects.{{@index}}.name">{{name}}</span>{{#if role}}<span class="separator"> — </span><span data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}</h3></div>{{#if description}}<p class="sub" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}{{#if highlights.length}}<ul class="highlights">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}</div>{{/each}}
+    {{#each projects}}<div class="entry" data-entry="projects" data-entry-index="{{@index}}"><div class="entry-header"><h3><span data-field="projects.{{@index}}.name">{{name}}</span>{{#if role}}<span class="separator"> — </span><span data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}</h3></div>{{#if description}}<div class="sub" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}{{#if highlights.length}}<ul class="highlights">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}</div>{{/each}}
   </section>
   {{/if}}
 </div>

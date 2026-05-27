@@ -14,7 +14,7 @@
   {{#if basics.summary}}
   <section class="sl-section">
     <h2 class="sl-section-title">个人简介</h2>
-    <p class="sl-body" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="sl-body" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -69,7 +69,7 @@
         <span class="sl-company" data-field="projects.{{@index}}.name">{{name}}</span>
         {{#if role}}<span class="sl-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
       </div>
-      {{#if description}}<p class="sl-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if description}}<div class="sl-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="sl-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}

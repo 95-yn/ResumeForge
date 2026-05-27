@@ -13,7 +13,7 @@
   {{#if basics.summary}}
   <section class="corp-section">
     <h2 class="corp-section-title">职业概述</h2>
-    <p class="corp-body" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="corp-body" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -68,7 +68,7 @@
           {{#if role}}<td class="corp-td-pos"><span data-field="projects.{{@index}}.role">{{role}}</span></td>{{/if}}
         </tr>
       </table>
-      {{#if description}}<p class="corp-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if description}}<div class="corp-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="corp-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}

@@ -14,7 +14,7 @@
     {{#if basics.summary}}
     <section class="ai-section">
       <h2 class="ai-section-title">Overview</h2>
-      <p class="ai-text" data-field="basics.summary">{{{basics.summary}}}</p>
+      <div class="ai-text" data-field="basics.summary">{{{basics.summary}}}</div>
     </section>
     {{/if}}
     {{#if experience.length}}
@@ -43,7 +43,7 @@
           <span class="ai-company" data-field="projects.{{@index}}.name">{{name}}</span>
           {{#if role}}<span class="ai-pos" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
         </div>
-        {{#if description}}<p class="ai-text" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+        {{#if description}}<div class="ai-text" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
         {{#if highlights.length}}<ul class="ai-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
       </div>
       {{/each}}

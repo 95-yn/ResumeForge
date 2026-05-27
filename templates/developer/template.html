@@ -12,7 +12,7 @@
   {{#if basics.summary}}
   <section class="dev-section">
     <h2 class="dev-section-title"><span class="dev-hash">#</span> about</h2>
-    <p class="dev-body" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="dev-body" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -65,7 +65,7 @@
         <span class="dev-company" data-field="projects.{{@index}}.name">{{name}}</span>
         {{#if role}}<span class="dev-at"> · </span><span data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
       </div>
-      {{#if description}}<p class="dev-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if description}}<div class="dev-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="dev-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}

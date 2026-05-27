@@ -13,7 +13,7 @@
   {{#if basics.summary}}
   <section class="mg-section">
     <h2 class="mg-section-title">职业概述</h2>
-    <p class="mg-body" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="mg-body" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -48,7 +48,7 @@
           <span class="mg-company" data-field="projects.{{@index}}.name">{{name}}</span>
           {{#if role}}<span class="mg-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
         </div>
-        {{#if description}}<p class="mg-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+        {{#if description}}<div class="mg-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
         {{#if highlights.length}}<ul class="mg-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
       </div>
     </div>

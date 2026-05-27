@@ -14,7 +14,7 @@
     <div class="jp-section-bar">
       <span class="jp-section-title">自我介绍</span>
     </div>
-    <p class="jp-summary" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="jp-summary" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -71,7 +71,7 @@
           <span class="jp-org" data-field="projects.{{@index}}.name">{{name}}</span>
           {{#if role}}<span class="jp-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
         </div>
-        {{#if description}}<p class="jp-pos" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+        {{#if description}}<div class="jp-pos" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
         {{#if highlights.length}}<ul class="jp-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
       </div>
     </div>

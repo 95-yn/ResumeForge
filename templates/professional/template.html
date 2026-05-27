@@ -13,7 +13,7 @@
   {{#if basics.summary}}
   <section class="pro-section">
     <h2 class="pro-section-title">个人简介</h2>
-    <p class="pro-summary" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="pro-summary" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -72,7 +72,7 @@
           {{#if role}}<span class="pro-sep"> · </span><span data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
         </div>
       </div>
-      {{#if description}}<p class="pro-desc" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if description}}<div class="pro-desc" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="pro-highlights">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}

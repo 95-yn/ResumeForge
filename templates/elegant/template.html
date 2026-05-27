@@ -12,7 +12,7 @@
   {{#if basics.summary}}
   <section class="eg-section">
     <h2 class="eg-section-title">简介</h2>
-    <p class="eg-body" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="eg-body" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -65,7 +65,7 @@
           {{#if role}}<span class="eg-secondary" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
         </div>
       </div>
-      {{#if description}}<p class="eg-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if description}}<div class="eg-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="eg-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}

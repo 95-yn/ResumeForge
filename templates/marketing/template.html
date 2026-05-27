@@ -15,7 +15,7 @@
       {{#if basics.summary}}
       <section class="mk-section">
         <h2 class="mk-section-title">个人简介</h2>
-        <p class="mk-text" data-field="basics.summary">{{{basics.summary}}}</p>
+        <div class="mk-text" data-field="basics.summary">{{{basics.summary}}}</div>
       </section>
       {{/if}}
       {{#if experience.length}}
@@ -44,7 +44,7 @@
             <span class="mk-company" data-field="projects.{{@index}}.name">{{name}}</span>
             {{#if role}}<span class="mk-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
           </div>
-          {{#if description}}<p class="mk-text" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+          {{#if description}}<div class="mk-text" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
           {{#if highlights.length}}<ul class="mk-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
         </div>
         {{/each}}

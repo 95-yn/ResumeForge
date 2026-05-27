@@ -12,7 +12,7 @@
   {{#if basics.summary}}
   <section class="lg-section">
     <h2 class="lg-section-title">PROFESSIONAL SUMMARY</h2>
-    <p class="lg-body" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="lg-body" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -67,7 +67,7 @@
           {{#if role}}<span class="lg-pos" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
         </div>
       </div>
-      {{#if description}}<p class="lg-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if description}}<div class="lg-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="lg-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}

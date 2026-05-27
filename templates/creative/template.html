@@ -11,7 +11,7 @@
   {{#if basics.summary}}
   <section class="cr-section">
     <h2 class="cr-section-title">个人简介</h2>
-    <p class="cr-body" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="cr-body" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -74,7 +74,7 @@
           {{#if role}}<span class="cr-role" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
         </div>
       </div>
-      {{#if description}}<p class="cr-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if description}}<div class="cr-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="cr-highlights">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}

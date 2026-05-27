@@ -11,7 +11,7 @@
   {{#if basics.summary}}
   <section class="ar-section">
     <h2 class="ar-section-title">创作自述</h2>
-    <p class="ar-body" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="ar-body" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -36,7 +36,7 @@
     <div class="ar-entry" data-entry="projects" data-entry-index="{{@index}}">
       <h3 data-field="projects.{{@index}}.name">{{name}}</h3>
       {{#if role}}<div class="ar-meta"><span data-field="projects.{{@index}}.role">{{role}}</span></div>{{/if}}
-      {{#if description}}<p class="ar-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if description}}<div class="ar-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="ar-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}

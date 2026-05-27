@@ -14,7 +14,7 @@
   {{#if basics.summary}}
   <section class="ex-section">
     <h2 class="ex-section-title">个人简介</h2>
-    <p class="ex-summary" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="ex-summary" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -69,7 +69,7 @@
           {{#if role}}<span class="ex-position" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
         </div>
       </div>
-      {{#if description}}<p class="ex-desc" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if description}}<div class="ex-desc" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="ex-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}

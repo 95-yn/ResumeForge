@@ -11,7 +11,7 @@
   {{#if basics.summary}}
   <section class="sp-section">
     <h2 class="sp-heading">Summary</h2>
-    <p class="sp-body" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="sp-body" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -60,7 +60,7 @@
         <span class="sp-org" data-field="projects.{{@index}}.name">{{name}}</span>
         {{#if role}}<span class="sp-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
       </div>
-      {{#if description}}<p class="sp-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if description}}<div class="sp-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="sp-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}

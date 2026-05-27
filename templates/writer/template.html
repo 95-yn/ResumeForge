@@ -11,7 +11,7 @@
   </header>
   {{#if basics.summary}}
   <section class="wr-section">
-    <p class="wr-summary" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="wr-summary" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -38,7 +38,7 @@
         <span class="wr-org" data-field="projects.{{@index}}.name">{{name}}</span>
         {{#if role}}<span class="wr-em" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
       </div>
-      {{#if description}}<p class="wr-desc" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if description}}<div class="wr-desc" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="wr-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}

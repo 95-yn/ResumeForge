@@ -21,7 +21,7 @@
     <div class="tm-prompt"><span class="tm-user">guest@resume</span><span class="tm-at">:</span><span class="tm-path">~</span><span class="tm-dollar">$</span> <span class="tm-cmd">cat summary.txt</span></div>
     <div class="tm-block">
       <div class="tm-label"># SUMMARY</div>
-      <p class="tm-text" data-field="basics.summary">{{{basics.summary}}}</p>
+      <div class="tm-text" data-field="basics.summary">{{{basics.summary}}}</div>
     </div>
     {{/if}}
     {{#if experience.length}}
@@ -74,7 +74,7 @@
           <span class="tm-green-text" data-field="projects.{{@index}}.name">{{name}}</span>
           {{#if role}}<span class="tm-separator"> | </span><span class="tm-cyan-text" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
         </div>
-        {{#if description}}<p class="tm-text" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+        {{#if description}}<div class="tm-text" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
         {{#if highlights.length}}<ul class="tm-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}"><span class="tm-bullet">▸</span> {{this}}</li>{{/each}}</ul>{{/if}}
       </div>
       {{/each}}

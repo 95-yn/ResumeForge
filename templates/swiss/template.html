@@ -18,7 +18,7 @@
     <div class="sw-row">
       <div class="sw-label">概述</div>
       <div class="sw-content">
-        <p class="sw-text" data-field="basics.summary">{{{basics.summary}}}</p>
+        <div class="sw-text" data-field="basics.summary">{{{basics.summary}}}</div>
       </div>
     </div>
     {{/if}}
@@ -75,7 +75,7 @@
             <span class="sw-bold" data-field="projects.{{@index}}.name">{{name}}</span>
             {{#if role}}<span class="sw-gray" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
           </div>
-          {{#if description}}<p class="sw-text" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+          {{#if description}}<div class="sw-text" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
           {{#if highlights.length}}<ul class="sw-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
         </div>
         {{/each}}

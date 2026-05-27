@@ -10,7 +10,7 @@
   </header>
   {{#if basics.summary}}
   <section class="nd-section">
-    <p class="nd-summary" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="nd-summary" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -67,7 +67,7 @@
       <div class="nd-entry-body">
         <p class="nd-main" data-field="projects.{{@index}}.name">{{name}}</p>
         {{#if role}}<p class="nd-sub" data-field="projects.{{@index}}.role">{{role}}</p>{{/if}}
-        {{#if description}}<p class="nd-text" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+        {{#if description}}<div class="nd-text" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
         {{#if highlights.length}}<ul class="nd-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
       </div>
     </div>

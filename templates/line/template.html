@@ -12,7 +12,7 @@
   {{#if basics.summary}}
   <section class="ln-section">
     <h2 class="ln-heading"><span>个人简介</span></h2>
-    <p class="ln-body" data-field="basics.summary">{{{basics.summary}}}</p>
+    <div class="ln-body" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>
   {{/if}}
   {{#if experience.length}}
@@ -61,7 +61,7 @@
         <span class="ln-name" data-field="projects.{{@index}}.name">{{name}}</span>
         {{#if role}}<span class="ln-pos" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
       </div>
-      {{#if description}}<p class="ln-body" data-field="projects.{{@index}}.description">{{{description}}}</p>{{/if}}
+      {{#if description}}<div class="ln-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="ln-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}
