@@ -1,3 +1,4 @@
+* { word-wrap: break-word; overflow-wrap: break-word; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .resume.sales { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Helvetica Neue", "Arial", "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 10pt; line-height: 1.6; color: #1C1917; background: #fff; }
 .sl-accent-bar { height: 5px; background: #EA580C; }

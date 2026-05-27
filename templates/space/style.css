@@ -1,3 +1,4 @@
+* { word-wrap: break-word; overflow-wrap: break-word; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .resume.space { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 26mm 26mm; font-family: "Helvetica Neue", "Arial", "PingFang SC", sans-serif; font-size: 10.5pt; line-height: 2.0; color: #222; background: #fff; }
 .sp-header { margin-bottom: 36px; }

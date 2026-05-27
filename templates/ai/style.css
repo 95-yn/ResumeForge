@@ -1,3 +1,4 @@
+* { word-wrap: break-word; overflow-wrap: break-word; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .resume.ai { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Helvetica Neue", "Arial", "PingFang SC", sans-serif; font-size: 10pt; line-height: 1.6; color: #E0E7FF; background: #1E1B4B; }
 .ai-header { background: linear-gradient(135deg, #4338CA 0%, #1D4ED8 100%); padding: 16mm 22mm 14mm; }

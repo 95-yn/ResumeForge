@@ -1,3 +1,4 @@
+* { word-wrap: break-word; overflow-wrap: break-word; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .resume.architect { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Helvetica Neue", "Arial", "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 9.5pt; line-height: 1.6; color: #2D2D2D; background: #fff; }
 .ac-header { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid #BDBDBD; padding: 18mm 20mm 14px; gap: 20px; }

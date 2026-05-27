@@ -1,3 +1,4 @@
+* { word-wrap: break-word; overflow-wrap: break-word; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .resume.japanese { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 24mm 28mm; font-family: "Hiragino Sans", "PingFang SC", "Yu Gothic", "Microsoft YaHei", sans-serif; font-size: 10pt; line-height: 1.8; color: #1C1917; background: #fff; }
 .jp-header { margin-bottom: 28px; }

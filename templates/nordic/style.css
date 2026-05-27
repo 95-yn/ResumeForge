@@ -1,3 +1,4 @@
+* { word-wrap: break-word; overflow-wrap: break-word; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .resume.nordic { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 24mm 24mm; font-family: "Helvetica Neue", "Arial", "PingFang SC", sans-serif; font-size: 10pt; line-height: 1.7; color: #334155; background: #F8FAFC; }
 .nd-header { margin-bottom: 24px; }

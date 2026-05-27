@@ -1,3 +1,4 @@
+* { word-wrap: break-word; overflow-wrap: break-word; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .resume.creative { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Source Han Sans SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 10pt; line-height: 1.6; color: #1F2937; background: #fff; }
 .cr-header { padding: 24px 28px 20px; background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%); color: #fff; }

@@ -1,3 +1,4 @@
+* { word-wrap: break-word; overflow-wrap: break-word; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .resume.artist { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 20mm 20mm 20mm 28mm; font-family: "Georgia", "Times New Roman", "PingFang SC", "Microsoft YaHei", serif; font-size: 10.5pt; line-height: 1.7; color: #2C1810; background: #fff; }
 .ar-header { margin-bottom: 20px; border-left: 5px solid #78350F; padding-left: 16px; }

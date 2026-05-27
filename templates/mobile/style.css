@@ -1,3 +1,4 @@
+* { word-wrap: break-word; overflow-wrap: break-word; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .resume.mobile { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: -apple-system, "SF Pro Text", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 10pt; line-height: 1.6; color: #1C1C1E; background: #F2F2F7; }
 .mb-header { background: #fff; text-align: center; padding: 16mm 20mm 14px; border-bottom: 1px solid #C6C6C8; }

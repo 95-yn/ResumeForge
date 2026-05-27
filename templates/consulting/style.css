@@ -1,3 +1,4 @@
+* { word-wrap: break-word; overflow-wrap: break-word; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .resume.consulting { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Helvetica Neue", "Arial", "PingFang SC", sans-serif; font-size: 10pt; line-height: 1.6; color: #111; background: #fff; }
 .cs-header { display: flex; justify-content: space-between; align-items: flex-end; padding: 20mm 22mm 12px; border-bottom: 3px solid #111; }

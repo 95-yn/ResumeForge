@@ -1,3 +1,4 @@
+* { word-wrap: break-word; overflow-wrap: break-word; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .resume.data { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 16mm 20mm; font-family: "Menlo", "Consolas", "Monaco", "Courier New", "PingFang SC", "Microsoft YaHei", monospace; font-size: 9.5pt; line-height: 1.6; color: #E2E8F0; background: #0F172A; }
 .dt-header { border-bottom: 1px solid #1E40AF; padding-bottom: 12px; margin-bottom: 16px; }

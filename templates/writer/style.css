@@ -1,3 +1,4 @@
+* { word-wrap: break-word; overflow-wrap: break-word; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .resume.writer { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 22mm 28mm; font-family: "Garamond", "Georgia", "Times New Roman", "PingFang SC", "Microsoft YaHei", serif; font-size: 11.5pt; line-height: 1.75; color: #1a1a1a; background: #fff; }
 .wr-header { margin-bottom: 18px; }
