@@ -38,7 +38,7 @@
   line-height: 1.4;
 }
 .pro-section {
-  padding: 12px 26px;
+  padding: 10px 26px;
   border-bottom: 1px solid #E5E7EB;
 }
 .pro-section:last-child { border-bottom: none; }
@@ -48,9 +48,9 @@
   text-transform: uppercase;
   letter-spacing: 1.5px;
   color: #1F2937;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
-.pro-entry { margin-bottom: 9px; }
+.pro-entry { margin-bottom: 8px; }
 .pro-entry:last-child { margin-bottom: 0; }
 .pro-entry-header {
   display: flex;

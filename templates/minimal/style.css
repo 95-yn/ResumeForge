@@ -1,13 +1,13 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .resume.minimal { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 20mm; font-family: Georgia, "Source Han Serif SC", serif; font-size: 10pt; line-height: 1.5; color: #222; }
-header { margin-bottom: 16px; }
+header { margin-bottom: 12px; }
 header h1 { font-size: 20pt; font-weight: 400; letter-spacing: 3px; }
 .contact-line { font-size: 9pt; color: #666; margin-top: 4px; }
 .contact-line span + span::before { content: " · "; }
-.summary { font-size: 9.5pt; color: #444; margin-bottom: 14px; font-style: italic; }
-section { margin-bottom: 14px; }
-section h2 { font-size: 10pt; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #222; padding-bottom: 3px; margin-bottom: 8px; }
-.item { margin-bottom: 8px; }
+.summary { font-size: 9.5pt; color: #444; margin-bottom: 10px; font-style: italic; }
+section { margin-bottom: 12px; }
+section h2 { font-size: 10pt; text-transform: uppercase; letter-spacing: 2px; border-bottom: 1px solid #222; padding-bottom: 3px; margin-bottom: 6px; }
+.item { margin-bottom: 7px; }
 .row { display: flex; justify-content: space-between; font-size: 10pt; }
 .role { font-size: 9pt; color: #555; }
 ul { padding-left: 16px; margin-top: 2px; }

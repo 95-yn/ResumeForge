@@ -8,11 +8,11 @@
 .sw-title { font-size: 9.5pt; font-weight: 700; color: #DC2626; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 6px; }
 .sw-contacts { font-size: 8.5pt; color: #555; line-height: 1.8; }
 .sw-body { padding: 16px 20mm 20mm; }
-.sw-row { display: grid; grid-template-columns: 60px 1fr; gap: 0 20px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid #F0F0F0; }
+.sw-row { display: grid; grid-template-columns: 60px 1fr; gap: 0 20px; margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #F0F0F0; }
 .sw-row:last-child { border-bottom: none; }
 .sw-label { font-size: 7.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #DC2626; padding-top: 2px; }
 .sw-content { }
-.sw-entry { margin-bottom: 10px; }
+.sw-entry { margin-bottom: 8px; }
 .sw-entry:last-child { margin-bottom: 0; }
 .sw-entry-row { display: flex; justify-content: space-between; align-items: baseline; }
 .sw-bold { font-size: 10pt; font-weight: 700; color: #111; }
