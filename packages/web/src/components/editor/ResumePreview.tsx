@@ -7,42 +7,90 @@ const ARRAY_SECTIONS = ['experience', 'education', 'skills', 'projects'];
 const EDIT_SCRIPT = `
 (function() {
   var activeEl = null;
-  document.querySelectorAll('[data-field]').forEach(function(el) {
+  var allFields = Array.from(document.querySelectorAll('[data-field]'));
+
+  allFields.forEach(function(el, idx) {
     el.style.cursor = 'text';
     el.style.outline = 'none';
     el.style.borderRadius = '2px';
-    el.style.transition = 'background 0.15s';
+    el.style.transition = 'background 0.12s, box-shadow 0.12s';
+
     el.addEventListener('mouseenter', function() {
-      if (el !== activeEl) el.style.background = 'rgba(0,0,0,0.04)';
+      if (el !== activeEl) {
+        el.style.background = 'rgba(59,130,246,0.05)';
+        el.style.boxShadow = 'inset 0 0 0 1px rgba(59,130,246,0.12)';
+      }
     });
     el.addEventListener('mouseleave', function() {
-      if (el !== activeEl) el.style.background = '';
+      if (el !== activeEl) {
+        el.style.background = '';
+        el.style.boxShadow = '';
+      }
     });
-    el.addEventListener('dblclick', function(e) {
+
+    // 单击直接进入编辑
+    el.addEventListener('click', function(e) {
+      if (el === activeEl) return;
       e.stopPropagation();
-      if (activeEl && activeEl !== el) {
+      if (activeEl) {
         activeEl.contentEditable = 'false';
         activeEl.style.background = '';
+        activeEl.style.boxShadow = '';
+        // 保存上一个字段
+        parent.postMessage({
+          type: 'resume-field-update',
+          field: activeEl.dataset.field,
+          value: activeEl.innerHTML.replace(/<br\\s*\\\\/?>/g, '\\n').replace(/<[^>]*>/g, '').trim()
+        }, '*');
       }
       activeEl = el;
       el.contentEditable = 'true';
-      el.style.background = 'rgba(0,0,0,0.04)';
-      el.focus();
+      el.style.background = 'rgba(59,130,246,0.06)';
+      el.style.boxShadow = 'inset 0 0 0 1.5px rgba(59,130,246,0.25)';
+      // 把光标放到文字末尾
+      var range = document.createRange();
+      range.selectNodeContents(el);
+      range.collapse(false);
+      var sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
     });
+
     el.addEventListener('blur', function() {
       el.contentEditable = 'false';
       el.style.background = '';
-      activeEl = null;
+      el.style.boxShadow = '';
+      if (activeEl === el) activeEl = null;
       parent.postMessage({
         type: 'resume-field-update',
         field: el.dataset.field,
-        value: el.innerHTML.replace(/<br\\s*\\/?>/g, '\\n').replace(/<[^>]*>/g, '').trim()
+        value: el.innerHTML.replace(/<br\\s*\\\\/?>/g, '\\n').replace(/<[^>]*>/g, '').trim()
       }, '*');
     });
+
     el.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); el.blur(); }
-      if (e.key === 'Escape') { el.blur(); }
+      if (e.key === 'Escape') { e.preventDefault(); el.blur(); return; }
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        // Tab 到下一个字段
+        var next = allFields[idx + 1];
+        if (next) { el.blur(); setTimeout(function() { next.click(); }, 50); }
+        else { el.blur(); }
+        return;
+      }
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        var target = e.shiftKey ? allFields[idx - 1] : allFields[idx + 1];
+        if (target) { el.blur(); setTimeout(function() { target.click(); }, 50); }
+      }
     });
+  });
+
+  // 点击空白区域退出编辑
+  document.addEventListener('click', function(e) {
+    if (activeEl && !e.target.closest('[data-field]')) {
+      activeEl.blur();
+    }
   });
 
   // Listen for scroll-to-section messages from parent
@@ -257,8 +305,10 @@ export function ResumePreview() {
     const handleLoad = () => {
       const iframeDoc = iframe.contentDocument;
       if (!iframeDoc) return;
-      iframeDoc.addEventListener('dblclick', () => {
-        isEditingRef.current = true;
+      iframeDoc.addEventListener('click', (e) => {
+        if ((e.target as Element)?.closest?.('[data-field]')) {
+          isEditingRef.current = true;
+        }
       });
     };
     iframe.addEventListener('load', handleLoad);
