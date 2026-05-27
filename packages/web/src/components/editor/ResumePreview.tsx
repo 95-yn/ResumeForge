@@ -40,13 +40,14 @@ const EDIT_SCRIPT = `
         parent.postMessage({
           type: 'resume-field-update',
           field: activeEl.dataset.field,
-          value: activeEl.innerHTML.replace(/<br\\s*\\\\/?>/g, '\\n').replace(/<[^>]*>/g, '').trim()
+          value: activeEl.innerHTML.replace(new RegExp('\\x3cbr\\\\s*\\\\/?\\x3e','g'), '\\n').replace(new RegExp('\\x3c[^\\x3e]*\\x3e','g'), '').trim()
         }, '*');
       }
       activeEl = el;
       el.contentEditable = 'true';
       el.style.background = 'rgba(59,130,246,0.06)';
       el.style.boxShadow = 'inset 0 0 0 1.5px rgba(59,130,246,0.25)';
+      parent.postMessage({ type: 'editing-started' }, '*');
       // 把光标放到文字末尾
       var range = document.createRange();
       range.selectNodeContents(el);
@@ -64,7 +65,7 @@ const EDIT_SCRIPT = `
       parent.postMessage({
         type: 'resume-field-update',
         field: el.dataset.field,
-        value: el.innerHTML.replace(/<br\\s*\\\\/?>/g, '\\n').replace(/<[^>]*>/g, '').trim()
+        value: el.innerHTML.replace(new RegExp('\\x3cbr\\\\s*\\\\/?\\x3e','g'), '\\n').replace(new RegExp('\\x3c[^\\x3e]*\\x3e','g'), '').trim()
       }, '*');
     });
 
@@ -245,29 +246,27 @@ export function ResumePreview() {
     }
   }, [renderedHtml, isEmpty, sectionOrder]);
 
-  // Inject editing script after rendering
+  const finalHtml = useMemo(() => {
+    if (!reorderedHtml || isEmpty) return reorderedHtml;
+    return reorderedHtml.replace('</body>', `<script>${EDIT_SCRIPT}</script></body>`);
+  }, [reorderedHtml, isEmpty]);
+
   useEffect(() => {
     if (isEditingRef.current) return;
-    const iframe = iframeRef.current;
-    if (!iframe) return;
-    const doc = iframe.contentDocument;
-    if (doc) {
-      doc.open();
-      doc.write(reorderedHtml);
-      doc.close();
-      // Inject edit script after document is written
-      try {
-        const scriptEl = doc.createElement('script');
-        scriptEl.textContent = EDIT_SCRIPT;
-        doc.body.appendChild(scriptEl);
-      } catch {}
+    if (iframeRef.current) {
+      iframeRef.current.srcdoc = finalHtml;
     }
-  }, [reorderedHtml]);
+  }, [finalHtml]);
 
   // Listen to postMessage from iframe
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
       if (!event.data?.type) return;
+
+      if (event.data.type === 'editing-started') {
+        isEditingRef.current = true;
+        return;
+      }
 
       if (event.data.type === 'resume-field-update') {
         const { field, value } = event.data as { field: string; value: string };
@@ -298,22 +297,9 @@ export function ResumePreview() {
     return () => window.removeEventListener('message', handleMessage);
   }, [updateByPath, addArrayItem, removeArrayItem]);
 
-  // Mark as editing when iframe gets a dblclick (prevents re-render mid-edit)
-  useEffect(() => {
-    const iframe = iframeRef.current;
-    if (!iframe) return;
-    const handleLoad = () => {
-      const iframeDoc = iframe.contentDocument;
-      if (!iframeDoc) return;
-      iframeDoc.addEventListener('click', (e) => {
-        if ((e.target as Element)?.closest?.('[data-field]')) {
-          isEditingRef.current = true;
-        }
-      });
-    };
-    iframe.addEventListener('load', handleLoad);
-    return () => iframe.removeEventListener('load', handleLoad);
-  }, []);
+  // isEditing is now managed via postMessage — the injected script sends
+  // 'editing-started' when a field is clicked, and 'resume-field-update' on blur
+  // clears it. No need for a separate listener.
 
   return (
     <div style={{
