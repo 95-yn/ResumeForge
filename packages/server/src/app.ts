@@ -5,6 +5,7 @@ import { authRouter } from './routes/auth';
 import { resumeRouter } from './routes/resume';
 import { exportRouter, guestExportRouter } from './routes/export';
 import { templateRouter } from './routes/template';
+import { shareRouter } from './routes/share';
 
 export const app = express();
 
@@ -20,5 +21,6 @@ app.use('/api/resumes', resumeRouter);
 app.use('/api/resumes', exportRouter);
 app.use('/api', guestExportRouter);
 app.use('/api/templates', templateRouter);
+app.use('/api/share', shareRouter);
 
 app.use(errorHandler);
