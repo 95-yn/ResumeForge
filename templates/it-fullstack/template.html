@@ -18,7 +18,7 @@
     {{#if basics.summary}}
     <div class="sidebar-section">
       <h2 class="sidebar-section-title">个人简介</h2>
-      <div class="summary" data-field="basics.summary">{{{{basics.summary}}}}</div>
+      <div class="summary" data-field="basics.summary">{{{basics.summary}}}</div>
     </div>
     {{/if}}
   </div>
@@ -31,14 +31,14 @@
           <h3><span data-field="experience.{{@index}}.company">{{company}}</span><span class="separator"> — </span><span data-field="experience.{{@index}}.position">{{position}}</span></h3>
           <span class="date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> - <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
         </div>
-        {{#if highlights.length}}<ul class="highlights">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{{this}}}}</li>{{/each}}</ul>{{/if}}
+        {{#if highlights.length}}<ul class="highlights">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
       </div>
       {{/each}}
     </section>
     {{/if}}
     {{#if projects.length}}
     <section class="section" data-section="projects"><h2 class="section-title">项目经历</h2>
-      {{#each projects}}<div class="entry" data-entry="projects" data-entry-index="{{@index}}"><div class="entry-header"><h3><span data-field="projects.{{@index}}.name">{{name}}</span>{{#if role}}<span class="separator"> — </span><span data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}</h3><span class="date"><span data-field="projects.{{@index}}.startDate">{{startDate}}</span> - <span data-field="projects.{{@index}}.endDate">{{endDate}}</span></span></div>{{#if description}}<div class="sub" data-field="projects.{{@index}}.description">{{{{description}}}}</div>{{/if}}{{#if highlights.length}}<ul class="highlights">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{{this}}}}</li>{{/each}}</ul>{{/if}}</div>{{/each}}
+      {{#each projects}}<div class="entry" data-entry="projects" data-entry-index="{{@index}}"><div class="entry-header"><h3><span data-field="projects.{{@index}}.name">{{name}}</span>{{#if role}}<span class="separator"> — </span><span data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}</h3><span class="date"><span data-field="projects.{{@index}}.startDate">{{startDate}}</span> - <span data-field="projects.{{@index}}.endDate">{{endDate}}</span></span></div>{{#if description}}<div class="sub" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}{{#if highlights.length}}<ul class="highlights">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}</div>{{/each}}
     </section>
     {{/if}}
     {{#if education.length}}

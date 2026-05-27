@@ -130,7 +130,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
         ? { company: '公司名称', position: '职位名称', startDate: '2024-01', endDate: '至今', highlights: ['工作内容描述'] }
         : sectionKey === 'education'
         ? { institution: '学校名称', area: '专业', studyType: '本科', startDate: '2020-09', endDate: '2024-06' }
-        : { name: '项目名称', role: '担任角色', description: '项目简介', highlights: ['项目亮点'] };
+        : { name: '项目名称', role: '担任角色', startDate: '2024-01', endDate: '至今', description: '项目简介', highlights: ['项目亮点'] };
       arr.push(newItem);
     }
     set(pushHistory(state, newData));

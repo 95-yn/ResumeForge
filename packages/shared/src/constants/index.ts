@@ -54,6 +54,8 @@ export const DEFAULT_RESUME_DATA = {
     {
       name: '企业级组件库 ProUI',
       role: '技术负责人',
+      startDate: '2022-06',
+      endDate: '2023-12',
       description: '从零搭建服务于内部 20+ 项目的 React 组件库，包含 60+ 组件，覆盖表单、数据展示、布局等场景。',
       highlights: [
         '基于 Monorepo 架构，支持按需加载和 Tree Shaking',

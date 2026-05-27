@@ -1,12 +1,13 @@
 import { Tooltip } from 'antd';
-import { ArrowLeftOutlined, PrinterOutlined, UndoOutlined, RedoOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, PrinterOutlined, UndoOutlined, RedoOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
+import { Modal } from 'antd';
 import Handlebars from 'handlebars';
 import { useEditorStore } from '../../stores/editor.store';
 
 export function TopBar() {
   const navigate = useNavigate();
-  const { save, saveStatus, undo, redo, historyIndex, history, templateHtml, templateCss, resume } = useEditorStore();
+  const { save, saveStatus, undo, redo, historyIndex, history, templateHtml, templateCss, resume, resetToDefault } = useEditorStore();
 
   const handlePrint = () => {
     if (!templateHtml || !templateCss || !resume) return;
@@ -107,6 +108,20 @@ export function TopBar() {
             onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
           >
             <RedoOutlined />
+          </button>
+        </Tooltip>
+        <Tooltip title="还原默认内容">
+          <button
+            style={iconBtnStyle(false)}
+            onClick={() => Modal.confirm({
+              title: '还原为默认内容？', content: '当前编辑的内容将被替换',
+              okText: '还原', cancelText: '取消', okButtonProps: { danger: true },
+              onOk: resetToDefault,
+            })}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F5F5F4'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
+          >
+            <ReloadOutlined />
           </button>
         </Tooltip>
 

@@ -53,6 +53,8 @@ export interface ResumeData {
   projects: Array<{
     name: string;
     role?: string;
+    startDate?: string;
+    endDate?: string;
     description?: string;
     highlights: string[];
   }>;

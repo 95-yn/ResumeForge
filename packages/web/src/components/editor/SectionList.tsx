@@ -171,57 +171,6 @@ export function SectionList() {
       fontFamily: 'inherit',
     }}>
 
-      {/* Template section */}
-      <div style={{ padding: '14px 14px 12px', borderBottom: '1px solid #F5F5F4' }}>
-        <span style={{
-          fontSize: 10, fontWeight: 600, color: '#A8A29E', letterSpacing: '0.08em',
-          textTransform: 'uppercase', display: 'block', marginBottom: 9, fontFamily: 'inherit',
-        }}>模板</span>
-
-        <div style={{
-          background: '#FAFAF9', border: '1px solid #E7E5E4', borderRadius: 8,
-          padding: '10px 12px',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, marginBottom: 8 }}>
-            <span style={{ fontSize: 12, color: '#1C1917', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontFamily: 'inherit' }}>
-              {templateId ?? '未选择'}
-            </span>
-            <button
-              onClick={() => navigate('/')}
-              style={{
-                flexShrink: 0, padding: '3px 10px', borderRadius: 5,
-                border: '1px solid #E7E5E4', background: '#FFFFFF',
-                color: '#78716C', cursor: 'pointer', fontSize: 11, fontWeight: 500,
-                transition: 'all 0.12s', fontFamily: 'inherit',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.color = '#78716C'; }}
-            >
-              换模板
-            </button>
-          </div>
-
-          <button
-            onClick={() => Modal.confirm({
-              title: '还原为默认内容？',
-              content: '当前编辑的内容将被替换为模板默认数据',
-              okText: '还原', cancelText: '取消', okButtonProps: { danger: true },
-              onOk: resetToDefault,
-            })}
-            style={{
-              width: '100%', padding: '4px 0', borderRadius: 5,
-              border: '1px solid #E7E5E4', background: '#FFFFFF',
-              color: '#78716C', cursor: 'pointer', fontSize: 11, fontWeight: 500,
-              transition: 'all 0.12s', fontFamily: 'inherit',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.color = '#78716C'; }}
-          >
-            还原默认内容
-          </button>
-        </div>
-      </div>
-
       {/* Modules section */}
       <div style={{ borderBottom: '1px solid #F5F5F4', flex: 1 }}>
         <div style={{ padding: '12px 14px 6px' }}>
@@ -469,58 +418,21 @@ export function SectionList() {
         </div>
       </div>
 
-      {/* Zoom controls */}
-      <div style={{ padding: '12px 14px', borderTop: '1px solid #F5F5F4' }}>
-        <span style={{
-          fontSize: 10, fontWeight: 600, color: '#A8A29E',
-          letterSpacing: '0.08em', textTransform: 'uppercase',
-          display: 'block', marginBottom: 8, fontFamily: 'inherit',
-        }}>缩放</span>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <button
-            style={{
-              width: 26, height: 26, borderRadius: 6, border: '1px solid #E7E5E4',
-              background: '#FAFAF9', color: '#78716C', cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 14, fontWeight: 600, flexShrink: 0, transition: 'all 0.12s',
-              fontFamily: 'inherit',
-            }}
-            onClick={() => setZoom(zoom - 0.1)}
-            onMouseEnter={e => { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#FAFAF9'; e.currentTarget.style.color = '#78716C'; }}
-          >−</button>
-          <span style={{
-            flex: 1, textAlign: 'center', fontSize: 12, fontWeight: 600,
-            color: '#78716C', userSelect: 'none', fontFamily: 'inherit',
-          }}>
-            {zoomPct}%
-          </span>
-          <button
-            style={{
-              width: 26, height: 26, borderRadius: 6, border: '1px solid #E7E5E4',
-              background: '#FAFAF9', color: '#78716C', cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 14, fontWeight: 600, flexShrink: 0, transition: 'all 0.12s',
-              fontFamily: 'inherit',
-            }}
-            onClick={() => setZoom(zoom + 0.1)}
-            onMouseEnter={e => { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#FAFAF9'; e.currentTarget.style.color = '#78716C'; }}
-          >+</button>
-        </div>
-        {zoom !== 1 && (
-          <button
-            onClick={() => setZoom(1)}
-            style={{
-              marginTop: 6, width: '100%', padding: '3px 0', borderRadius: 5,
-              border: '1px solid #E7E5E4', background: 'transparent',
-              color: '#A8A29E', cursor: 'pointer', fontSize: 11,
-              transition: 'color 0.12s', fontFamily: 'inherit',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#78716C'; }}
-            onMouseLeave={e => { e.currentTarget.style.color = '#A8A29E'; }}
-          >重置 100%</button>
-        )}
+      {/* Bottom: change template link */}
+      <div style={{ padding: '10px 14px', borderTop: '1px solid #F5F5F4' }}>
+        <button
+          onClick={() => navigate('/')}
+          style={{
+            width: '100%', padding: '6px 0', borderRadius: 6,
+            border: '1px solid #E7E5E4', background: '#FFFFFF',
+            color: '#78716C', cursor: 'pointer', fontSize: 12, fontWeight: 500,
+            transition: 'all 0.12s', fontFamily: 'inherit',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; }}
+          onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.color = '#78716C'; }}
+        >
+          换模板
+        </button>
       </div>
     </div>
   );
