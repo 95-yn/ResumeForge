@@ -124,7 +124,7 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
               key: s, label: `${s}px`,
               onClick: () => editor?.chain().focus().setFontSize(`${s}px`).run(),
             })),
-          }} trigger={['click']}>
+          }} trigger={['click']} overlayStyle={{ zIndex: 10000 }}>
             <button style={btnStyle(false)} title="字体大小"><FontSizeOutlined /></button>
           </Dropdown>
           {sep}
