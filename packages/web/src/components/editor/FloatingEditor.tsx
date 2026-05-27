@@ -54,6 +54,15 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
   });
 
   useEffect(() => {
+    if (editor && editingField.value !== undefined) {
+      const currentContent = richtext ? editor.getHTML() : editor.getText();
+      if (currentContent !== editingField.value) {
+        editor.commands.setContent(editingField.value || '');
+      }
+    }
+  }, [editor, editingField.field, editingField.value, richtext]);
+
+  useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') { e.preventDefault(); onCancel(); }
     };
