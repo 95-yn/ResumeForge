@@ -5,7 +5,7 @@ import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { useEditorStore } from '../../stores/editor.store';
 
 const SECTION_ICONS: Record<string, string> = {
-  basics: '👤', experience: '💼', education: '🎓', skills: '✦', projects: '📁',
+  basics: '👤', summary: '📝', experience: '💼', education: '🎓', skills: '✦', projects: '📁',
 };
 
 const SECTION_ADD_LABELS: Record<string, string> = {
@@ -15,13 +15,22 @@ const SECTION_ADD_LABELS: Record<string, string> = {
   projects: '添加项目',
 };
 
-const BASICS_FIELDS = [
-  { key: 'name', label: '姓名' },
-  { key: 'title', label: '职位头衔' },
-  { key: 'email', label: '邮箱' },
-  { key: 'phone', label: '电话' },
-  { key: 'location', label: '所在城市' },
-  { key: 'summary', label: '个人简介' },
+const DEFAULT_BASICS_FIELDS = [
+  { key: 'name', label: '姓名', removable: false },
+  { key: 'title', label: '职位头衔', removable: true },
+  { key: 'email', label: '邮箱', removable: false },
+  { key: 'phone', label: '电话', removable: true },
+  { key: 'location', label: '所在城市', removable: true },
+];
+
+const EXTRA_BASICS_OPTIONS = [
+  { key: 'website', label: '个人网站' },
+  { key: 'linkedin', label: 'LinkedIn' },
+  { key: 'github', label: 'GitHub' },
+  { key: 'wechat', label: '微信' },
+  { key: 'avatar', label: '头像链接' },
+  { key: 'birthday', label: '出生日期' },
+  { key: 'gender', label: '性别' },
 ];
 
 // Sections that can be reordered (basics is always fixed at top)
@@ -48,8 +57,13 @@ export function SectionList() {
   const {
     schema, sectionOrder, activeSection, setActiveSection,
     reorderSections, zoom, setZoom, templateId, resume,
-    addArrayItem, removeArrayItem, updateField,
+    addArrayItem, removeArrayItem, updateField, resetToDefault,
   } = useEditorStore();
+
+  const [visibleBasicsFields, setVisibleBasicsFields] = useState<string[]>(
+    DEFAULT_BASICS_FIELDS.map(f => f.key)
+  );
+  const [showAddField, setShowAddField] = useState(false);
 
   const [hovered, setHovered] = useState<string | null>(null);
   const [dragKey, setDragKey] = useState<string | null>(null);
@@ -194,17 +208,21 @@ export function SectionList() {
           </span>
           <button
             onClick={() => navigate('/')}
-            style={{
-              flexShrink: 0, padding: '3px 10px', borderRadius: 6, border: '1px solid #E5E7EB',
-              background: '#F9FAFB', color: '#374151', cursor: 'pointer', fontSize: 12, fontWeight: 500,
-              transition: 'background 0.15s',
-            }}
-            onMouseEnter={(e) => { e.currentTarget.style.background = '#F3F4F6'; }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = '#F9FAFB'; }}
+            style={{ flexShrink: 0, padding: '3px 10px', borderRadius: 6, border: '1px solid #E5E7EB', background: '#F9FAFB', color: '#374151', cursor: 'pointer', fontSize: 12, fontWeight: 500 }}
           >
             换模板
           </button>
         </div>
+        <button
+          onClick={() => Modal.confirm({
+            title: '还原为默认内容？', content: '当前编辑的内容将被替换为模板默认数据',
+            okText: '还原', cancelText: '取消', okButtonProps: { danger: true },
+            onOk: resetToDefault,
+          })}
+          style={{ marginTop: 8, width: '100%', padding: '4px 0', borderRadius: 5, border: '1px solid #E5E7EB', background: 'transparent', color: '#9CA3AF', cursor: 'pointer', fontSize: 11 }}
+        >
+          还原默认内容
+        </button>
       </div>
 
       {/* Modules section */}
@@ -294,43 +312,79 @@ export function SectionList() {
                   )}
                 </div>
 
-                {/* Basics fields */}
+                {/* Basics fields — with add/remove */}
                 {key === 'basics' && isExpanded && resume?.basics && (
                   <div style={{ paddingLeft: 28, paddingRight: 10, paddingBottom: 6 }}>
-                    {BASICS_FIELDS.map((f) => {
-                      const val = (resume.basics as Record<string, unknown>)[f.key] as string || '';
+                    {visibleBasicsFields.map((fKey) => {
+                      const fieldDef = [...DEFAULT_BASICS_FIELDS, ...EXTRA_BASICS_OPTIONS].find(f => f.key === fKey);
+                      if (!fieldDef) return null;
+                      const val = (resume.basics as Record<string, unknown>)[fKey] as string || '';
+                      const canRemove = !DEFAULT_BASICS_FIELDS.find(f => f.key === fKey && !f.removable);
                       return (
-                        <div key={f.key} style={{ marginBottom: 4 }}>
-                          <span style={{ fontSize: 11, color: '#9CA3AF', display: 'block', marginBottom: 2 }}>{f.label}</span>
-                          {f.key === 'summary' ? (
-                            <textarea
-                              value={val}
-                              onChange={(e) => updateField('basics', f.key, e.target.value)}
-                              rows={2}
-                              style={{
-                                width: '100%', fontSize: 12, color: '#374151', border: '1px solid #E5E7EB',
-                                borderRadius: 4, padding: '4px 6px', resize: 'vertical', outline: 'none',
-                                fontFamily: 'inherit', lineHeight: 1.5,
-                              }}
-                              onFocus={(e) => { e.currentTarget.style.borderColor = '#3B82F6'; }}
-                              onBlur={(e) => { e.currentTarget.style.borderColor = '#E5E7EB'; }}
-                            />
-                          ) : (
-                            <input
-                              value={val}
-                              onChange={(e) => updateField('basics', f.key, e.target.value)}
-                              style={{
-                                width: '100%', fontSize: 12, color: '#374151', border: '1px solid #E5E7EB',
-                                borderRadius: 4, padding: '3px 6px', outline: 'none',
-                              }}
-                              onFocus={(e) => { e.currentTarget.style.borderColor = '#3B82F6'; }}
-                              onBlur={(e) => { e.currentTarget.style.borderColor = '#E5E7EB'; }}
-                              placeholder={`输入${f.label}`}
-                            />
-                          )}
-                        </div>
+                        <BasicFieldRow
+                          key={fKey}
+                          label={fieldDef.label}
+                          value={val}
+                          canRemove={canRemove}
+                          onChange={(v) => updateField('basics', fKey, v)}
+                          onRemove={() => {
+                            setVisibleBasicsFields(prev => prev.filter(k => k !== fKey));
+                            updateField('basics', fKey, '');
+                          }}
+                        />
                       );
                     })}
+                    {/* Add field button */}
+                    <div style={{ position: 'relative' }}>
+                      <button
+                        onClick={() => setShowAddField(!showAddField)}
+                        style={{ display: 'flex', alignItems: 'center', gap: 4, width: '100%', marginTop: 4, padding: '4px 0', border: '1.5px dashed #D1D5DB', borderRadius: 5, background: 'transparent', color: '#9CA3AF', fontSize: 11, cursor: 'pointer' }}
+                      >
+                        <PlusOutlined style={{ fontSize: 10, marginLeft: 6 }} /> 添加字段
+                      </button>
+                      {showAddField && (
+                        <div style={{ position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 100, background: '#fff', border: '1px solid #E5E7EB', borderRadius: 6, boxShadow: '0 4px 12px rgba(0,0,0,0.1)', marginTop: 2, maxHeight: 160, overflowY: 'auto' }}>
+                          {EXTRA_BASICS_OPTIONS.filter(o => !visibleBasicsFields.includes(o.key)).map(o => (
+                            <div
+                              key={o.key}
+                              onClick={() => { setVisibleBasicsFields(prev => [...prev, o.key]); setShowAddField(false); }}
+                              style={{ padding: '6px 10px', fontSize: 12, color: '#374151', cursor: 'pointer' }}
+                              onMouseEnter={(e) => { e.currentTarget.style.background = '#F3F4F6'; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.background = ''; }}
+                            >
+                              {o.label}
+                            </div>
+                          ))}
+                          {EXTRA_BASICS_OPTIONS.filter(o => !visibleBasicsFields.includes(o.key)).length === 0 && (
+                            <div style={{ padding: '8px 10px', fontSize: 12, color: '#9CA3AF' }}>已添加全部字段</div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Summary as independent section */}
+                {key === 'basics' && isExpanded && resume?.basics && (
+                  <div style={{ paddingLeft: 14, paddingRight: 10, paddingBottom: 4, marginTop: 2 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '7px 14px', borderRadius: 6, cursor: 'pointer', background: activeSection === 'summary' ? '#F3F4F6' : 'transparent' }}
+                      onClick={() => { setActiveSection('summary'); const iframe = document.querySelector('iframe[title="preview"]') as HTMLIFrameElement | null; iframe?.contentWindow?.postMessage({ type: 'scroll-to-section', sectionKey: 'basics' }, '*'); }}>
+                      <span style={{ fontSize: 13, opacity: 0.5, width: 18, textAlign: 'center' }}>📝</span>
+                      <span style={{ fontSize: 13, fontWeight: activeSection === 'summary' ? 600 : 400, color: activeSection === 'summary' ? '#111827' : '#6B7280' }}>个人简介</span>
+                    </div>
+                    {activeSection === 'summary' && (
+                      <div style={{ paddingLeft: 28, paddingRight: 0, paddingTop: 4, paddingBottom: 4 }}>
+                        <textarea
+                          value={(resume.basics as Record<string, unknown>).summary as string || ''}
+                          onChange={(e) => updateField('basics', 'summary', e.target.value)}
+                          rows={4}
+                          placeholder="输入个人简介..."
+                          style={{ width: '100%', fontSize: 12, color: '#374151', border: '1px solid #E5E7EB', borderRadius: 4, padding: '6px 8px', resize: 'vertical', outline: 'none', fontFamily: 'inherit', lineHeight: 1.6 }}
+                          onFocus={(e) => { e.currentTarget.style.borderColor = '#3B82F6'; }}
+                          onBlur={(e) => { e.currentTarget.style.borderColor = '#E5E7EB'; }}
+                        />
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -494,5 +548,34 @@ function AddButton({ label, onClick }: { label: string; onClick: () => void }) {
       <PlusOutlined style={{ fontSize: 10 }} />
       {label}
     </button>
+  );
+}
+
+function BasicFieldRow({ label, value, canRemove, onChange, onRemove }: {
+  label: string; value: string; canRemove: boolean;
+  onChange: (v: string) => void; onRemove: () => void;
+}) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <div style={{ marginBottom: 4 }} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <span style={{ fontSize: 11, color: '#9CA3AF' }}>{label}</span>
+        {canRemove && hovered && (
+          <button onClick={onRemove} style={{ border: 'none', background: 'none', color: '#D1D5DB', cursor: 'pointer', fontSize: 10, padding: 0 }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = '#EF4444'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = '#D1D5DB'; }}>
+            <DeleteOutlined />
+          </button>
+        )}
+      </div>
+      <input
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={`输入${label}`}
+        style={{ width: '100%', fontSize: 12, color: '#374151', border: '1px solid #E5E7EB', borderRadius: 4, padding: '3px 6px', outline: 'none', boxSizing: 'border-box' }}
+        onFocus={(e) => { e.currentTarget.style.borderColor = '#3B82F6'; }}
+        onBlur={(e) => { e.currentTarget.style.borderColor = '#E5E7EB'; }}
+      />
+    </div>
   );
 }

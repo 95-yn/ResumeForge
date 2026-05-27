@@ -29,6 +29,7 @@ interface EditorStore {
   reorderSections: (order: string[]) => void;
   updateByPath: (path: string, value: unknown) => void;
   setZoom: (zoom: number) => void;
+  resetToDefault: () => void;
   undo: () => void;
   redo: () => void;
   save: () => Promise<void>;
@@ -147,6 +148,18 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   setActiveSection: (key) => set({ activeSection: key }),
   reorderSections: (order) => set({ sectionOrder: order, isDirty: true, saveStatus: 'unsaved' }),
   setZoom: (zoom) => set({ zoom: Math.max(0.5, Math.min(2, zoom)) }),
+
+  resetToDefault: () => {
+    const resumeData = structuredClone(DEFAULT_RESUME_DATA) as ResumeData;
+    set({
+      resume: resumeData,
+      sectionOrder: [...DEFAULT_SECTION_ORDER],
+      history: [structuredClone(resumeData)],
+      historyIndex: 0,
+      isDirty: true,
+      saveStatus: 'unsaved',
+    });
+  },
 
   updateByPath: (path, value) => {
     const state = get();
