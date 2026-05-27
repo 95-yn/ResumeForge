@@ -1,11 +1,11 @@
 <div class="resume mono">
   <header class="mn-header">
-    <h1 data-field="basics.name">{{basics.name}}</h1>
-    {{#if basics.title}}<p class="mn-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+    <h1 data-field="basics.name">{{{basics.name}}}</h1>
+    {{#if basics.title}}<p class="mn-title" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
     <div class="mn-contacts">
-      {{#if basics.email}}<span data-field="basics.email">{{basics.email}}</span>{{/if}}
-      {{#if basics.phone}}<span data-field="basics.phone">{{basics.phone}}</span>{{/if}}
-      {{#if basics.location}}<span data-field="basics.location">{{basics.location}}</span>{{/if}}
+      {{#if basics.email}}<span data-field="basics.email">{{{basics.email}}}</span>{{/if}}
+      {{#if basics.phone}}<span data-field="basics.phone">{{{basics.phone}}}</span>{{/if}}
+      {{#if basics.location}}<span data-field="basics.location">{{{basics.location}}}</span>{{/if}}
     </div>
   </header>
   {{#if basics.summary}}
@@ -20,10 +20,10 @@
     {{#each experience}}
     <div class="mn-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="mn-row">
-        <span class="mn-strong" data-field="experience.{{@index}}.company">{{company}}</span>
-        <span class="mn-light"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span>–<span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="mn-strong" data-field="experience.{{@index}}.company">{{{company}}}</span>
+        <span class="mn-light"><span data-field="experience.{{@index}}.startDate">{{{startDate}}}</span>–<span data-field="experience.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
-      <p class="mn-mid" data-field="experience.{{@index}}.position">{{position}}</p>
+      <p class="mn-mid" data-field="experience.{{@index}}.position">{{{position}}}</p>
       {{#if highlights.length}}<ul class="mn-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}
@@ -35,10 +35,10 @@
     {{#each education}}
     <div class="mn-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="mn-row">
-        <span class="mn-strong" data-field="education.{{@index}}.institution">{{institution}}</span>
-        <span class="mn-light"><span data-field="education.{{@index}}.startDate">{{startDate}}</span>–<span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="mn-strong" data-field="education.{{@index}}.institution">{{{institution}}}</span>
+        <span class="mn-light"><span data-field="education.{{@index}}.startDate">{{{startDate}}}</span>–<span data-field="education.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
-      <p class="mn-mid"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></p>
+      <p class="mn-mid"><span data-field="education.{{@index}}.area">{{{area}}}</span> · <span data-field="education.{{@index}}.studyType">{{{studyType}}}</span></p>
     </div>
     {{/each}}
   </section>
@@ -47,7 +47,7 @@
   <section class="mn-section" data-section="skills">
     <h2 class="mn-heading">专业技能</h2>
     <div class="mn-skills">
-      {{#each skills}}<span class="mn-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="mn-light"> · <span data-field="skills.{{@index}}.level">{{level}}</span></span>{{/if}}</span>{{/each}}
+      {{#each skills}}<span class="mn-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}}<span class="mn-light"> · <span data-field="skills.{{@index}}.level">{{{level}}}</span></span>{{/if}}</span>{{/each}}
     </div>
   </section>
   {{/if}}
@@ -57,8 +57,8 @@
     {{#each projects}}
     <div class="mn-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="mn-row">
-        <span class="mn-strong" data-field="projects.{{@index}}.name">{{name}}</span>
-        {{#if role}}<span class="mn-light" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+        <span class="mn-strong" data-field="projects.{{@index}}.name">{{{name}}}</span>
+        {{#if role}}<span class="mn-light" data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}
       </div>
       {{#if description}}<div class="mn-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="mn-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}

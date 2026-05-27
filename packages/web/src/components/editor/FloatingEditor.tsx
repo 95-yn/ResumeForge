@@ -80,7 +80,7 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
 
   const handleConfirm = useCallback(() => {
     if (!editor) return;
-    onConfirm(editingField.field, richtext ? editor.getHTML() : editor.getText());
+    onConfirm(editingField.field, editor.getHTML());
   }, [editor, richtext, editingField.field, onConfirm]);
 
   const handleLink = useCallback(() => {

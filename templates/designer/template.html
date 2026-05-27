@@ -1,18 +1,18 @@
 <div class="resume designer">
   <aside class="ds-sidebar">
-    {{#if basics.avatar}}<img class="ds-avatar" src="{{basics.avatar}}" alt="" />{{/if}}
-    <h1 data-field="basics.name">{{basics.name}}</h1>
-    {{#if basics.title}}<p class="ds-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+    {{#if basics.avatar}}<img class="ds-avatar" src="{{{basics.avatar}}}" alt="" />{{/if}}
+    <h1 data-field="basics.name">{{{basics.name}}}</h1>
+    {{#if basics.title}}<p class="ds-title" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
     <div class="ds-divider"></div>
     <div class="ds-contact-section">
-      {{#if basics.email}}<div class="ds-contact-item" data-field="basics.email">{{basics.email}}</div>{{/if}}
-      {{#if basics.phone}}<div class="ds-contact-item" data-field="basics.phone">{{basics.phone}}</div>{{/if}}
-      {{#if basics.location}}<div class="ds-contact-item" data-field="basics.location">{{basics.location}}</div>{{/if}}
+      {{#if basics.email}}<div class="ds-contact-item" data-field="basics.email">{{{basics.email}}}</div>{{/if}}
+      {{#if basics.phone}}<div class="ds-contact-item" data-field="basics.phone">{{{basics.phone}}}</div>{{/if}}
+      {{#if basics.location}}<div class="ds-contact-item" data-field="basics.location">{{{basics.location}}}</div>{{/if}}
     </div>
     {{#if skills.length}}
     <div class="ds-skill-section" data-section="skills">
       <h3 class="ds-sidebar-title">技能</h3>
-      {{#each skills}}<div class="ds-skill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="ds-skill-dot" data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</div>{{/each}}
+      {{#each skills}}<div class="ds-skill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}}<span class="ds-skill-dot" data-field="skills.{{@index}}.level">{{{level}}}</span>{{/if}}</div>{{/each}}
     </div>
     {{/if}}
     {{#if education.length}}
@@ -20,10 +20,10 @@
       <h3 class="ds-sidebar-title">教育</h3>
       {{#each education}}
       <div class="ds-edu-item" data-entry="education" data-entry-index="{{@index}}">
-        <span class="ds-edu-school" data-field="education.{{@index}}.institution">{{institution}}</span>
-        <span class="ds-edu-major"><span data-field="education.{{@index}}.area">{{area}}</span></span>
-        <span class="ds-edu-deg" data-field="education.{{@index}}.studyType">{{studyType}}</span>
-        <span class="ds-edu-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> — <span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="ds-edu-school" data-field="education.{{@index}}.institution">{{{institution}}}</span>
+        <span class="ds-edu-major"><span data-field="education.{{@index}}.area">{{{area}}}</span></span>
+        <span class="ds-edu-deg" data-field="education.{{@index}}.studyType">{{{studyType}}}</span>
+        <span class="ds-edu-date"><span data-field="education.{{@index}}.startDate">{{{startDate}}}</span> — <span data-field="education.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
       {{/each}}
     </div>
@@ -43,10 +43,10 @@
       <div class="ds-entry" data-entry="experience" data-entry-index="{{@index}}">
         <div class="ds-entry-head">
           <div>
-            <span class="ds-company" data-field="experience.{{@index}}.company">{{company}}</span>
-            <span class="ds-position" data-field="experience.{{@index}}.position">{{position}}</span>
+            <span class="ds-company" data-field="experience.{{@index}}.company">{{{company}}}</span>
+            <span class="ds-position" data-field="experience.{{@index}}.position">{{{position}}}</span>
           </div>
-          <span class="ds-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> — <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+          <span class="ds-date"><span data-field="experience.{{@index}}.startDate">{{{startDate}}}</span> — <span data-field="experience.{{@index}}.endDate">{{{endDate}}}</span></span>
         </div>
         {{#if highlights.length}}<ul class="ds-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
       </div>
@@ -60,8 +60,8 @@
       <div class="ds-entry" data-entry="projects" data-entry-index="{{@index}}">
         <div class="ds-entry-head">
           <div>
-            <span class="ds-company" data-field="projects.{{@index}}.name">{{name}}</span>
-            {{#if role}}<span class="ds-position" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+            <span class="ds-company" data-field="projects.{{@index}}.name">{{{name}}}</span>
+            {{#if role}}<span class="ds-position" data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}
           </div>
         </div>
         {{#if description}}<div class="ds-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}

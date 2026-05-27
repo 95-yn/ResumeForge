@@ -1,12 +1,12 @@
 <div class="resume elegant">
   <header class="eg-header">
-    <h1 data-field="basics.name">{{basics.name}}</h1>
-    {{#if basics.title}}<p class="eg-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+    <h1 data-field="basics.name">{{{basics.name}}}</h1>
+    {{#if basics.title}}<p class="eg-title" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
     <div class="eg-divider"></div>
     <div class="eg-contacts">
-      {{#if basics.email}}<span class="eg-contact" data-field="basics.email">{{basics.email}}</span>{{/if}}
-      {{#if basics.phone}}<span class="eg-contact" data-field="basics.phone">{{basics.phone}}</span>{{/if}}
-      {{#if basics.location}}<span class="eg-contact" data-field="basics.location">{{basics.location}}</span>{{/if}}
+      {{#if basics.email}}<span class="eg-contact" data-field="basics.email">{{{basics.email}}}</span>{{/if}}
+      {{#if basics.phone}}<span class="eg-contact" data-field="basics.phone">{{{basics.phone}}}</span>{{/if}}
+      {{#if basics.location}}<span class="eg-contact" data-field="basics.location">{{{basics.location}}}</span>{{/if}}
     </div>
   </header>
   {{#if basics.summary}}
@@ -22,10 +22,10 @@
     <div class="eg-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="eg-entry-head">
         <div class="eg-entry-left">
-          <span class="eg-primary" data-field="experience.{{@index}}.company">{{company}}</span>
-          <span class="eg-secondary" data-field="experience.{{@index}}.position">{{position}}</span>
+          <span class="eg-primary" data-field="experience.{{@index}}.company">{{{company}}}</span>
+          <span class="eg-secondary" data-field="experience.{{@index}}.position">{{{position}}}</span>
         </div>
-        <span class="eg-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> – <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="eg-date"><span data-field="experience.{{@index}}.startDate">{{{startDate}}}</span> – <span data-field="experience.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
       {{#if highlights.length}}<ul class="eg-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>
@@ -39,10 +39,10 @@
     <div class="eg-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="eg-entry-head">
         <div class="eg-entry-left">
-          <span class="eg-primary" data-field="education.{{@index}}.institution">{{institution}}</span>
-          <span class="eg-secondary"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></span>
+          <span class="eg-primary" data-field="education.{{@index}}.institution">{{{institution}}}</span>
+          <span class="eg-secondary"><span data-field="education.{{@index}}.area">{{{area}}}</span> · <span data-field="education.{{@index}}.studyType">{{{studyType}}}</span></span>
         </div>
-        <span class="eg-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> – <span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="eg-date"><span data-field="education.{{@index}}.startDate">{{{startDate}}}</span> – <span data-field="education.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
     </div>
     {{/each}}
@@ -51,7 +51,7 @@
   {{#if skills.length}}
   <section class="eg-section" data-section="skills">
     <h2 class="eg-section-title">技能</h2>
-    <p class="eg-skills-line">{{#each skills}}<span data-entry="skills" data-entry-index="{{@index}}" data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}} (<span data-field="skills.{{@index}}.level">{{level}}</span>){{/if}}{{#unless @last}} &ensp;·&ensp; {{/unless}}{{/each}}</p>
+    <p class="eg-skills-line">{{#each skills}}<span data-entry="skills" data-entry-index="{{@index}}" data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}} (<span data-field="skills.{{@index}}.level">{{{level}}}</span>){{/if}}{{#unless @last}} &ensp;·&ensp; {{/unless}}{{/each}}</p>
   </section>
   {{/if}}
   {{#if projects.length}}
@@ -61,10 +61,10 @@
     <div class="eg-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="eg-entry-head">
         <div class="eg-entry-left">
-          <span class="eg-primary" data-field="projects.{{@index}}.name">{{name}}</span>
-          {{#if role}}<span class="eg-secondary" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+          <span class="eg-primary" data-field="projects.{{@index}}.name">{{{name}}}</span>
+          {{#if role}}<span class="eg-secondary" data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}
         </div>
-        <span class="eg-date"><span data-field="projects.{{@index}}.startDate">{{startDate}}</span> – <span data-field="projects.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="eg-date"><span data-field="projects.{{@index}}.startDate">{{{startDate}}}</span> – <span data-field="projects.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
       {{#if description}}<div class="eg-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="eg-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}

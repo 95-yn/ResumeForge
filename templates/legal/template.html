@@ -1,11 +1,11 @@
 <div class="resume legal">
   <header class="lg-header">
-    <h1 data-field="basics.name">{{basics.name}}</h1>
-    {{#if basics.title}}<p class="lg-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+    <h1 data-field="basics.name">{{{basics.name}}}</h1>
+    {{#if basics.title}}<p class="lg-title" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
     <div class="lg-contacts">
-      {{#if basics.email}}<span data-field="basics.email">{{basics.email}}</span>{{/if}}
-      {{#if basics.phone}}<span data-field="basics.phone">{{basics.phone}}</span>{{/if}}
-      {{#if basics.location}}<span data-field="basics.location">{{basics.location}}</span>{{/if}}
+      {{#if basics.email}}<span data-field="basics.email">{{{basics.email}}}</span>{{/if}}
+      {{#if basics.phone}}<span data-field="basics.phone">{{{basics.phone}}}</span>{{/if}}
+      {{#if basics.location}}<span data-field="basics.location">{{{basics.location}}}</span>{{/if}}
     </div>
   </header>
   <div class="lg-rule"></div>
@@ -22,10 +22,10 @@
     <div class="lg-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="lg-entry-head">
         <div class="lg-entry-main">
-          <span class="lg-org" data-field="experience.{{@index}}.company">{{company}}</span>
-          <span class="lg-pos" data-field="experience.{{@index}}.position">{{position}}</span>
+          <span class="lg-org" data-field="experience.{{@index}}.company">{{{company}}}</span>
+          <span class="lg-pos" data-field="experience.{{@index}}.position">{{{position}}}</span>
         </div>
-        <span class="lg-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> – <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="lg-date"><span data-field="experience.{{@index}}.startDate">{{{startDate}}}</span> – <span data-field="experience.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
       {{#if highlights.length}}<ul class="lg-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>
@@ -39,10 +39,10 @@
     <div class="lg-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="lg-entry-head">
         <div class="lg-entry-main">
-          <span class="lg-org" data-field="education.{{@index}}.institution">{{institution}}</span>
-          <span class="lg-pos"><span data-field="education.{{@index}}.studyType">{{studyType}}</span>, <span data-field="education.{{@index}}.area">{{area}}</span></span>
+          <span class="lg-org" data-field="education.{{@index}}.institution">{{{institution}}}</span>
+          <span class="lg-pos"><span data-field="education.{{@index}}.studyType">{{{studyType}}}</span>, <span data-field="education.{{@index}}.area">{{{area}}}</span></span>
         </div>
-        <span class="lg-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> – <span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="lg-date"><span data-field="education.{{@index}}.startDate">{{{startDate}}}</span> – <span data-field="education.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
     </div>
     {{/each}}
@@ -52,7 +52,7 @@
   <section class="lg-section" data-section="skills">
     <h2 class="lg-section-title">AREAS OF PRACTICE</h2>
     <div class="lg-skills">
-      {{#each skills}}<span class="lg-skill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}} (<span data-field="skills.{{@index}}.level">{{level}}</span>){{/if}}</span>{{/each}}
+      {{#each skills}}<span class="lg-skill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}} (<span data-field="skills.{{@index}}.level">{{{level}}}</span>){{/if}}</span>{{/each}}
     </div>
   </section>
   {{/if}}
@@ -63,8 +63,8 @@
     <div class="lg-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="lg-entry-head">
         <div class="lg-entry-main">
-          <span class="lg-org" data-field="projects.{{@index}}.name">{{name}}</span>
-          {{#if role}}<span class="lg-pos" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+          <span class="lg-org" data-field="projects.{{@index}}.name">{{{name}}}</span>
+          {{#if role}}<span class="lg-pos" data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}
         </div>
       </div>
       {{#if description}}<div class="lg-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}

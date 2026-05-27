@@ -1,14 +1,14 @@
 <div class="resume mobile">
   <header class="mb-header">
     <div class="mb-avatar-area">
-      {{#if basics.avatar}}<img class="mb-avatar" src="{{basics.avatar}}" alt="" />{{else}}<div class="mb-avatar-ph"></div>{{/if}}
+      {{#if basics.avatar}}<img class="mb-avatar" src="{{{basics.avatar}}}" alt="" />{{else}}<div class="mb-avatar-ph"></div>{{/if}}
     </div>
-    <h1 data-field="basics.name">{{basics.name}}</h1>
-    {{#if basics.title}}<p class="mb-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+    <h1 data-field="basics.name">{{{basics.name}}}</h1>
+    {{#if basics.title}}<p class="mb-title" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
     <div class="mb-contacts">
-      {{#if basics.email}}<span class="mb-contact" data-field="basics.email">{{basics.email}}</span>{{/if}}
-      {{#if basics.phone}}<span class="mb-contact" data-field="basics.phone">{{basics.phone}}</span>{{/if}}
-      {{#if basics.location}}<span class="mb-contact" data-field="basics.location">{{basics.location}}</span>{{/if}}
+      {{#if basics.email}}<span class="mb-contact" data-field="basics.email">{{{basics.email}}}</span>{{/if}}
+      {{#if basics.phone}}<span class="mb-contact" data-field="basics.phone">{{{basics.phone}}}</span>{{/if}}
+      {{#if basics.location}}<span class="mb-contact" data-field="basics.location">{{{basics.location}}}</span>{{/if}}
     </div>
   </header>
   <div class="mb-content">
@@ -25,10 +25,10 @@
       <div class="mb-entry" data-entry="experience" data-entry-index="{{@index}}">
         <div class="mb-entry-head">
           <div>
-            <p class="mb-org" data-field="experience.{{@index}}.company">{{company}}</p>
-            <p class="mb-pos" data-field="experience.{{@index}}.position">{{position}}</p>
+            <p class="mb-org" data-field="experience.{{@index}}.company">{{{company}}}</p>
+            <p class="mb-pos" data-field="experience.{{@index}}.position">{{{position}}}</p>
           </div>
-          <span class="mb-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span>–<span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+          <span class="mb-date"><span data-field="experience.{{@index}}.startDate">{{{startDate}}}</span>–<span data-field="experience.{{@index}}.endDate">{{{endDate}}}</span></span>
         </div>
         {{#if highlights.length}}<ul class="mb-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
       </div>
@@ -41,8 +41,8 @@
       {{#each projects}}
       <div class="mb-entry" data-entry="projects" data-entry-index="{{@index}}">
         <div class="mb-entry-head">
-          <p class="mb-org" data-field="projects.{{@index}}.name">{{name}}</p>
-          {{#if role}}<span class="mb-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+          <p class="mb-org" data-field="projects.{{@index}}.name">{{{name}}}</p>
+          {{#if role}}<span class="mb-date" data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}
         </div>
         {{#if description}}<div class="mb-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
         {{#if highlights.length}}<ul class="mb-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
@@ -56,9 +56,9 @@
         <h2 class="mb-card-title">教育背景</h2>
         {{#each education}}
         <div class="mb-entry" data-entry="education" data-entry-index="{{@index}}">
-          <p class="mb-org" data-field="education.{{@index}}.institution">{{institution}}</p>
-          <p class="mb-pos"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></p>
-          <p class="mb-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span>–<span data-field="education.{{@index}}.endDate">{{endDate}}</span></p>
+          <p class="mb-org" data-field="education.{{@index}}.institution">{{{institution}}}</p>
+          <p class="mb-pos"><span data-field="education.{{@index}}.area">{{{area}}}</span> · <span data-field="education.{{@index}}.studyType">{{{studyType}}}</span></p>
+          <p class="mb-date"><span data-field="education.{{@index}}.startDate">{{{startDate}}}</span>–<span data-field="education.{{@index}}.endDate">{{{endDate}}}</span></p>
         </div>
         {{/each}}
       </div>
@@ -67,7 +67,7 @@
       <div class="mb-card" data-section="skills">
         <h2 class="mb-card-title">专业技能</h2>
         <div class="mb-tags">
-          {{#each skills}}<span class="mb-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="mb-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
+          {{#each skills}}<span class="mb-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}}<span class="mb-lv" data-field="skills.{{@index}}.level"> · {{{level}}}</span>{{/if}}</span>{{/each}}
         </div>
       </div>
       {{/if}}

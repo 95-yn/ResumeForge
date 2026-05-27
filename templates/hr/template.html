@@ -1,15 +1,15 @@
 <div class="resume hr">
   <header class="hr-header">
     <div class="hr-avatar-area">
-      {{#if basics.avatar}}<img class="hr-avatar" src="{{basics.avatar}}" alt="" />{{/if}}
+      {{#if basics.avatar}}<img class="hr-avatar" src="{{{basics.avatar}}}" alt="" />{{/if}}
     </div>
     <div class="hr-header-info">
-      <h1 data-field="basics.name">{{basics.name}}</h1>
-      {{#if basics.title}}<p class="hr-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+      <h1 data-field="basics.name">{{{basics.name}}}</h1>
+      {{#if basics.title}}<p class="hr-title" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
       <div class="hr-contacts">
-        {{#if basics.email}}<span class="hr-contact" data-field="basics.email">{{basics.email}}</span>{{/if}}
-        {{#if basics.phone}}<span class="hr-contact" data-field="basics.phone">{{basics.phone}}</span>{{/if}}
-        {{#if basics.location}}<span class="hr-contact" data-field="basics.location">{{basics.location}}</span>{{/if}}
+        {{#if basics.email}}<span class="hr-contact" data-field="basics.email">{{{basics.email}}}</span>{{/if}}
+        {{#if basics.phone}}<span class="hr-contact" data-field="basics.phone">{{{basics.phone}}}</span>{{/if}}
+        {{#if basics.location}}<span class="hr-contact" data-field="basics.location">{{{basics.location}}}</span>{{/if}}
       </div>
     </div>
   </header>
@@ -26,10 +26,10 @@
     <div class="hr-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="hr-entry-head">
         <div class="hr-entry-meta">
-          <span class="hr-company" data-field="experience.{{@index}}.company">{{company}}</span>
-          <span class="hr-position" data-field="experience.{{@index}}.position">{{position}}</span>
+          <span class="hr-company" data-field="experience.{{@index}}.company">{{{company}}}</span>
+          <span class="hr-position" data-field="experience.{{@index}}.position">{{{position}}}</span>
         </div>
-        <span class="hr-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> — <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="hr-date"><span data-field="experience.{{@index}}.startDate">{{{startDate}}}</span> — <span data-field="experience.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
       {{#if highlights.length}}<ul class="hr-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>
@@ -43,10 +43,10 @@
     <div class="hr-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="hr-entry-head">
         <div class="hr-entry-meta">
-          <span class="hr-company" data-field="education.{{@index}}.institution">{{institution}}</span>
-          <span class="hr-position"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></span>
+          <span class="hr-company" data-field="education.{{@index}}.institution">{{{institution}}}</span>
+          <span class="hr-position"><span data-field="education.{{@index}}.area">{{{area}}}</span> · <span data-field="education.{{@index}}.studyType">{{{studyType}}}</span></span>
         </div>
-        <span class="hr-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> — <span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="hr-date"><span data-field="education.{{@index}}.startDate">{{{startDate}}}</span> — <span data-field="education.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
     </div>
     {{/each}}
@@ -56,7 +56,7 @@
   <section class="hr-section" data-section="skills">
     <h2 class="hr-section-title">专业技能</h2>
     <div class="hr-skills">
-      {{#each skills}}<div class="hr-skill-chip" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="hr-skill-level" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</div>{{/each}}
+      {{#each skills}}<div class="hr-skill-chip" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}}<span class="hr-skill-level" data-field="skills.{{@index}}.level"> · {{{level}}}</span>{{/if}}</div>{{/each}}
     </div>
   </section>
   {{/if}}
@@ -67,8 +67,8 @@
     <div class="hr-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="hr-entry-head">
         <div class="hr-entry-meta">
-          <span class="hr-company" data-field="projects.{{@index}}.name">{{name}}</span>
-          {{#if role}}<span class="hr-position" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+          <span class="hr-company" data-field="projects.{{@index}}.name">{{{name}}}</span>
+          {{#if role}}<span class="hr-position" data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}
         </div>
       </div>
       {{#if description}}<div class="hr-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}

@@ -1,11 +1,11 @@
 <div class="resume clean">
   <header class="cl-header">
-    <h1 data-field="basics.name">{{basics.name}}</h1>
-    {{#if basics.title}}<p class="cl-subtitle" data-field="basics.title">{{basics.title}}</p>{{/if}}
+    <h1 data-field="basics.name">{{{basics.name}}}</h1>
+    {{#if basics.title}}<p class="cl-subtitle" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
     <div class="cl-contacts">
-      {{#if basics.email}}<span data-field="basics.email">{{basics.email}}</span>{{/if}}
-      {{#if basics.phone}}<span data-field="basics.phone">{{basics.phone}}</span>{{/if}}
-      {{#if basics.location}}<span data-field="basics.location">{{basics.location}}</span>{{/if}}
+      {{#if basics.email}}<span data-field="basics.email">{{{basics.email}}}</span>{{/if}}
+      {{#if basics.phone}}<span data-field="basics.phone">{{{basics.phone}}}</span>{{/if}}
+      {{#if basics.location}}<span data-field="basics.location">{{{basics.location}}}</span>{{/if}}
     </div>
   </header>
   {{#if basics.summary}}
@@ -19,10 +19,10 @@
     {{#each experience}}
     <div class="cl-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="cl-row">
-        <span class="cl-main" data-field="experience.{{@index}}.company">{{company}}</span>
-        <span class="cl-side"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> – <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="cl-main" data-field="experience.{{@index}}.company">{{{company}}}</span>
+        <span class="cl-side"><span data-field="experience.{{@index}}.startDate">{{{startDate}}}</span> – <span data-field="experience.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
-      <p class="cl-sub" data-field="experience.{{@index}}.position">{{position}}</p>
+      <p class="cl-sub" data-field="experience.{{@index}}.position">{{{position}}}</p>
       {{#if highlights.length}}<ul class="cl-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}
@@ -34,10 +34,10 @@
     {{#each education}}
     <div class="cl-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="cl-row">
-        <span class="cl-main" data-field="education.{{@index}}.institution">{{institution}}</span>
-        <span class="cl-side"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> – <span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="cl-main" data-field="education.{{@index}}.institution">{{{institution}}}</span>
+        <span class="cl-side"><span data-field="education.{{@index}}.startDate">{{{startDate}}}</span> – <span data-field="education.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
-      <p class="cl-sub"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></p>
+      <p class="cl-sub"><span data-field="education.{{@index}}.area">{{{area}}}</span> · <span data-field="education.{{@index}}.studyType">{{{studyType}}}</span></p>
     </div>
     {{/each}}
   </section>
@@ -45,7 +45,7 @@
   {{#if skills.length}}
   <section class="cl-section" data-section="skills">
     <h2 class="cl-heading">专业技能</h2>
-    <p class="cl-skills-line">{{#each skills}}<span data-entry="skills" data-entry-index="{{@index}}" data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}} (<span data-field="skills.{{@index}}.level">{{level}}</span>){{/if}}{{#unless @last}}  ·  {{/unless}}{{/each}}</p>
+    <p class="cl-skills-line">{{#each skills}}<span data-entry="skills" data-entry-index="{{@index}}" data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}} (<span data-field="skills.{{@index}}.level">{{{level}}}</span>){{/if}}{{#unless @last}}  ·  {{/unless}}{{/each}}</p>
   </section>
   {{/if}}
   {{#if projects.length}}
@@ -54,10 +54,10 @@
     {{#each projects}}
     <div class="cl-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="cl-row">
-        <span class="cl-main" data-field="projects.{{@index}}.name">{{name}}</span>
-        <span class="cl-side"><span data-field="projects.{{@index}}.startDate">{{startDate}}</span> – <span data-field="projects.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="cl-main" data-field="projects.{{@index}}.name">{{{name}}}</span>
+        <span class="cl-side"><span data-field="projects.{{@index}}.startDate">{{{startDate}}}</span> – <span data-field="projects.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
-      {{#if role}}<p class="cl-sub" data-field="projects.{{@index}}.role">{{role}}</p>{{/if}}
+      {{#if role}}<p class="cl-sub" data-field="projects.{{@index}}.role">{{{role}}}</p>{{/if}}
       {{#if description}}<div class="cl-sub" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="cl-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>

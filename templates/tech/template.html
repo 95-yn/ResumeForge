@@ -1,13 +1,13 @@
 <div class="resume tech">
   <header class="tc-header">
     <div class="tc-header-inner">
-      <h1 data-field="basics.name">{{basics.name}}</h1>
-      {{#if basics.title}}<p class="tc-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+      <h1 data-field="basics.name">{{{basics.name}}}</h1>
+      {{#if basics.title}}<p class="tc-title" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
     </div>
     <div class="tc-contacts">
-      {{#if basics.email}}<span class="tc-contact" data-field="basics.email">{{basics.email}}</span>{{/if}}
-      {{#if basics.phone}}<span class="tc-contact" data-field="basics.phone">{{basics.phone}}</span>{{/if}}
-      {{#if basics.location}}<span class="tc-contact" data-field="basics.location">{{basics.location}}</span>{{/if}}
+      {{#if basics.email}}<span class="tc-contact" data-field="basics.email">{{{basics.email}}}</span>{{/if}}
+      {{#if basics.phone}}<span class="tc-contact" data-field="basics.phone">{{{basics.phone}}}</span>{{/if}}
+      {{#if basics.location}}<span class="tc-contact" data-field="basics.location">{{{basics.location}}}</span>{{/if}}
     </div>
   </header>
   {{#if basics.summary}}
@@ -22,10 +22,10 @@
     {{#each experience}}
     <div class="tc-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="tc-entry-head">
-        <span class="tc-company" data-field="experience.{{@index}}.company">{{company}}</span>
+        <span class="tc-company" data-field="experience.{{@index}}.company">{{{company}}}</span>
         <span class="tc-pipe"> | </span>
-        <span class="tc-position" data-field="experience.{{@index}}.position">{{position}}</span>
-        <span class="tc-date tc-pull"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> ~ <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="tc-position" data-field="experience.{{@index}}.position">{{{position}}}</span>
+        <span class="tc-date tc-pull"><span data-field="experience.{{@index}}.startDate">{{{startDate}}}</span> ~ <span data-field="experience.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
       {{#if highlights.length}}<ul class="tc-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>
@@ -38,12 +38,12 @@
     {{#each education}}
     <div class="tc-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="tc-entry-head">
-        <span class="tc-company" data-field="education.{{@index}}.institution">{{institution}}</span>
+        <span class="tc-company" data-field="education.{{@index}}.institution">{{{institution}}}</span>
         <span class="tc-pipe"> | </span>
-        <span data-field="education.{{@index}}.area">{{area}}</span>
+        <span data-field="education.{{@index}}.area">{{{area}}}</span>
         <span class="tc-pipe"> · </span>
-        <span data-field="education.{{@index}}.studyType">{{studyType}}</span>
-        <span class="tc-date tc-pull"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> ~ <span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+        <span data-field="education.{{@index}}.studyType">{{{studyType}}}</span>
+        <span class="tc-date tc-pull"><span data-field="education.{{@index}}.startDate">{{{startDate}}}</span> ~ <span data-field="education.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
     </div>
     {{/each}}
@@ -53,7 +53,7 @@
   <section class="tc-section" data-section="skills">
     <h2 class="tc-section-title">// SKILLS</h2>
     <div class="tc-tags">
-      {{#each skills}}<span class="tc-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="tc-tag-level" data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}</span>{{/each}}
+      {{#each skills}}<span class="tc-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}}<span class="tc-tag-level" data-field="skills.{{@index}}.level">{{{level}}}</span>{{/if}}</span>{{/each}}
     </div>
   </section>
   {{/if}}
@@ -63,9 +63,9 @@
     {{#each projects}}
     <div class="tc-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="tc-entry-head">
-        <span class="tc-company" data-field="projects.{{@index}}.name">{{name}}</span>
-        {{#if role}}<span class="tc-pipe"> | </span><span data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
-        <span class="tc-date tc-pull"><span data-field="projects.{{@index}}.startDate">{{startDate}}</span> ~ <span data-field="projects.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="tc-company" data-field="projects.{{@index}}.name">{{{name}}}</span>
+        {{#if role}}<span class="tc-pipe"> | </span><span data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}
+        <span class="tc-date tc-pull"><span data-field="projects.{{@index}}.startDate">{{{startDate}}}</span> ~ <span data-field="projects.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
       {{#if description}}<div class="tc-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="tc-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}

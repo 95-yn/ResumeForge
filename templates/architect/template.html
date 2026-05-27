@@ -1,13 +1,13 @@
 <div class="resume architect">
   <header class="ac-header">
     <div class="ac-header-top">
-      <h1 data-field="basics.name">{{basics.name}}</h1>
-      {{#if basics.title}}<p class="ac-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+      <h1 data-field="basics.name">{{{basics.name}}}</h1>
+      {{#if basics.title}}<p class="ac-title" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
     </div>
     <div class="ac-header-contacts">
-      {{#if basics.email}}<span data-field="basics.email">{{basics.email}}</span>{{/if}}
-      {{#if basics.phone}}<span data-field="basics.phone">{{basics.phone}}</span>{{/if}}
-      {{#if basics.location}}<span data-field="basics.location">{{basics.location}}</span>{{/if}}
+      {{#if basics.email}}<span data-field="basics.email">{{{basics.email}}}</span>{{/if}}
+      {{#if basics.phone}}<span data-field="basics.phone">{{{basics.phone}}}</span>{{/if}}
+      {{#if basics.location}}<span data-field="basics.location">{{{basics.location}}}</span>{{/if}}
     </div>
   </header>
   <div class="ac-grid">
@@ -24,10 +24,10 @@
         {{#each experience}}
         <div class="ac-entry" data-entry="experience" data-entry-index="{{@index}}">
           <div class="ac-entry-head">
-            <span class="ac-firm" data-field="experience.{{@index}}.company">{{company}}</span>
-            <span class="ac-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span>–<span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+            <span class="ac-firm" data-field="experience.{{@index}}.company">{{{company}}}</span>
+            <span class="ac-date"><span data-field="experience.{{@index}}.startDate">{{{startDate}}}</span>–<span data-field="experience.{{@index}}.endDate">{{{endDate}}}</span></span>
           </div>
-          <p class="ac-role" data-field="experience.{{@index}}.position">{{position}}</p>
+          <p class="ac-role" data-field="experience.{{@index}}.position">{{{position}}}</p>
           {{#if highlights.length}}<ul class="ac-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
         </div>
         {{/each}}
@@ -39,8 +39,8 @@
         {{#each projects}}
         <div class="ac-entry" data-entry="projects" data-entry-index="{{@index}}">
           <div class="ac-entry-head">
-            <span class="ac-firm" data-field="projects.{{@index}}.name">{{name}}</span>
-            {{#if role}}<span class="ac-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+            <span class="ac-firm" data-field="projects.{{@index}}.name">{{{name}}}</span>
+            {{#if role}}<span class="ac-date" data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}
           </div>
           {{#if description}}<div class="ac-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
           {{#if highlights.length}}<ul class="ac-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
@@ -55,9 +55,9 @@
         <h2 class="ac-section-title">Education</h2>
         {{#each education}}
         <div class="ac-edu" data-entry="education" data-entry-index="{{@index}}">
-          <span class="ac-firm" data-field="education.{{@index}}.institution">{{institution}}</span>
-          <span class="ac-role"><span data-field="education.{{@index}}.studyType">{{studyType}}</span> · <span data-field="education.{{@index}}.area">{{area}}</span></span>
-          <span class="ac-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span>–<span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+          <span class="ac-firm" data-field="education.{{@index}}.institution">{{{institution}}}</span>
+          <span class="ac-role"><span data-field="education.{{@index}}.studyType">{{{studyType}}}</span> · <span data-field="education.{{@index}}.area">{{{area}}}</span></span>
+          <span class="ac-date"><span data-field="education.{{@index}}.startDate">{{{startDate}}}</span>–<span data-field="education.{{@index}}.endDate">{{{endDate}}}</span></span>
         </div>
         {{/each}}
       </section>
@@ -67,8 +67,8 @@
         <h2 class="ac-section-title">Skills</h2>
         {{#each skills}}
         <div class="ac-skill" data-entry="skills" data-entry-index="{{@index}}">
-          <span data-field="skills.{{@index}}.name">{{name}}</span>
-          {{#if level}}<span class="ac-level" data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}
+          <span data-field="skills.{{@index}}.name">{{{name}}}</span>
+          {{#if level}}<span class="ac-level" data-field="skills.{{@index}}.level">{{{level}}}</span>{{/if}}
         </div>
         {{/each}}
       </section>

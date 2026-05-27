@@ -1,12 +1,12 @@
 <div class="resume fullstack">
   <header class="fs-header">
     <div class="fs-header-inner">
-      <h1 data-field="basics.name">{{basics.name}}</h1>
-      {{#if basics.title}}<p class="fs-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+      <h1 data-field="basics.name">{{{basics.name}}}</h1>
+      {{#if basics.title}}<p class="fs-title" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
       <div class="fs-contacts">
-        {{#if basics.email}}<span data-field="basics.email">{{basics.email}}</span>{{/if}}
-        {{#if basics.phone}}<span data-field="basics.phone">{{basics.phone}}</span>{{/if}}
-        {{#if basics.location}}<span data-field="basics.location">{{basics.location}}</span>{{/if}}
+        {{#if basics.email}}<span data-field="basics.email">{{{basics.email}}}</span>{{/if}}
+        {{#if basics.phone}}<span data-field="basics.phone">{{{basics.phone}}}</span>{{/if}}
+        {{#if basics.location}}<span data-field="basics.location">{{{basics.location}}}</span>{{/if}}
       </div>
     </div>
   </header>
@@ -24,10 +24,10 @@
       <div class="fs-entry" data-entry="experience" data-entry-index="{{@index}}">
         <div class="fs-entry-head">
           <div class="fs-entry-main">
-            <span class="fs-company" data-field="experience.{{@index}}.company">{{company}}</span>
-            <span class="fs-pos" data-field="experience.{{@index}}.position">{{position}}</span>
+            <span class="fs-company" data-field="experience.{{@index}}.company">{{{company}}}</span>
+            <span class="fs-pos" data-field="experience.{{@index}}.position">{{{position}}}</span>
           </div>
-          <span class="fs-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> – <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+          <span class="fs-date"><span data-field="experience.{{@index}}.startDate">{{{startDate}}}</span> – <span data-field="experience.{{@index}}.endDate">{{{endDate}}}</span></span>
         </div>
         {{#if highlights.length}}<ul class="fs-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
       </div>
@@ -41,8 +41,8 @@
       <div class="fs-entry" data-entry="projects" data-entry-index="{{@index}}">
         <div class="fs-entry-head">
           <div class="fs-entry-main">
-            <span class="fs-company" data-field="projects.{{@index}}.name">{{name}}</span>
-            {{#if role}}<span class="fs-pos" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+            <span class="fs-company" data-field="projects.{{@index}}.name">{{{name}}}</span>
+            {{#if role}}<span class="fs-pos" data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}
           </div>
         </div>
         {{#if description}}<div class="fs-text" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
@@ -58,10 +58,10 @@
         {{#each education}}
         <div class="fs-entry" data-entry="education" data-entry-index="{{@index}}">
           <div class="fs-entry-head">
-            <span class="fs-company" data-field="education.{{@index}}.institution">{{institution}}</span>
-            <span class="fs-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span>–<span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+            <span class="fs-company" data-field="education.{{@index}}.institution">{{{institution}}}</span>
+            <span class="fs-date"><span data-field="education.{{@index}}.startDate">{{{startDate}}}</span>–<span data-field="education.{{@index}}.endDate">{{{endDate}}}</span></span>
           </div>
-          <p class="fs-pos"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></p>
+          <p class="fs-pos"><span data-field="education.{{@index}}.area">{{{area}}}</span> · <span data-field="education.{{@index}}.studyType">{{{studyType}}}</span></p>
         </div>
         {{/each}}
       </section>
@@ -70,7 +70,7 @@
       <section class="fs-section" data-section="skills">
         <h2 class="fs-section-title">Skills</h2>
         <div class="fs-skills">
-          {{#each skills}}<span class="fs-skill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="fs-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
+          {{#each skills}}<span class="fs-skill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}}<span class="fs-lv" data-field="skills.{{@index}}.level"> · {{{level}}}</span>{{/if}}</span>{{/each}}
         </div>
       </section>
       {{/if}}

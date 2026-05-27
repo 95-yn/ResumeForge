@@ -1,15 +1,15 @@
 <div class="resume github">
   <header class="gh-header">
     <div class="gh-avatar-wrap">
-      {{#if basics.avatar}}<img class="gh-avatar" src="{{basics.avatar}}" alt="" />{{else}}<div class="gh-avatar-placeholder"></div>{{/if}}
+      {{#if basics.avatar}}<img class="gh-avatar" src="{{{basics.avatar}}}" alt="" />{{else}}<div class="gh-avatar-placeholder"></div>{{/if}}
     </div>
     <div class="gh-header-info">
-      <h1 data-field="basics.name">{{basics.name}}</h1>
-      {{#if basics.title}}<p class="gh-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+      <h1 data-field="basics.name">{{{basics.name}}}</h1>
+      {{#if basics.title}}<p class="gh-title" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
       <div class="gh-contacts">
-        {{#if basics.email}}<span class="gh-contact" data-field="basics.email">{{basics.email}}</span>{{/if}}
-        {{#if basics.phone}}<span class="gh-contact" data-field="basics.phone">{{basics.phone}}</span>{{/if}}
-        {{#if basics.location}}<span class="gh-contact" data-field="basics.location">{{basics.location}}</span>{{/if}}
+        {{#if basics.email}}<span class="gh-contact" data-field="basics.email">{{{basics.email}}}</span>{{/if}}
+        {{#if basics.phone}}<span class="gh-contact" data-field="basics.phone">{{{basics.phone}}}</span>{{/if}}
+        {{#if basics.location}}<span class="gh-contact" data-field="basics.location">{{{basics.location}}}</span>{{/if}}
       </div>
     </div>
   </header>
@@ -25,9 +25,9 @@
     {{#each experience}}
     <div class="gh-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="gh-entry-head">
-        <span class="gh-org" data-field="experience.{{@index}}.company">{{company}}</span>
-        <span class="gh-pos" data-field="experience.{{@index}}.position">{{position}}</span>
-        <span class="gh-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> – <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="gh-org" data-field="experience.{{@index}}.company">{{{company}}}</span>
+        <span class="gh-pos" data-field="experience.{{@index}}.position">{{{position}}}</span>
+        <span class="gh-date"><span data-field="experience.{{@index}}.startDate">{{{startDate}}}</span> – <span data-field="experience.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
       {{#if highlights.length}}<ul class="gh-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>
@@ -41,8 +41,8 @@
     <div class="gh-repo-card" data-entry="projects" data-entry-index="{{@index}}">
       <div class="gh-repo-head">
         <span class="gh-repo-icon">⬡</span>
-        <span class="gh-repo-name" data-field="projects.{{@index}}.name">{{name}}</span>
-        {{#if role}}<span class="gh-repo-role" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+        <span class="gh-repo-name" data-field="projects.{{@index}}.name">{{{name}}}</span>
+        {{#if role}}<span class="gh-repo-role" data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}
       </div>
       {{#if description}}<div class="gh-repo-desc" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
       {{#if highlights.length}}<ul class="gh-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
@@ -56,9 +56,9 @@
     {{#each education}}
     <div class="gh-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="gh-entry-head">
-        <span class="gh-org" data-field="education.{{@index}}.institution">{{institution}}</span>
-        <span class="gh-pos"><span data-field="education.{{@index}}.area">{{area}}</span> · <span data-field="education.{{@index}}.studyType">{{studyType}}</span></span>
-        <span class="gh-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> – <span data-field="education.{{@index}}.endDate">{{endDate}}</span></span>
+        <span class="gh-org" data-field="education.{{@index}}.institution">{{{institution}}}</span>
+        <span class="gh-pos"><span data-field="education.{{@index}}.area">{{{area}}}</span> · <span data-field="education.{{@index}}.studyType">{{{studyType}}}</span></span>
+        <span class="gh-date"><span data-field="education.{{@index}}.startDate">{{{startDate}}}</span> – <span data-field="education.{{@index}}.endDate">{{{endDate}}}</span></span>
       </div>
     </div>
     {{/each}}
@@ -68,7 +68,7 @@
   <section class="gh-section" data-section="skills">
     <h2 class="gh-section-title">Skills</h2>
     <div class="gh-skills">
-      {{#each skills}}<span class="gh-skill-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="gh-skill-lv" data-field="skills.{{@index}}.level"> · {{level}}</span>{{/if}}</span>{{/each}}
+      {{#each skills}}<span class="gh-skill-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}}<span class="gh-skill-lv" data-field="skills.{{@index}}.level"> · {{{level}}}</span>{{/if}}</span>{{/each}}
     </div>
   </section>
   {{/if}}

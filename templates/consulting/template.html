@@ -1,13 +1,13 @@
 <div class="resume consulting">
   <header class="cs-header">
     <div class="cs-header-left">
-      <h1 data-field="basics.name">{{basics.name}}</h1>
-      {{#if basics.title}}<p class="cs-title" data-field="basics.title">{{basics.title}}</p>{{/if}}
+      <h1 data-field="basics.name">{{{basics.name}}}</h1>
+      {{#if basics.title}}<p class="cs-title" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
     </div>
     <div class="cs-header-right">
-      {{#if basics.email}}<div data-field="basics.email">{{basics.email}}</div>{{/if}}
-      {{#if basics.phone}}<div data-field="basics.phone">{{basics.phone}}</div>{{/if}}
-      {{#if basics.location}}<div data-field="basics.location">{{basics.location}}</div>{{/if}}
+      {{#if basics.email}}<div data-field="basics.email">{{{basics.email}}}</div>{{/if}}
+      {{#if basics.phone}}<div data-field="basics.phone">{{{basics.phone}}}</div>{{/if}}
+      {{#if basics.location}}<div data-field="basics.location">{{{basics.location}}}</div>{{/if}}
     </div>
   </header>
   <div class="cs-body">
@@ -24,10 +24,10 @@
         {{#each experience}}
         <div class="cs-entry" data-entry="experience" data-entry-index="{{@index}}">
           <div class="cs-entry-head">
-            <strong data-field="experience.{{@index}}.company">{{company}}</strong>
-            <span class="cs-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> — <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+            <strong data-field="experience.{{@index}}.company">{{{company}}}</strong>
+            <span class="cs-date"><span data-field="experience.{{@index}}.startDate">{{{startDate}}}</span> — <span data-field="experience.{{@index}}.endDate">{{{endDate}}}</span></span>
           </div>
-          <p class="cs-pos" data-field="experience.{{@index}}.position">{{position}}</p>
+          <p class="cs-pos" data-field="experience.{{@index}}.position">{{{position}}}</p>
           {{#if highlights.length}}<ul class="cs-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
         </div>
         {{/each}}
@@ -39,8 +39,8 @@
         {{#each projects}}
         <div class="cs-entry" data-entry="projects" data-entry-index="{{@index}}">
           <div class="cs-entry-head">
-            <strong data-field="projects.{{@index}}.name">{{name}}</strong>
-            {{#if role}}<span class="cs-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+            <strong data-field="projects.{{@index}}.name">{{{name}}}</strong>
+            {{#if role}}<span class="cs-date" data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}
           </div>
           {{#if description}}<div class="cs-body-text" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
           {{#if highlights.length}}<ul class="cs-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
@@ -55,9 +55,9 @@
         <h2 class="cs-section-title">教育背景</h2>
         {{#each education}}
         <div class="cs-entry" data-entry="education" data-entry-index="{{@index}}">
-          <strong data-field="education.{{@index}}.institution">{{institution}}</strong>
-          <p class="cs-pos"><span data-field="education.{{@index}}.studyType">{{studyType}}</span> · <span data-field="education.{{@index}}.area">{{area}}</span></p>
-          <p class="cs-date"><span data-field="education.{{@index}}.startDate">{{startDate}}</span> — <span data-field="education.{{@index}}.endDate">{{endDate}}</span></p>
+          <strong data-field="education.{{@index}}.institution">{{{institution}}}</strong>
+          <p class="cs-pos"><span data-field="education.{{@index}}.studyType">{{{studyType}}}</span> · <span data-field="education.{{@index}}.area">{{{area}}}</span></p>
+          <p class="cs-date"><span data-field="education.{{@index}}.startDate">{{{startDate}}}</span> — <span data-field="education.{{@index}}.endDate">{{{endDate}}}</span></p>
         </div>
         {{/each}}
       </section>
@@ -67,8 +67,8 @@
         <h2 class="cs-section-title">专业技能</h2>
         {{#each skills}}
         <div class="cs-skill" data-entry="skills" data-entry-index="{{@index}}">
-          <span data-field="skills.{{@index}}.name">{{name}}</span>
-          {{#if level}}<span class="cs-level" data-field="skills.{{@index}}.level">{{level}}</span>{{/if}}
+          <span data-field="skills.{{@index}}.name">{{{name}}}</span>
+          {{#if level}}<span class="cs-level" data-field="skills.{{@index}}.level">{{{level}}}</span>{{/if}}
         </div>
         {{/each}}
       </section>

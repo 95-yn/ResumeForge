@@ -9,12 +9,12 @@
     <div class="tm-prompt"><span class="tm-user">guest@resume</span><span class="tm-at">:</span><span class="tm-path">~</span><span class="tm-dollar">$</span> <span class="tm-cmd">cat profile.txt</span></div>
     <div class="tm-block">
       <div class="tm-label"># NAME</div>
-      <h1 class="tm-name" data-field="basics.name">{{basics.name}}</h1>
-      {{#if basics.title}}<p class="tm-title-text" data-field="basics.title">{{basics.title}}</p>{{/if}}
+      <h1 class="tm-name" data-field="basics.name">{{{basics.name}}}</h1>
+      {{#if basics.title}}<p class="tm-title-text" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
       <div class="tm-contacts">
-        {{#if basics.email}}<span class="tm-contact" data-field="basics.email">{{basics.email}}</span>{{/if}}
-        {{#if basics.phone}}<span class="tm-contact" data-field="basics.phone">{{basics.phone}}</span>{{/if}}
-        {{#if basics.location}}<span class="tm-contact" data-field="basics.location">{{basics.location}}</span>{{/if}}
+        {{#if basics.email}}<span class="tm-contact" data-field="basics.email">{{{basics.email}}}</span>{{/if}}
+        {{#if basics.phone}}<span class="tm-contact" data-field="basics.phone">{{{basics.phone}}}</span>{{/if}}
+        {{#if basics.location}}<span class="tm-contact" data-field="basics.location">{{{basics.location}}}</span>{{/if}}
       </div>
     </div>
     {{#if basics.summary}}
@@ -31,10 +31,10 @@
       {{#each experience}}
       <div class="tm-entry" data-entry="experience" data-entry-index="{{@index}}">
         <div class="tm-entry-row">
-          <span class="tm-green-text" data-field="experience.{{@index}}.company">{{company}}</span>
+          <span class="tm-green-text" data-field="experience.{{@index}}.company">{{{company}}}</span>
           <span class="tm-separator"> | </span>
-          <span class="tm-cyan-text" data-field="experience.{{@index}}.position">{{position}}</span>
-          <span class="tm-gray-text"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> ~ <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
+          <span class="tm-cyan-text" data-field="experience.{{@index}}.position">{{{position}}}</span>
+          <span class="tm-gray-text"><span data-field="experience.{{@index}}.startDate">{{{startDate}}}</span> ~ <span data-field="experience.{{@index}}.endDate">{{{endDate}}}</span></span>
         </div>
         {{#if highlights.length}}<ul class="tm-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}"><span class="tm-bullet">▸</span> {{{this}}}</li>{{/each}}</ul>{{/if}}
       </div>
@@ -47,12 +47,12 @@
       <div class="tm-label"># EDUCATION</div>
       {{#each education}}
       <div class="tm-entry" data-entry="education" data-entry-index="{{@index}}">
-        <span class="tm-green-text" data-field="education.{{@index}}.institution">{{institution}}</span>
+        <span class="tm-green-text" data-field="education.{{@index}}.institution">{{{institution}}}</span>
         <span class="tm-separator"> | </span>
-        <span class="tm-text" data-field="education.{{@index}}.area">{{area}}</span>
+        <span class="tm-text" data-field="education.{{@index}}.area">{{{area}}}</span>
         <span class="tm-separator"> · </span>
-        <span class="tm-text" data-field="education.{{@index}}.studyType">{{studyType}}</span>
-        <span class="tm-gray-text"> [<span data-field="education.{{@index}}.startDate">{{startDate}}</span>-<span data-field="education.{{@index}}.endDate">{{endDate}}</span>]</span>
+        <span class="tm-text" data-field="education.{{@index}}.studyType">{{{studyType}}}</span>
+        <span class="tm-gray-text"> [<span data-field="education.{{@index}}.startDate">{{{startDate}}}</span>-<span data-field="education.{{@index}}.endDate">{{{endDate}}}</span>]</span>
       </div>
       {{/each}}
     </div>
@@ -61,7 +61,7 @@
     <div class="tm-prompt"><span class="tm-user">guest@resume</span><span class="tm-at">:</span><span class="tm-path">~</span><span class="tm-dollar">$</span> <span class="tm-cmd">./list-skills.sh</span></div>
     <div class="tm-block" data-section="skills">
       <div class="tm-label"># SKILLS</div>
-      <div class="tm-tags">{{#each skills}}<span class="tm-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{name}}</span>{{#if level}}<span class="tm-tag-lv" data-field="skills.{{@index}}.level">:{{level}}</span>{{/if}}</span>{{/each}}</div>
+      <div class="tm-tags">{{#each skills}}<span class="tm-tag" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}}<span class="tm-tag-lv" data-field="skills.{{@index}}.level">:{{{level}}}</span>{{/if}}</span>{{/each}}</div>
     </div>
     {{/if}}
     {{#if projects.length}}
@@ -71,8 +71,8 @@
       {{#each projects}}
       <div class="tm-entry" data-entry="projects" data-entry-index="{{@index}}">
         <div class="tm-entry-row">
-          <span class="tm-green-text" data-field="projects.{{@index}}.name">{{name}}</span>
-          {{#if role}}<span class="tm-separator"> | </span><span class="tm-cyan-text" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
+          <span class="tm-green-text" data-field="projects.{{@index}}.name">{{{name}}}</span>
+          {{#if role}}<span class="tm-separator"> | </span><span class="tm-cyan-text" data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}
         </div>
         {{#if description}}<div class="tm-text" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
         {{#if highlights.length}}<ul class="tm-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}"><span class="tm-bullet">▸</span> {{{this}}}</li>{{/each}}</ul>{{/if}}
