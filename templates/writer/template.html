@@ -24,7 +24,7 @@
         <span class="wr-em" data-field="experience.{{@index}}.position">{{position}}</span>
         <span class="wr-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span>–<span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
       </div>
-      {{#if highlights.length}}<ul class="wr-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+      {{#if highlights.length}}<ul class="wr-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}
   </section>
@@ -39,7 +39,7 @@
         {{#if role}}<span class="wr-em" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
       </div>
       {{#if description}}<div class="wr-desc" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
-      {{#if highlights.length}}<ul class="wr-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+      {{#if highlights.length}}<ul class="wr-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}
   </section>

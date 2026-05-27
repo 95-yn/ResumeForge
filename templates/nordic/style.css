@@ -19,4 +19,5 @@
 .nd-skills { display: flex; flex-wrap: wrap; gap: 8px; }
 .nd-skill { font-size: 9.5pt; color: #475569; border: 1px solid #CBD5E1; padding: 3px 12px; border-radius: 4px; }
 .nd-skill-lv { color: #94A3B8; }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print { .resume.nordic { margin: 0; padding: 22mm 22mm; background: #fff; } }

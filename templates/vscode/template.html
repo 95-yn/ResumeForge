@@ -44,7 +44,7 @@
             <span class="vs-pos" data-field="experience.{{@index}}.position">{{position}}</span>
             <span class="vs-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span>–<span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
           </div>
-          {{#if highlights.length}}<ul class="vs-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+          {{#if highlights.length}}<ul class="vs-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
         </div>
         {{/each}}
         <div class="vs-close">]</div>
@@ -79,7 +79,7 @@
           <span class="vs-company" data-field="projects.{{@index}}.name">{{name}}</span>
           {{#if role}}<span class="vs-sep"> · </span><span class="vs-pos" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
           {{#if description}}<div class="vs-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
-          {{#if highlights.length}}<ul class="vs-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+          {{#if highlights.length}}<ul class="vs-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
         </div>
         {{/each}}
         <div class="vs-close">]</div>

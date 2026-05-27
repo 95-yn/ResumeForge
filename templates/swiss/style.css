@@ -23,4 +23,5 @@
 .sw-list li { font-size: 9pt; color: #444; margin-bottom: 2px; }
 .sw-skills { display: flex; flex-wrap: wrap; gap: 4px 16px; }
 .sw-skill-item { font-size: 9pt; color: #333; }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print { .resume.swiss { margin: 0; } .sw-header { padding: 14mm 18mm 12px; } .sw-body { padding: 14px 18mm 18mm; } }

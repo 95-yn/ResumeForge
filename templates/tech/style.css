@@ -94,6 +94,7 @@
   border-left: 1px solid #334155;
   padding-left: 5px;
 }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print {
   .resume.tech {
     margin: 0;

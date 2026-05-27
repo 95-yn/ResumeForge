@@ -21,4 +21,5 @@
 .jp-skills { display: flex; flex-direction: column; gap: 6px; }
 .jp-skill { display: flex; justify-content: space-between; font-size: 9.5pt; border-bottom: 1px solid #F5F5F4; padding-bottom: 5px; }
 .jp-lv { font-size: 9pt; color: #A8A29E; }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print { .resume.japanese { margin: 0; padding: 22mm 26mm; } }

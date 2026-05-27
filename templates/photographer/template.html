@@ -26,7 +26,7 @@
           <h3><span data-field="experience.{{@index}}.company">{{company}}</span> <span class="ph-sep">·</span> <span class="ph-pos" data-field="experience.{{@index}}.position">{{position}}</span></h3>
           <span class="ph-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> — <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
         </div>
-        {{#if highlights.length}}<ul class="ph-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+        {{#if highlights.length}}<ul class="ph-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
       </div>
       {{/each}}
     </section>
@@ -40,7 +40,7 @@
           <h3><span data-field="projects.{{@index}}.name">{{name}}</span>{{#if role}} <span class="ph-sep">·</span> <span class="ph-pos" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}</h3>
         </div>
         {{#if description}}<div class="ph-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
-        {{#if highlights.length}}<ul class="ph-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+        {{#if highlights.length}}<ul class="ph-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
       </div>
       {{/each}}
     </section>

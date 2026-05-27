@@ -39,7 +39,7 @@
         <span class="dt-pos" data-field="experience.{{@index}}.position">{{position}}</span>
         <span class="dt-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span>–<span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
       </div>
-      {{#if highlights.length}}<ul class="dt-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+      {{#if highlights.length}}<ul class="dt-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}
   </section>
@@ -54,7 +54,7 @@
         {{#if role}}<span class="dt-pos" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
       </div>
       {{#if description}}<div class="dt-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
-      {{#if highlights.length}}<ul class="dt-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+      {{#if highlights.length}}<ul class="dt-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}
   </section>

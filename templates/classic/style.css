@@ -61,6 +61,7 @@
   font-size: 9pt;
   color: #444;
 }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print {
   .resume.classic { margin: 0; padding: 15mm 18mm; }
   @page { margin: 0; size: A4; }

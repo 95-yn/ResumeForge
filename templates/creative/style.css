@@ -28,4 +28,5 @@
 .cr-level-了解 .cr-skill-fill, .cr-skill-fill.cr-level-了解 { width: 35%; }
 .cr-skill-fill { width: 60%; }
 .cr-skill-level { width: 30px; font-size: 8.5pt; color: #9CA3AF; flex-shrink: 0; }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print { .resume.creative { margin: 0; } }

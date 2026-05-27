@@ -23,4 +23,5 @@
 .mb-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .mb-tag { font-size: 9pt; color: #007AFF; background: #EBF5FF; padding: 3px 10px; border-radius: 8px; }
 .mb-lv { color: #0055CC; font-size: 8.5pt; }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print { .resume.mobile { margin: 0; background: #fff; } .mb-card { box-shadow: none; border: 1px solid #E5E5EA; } .mb-header { padding: 14mm 18mm 12px; } .mb-content { padding: 10px 12px; } }

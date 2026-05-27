@@ -23,4 +23,5 @@
 .mk-skill-bar { display: flex; justify-content: space-between; font-size: 9.5pt; padding: 5px 0; border-bottom: 1px solid #F3F4F6; }
 .mk-skill-name { color: #1a2233; font-weight: 500; }
 .mk-skill-level { color: #059669; font-size: 9pt; }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print { .resume.marketing { margin: 0; } .mk-header-bg { padding: 16mm 20mm 14mm; } .mk-body { padding: 0 20mm; } }

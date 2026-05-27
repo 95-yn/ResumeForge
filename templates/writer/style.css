@@ -17,4 +17,5 @@
 .wr-list { margin-top: 5px; padding-left: 22px; }
 .wr-list li { font-size: 10.5pt; color: #444; margin-bottom: 4px; }
 .wr-skills-inline { font-size: 10.5pt; color: #444; line-height: 1.8; }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print { .resume.writer { margin: 0; padding: 20mm 26mm; } }

@@ -25,7 +25,7 @@
         <span class="bk-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> — <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
       </div>
       <p class="bk-position" data-field="experience.{{@index}}.position">{{position}}</p>
-      {{#if highlights.length}}<ul class="bk-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+      {{#if highlights.length}}<ul class="bk-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}
   </section>
@@ -62,7 +62,7 @@
         {{#if role}}<span class="bk-date" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
       </div>
       {{#if description}}<div class="bk-body" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
-      {{#if highlights.length}}<ul class="bk-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+      {{#if highlights.length}}<ul class="bk-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}
   </section>

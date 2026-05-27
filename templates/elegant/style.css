@@ -81,6 +81,7 @@
   color: #555;
   line-height: 1.8;
 }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print {
   .resume.elegant { margin: 0; padding: 14mm 18mm; background: #FAF8F5; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   @page { margin: 0; size: A4; }

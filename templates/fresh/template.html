@@ -29,7 +29,7 @@
           </div>
           <span class="fresh-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> - <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
         </div>
-        {{#if highlights.length}}<ul class="fresh-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+        {{#if highlights.length}}<ul class="fresh-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
       </div>
       {{/each}}
     </section>
@@ -73,7 +73,7 @@
           </div>
         </div>
         {{#if description}}<div class="fresh-text" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
-        {{#if highlights.length}}<ul class="fresh-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+        {{#if highlights.length}}<ul class="fresh-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
       </div>
       {{/each}}
     </section>

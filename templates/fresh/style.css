@@ -93,6 +93,7 @@
   font-weight: 500;
 }
 .fresh-skill-level { color: #60A5FA; font-weight: 400; }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print {
   .resume.fresh { margin: 0; }
   .fresh-sidebar { background: linear-gradient(180deg, #3B82F6 0%, #60A5FA 50%, #93C5FD 100%); -webkit-print-color-adjust: exact; print-color-adjust: exact; }

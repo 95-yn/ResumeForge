@@ -27,4 +27,5 @@
 .ds-body { font-size: 9.5pt; color: #404040; }
 .ds-list { margin-top: 5px; padding-left: 16px; }
 .ds-list li { font-size: 9.5pt; color: #404040; margin-bottom: 3px; }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print { .resume.designer { margin: 0; } .ds-sidebar { min-height: auto; } }

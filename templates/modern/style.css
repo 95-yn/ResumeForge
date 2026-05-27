@@ -87,6 +87,7 @@
 .entry ul { margin-top: 4px; padding-left: 16px; }
 .entry li { font-size: 9pt; margin-bottom: 2px; line-height: 1.5; }
 .entry p { font-size: 9pt; color: #555; margin-top: 2px; line-height: 1.5; }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print {
   .resume.modern { margin: 0; }
   .sidebar { background: #1a1a2e; -webkit-print-color-adjust: exact; print-color-adjust: exact; }

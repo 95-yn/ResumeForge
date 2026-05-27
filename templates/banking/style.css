@@ -17,4 +17,5 @@
 .bk-list li { font-size: 10pt; margin-bottom: 3px; color: #333; }
 .bk-skills { columns: 2; gap: 20px; }
 .bk-skill { font-size: 10pt; color: #333; margin-bottom: 4px; break-inside: avoid; }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print { .resume.banking { margin: 0; padding: 20mm 20mm; } }

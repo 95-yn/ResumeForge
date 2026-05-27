@@ -20,4 +20,5 @@
 .dt-body { font-size: 9pt; color: #CBD5E1; margin-top: 4px; }
 .dt-list { margin-top: 5px; padding-left: 16px; }
 .dt-list li { font-size: 9pt; color: #CBD5E1; margin-bottom: 3px; }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print { .resume.data { margin: 0; padding: 14mm 18mm; print-color-adjust: exact; -webkit-print-color-adjust: exact; } }

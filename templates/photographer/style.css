@@ -21,4 +21,5 @@
 .ph-skill { font-size: 9pt; color: #555; font-family: "Helvetica Neue", sans-serif; }
 .ph-skill + .ph-skill::before { content: "/"; margin-right: 8px; color: #ccc; }
 .ph-skill-lv { color: #999; }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print { .resume.photographer { margin: 0; } .ph-header { padding: 20mm 20mm 16mm; } .ph-content { padding: 18px 20mm; } }

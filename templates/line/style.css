@@ -22,4 +22,5 @@
 .ln-skills { display: flex; flex-wrap: wrap; gap: 8px; }
 .ln-skill-item { font-size: 9pt; color: #555; border-bottom: 1px solid #ccc; padding-bottom: 2px; }
 .ln-lv { color: #aaa; }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print { .resume.line { margin: 0; padding: 20mm 20mm; } }

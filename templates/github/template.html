@@ -29,7 +29,7 @@
         <span class="gh-pos" data-field="experience.{{@index}}.position">{{position}}</span>
         <span class="gh-date"><span data-field="experience.{{@index}}.startDate">{{startDate}}</span> – <span data-field="experience.{{@index}}.endDate">{{endDate}}</span></span>
       </div>
-      {{#if highlights.length}}<ul class="gh-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+      {{#if highlights.length}}<ul class="gh-list">{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}
   </section>
@@ -45,7 +45,7 @@
         {{#if role}}<span class="gh-repo-role" data-field="projects.{{@index}}.role">{{role}}</span>{{/if}}
       </div>
       {{#if description}}<div class="gh-repo-desc" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
-      {{#if highlights.length}}<ul class="gh-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{this}}</li>{{/each}}</ul>{{/if}}
+      {{#if highlights.length}}<ul class="gh-list">{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>
     {{/each}}
   </section>

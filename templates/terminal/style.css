@@ -34,4 +34,5 @@
 .tm-tag-lv { color: #065F46; }
 .tm-cursor { color: #4ADE80; animation: blink 1s step-end infinite; font-size: 11pt; }
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print { .resume.terminal { margin: 0; print-color-adjust: exact; -webkit-print-color-adjust: exact; } .tm-body { padding: 14px 18mm 18mm; } .tm-cursor { display: none; } }

@@ -17,4 +17,5 @@
 .sp-skills { display: flex; flex-wrap: wrap; gap: 12px 24px; }
 .sp-skill { font-size: 10pt; color: #444; }
 .sp-lv { color: #aaa; }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print { .resume.space { margin: 0; padding: 24mm 24mm; } }

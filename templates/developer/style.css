@@ -25,4 +25,5 @@
 .dev-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .dev-skill-tag { background: #2D2D2D; border: 1px solid #3C3C3C; color: #D4D4D4; padding: 2px 8px; border-radius: 2px; font-size: 8.5pt; }
 .dev-skill-level { color: #4EC9B0; }
+li p, li div { margin: 0; padding: 0; display: inline; }
 @media print { .resume.developer { margin: 0; background: #1E1E1E; -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
