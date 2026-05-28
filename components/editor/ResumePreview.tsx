@@ -190,13 +190,65 @@ export function ResumePreview() {
     }
     try {
       const template = compileTemplate(templateHtml);
-      const body = template(resume);
+      let body = template(resume);
       const bgColor = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor || '#ffffff';
       const bgOverride = `<style>
         html, body, .resume { background: ${bgColor} !important; background-color: ${bgColor} !important; }
         html, body { overflow: hidden !important; scrollbar-width: none; }
         html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; height: 0; }
       </style>`;
+
+      // Bug 2: inject website/linkedin/github into contact area if template doesn't render them
+      const basics = resume.basics as Record<string, string> | undefined;
+      const linksToInject: { label: string; value: string; href: string }[] = [];
+      if (basics?.website && !body.includes(basics.website)) {
+        const href = basics.website.startsWith('http') ? basics.website : 'https://' + basics.website;
+        linksToInject.push({ label: '🌐', value: basics.website, href });
+      }
+      if (basics?.linkedin && !body.includes(basics.linkedin)) {
+        const href = basics.linkedin.startsWith('http') ? basics.linkedin : 'https://linkedin.com/in/' + basics.linkedin;
+        linksToInject.push({ label: 'in', value: basics.linkedin, href });
+      }
+      if (basics?.github && !body.includes(basics.github)) {
+        const href = basics.github.startsWith('http') ? basics.github : 'https://github.com/' + basics.github;
+        linksToInject.push({ label: 'GH', value: basics.github, href });
+      }
+
+      if (linksToInject.length > 0) {
+        const linksHtml = linksToInject.map(({ label, value, href }) =>
+          `<a href="${href}" style="color:inherit;text-decoration:none;margin-left:8px;font-size:0.9em;white-space:nowrap;" target="_blank" rel="noopener">${label} ${value}</a>`
+        ).join('');
+
+        // Try to find email element and inject after it; fall back to after phone, or into basics container
+        const emailVal = basics?.email || '';
+        const phoneVal = basics?.phone || '';
+        const emailEscaped = emailVal.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const phoneEscaped = phoneVal.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+        let injected = false;
+        if (emailVal) {
+          // Inject after the closing tag of the element containing the email
+          body = body.replace(
+            new RegExp(`(${emailEscaped})(</[a-zA-Z]+>)`),
+            (_, m1, m2) => { injected = true; return m1 + m2 + linksHtml; }
+          );
+        }
+        if (!injected && phoneVal) {
+          body = body.replace(
+            new RegExp(`(${phoneEscaped})(</[a-zA-Z]+>)`),
+            (_, m1, m2) => { injected = true; return m1 + m2 + linksHtml; }
+          );
+        }
+        if (!injected) {
+          // Last resort: append before </header> or first </section>
+          if (body.includes('</header>')) {
+            body = body.replace('</header>', linksHtml + '</header>');
+          } else if (body.includes('data-section="basics"')) {
+            body = body.replace(/(<[^>]+data-section="basics"[^>]*>)([\s\S]*?)<\//, (m) => m.replace(/(<\/[a-zA-Z]+>\s*)$/, linksHtml + '$1'));
+          }
+        }
+      }
+
       setRenderError(false);
       return `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>${templateCss}</style>${bgOverride}</head><body style="margin:0;background:${bgColor}">${body}</body></html>`;
     } catch {
