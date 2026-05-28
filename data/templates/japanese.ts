@@ -108,7 +108,7 @@ const template: TemplateData = {
 .jp-line { height: 1px; background: #1C1917; margin: 12px 0; }
 .jp-contacts { display: flex; gap: 20px; flex-wrap: wrap; font-size: 9pt; color: #57534E; letter-spacing: 0.5px; }
 .jp-section { margin-bottom: 20px; }
-.jp-section-bar { border-left: 2px solid #1C1917; padding-left: 12px; margin-bottom: 14px; }
+.jp-section-bar { border-left: 1px solid #1C1917; padding-left: 12px; margin-bottom: 14px; }
 .jp-section-title { font-size: 9pt; font-weight: 400; letter-spacing: 3px; color: #1C1917; }
 .jp-summary { font-size: 10pt; color: #44403C; line-height: 1.9; }
 .jp-entry { display: flex; gap: 0; margin-bottom: 14px; }

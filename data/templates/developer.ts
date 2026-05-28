@@ -169,7 +169,7 @@ const template: TemplateData = {
 .dev-entry {
   margin-bottom: 8px;
   padding-left: 4px;
-  border-left: 2px solid #252525;
+  border-left: 1px solid #252525;
 }
 
 .dev-entry:last-child { margin-bottom: 0; }

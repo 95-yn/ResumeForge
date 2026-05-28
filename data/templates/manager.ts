@@ -105,7 +105,7 @@ const template: TemplateData = {
     css: `* { word-wrap: break-word; overflow-wrap: break-word; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .resume.manager { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 18mm 22mm; font-family: "Helvetica Neue", "Arial", "PingFang SC", sans-serif; font-size: 10pt; line-height: 1.6; color: #1E293B; background: #F8FAFC; }
-.mg-header { background: #fff; border-left: 4px solid #475569; padding: 14px 18px; margin-bottom: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+.mg-header { background: #fff; border-left: 1px solid #475569; padding: 14px 18px; margin-bottom: 18px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
 .mg-header-top h1 { font-size: 22pt; font-weight: 700; color: #0F172A; }
 .mg-title { font-size: 10.5pt; color: #475569; margin-top: 3px; }
 .mg-contacts { margin-top: 8px; display: flex; gap: 16px; flex-wrap: wrap; }

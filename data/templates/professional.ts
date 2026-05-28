@@ -165,7 +165,7 @@ const template: TemplateData = {
   color: #44403C;
   margin-bottom: 7px;
   padding-left: 10px;
-  border-left: 3px solid #1C1917;
+  border-left: 1px solid #1C1917;
 }
 
 /* ── Entry ── */

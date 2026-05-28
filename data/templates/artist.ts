@@ -88,13 +88,13 @@ const template: TemplateData = {
     css: `* { word-wrap: break-word; overflow-wrap: break-word; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .resume.artist { max-width: 210mm; min-height: 297mm; margin: 0 auto; padding: 20mm 20mm 20mm 28mm; font-family: "Georgia", "Times New Roman", "PingFang SC", "Microsoft YaHei", serif; font-size: 10.5pt; line-height: 1.7; color: #2C1810; background: #fff; }
-.ar-header { margin-bottom: 20px; border-left: 5px solid #78350F; padding-left: 16px; }
+.ar-header { margin-bottom: 20px; border-left: 1px solid #78350F; padding-left: 16px; }
 .ar-header h1 { font-size: 30pt; font-weight: 400; color: #78350F; font-family: "Georgia", serif; line-height: 1.1; }
 .ar-title { font-size: 11pt; color: #92400E; margin-top: 5px; font-style: italic; }
 .ar-contacts { margin-top: 8px; display: flex; gap: 14px; flex-wrap: wrap; font-size: 9pt; color: #A16207; font-family: "Helvetica Neue", sans-serif; }
 .ar-section { margin-bottom: 16px; }
 .ar-section-title { font-size: 9pt; font-weight: 400; text-transform: uppercase; letter-spacing: 3px; color: #78350F; margin-bottom: 10px; border-bottom: 1px solid #D4B97A; padding-bottom: 4px; font-family: "Helvetica Neue", "Arial", sans-serif; }
-.ar-entry { margin-bottom: 12px; padding-left: 12px; border-left: 2px solid #F5DEB3; }
+.ar-entry { margin-bottom: 12px; padding-left: 12px; border-left: 1px solid #F5DEB3; }
 .ar-entry h3 { font-size: 11pt; font-weight: 700; color: #2C1810; }
 .ar-meta { display: flex; justify-content: space-between; align-items: baseline; font-size: 9.5pt; color: #92400E; margin-top: 2px; font-style: italic; font-family: "Helvetica Neue", sans-serif; }
 .ar-date { font-size: 9pt; color: #B45309; }

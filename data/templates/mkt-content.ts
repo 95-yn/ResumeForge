@@ -75,7 +75,7 @@ const template: TemplateData = {
   padding-bottom: 12px;
   margin-bottom: 14px;
   padding-left: 12px;
-  border-left: 4px solid #44403C;
+  border-left: 1px solid #44403C;
 }
 .resume.mkt-content .resume-header h1 {
   font-size: 22pt;
@@ -109,7 +109,7 @@ const template: TemplateData = {
   letter-spacing: 1px;
   padding-bottom: 4px;
   padding-left: 8px;
-  border-left: 3px solid #44403C;
+  border-left: 1px solid #44403C;
   margin-bottom: 8px;
 }
 .resume.mkt-content .entry { margin-bottom: 8px; }

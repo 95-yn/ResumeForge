@@ -109,7 +109,7 @@ const template: TemplateData = {
   max-width: 210mm;
   min-height: 297mm;
   padding: 24mm 20mm 20mm;
-  font-family: 'Helvetica Neue', 'Inter', -apple-system, 'PingFang SC', sans-serif;
+  font-family: 'Helvetica Neue', 'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif;
   font-size: 10pt;
   color: #0a0a0a;
   background: #fff;

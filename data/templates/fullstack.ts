@@ -99,7 +99,7 @@ const template: TemplateData = {
 `,
     css: `* { word-wrap: break-word; overflow-wrap: break-word; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-.resume.fullstack { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Inter", "Helvetica Neue", "Arial", "PingFang SC", sans-serif; font-size: 10pt; line-height: 1.6; color: #1E293B; background: #fff; }
+.resume.fullstack { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Plus Jakarta Sans", "Helvetica Neue", "Arial", "PingFang SC", sans-serif; font-size: 10pt; line-height: 1.6; color: #1E293B; background: #fff; }
 .fs-header { background: #1E293B; color: #fff; padding: 16mm 22mm 14mm; }
 .fs-header-inner h1 { font-size: 22pt; font-weight: 800; color: #F1F5F9; letter-spacing: -0.5px; }
 .fs-title { font-size: 10.5pt; color: #64748B; margin-top: 4px; }

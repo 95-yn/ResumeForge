@@ -108,7 +108,7 @@ const template: TemplateData = {
 .hr-contacts { margin-top: 6px; display: flex; gap: 12px; flex-wrap: wrap; }
 .hr-contact { font-size: 9pt; color: #78716C; }
 .hr-section { margin-bottom: 14px; }
-.hr-section-title { font-size: 9.5pt; font-weight: 700; color: #B45309; background: #FFFBEB; border-left: 3px solid #D97706; padding: 4px 10px; margin-bottom: 10px; border-radius: 0 4px 4px 0; }
+.hr-section-title { font-size: 9.5pt; font-weight: 700; color: #B45309; background: #FFFBEB; border-left: 1px solid #D97706; padding: 4px 10px; margin-bottom: 10px; border-radius: 0 4px 4px 0; }
 .hr-entry { margin-bottom: 10px; }
 .hr-entry-head { display: flex; justify-content: space-between; align-items: flex-start; }
 .hr-entry-meta { display: flex; flex-direction: column; gap: 1px; }

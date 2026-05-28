@@ -193,7 +193,7 @@ const template: TemplateData = {
 .fresh-entry {
   margin-bottom: 8px;
   padding-left: 8px;
-  border-left: 2px solid #E0F2FE;
+  border-left: 1px solid #E0F2FE;
 }
 
 .fresh-entry:last-child { margin-bottom: 0; }

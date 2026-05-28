@@ -115,7 +115,7 @@ const template: TemplateData = {
   letter-spacing: 1px;
   padding-bottom: 4px;
   border-bottom: none;
-  border-left: 4px solid #2563EB;
+  border-left: 1px solid #2563EB;
   padding-left: 8px;
   margin-bottom: 8px;
   line-height: 1.3;

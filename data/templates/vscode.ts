@@ -122,7 +122,7 @@ const template: TemplateData = {
 .vs-tab { display: inline-block; padding: 6px 16px; font-size: 8.5pt; color: #CCCCCC; border-right: 1px solid #1E1E1E; }
 .vs-tab.active { background: #1E1E1E; color: #fff; border-top: 1px solid #569CD6; }
 .vs-editor { flex: 1; padding: 14px 16px 20px; }
-.vs-header-block { border-left: 3px solid #569CD6; padding-left: 10px; margin-bottom: 16px; }
+.vs-header-block { border-left: 1px solid #569CD6; padding-left: 10px; margin-bottom: 16px; }
 .vs-name { font-size: 16pt; font-weight: 700; color: #D4D4D4; }
 .vs-title { font-size: 9.5pt; color: #9CDCFE; margin-top: 3px; }
 .vs-contacts { margin-top: 6px; display: flex; flex-direction: column; gap: 2px; }
