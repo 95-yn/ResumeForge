@@ -143,6 +143,58 @@
   flex-shrink: 0;
 }
 
+/* ── Search input ──────────────────────────────────────────── */
+.searchWrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px 5px 8px;
+  background: rgba(45, 24, 16, 0.04);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  transition: border-color 150ms ease-out, background 150ms ease-out;
+  flex-shrink: 0;
+  margin-left: auto;
+}
+.searchWrap:focus-within {
+  background: #FEFEFE;
+  border-color: var(--arch-chestnut);
+}
+.searchIcon {
+  font-size: 14px;
+  color: var(--arch-stone-mid);
+  line-height: 1;
+  flex-shrink: 0;
+}
+.searchInput {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--arch-chestnut);
+  width: 180px;
+  padding: 0;
+}
+.searchInput::placeholder {
+  color: var(--arch-stone-mid);
+  font-style: italic;
+}
+/* Native search clear */
+.searchInput::-webkit-search-cancel-button { display: none; }
+.searchClear {
+  border: none;
+  background: transparent;
+  color: var(--arch-stone-mid);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  padding: 0 2px;
+  flex-shrink: 0;
+  transition: color 120ms ease-out;
+}
+.searchClear:hover { color: var(--arch-brick); }
+
 /* Style chips — Fraunces 15px */
 .filterBtnStyle {
   font-family: 'Fraunces', Georgia, serif;

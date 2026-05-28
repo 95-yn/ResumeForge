@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo, useDeferredValue } from 'react';
 import { useRouter } from 'next/navigation';
 import { TEMPLATE_LIST as TEMPLATES } from '@/data/template-list';
 import styles from './templates.module.css';
@@ -262,6 +262,8 @@ export default function TemplatesPage() {
   const router = useRouter();
   const [styleFilter, setStyleFilter]         = useState<string>('all');
   const [professionFilter, setProfessionFilter] = useState<string>('all');
+  const [query, setQuery]                       = useState<string>('');
+  const deferredQuery                           = useDeferredValue(query);
 
   // Hero title stagger — mount-triggered
   const [titlePhase, setTitlePhase] = useState(0);
@@ -282,21 +284,34 @@ export default function TemplatesPage() {
   const templates = TEMPLATES;
   const total = templates.length;
 
-  const filtered = templates
-    .filter(t => {
-      const styleMatch = styleFilter === 'all' || t.category === styleFilter;
-      const meta = TEMPLATE_META[t.slug];
-      const profMatch = professionFilter === 'all' || (meta && meta.profession === professionFilter);
-      return styleMatch && profMatch;
-    })
-    .sort((a, b) => {
-      const ai = FEATURED_ORDER.indexOf(a.slug);
-      const bi = FEATURED_ORDER.indexOf(b.slug);
-      if (ai !== -1 && bi !== -1) return ai - bi;
-      if (ai !== -1) return -1;
-      if (bi !== -1) return 1;
-      return 0;
-    });
+  const filtered = useMemo(() => {
+    const q = deferredQuery.trim().toLowerCase();
+    return templates
+      .filter(t => {
+        const styleMatch = styleFilter === 'all' || t.category === styleFilter;
+        const meta = TEMPLATE_META[t.slug];
+        const profMatch = professionFilter === 'all' || (meta && meta.profession === professionFilter);
+        if (!styleMatch || !profMatch) return false;
+        if (!q) return true;
+        return (
+          t.slug.toLowerCase().includes(q) ||
+          t.name.toLowerCase().includes(q) ||
+          t.category.toLowerCase().includes(q) ||
+          (meta?.desc?.toLowerCase().includes(q) ?? false) ||
+          (meta?.profession?.toLowerCase().includes(q) ?? false)
+        );
+      })
+      .sort((a, b) => {
+        const ai = FEATURED_ORDER.indexOf(a.slug);
+        const bi = FEATURED_ORDER.indexOf(b.slug);
+        if (ai !== -1 && bi !== -1) return ai - bi;
+        if (ai !== -1) return -1;
+        if (bi !== -1) return 1;
+        return 0;
+      });
+  }, [templates, styleFilter, professionFilter, deferredQuery]);
+
+  const isStale = query !== deferredQuery;
 
   const handleCardClick = useCallback((slug: string) => {
     const meta = TEMPLATE_META[slug];
@@ -306,7 +321,21 @@ export default function TemplatesPage() {
   const handleClearFilters = () => {
     setStyleFilter('all');
     setProfessionFilter('all');
+    setQuery('');
   };
+
+  // Cmd+K / Ctrl+K to focus search input
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault();
+        const input = document.querySelector<HTMLInputElement>('input[aria-label="搜索模板"]');
+        input?.focus();
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, []);
 
   // titlePhase class helper
   const titlePhaseClass = titlePhase >= 1 ? (titlePhase >= 2 ? styles.phase2 : styles.phase1) : '';
@@ -334,6 +363,9 @@ export default function TemplatesPage() {
       <StickyFilterBar
         styleFilter={styleFilter}
         professionFilter={professionFilter}
+        query={query}
+        onQueryChange={setQuery}
+        isStale={isStale}
         onStyleChange={setStyleFilter}
         onProfessionChange={setProfessionFilter}
         titlePhase={titlePhase}
@@ -372,12 +404,15 @@ export default function TemplatesPage() {
 interface StickyFilterBarProps {
   styleFilter: string;
   professionFilter: string;
+  query: string;
   onStyleChange: (key: string) => void;
   onProfessionChange: (key: string) => void;
+  onQueryChange: (q: string) => void;
   titlePhase: number;
+  isStale: boolean;
 }
 
-function StickyFilterBar({ styleFilter, professionFilter, onStyleChange, onProfessionChange, titlePhase }: StickyFilterBarProps) {
+function StickyFilterBar({ styleFilter, professionFilter, query, onStyleChange, onProfessionChange, onQueryChange, titlePhase, isStale }: StickyFilterBarProps) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -431,6 +466,31 @@ function StickyFilterBar({ styleFilter, professionFilter, onStyleChange, onProfe
             {f.label}
           </button>
         ))}
+      </div>
+
+      <div className={styles.filterDivider} aria-hidden="true" />
+
+      {/* Search */}
+      <div className={styles.searchWrap} role="search">
+        <span className={styles.searchIcon} aria-hidden="true">⌕</span>
+        <input
+          type="search"
+          className={styles.searchInput}
+          placeholder="搜索模板…  /  search"
+          value={query}
+          onChange={(e) => onQueryChange(e.target.value)}
+          aria-label="搜索模板"
+          style={{ opacity: isStale ? 0.55 : 1, transition: 'opacity 150ms ease-out' }}
+        />
+        {query && (
+          <button
+            type="button"
+            onClick={() => onQueryChange('')}
+            className={styles.searchClear}
+            aria-label="清除搜索"
+            title="清除"
+          >×</button>
+        )}
       </div>
     </nav>
   );

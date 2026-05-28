@@ -653,17 +653,11 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
             <DeleteOutlined style={{ fontSize: 10 }} />
           </button>
         </div>
-        <div
-          contentEditable
-          suppressContentEditableWarning
-          dangerouslySetInnerHTML={{ __html: (basics.summary as string) || '' }}
-          onBlur={e => updateField('basics', 'summary', e.currentTarget.innerHTML)}
-          data-placeholder="输入个人简介..."
-          style={{
-            ...inputCss, minHeight: 60, resize: 'vertical' as const, lineHeight: 1.6,
-            display: 'block', whiteSpace: 'pre-wrap', wordBreak: 'break-word',
-          }}
-          onFocus={e => { e.currentTarget.style.borderColor = '#1C1917'; e.currentTarget.style.background = '#FFF'; }}
+        <InlineRichText
+          value={(basics.summary as string) || ''}
+          onChange={html => updateField('basics', 'summary', html)}
+          placeholder="输入个人简介..."
+          minHeight={64}
         />
       </div>
       {/* Add field — uses Portal dropdown to avoid overflow clipping (Bug 1) */}
