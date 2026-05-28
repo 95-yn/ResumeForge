@@ -53,7 +53,7 @@ export function TopBar() {
       {/* Left */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         <button
-          onClick={() => router.push('/')}
+          onClick={() => router.push('/templates')}
           style={{
             width: 30, height: 30, borderRadius: 6, border: '1px solid #E7E5E4',
             background: 'transparent', cursor: 'pointer', color: '#78716C',

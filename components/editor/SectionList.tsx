@@ -17,12 +17,30 @@ const RESUME_BG_COLORS = [
   { color: '#FAF5FF', label: '浅紫' },
 ];
 
-const SECTION_META: Record<string, { icon: string; label: string; addLabel: string }> = {
-  basics: { icon: '👤', label: '基本信息', addLabel: '' },
-  experience: { icon: '💼', label: '工作经历', addLabel: '添加经历' },
-  education: { icon: '🎓', label: '教育背景', addLabel: '添加教育' },
-  skills: { icon: '⚡', label: '技能特长', addLabel: '添加技能' },
-  projects: { icon: '📁', label: '项目经历', addLabel: '添加项目' },
+// 简笔 SVG icon — Manus / Linear 风格的 1.5px stroke
+function SectionIcon({ name, size = 14 }: { name: string; size?: number }) {
+  const s = { width: size, height: size, fill: 'none', stroke: 'currentColor', strokeWidth: 1.5, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const };
+  switch (name) {
+    case 'basics': return <svg viewBox="0 0 24 24" {...s}><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0 1 16 0v1"/></svg>;
+    case 'experience': return <svg viewBox="0 0 24 24" {...s}><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/></svg>;
+    case 'education': return <svg viewBox="0 0 24 24" {...s}><path d="M22 10L12 4 2 10l10 6 10-6Z"/><path d="M6 12v5c0 1.5 2.5 3 6 3s6-1.5 6-3v-5"/></svg>;
+    case 'skills': return <svg viewBox="0 0 24 24" {...s}><path d="M12 2l2.6 6.5L21 9.2l-5 4.7L17.4 21 12 17.7 6.6 21 8 13.9 3 9.2l6.4-0.7L12 2z"/></svg>;
+    case 'projects': return <svg viewBox="0 0 24 24" {...s}><path d="M3 7v12a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1h-7L11 5H4a1 1 0 0 0-1 1v1Z"/></svg>;
+    case 'awards': return <svg viewBox="0 0 24 24" {...s}><circle cx="12" cy="9" r="6"/><path d="M9 15l-2 7 5-3 5 3-2-7"/></svg>;
+    case 'certifications': return <svg viewBox="0 0 24 24" {...s}><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>;
+    case 'languages': return <svg viewBox="0 0 24 24" {...s}><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>;
+    case 'interests': return <svg viewBox="0 0 24 24" {...s}><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>;
+    case 'volunteer': return <svg viewBox="0 0 24 24" {...s}><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 11c0 5.5-7 10-7 10z"/></svg>;
+    default: return <svg viewBox="0 0 24 24" {...s}><rect x="4" y="4" width="16" height="16" rx="2"/></svg>;
+  }
+}
+
+const SECTION_META: Record<string, { iconName: string; label: string; addLabel: string }> = {
+  basics: { iconName: 'basics', label: '基本信息', addLabel: '' },
+  experience: { iconName: 'experience', label: '工作经历', addLabel: '添加经历' },
+  education: { iconName: 'education', label: '教育背景', addLabel: '添加教育' },
+  skills: { iconName: 'skills', label: '技能特长', addLabel: '添加技能' },
+  projects: { iconName: 'projects', label: '项目经历', addLabel: '添加项目' },
 };
 
 const BASICS_FIELDS = [
@@ -41,11 +59,11 @@ const EXTRA_FIELDS = [
 ];
 
 const CUSTOM_MODULES = [
-  { key: 'awards', label: '荣誉奖项', icon: '🏆' },
-  { key: 'certifications', label: '证书资质', icon: '📜' },
-  { key: 'languages', label: '语言能力', icon: '🌐' },
-  { key: 'interests', label: '兴趣爱好', icon: '🎯' },
-  { key: 'volunteer', label: '志愿经历', icon: '🤝' },
+  { key: 'awards', label: '荣誉奖项', iconName: 'awards' },
+  { key: 'certifications', label: '证书资质', iconName: 'certifications' },
+  { key: 'languages', label: '语言能力', iconName: 'languages' },
+  { key: 'interests', label: '兴趣爱好', iconName: 'interests' },
+  { key: 'volunteer', label: '志愿经历', iconName: 'volunteer' },
 ];
 
 const DRAGGABLE = new Set(['experience', 'education', 'skills', 'projects']);
@@ -130,7 +148,8 @@ export function SectionList() {
   if (!resume) return null;
 
   const allSections = sectionOrder.map(key => {
-    const meta = SECTION_META[key] || { icon: '📋', label: key, addLabel: '添加条目' };
+    const customMeta = CUSTOM_MODULES.find(m => m.key === key);
+    const meta = SECTION_META[key] || (customMeta ? { iconName: customMeta.iconName, label: customMeta.label, addLabel: '添加条目' } : { iconName: 'default', label: key, addLabel: '添加条目' });
     return { key, ...meta };
   });
 
@@ -140,7 +159,7 @@ export function SectionList() {
 
       {/* Section list */}
       <div style={{ flex: 1, padding: '8px 0' }}>
-        {allSections.map(({ key, icon, label, addLabel }) => {
+        {allSections.map(({ key, iconName, label, addLabel }) => {
           const isOpen = expanded.has(key);
           const isDraggable = DRAGGABLE.has(key) || !SECTION_META[key];
           const isBasics = key === 'basics';
@@ -181,7 +200,7 @@ export function SectionList() {
                 }}
               >
                 {isDraggable && <span style={{ fontSize: 10, color: '#D6D3D1', cursor: 'grab', lineHeight: 1 }}>⠿</span>}
-                <span style={{ fontSize: 15, width: 20, textAlign: 'center', flexShrink: 0 }}>{icon}</span>
+                <span style={{ width: 18, height: 18, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#78716C' }}><SectionIcon name={iconName} size={15} /></span>
                 <span style={{ flex: 1, fontSize: 13, fontWeight: 500, color: '#1C1917' }}>{label}</span>
                 {isArray && items.length > 0 && (
                   <span style={{ fontSize: 11, color: '#78716C', background: '#F5F5F4', borderRadius: 10, padding: '1px 7px', fontWeight: 500 }}>
@@ -345,7 +364,7 @@ export function SectionList() {
                   onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#F5F5F4'; }}
                   onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = ''; }}
                 >
-                  <span style={{ fontSize: 14 }}>{m.icon}</span> {m.label}
+                  <span style={{ width: 16, height: 16, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', color: '#78716C' }}><SectionIcon name={m.iconName} size={14} /></span> {m.label}
                 </div>
               ))}
               {CUSTOM_MODULES.filter(m => !sectionOrder.includes(m.key)).length === 0 && (
@@ -355,7 +374,7 @@ export function SectionList() {
           )}
         </div>
         <button
-          onClick={() => router.push('/')}
+          onClick={() => router.push('/templates')}
           style={{
             padding: '7px 14px', borderRadius: 6, border: '1px solid #E7E5E4',
             background: '#FFF', color: '#78716C', cursor: 'pointer', fontSize: 12,
@@ -394,7 +413,7 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
         return (
           <div key={fKey} style={{ marginBottom: 6 }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
-              <label style={{ fontSize: 11, color: '#A8A29E' }}>{def.label}</label>
+              <label style={{ fontSize: 10, color: '#A8A29E', fontFamily: "'JetBrains Mono', 'SF Mono', monospace", letterSpacing: '0.06em', textTransform: 'uppercase' }}>{def.label}</label>
               <button
                 onClick={() => removeField(fKey)}
                 title={`删除${def.label}`}
@@ -423,7 +442,7 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
       {/* 个人简介 */}
       <div style={{ marginBottom: 6 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 2 }}>
-          <label style={{ fontSize: 11, color: '#A8A29E' }}>个人简介</label>
+          <label style={{ fontSize: 10, color: '#A8A29E', fontFamily: "'JetBrains Mono', 'SF Mono', monospace", letterSpacing: '0.06em', textTransform: 'uppercase' }}>个人简介</label>
           <button
             onClick={() => updateField('basics', 'summary', '')}
             title="清空个人简介"
