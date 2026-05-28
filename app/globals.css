@@ -70,11 +70,26 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Warm scrollbar */
-::-webkit-scrollbar { width: 5px; height: 5px; }
+/* Page-bg sync — 让 body 跟随当前页面，避免 over-scroll 露出两色 */
+body:has(.archive-page) { background: #F8F6F1; }
+body:has(.lp-root)      { background: #F5F1E8; }
+
+/* Warm scrollbar — 12px 易抓，thumb 用 padding-box 营造内嵌感 */
+* { scrollbar-width: thin; scrollbar-color: #B8B2A8 transparent; }
+::-webkit-scrollbar { width: 12px; height: 12px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #D6D3D1; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #A8A29E; }
+::-webkit-scrollbar-thumb {
+  background: #B8B2A8;
+  border-radius: 8px;
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  transition: background 0.2s ease-out;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #78716C;
+  background-clip: padding-box;
+}
+::-webkit-scrollbar-corner { background: transparent; }
 
 /* Canvas engine styles */
 .canvas-engine {
