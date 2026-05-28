@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { Modal } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { useEditorStore } from '@/lib/editor-store';
+import { InlineRichText } from './InlineRichText';
 
 const RESUME_BG_COLORS = [
   { color: '#FFFFFF', label: '白' },
@@ -529,6 +531,57 @@ export function SectionList() {
   );
 }
 
+/* ---- Portal Dropdown (Bug 1 fix) ---- */
+function PortalDropdown({ anchorRef, open, onClose, children }: {
+  anchorRef: React.RefObject<HTMLButtonElement | null>;
+  open: boolean;
+  onClose: () => void;
+  children: React.ReactNode;
+}) {
+  const [pos, setPos] = useState<{ top: number; left: number; width: number } | null>(null);
+  const dropRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (open && anchorRef.current) {
+      const r = anchorRef.current.getBoundingClientRect();
+      const dropH = 180; // estimated dropdown height
+      // Flip up if not enough space below
+      const top = (r.bottom + 4 + dropH > window.innerHeight - 10)
+        ? r.top - dropH - 4
+        : r.bottom + 4;
+      setPos({ top, left: r.left, width: r.width });
+    }
+  }, [open, anchorRef]);
+
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (
+        dropRef.current && !dropRef.current.contains(e.target as Node) &&
+        anchorRef.current && !anchorRef.current.contains(e.target as Node)
+      ) {
+        onClose();
+      }
+    };
+    setTimeout(() => document.addEventListener('mousedown', handler), 50);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [open, onClose, anchorRef]);
+
+  if (!open || !pos) return null;
+
+  return createPortal(
+    <div ref={dropRef} data-testid="portal-dropdown" style={{
+      position: 'fixed', top: pos.top, left: pos.left, width: pos.width,
+      zIndex: 99999,
+      background: '#FFF', border: '1px solid #E7E5E4', borderRadius: 6,
+      boxShadow: '0 8px 24px rgba(0,0,0,0.12)', maxHeight: 180, overflowY: 'auto',
+    }}>
+      {children}
+    </div>,
+    document.body
+  );
+}
+
 /* ---- Basics Panel ---- */
 function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, setVisibleFields, updateField }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -537,11 +590,14 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
   updateField: (s: string, f: string, v: unknown) => void;
 }) {
   const basics = resume.basics || {};
+  const addFieldBtnRef = useRef<HTMLButtonElement>(null);
 
   const removeField = (fKey: string) => {
     setVisibleFields(p => p.filter(k => k !== fKey));
     updateField('basics', fKey, '');
   };
+
+  const availableFields = [...BASICS_FIELDS, ...EXTRA_FIELDS].filter(o => !visibleFields.includes(o.key));
 
   return (
     <div style={{ padding: '4px 12px' }}>
@@ -610,10 +666,12 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
           onFocus={e => { e.currentTarget.style.borderColor = '#1C1917'; e.currentTarget.style.background = '#FFF'; }}
         />
       </div>
-      {/* Add field */}
-      <div style={{ position: 'relative' }}>
+      {/* Add field — uses Portal dropdown to avoid overflow clipping (Bug 1) */}
+      <div>
         <button
+          ref={addFieldBtnRef}
           onClick={() => setShowAddField(!showAddField)}
+          data-testid="add-field-btn"
           style={{
             width: '100%', padding: '4px 0', border: '1px dashed #E7E5E4', borderRadius: 5,
             background: 'transparent', color: '#A8A29E', fontSize: 11, cursor: 'pointer',
@@ -623,28 +681,26 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
         >
           <PlusOutlined style={{ fontSize: 9 }} /> 添加字段
         </button>
-        {showAddField && (
-          <div style={{
-            position: 'absolute', top: '100%', left: 0, right: 0, zIndex: 100, marginTop: 2,
-            background: '#FFF', border: '1px solid #E7E5E4', borderRadius: 6,
-            boxShadow: '0 4px 12px rgba(0,0,0,0.08)', maxHeight: 150, overflowY: 'auto',
-          }}>
-            {[...BASICS_FIELDS, ...EXTRA_FIELDS].filter(o => !visibleFields.includes(o.key)).map(o => (
-              <div
-                key={o.key}
-                onClick={() => { setVisibleFields(p => [...p, o.key]); setShowAddField(false); }}
-                style={{ padding: '6px 10px', fontSize: 12, color: '#44403C', cursor: 'pointer' }}
-                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#F0EAE0'; }}
-                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = ''; }}
-              >
-                {o.label}
-              </div>
-            ))}
-            {[...BASICS_FIELDS, ...EXTRA_FIELDS].filter(o => !visibleFields.includes(o.key)).length === 0 && (
-              <div style={{ padding: '8px 10px', fontSize: 12, color: '#A8A29E' }}>所有字段已显示</div>
-            )}
-          </div>
-        )}
+        <PortalDropdown
+          anchorRef={addFieldBtnRef}
+          open={showAddField}
+          onClose={() => setShowAddField(false)}
+        >
+          {availableFields.map(o => (
+            <div
+              key={o.key}
+              onClick={() => { setVisibleFields(p => [...p, o.key]); setShowAddField(false); }}
+              style={{ padding: '6px 10px', fontSize: 12, color: '#44403C', cursor: 'pointer' }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#F0EAE0'; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = ''; }}
+            >
+              {o.label}
+            </div>
+          ))}
+          {availableFields.length === 0 && (
+            <div style={{ padding: '8px 10px', fontSize: 12, color: '#A8A29E' }}>所有字段已显示</div>
+          )}
+        </PortalDropdown>
       </div>
     </div>
   );
@@ -740,23 +796,25 @@ function ArrayPanel({ sectionKey, items, addLabel, addArrayItem, removeArrayItem
               <div style={{ padding: '4px 8px 8px 22px' }}>
                 {fields.map(f => {
                   if (f.type === 'highlights') {
+                    // Bug 4: highlights use InlineRichText for rich text support
                     const arr = (item[f.key] as string[]) || [];
                     return (
                       <div key={f.key} style={{ marginBottom: 4 }}>
                         <label style={{ fontSize: 10, color: '#A8A29E', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.06em', textTransform: 'uppercase' }}>{f.label}</label>
                         {arr.map((h, hi) => (
-                          <div key={hi} style={{ display: 'flex', gap: 4, marginTop: 2 }}>
-                            <input
-                              value={h}
-                              onChange={e => { const a = [...arr]; a[hi] = e.target.value; updateArrayItem(sectionKey, idx, f.key, a); }}
-                              style={{ ...inputCss, fontSize: 11, padding: '3px 6px' }}
-                              onFocus={e => { e.currentTarget.style.borderColor = '#1C1917'; }}
-                              onBlur={e => { e.currentTarget.style.borderColor = '#E7E5E4'; }}
-                            />
+                          <div key={hi} style={{ display: 'flex', gap: 4, marginTop: 2, alignItems: 'flex-start' }}>
+                            <div style={{ flex: 1 }}>
+                              <InlineRichText
+                                value={h}
+                                onChange={html => { const a = [...arr]; a[hi] = html; updateArrayItem(sectionKey, idx, f.key, a); }}
+                                placeholder="输入亮点..."
+                                minHeight={32}
+                              />
+                            </div>
                             <button
                               onClick={() => updateArrayItem(sectionKey, idx, f.key, arr.filter((_, i) => i !== hi))}
                               aria-label="删除此条"
-                              style={{ border: 'none', background: 'none', color: '#D6D3D1', cursor: 'pointer', fontSize: 10, outline: 'none' }}
+                              style={{ border: 'none', background: 'none', color: '#D6D3D1', cursor: 'pointer', fontSize: 10, outline: 'none', marginTop: 4, flexShrink: 0 }}
                             >×</button>
                           </div>
                         ))}
@@ -776,13 +834,12 @@ function ArrayPanel({ sectionKey, items, addLabel, addArrayItem, removeArrayItem
                     <div key={f.key} style={{ marginBottom: 4 }}>
                       <label style={{ fontSize: 10, color: '#A8A29E', fontFamily: "'JetBrains Mono', monospace", letterSpacing: '0.06em', textTransform: 'uppercase' }}>{f.label}</label>
                       {f.type === 'textarea' ? (
-                        <textarea
+                        // Bug 4: textarea (description) uses InlineRichText
+                        <InlineRichText
                           value={(item[f.key] as string) || ''}
-                          onChange={e => updateArrayItem(sectionKey, idx, f.key, e.target.value)}
-                          rows={2}
-                          style={{ ...inputCss, fontSize: 11, padding: '3px 6px', resize: 'vertical' as const }}
-                          onFocus={e => { e.currentTarget.style.borderColor = '#1C1917'; }}
-                          onBlur={e => { e.currentTarget.style.borderColor = '#E7E5E4'; }}
+                          onChange={html => updateArrayItem(sectionKey, idx, f.key, html)}
+                          placeholder="输入描述..."
+                          minHeight={48}
                         />
                       ) : (
                         <input
