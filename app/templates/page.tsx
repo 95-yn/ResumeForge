@@ -5,11 +5,13 @@ import { useRouter } from 'next/navigation';
 import { TEMPLATES } from '@/data/templates';
 
 /* ─── Palette ─────────────────────────────────────────────── */
-const PARCHMENT = '#F8F6F1';
-const CHESTNUT  = '#2D1810';
-const BRICK     = '#B0463A';
-const DUST      = '#E9E5DD';
-const INK_DIM   = 'rgba(45,24,16,0.42)';
+const PARCHMENT  = '#F8F6F1';
+const CHESTNUT   = '#2D1810';
+const BRICK      = '#B0463A';
+const DUST       = '#E9E5DD';
+const STONE_MID  = '#78716C';
+const INK_DIM    = 'rgba(45,24,16,0.42)';
+const CARD_WHITE = '#FEFEFE';
 
 /* ─── Template metadata ────────────────────────────────────── */
 interface TemplateMeta {
@@ -92,19 +94,67 @@ const TEMPLATE_META: Record<string, TemplateMeta> = {
   'legal-ip':         { desc: '深灰标题，知识产权专属', profession: '法律合规' },
 };
 
+/* ─── Template editorial quotes ───────────────────────────── */
+const TEMPLATE_QUOTES: Record<string, string> = {
+  classic:      'a study in restraint',
+  professional: 'tailored for the boardroom',
+  modern:       'a quiet rebellion',
+  elegant:      'serif at its most generous',
+  minimal:      'less, more deliberately',
+  tech:         'commits made visible',
+  developer:    'pull request as portrait',
+  manifesto:    'shouts when it must',
+  executive:    'authority without ornament',
+  corporate:    'the architecture of trust',
+  banking:      'conservative by design',
+  consulting:   'symmetry as argument',
+  creative:     'permission to be seen',
+  designer:     'white space as voice',
+  architect:    'the grid is the idea',
+  swiss:        'helvetica had an heir',
+  nordic:       'cold air, warm paper',
+  japanese:     'the pause is the point',
+  terminal:     'the shell never lies',
+  paper:        'typed in earnest',
+  mono:         'tone without colour',
+  clean:        'nothing left to remove',
+  legal:        'measured and unapologetic',
+  writer:       'sentences first',
+  photographer: 'image before word',
+  github:       'the commit history speaks',
+  vscode:       'dark mode as lifestyle',
+  data:         'structured for the analyst',
+  devops:       'shipping is the metric',
+  mobile:       'native in spirit',
+  fullstack:    'top to bottom, no gaps',
+  ai:           'models all the way down',
+};
+
+const FALLBACK_QUOTES = [
+  'a measured statement',
+  'composed for the eye',
+  'patient in its choices',
+  'unafraid of white',
+  'a careful kind of confident',
+];
+
+function getQuote(slug: string, idx: number): string {
+  return TEMPLATE_QUOTES[slug] ?? FALLBACK_QUOTES[idx % FALLBACK_QUOTES.length];
+}
+
 /* ─── Filter categories ────────────────────────────────────── */
 const STYLE_FILTERS = [
-  { key: 'all', label: 'ALL' },
-  { key: 'business', label: 'BUSINESS' },
-  { key: 'creative', label: 'CREATIVE' },
-  { key: 'minimal', label: 'MINIMAL' },
-  { key: 'tech', label: 'TECH' },
-  { key: 'campus', label: 'CAMPUS' },
-  { key: 'profession', label: 'PROFESSION' },
+  { key: 'all',        label: 'All' },
+  { key: 'business',   label: 'Business' },
+  { key: 'creative',   label: 'Creative' },
+  { key: 'minimal',    label: 'Minimal' },
+  { key: 'tech',       label: 'Tech' },
+  { key: 'campus',     label: 'Campus' },
+  { key: 'profession', label: 'Profession' },
 ];
 
 const PROFESSION_FILTERS = [
-  { key: 'all', label: 'ALL' },
+  { key: 'all',     label: 'ALL' },
   { key: 'IT互联网', label: 'IT' },
   { key: '金融财会', label: '金融' },
   { key: '设计创意', label: '设计' },
@@ -116,7 +166,6 @@ const PROFESSION_FILTERS = [
   { key: '法律合规', label: '法律' },
 ];
 
-/* ─── Category label map ───────────────────────────────────── */
 const CATEGORY_DISPLAY: Record<string, string> = {
   business:   'BUSINESS',
   creative:   'CREATIVE',
@@ -126,21 +175,20 @@ const CATEGORY_DISPLAY: Record<string, string> = {
   campus:     'CAMPUS',
 };
 
-/* ─── Featured order ───────────────────────────────────────── */
 const FEATURED_ORDER = ['classic', 'professional', 'elegant', 'modern', 'fresh', 'clean', 'swiss', 'minimal', 'tech', 'developer'];
 
-/* ─── Margin rhythm ────────────────────────────────────────── */
+/* ─── Irregular margin rhythm (larger jumps) ─────────────── */
+const MARGIN_RHYTHM = [40, 96, 56, 32, 72, 48];
 function cardMarginBottom(idx: number): number {
-  return [32, 56, 40][idx % 3];
+  return MARGIN_RHYTHM[idx % MARGIN_RHYTHM.length];
 }
 
 /* ─── Main component ───────────────────────────────────────── */
-export default function HomePage() {
+export default function TemplatesPage() {
   const router = useRouter();
-  const [styleFilter, setStyleFilter] = useState<string>('all');
+  const [styleFilter, setStyleFilter]         = useState<string>('all');
   const [professionFilter, setProfessionFilter] = useState<string>('all');
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
-  const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
+  const [hoveredSlug, setHoveredSlug]         = useState<string | null>(null);
 
   const templates = TEMPLATES;
   const total = templates.length;
@@ -166,21 +214,25 @@ export default function HomePage() {
     router.push(`/editor?template=${slug}&profession=${encodeURIComponent(meta?.profession || '通用')}`);
   };
 
-  const styleLabel = STYLE_FILTERS.find(f => f.key === styleFilter)?.label ?? 'ALL';
-  const profLabel  = PROFESSION_FILTERS.find(f => f.key === professionFilter)?.label ?? 'ALL';
+  /* Hero card is the first filtered result */
+  const heroTemplate  = filtered[0] ?? null;
+  const restTemplates = filtered.slice(1);
 
   return (
     <>
-      {/* ── Font face injection ── */}
       <style>{`
+        /* ── Reset & base ── */
+        * { box-sizing: border-box; }
+
         .archive-page {
           min-height: 100vh;
           background: ${PARCHMENT};
           color: ${CHESTNUT};
-          font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+          font-family: 'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif;
+          padding-bottom: 160px;
         }
 
-        /* ── Marginalia header ── */
+        /* ── Top nav ── */
         .arch-header {
           display: flex;
           align-items: baseline;
@@ -204,46 +256,211 @@ export default function HomePage() {
           text-transform: uppercase;
         }
 
-        /* ── Title area ── */
+        /* ── Hero title area ── */
         .arch-title-area {
-          padding: 52px 56px 40px;
+          padding: 96px 56px 64px;
         }
+
+        /* Display title: extreme scale */
         .arch-display-title {
           font-family: 'Fraunces', Georgia, serif;
+          font-optical-sizing: auto;
+          font-variation-settings: 'opsz' 144;
           font-weight: 400;
-          font-size: clamp(64px, 8vw, 96px);
-          line-height: 0.95;
-          letter-spacing: -0.03em;
+          font-size: clamp(140px, 16vw, 280px);
+          line-height: 0.85;
+          letter-spacing: -0.04em;
           color: ${CHESTNUT};
-          margin: 0 0 16px;
+          margin: 0 0 20px;
         }
-        .arch-subtitle {
+
+        /* Pull quote — Fraunces italic, 28px, max 12ch */
+        .arch-pull-quote {
           font-family: 'Fraunces', Georgia, serif;
           font-style: italic;
           font-weight: 400;
-          font-size: 18px;
+          font-size: 28px;
+          line-height: 1.15;
           color: ${CHESTNUT};
-          margin: 0 0 14px;
-          opacity: 0.7;
-        }
-        .arch-catalog-id {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 11px;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: ${INK_DIM};
+          max-width: 12ch;
+          margin: 0 0 40px;
+          opacity: 0.75;
         }
 
-        /* ── Divider ── */
-        .arch-rule {
+        /* INDEX divider line */
+        .arch-index-rule {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+        }
+        .arch-index-label {
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 9px;
+          letter-spacing: 0.3em;
+          text-transform: uppercase;
+          color: ${STONE_MID};
+          white-space: nowrap;
+          flex-shrink: 0;
+        }
+        .arch-index-line {
+          flex: 1;
           height: 1px;
           background: ${DUST};
-          margin: 0 56px;
         }
 
         /* ── Content wrapper ── */
         .arch-content {
-          padding: 48px 56px 120px;
+          padding: 48px 56px 0;
+        }
+
+        /* ── Hero featured card ── */
+        .hero-card {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0;
+          cursor: pointer;
+          position: relative;
+          margin-bottom: 80px;
+          background: ${CARD_WHITE};
+          border: 1px solid ${DUST};
+          overflow: hidden;
+          transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .hero-card:hover {
+          transform: translateY(2px);
+        }
+
+        .hero-card-img-col {
+          position: relative;
+          background: #EEE9E0;
+          overflow: hidden;
+          min-height: 480px;
+        }
+        .hero-card-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: top;
+          display: block;
+          filter: grayscale(20%);
+          transition: filter 0.4s ease-out;
+        }
+        .hero-card:hover .hero-card-img {
+          filter: grayscale(0%);
+        }
+
+        /* EDITORS PICK label — top right of image col */
+        .hero-card-badge {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 9px;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: ${CARD_WHITE};
+          background: ${BRICK};
+          padding: 5px 10px;
+          z-index: 2;
+        }
+
+        .hero-card-body-col {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          padding: 32px 36px;
+        }
+        .hero-card-top {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        /* № num — right-aligned, mono 14px */
+        .hero-card-num {
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 14px;
+          color: ${INK_DIM};
+          letter-spacing: 0.04em;
+          align-self: flex-end;
+        }
+        .hero-card-quote {
+          font-family: 'Fraunces', Georgia, serif;
+          font-style: italic;
+          font-weight: 400;
+          font-size: 11px;
+          color: ${CHESTNUT};
+          opacity: 0.45;
+          margin: 0;
+          letter-spacing: 0.01em;
+        }
+
+        .hero-card-name {
+          font-family: 'Fraunces', Georgia, serif;
+          font-weight: 400;
+          font-size: 36px;
+          line-height: 1.1;
+          letter-spacing: -0.02em;
+          color: ${CHESTNUT};
+          margin: 0;
+          transition: color 0.2s ease-out;
+        }
+        .hero-card:hover .hero-card-name {
+          color: ${BRICK};
+        }
+
+        .hero-card-tags {
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          color: ${INK_DIM};
+          opacity: 0.55;
+          margin: 0;
+        }
+        .hero-card-desc {
+          font-family: 'Fraunces', Georgia, serif;
+          font-style: italic;
+          font-weight: 400;
+          font-size: 16px;
+          line-height: 1.55;
+          color: ${CHESTNUT};
+          opacity: 0.65;
+          margin: 0;
+        }
+
+        .hero-card-bottom {
+          margin-top: 24px;
+        }
+        .hero-use-hint {
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 10px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: ${STONE_MID};
+          opacity: 0.6;
+        }
+
+        /* ── Archive divider ── */
+        .archive-divider {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          margin-bottom: 56px;
+        }
+        .archive-divider-line {
+          flex: 1;
+          height: 1px;
+          background: ${DUST};
+        }
+        .archive-divider-label {
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 10px;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: ${STONE_MID};
+          opacity: 0.5;
+          white-space: nowrap;
         }
 
         /* ── Masonry grid ── */
@@ -251,18 +468,21 @@ export default function HomePage() {
           columns: 3;
           column-gap: 48px;
         }
-        @media (max-width: 1024px) {
+        @media (max-width: 1100px) {
           .archive { columns: 2; }
         }
         @media (max-width: 640px) {
           .archive { columns: 1; }
           .arch-header { padding: 20px 24px; }
-          .arch-title-area { padding: 36px 24px 28px; }
-          .arch-content { padding: 32px 24px 100px; }
-          .arch-rule { margin: 0 24px; }
+          .arch-title-area { padding: 60px 24px 40px; }
+          .arch-content { padding: 32px 24px 0; }
+          .arch-display-title { font-size: clamp(80px, 20vw, 160px); }
+          .arch-pull-quote { font-size: 20px; }
+          .hero-card { grid-template-columns: 1fr; }
+          .hero-card-img-col { min-height: 260px; }
         }
 
-        /* ── Card ── */
+        /* ── Regular card ── */
         .archive-card {
           break-inside: avoid;
           display: block;
@@ -270,13 +490,27 @@ export default function HomePage() {
           position: relative;
         }
 
+        .archive-card-marginalia {
+          margin-bottom: 8px;
+        }
         .archive-card-num {
           font-family: 'JetBrains Mono', 'Courier New', monospace;
           font-size: 10px;
           color: ${INK_DIM};
           opacity: 0.5;
-          margin-bottom: 8px;
           letter-spacing: 0.04em;
+          line-height: 1.4;
+        }
+        .archive-card-pull-quote {
+          font-family: 'Fraunces', Georgia, serif;
+          font-style: italic;
+          font-weight: 400;
+          font-size: 11px;
+          color: ${CHESTNUT};
+          opacity: 0.45;
+          margin: 0;
+          letter-spacing: 0.01em;
+          line-height: 1.4;
         }
 
         .archive-card-img-wrap {
@@ -300,7 +534,6 @@ export default function HomePage() {
         .archive-card-body {
           padding: 12px 0 0;
         }
-
         .archive-card-name {
           font-family: 'Fraunces', Georgia, serif;
           font-weight: 500;
@@ -314,7 +547,6 @@ export default function HomePage() {
         .archive-card:hover .archive-card-name {
           color: ${BRICK};
         }
-
         .archive-card-tags {
           font-family: 'JetBrains Mono', 'Courier New', monospace;
           font-size: 10px;
@@ -324,7 +556,6 @@ export default function HomePage() {
           opacity: 0.5;
           margin: 0 0 8px;
         }
-
         .archive-card-desc {
           font-family: 'Fraunces', Georgia, serif;
           font-style: italic;
@@ -336,8 +567,8 @@ export default function HomePage() {
           margin: 0;
         }
 
-        /* ── Bottom drawer ── */
-        .arch-drawer {
+        /* ── Bottom filter bar ── */
+        .arch-filter-bar {
           position: fixed;
           bottom: 0;
           left: 0;
@@ -345,114 +576,115 @@ export default function HomePage() {
           z-index: 100;
           background: ${PARCHMENT};
           border-top: 1px solid ${DUST};
-          transition: height 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+          height: 80px;
+          display: flex;
+          align-items: stretch;
+        }
+
+        /* Left vertical label */
+        .arch-filter-label-vert {
+          width: 80px;
+          flex-shrink: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-right: 1px solid ${DUST};
+        }
+        .arch-filter-label-vert span {
+          writing-mode: vertical-rl;
+          text-orientation: mixed;
+          transform: rotate(180deg);
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 14px;
+          letter-spacing: 0.3em;
+          text-transform: uppercase;
+          color: ${STONE_MID};
+          padding: 16px 0;
+        }
+
+        /* Right section: two rows */
+        .arch-filter-rows {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          padding: 0 40px;
+          gap: 8px;
           overflow: hidden;
         }
-        .arch-drawer-inner {
-          padding: 0 56px;
-          height: 56px;
+
+        /* Row 1: STYLE — Fraunces 16px */
+        .arch-filter-row-style {
           display: flex;
-          align-items: center;
-          gap: 32px;
-        }
-        .arch-drawer-state {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 11px;
-          letter-spacing: 0.07em;
-          color: ${INK_DIM};
-          white-space: nowrap;
-          flex-shrink: 0;
-        }
-        .arch-drawer-divider {
-          width: 1px;
-          height: 18px;
-          background: ${DUST};
-          flex-shrink: 0;
-        }
-        .arch-filter-row {
-          display: flex;
-          align-items: center;
-          gap: 4px;
+          align-items: baseline;
+          gap: 0;
           overflow-x: auto;
           scrollbar-width: none;
         }
-        .arch-filter-row::-webkit-scrollbar { display: none; }
-        .arch-filter-label {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 10px;
-          letter-spacing: 0.06em;
-          color: ${INK_DIM};
-          opacity: 0.5;
-          margin-right: 6px;
+        .arch-filter-row-style::-webkit-scrollbar { display: none; }
+
+        .arch-filter-btn-style {
+          font-family: 'Fraunces', Georgia, serif;
+          font-weight: 400;
+          font-size: 16px;
+          letter-spacing: -0.01em;
+          color: ${CHESTNUT};
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0 12px 0 0;
+          opacity: 0.4;
+          transition: opacity 0.15s ease;
+          white-space: nowrap;
           flex-shrink: 0;
-          text-transform: uppercase;
+          text-decoration: none;
+          line-height: 1;
         }
-        .arch-filter-link {
+        .arch-filter-btn-style:hover { opacity: 0.7; }
+        .arch-filter-btn-style.active {
+          opacity: 1;
+          text-decoration: underline;
+          text-decoration-color: ${BRICK};
+          text-decoration-thickness: 2px;
+          text-underline-offset: 4px;
+        }
+
+        /* Row 2: PROFESSION — mono 11px */
+        .arch-filter-row-prof {
+          display: flex;
+          align-items: center;
+          gap: 0;
+          overflow-x: auto;
+          scrollbar-width: none;
+        }
+        .arch-filter-row-prof::-webkit-scrollbar { display: none; }
+
+        .arch-filter-btn-prof {
           font-family: 'JetBrains Mono', 'Courier New', monospace;
           font-size: 11px;
-          letter-spacing: 0.05em;
+          letter-spacing: 0.07em;
           text-transform: uppercase;
           color: ${CHESTNUT};
           background: none;
           border: none;
           cursor: pointer;
-          padding: 4px 8px;
-          opacity: 0.45;
-          text-decoration: none;
+          padding: 0 10px 0 0;
+          opacity: 0.35;
           transition: opacity 0.15s ease;
           white-space: nowrap;
           flex-shrink: 0;
+          line-height: 1;
         }
-        .arch-filter-link:hover {
-          opacity: 0.75;
-        }
-        .arch-filter-link.active {
+        .arch-filter-btn-prof:hover { opacity: 0.65; }
+        .arch-filter-btn-prof.active {
           opacity: 1;
           text-decoration: underline;
-          text-underline-offset: 3px;
-        }
-        .arch-filter-sep {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px;
-          color: ${INK_DIM};
-          opacity: 0.3;
-          flex-shrink: 0;
+          text-decoration-color: ${BRICK};
+          text-decoration-thickness: 2px;
+          text-underline-offset: 4px;
         }
 
-        /* Profession row expansion */
-        .arch-drawer-profession {
-          height: 0;
-          overflow: hidden;
-          padding: 0 56px;
-          display: flex;
-          align-items: center;
-          gap: 4px;
-          transition: height 0.22s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .arch-drawer-profession.open {
-          height: 44px;
-          border-top: 1px solid ${DUST};
-        }
-
-        /* Toggle expand button */
-        .arch-drawer-toggle {
-          margin-left: auto;
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-          background: none;
-          border: none;
-          cursor: pointer;
-          color: ${INK_DIM};
-          opacity: 0.45;
-          padding: 4px 0;
-          flex-shrink: 0;
-          transition: opacity 0.15s ease;
-        }
-        .arch-drawer-toggle:hover { opacity: 0.8; }
-
-        /* Empty state */
+        /* ── Empty state ── */
         .arch-empty {
           padding: 80px 0;
           font-family: 'Fraunces', Georgia, serif;
@@ -464,7 +696,8 @@ export default function HomePage() {
       `}</style>
 
       <div className="archive-page">
-        {/* ── 1. Marginalia header ── */}
+
+        {/* ── 1. Top nav ── */}
         <header className="arch-header">
           <span className="arch-logo">ResumeForge</span>
           <span className="arch-meta">
@@ -472,121 +705,181 @@ export default function HomePage() {
           </span>
         </header>
 
-        {/* ── 2. Editorial title ── */}
+        {/* ── 2. Hero title ── */}
         <div className="arch-title-area">
           <h1 className="arch-display-title">Templates</h1>
-          <p className="arch-subtitle">A curated archive for the working professional.</p>
-          <p className="arch-catalog-id">№ 001 — {String(total).padStart(3, '0')} / Continuously Curated</p>
+          <p className="arch-pull-quote">
+            "A curated archive<br />
+            for the working<br />
+            professional."
+          </p>
+          <div className="arch-index-rule">
+            <span className="arch-index-label">Index</span>
+            <div className="arch-index-line" />
+          </div>
         </div>
 
-        <div className="arch-rule" />
-
-        {/* ── 3. Masonry archive ── */}
+        {/* ── 3. Main content ── */}
         <div className="arch-content">
           {filtered.length === 0 ? (
             <p className="arch-empty">该筛选组合暂无收录模板。</p>
           ) : (
-            <div className="archive">
-              {filtered.map((t, idx) => {
-                const meta = TEMPLATE_META[t.slug] ?? { desc: '', profession: '通用' };
-                const num = String(idx + 1).padStart(3, '0');
-                const catDisplay = CATEGORY_DISPLAY[t.category] ?? t.category.toUpperCase();
-                const isHovered = hoveredSlug === t.slug;
-
+            <>
+              {/* ── Hero featured card (first result) ── */}
+              {heroTemplate && (() => {
+                const meta = TEMPLATE_META[heroTemplate.slug] ?? { desc: '', profession: '通用' };
+                const catDisplay = CATEGORY_DISPLAY[heroTemplate.category] ?? heroTemplate.category.toUpperCase();
+                const quote = getQuote(heroTemplate.slug, 0);
                 return (
                   <div
-                    key={t.slug}
-                    className="archive-card"
-                    style={{ marginBottom: cardMarginBottom(idx) }}
-                    onClick={() => handleCardClick(t.slug)}
-                    onMouseEnter={() => setHoveredSlug(t.slug)}
+                    className="hero-card"
+                    onClick={() => handleCardClick(heroTemplate.slug)}
+                    onMouseEnter={() => setHoveredSlug(heroTemplate.slug)}
                     onMouseLeave={() => setHoveredSlug(null)}
                     role="button"
                     tabIndex={0}
-                    onKeyDown={(e) => e.key === 'Enter' && handleCardClick(t.slug)}
-                    aria-label={`使用模板：${t.name}`}
+                    onKeyDown={(e) => e.key === 'Enter' && handleCardClick(heroTemplate.slug)}
+                    aria-label={`使用模板：${heroTemplate.name}`}
                   >
-                    {/* № index */}
-                    <div className="archive-card-num">№ {num}</div>
-
-                    {/* Thumbnail */}
-                    <div className="archive-card-img-wrap">
+                    {/* Left: image */}
+                    <div className="hero-card-img-col">
+                      <span className="hero-card-badge">Featured / Editors Pick</span>
                       <img
-                        src={`/thumbnails/${t.slug}.png`}
-                        alt={t.name}
-                        loading="lazy"
-                        className="archive-card-img"
+                        src={`/thumbnails/${heroTemplate.slug}.png`}
+                        alt={heroTemplate.name}
+                        className="hero-card-img"
                         onError={(e) => {
                           const el = e.target as HTMLImageElement;
                           el.style.display = 'none';
-                          const wrap = el.parentElement;
-                          if (wrap) wrap.style.minHeight = '140px';
                         }}
                       />
                     </div>
 
-                    {/* Card body */}
-                    <div className="archive-card-body">
-                      <h2 className="archive-card-name">{t.name}</h2>
-                      <p className="archive-card-tags">
-                        {catDisplay} · {meta.profession !== '通用' ? meta.profession : 'UNIVERSAL'}
-                      </p>
-                      <p className="archive-card-desc">{meta.desc}</p>
+                    {/* Right: body */}
+                    <div className="hero-card-body-col">
+                      <div className="hero-card-top">
+                        <span className="hero-card-num">№ 001</span>
+                        <p className="hero-card-quote">{quote}</p>
+                        <h2 className="hero-card-name">{heroTemplate.name}</h2>
+                        <p className="hero-card-tags">
+                          {catDisplay} · {meta.profession !== '通用' ? meta.profession : 'UNIVERSAL'}
+                        </p>
+                        <p className="hero-card-desc">{meta.desc}</p>
+                      </div>
+                      <div className="hero-card-bottom">
+                        <span className="hero-use-hint">Use this template →</span>
+                      </div>
                     </div>
                   </div>
                 );
-              })}
-            </div>
+              })()}
+
+              {/* ── Archive divider ── */}
+              {restTemplates.length > 0 && (
+                <div className="archive-divider" style={{ gap: 20 }}>
+                  <div className="archive-divider-line" />
+                  <span className="archive-divider-label">Archive ↓</span>
+                  <div className="archive-divider-line" />
+                </div>
+              )}
+
+              {/* ── Masonry archive (remaining) ── */}
+              {restTemplates.length > 0 && (
+                <div className="archive">
+                  {restTemplates.map((t, idx) => {
+                    const meta = TEMPLATE_META[t.slug] ?? { desc: '', profession: '通用' };
+                    const num = String(idx + 2).padStart(3, '0');
+                    const catDisplay = CATEGORY_DISPLAY[t.category] ?? t.category.toUpperCase();
+                    const quote = getQuote(t.slug, idx + 1);
+
+                    return (
+                      <div
+                        key={t.slug}
+                        className="archive-card"
+                        style={{ marginBottom: cardMarginBottom(idx) }}
+                        onClick={() => handleCardClick(t.slug)}
+                        onMouseEnter={() => setHoveredSlug(t.slug)}
+                        onMouseLeave={() => setHoveredSlug(null)}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={(e) => e.key === 'Enter' && handleCardClick(t.slug)}
+                        aria-label={`使用模板：${t.name}`}
+                      >
+                        {/* Marginalia */}
+                        <div className="archive-card-marginalia">
+                          <div className="archive-card-num">№ {num}</div>
+                          <p className="archive-card-pull-quote">{quote}</p>
+                        </div>
+
+                        {/* Thumbnail */}
+                        <div className="archive-card-img-wrap">
+                          <img
+                            src={`/thumbnails/${t.slug}.png`}
+                            alt={t.name}
+                            loading="lazy"
+                            className="archive-card-img"
+                            onError={(e) => {
+                              const el = e.target as HTMLImageElement;
+                              el.style.display = 'none';
+                              const wrap = el.parentElement;
+                              if (wrap) wrap.style.minHeight = '140px';
+                            }}
+                          />
+                        </div>
+
+                        {/* Card body */}
+                        <div className="archive-card-body">
+                          <h2 className="archive-card-name">{t.name}</h2>
+                          <p className="archive-card-tags">
+                            {catDisplay} · {meta.profession !== '通用' ? meta.profession : 'UNIVERSAL'}
+                          </p>
+                          <p className="archive-card-desc">{meta.desc}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
 
-      {/* ── 4. Bottom fixed drawer ── */}
-      <div className="arch-drawer" style={{ height: drawerOpen ? 100 : 56 }}>
-        {/* Style row */}
-        <div className="arch-drawer-inner">
-          <span className="arch-drawer-state">
-            STYLE: {styleLabel} / PROF: {profLabel}
-          </span>
-          <div className="arch-drawer-divider" />
-          <div className="arch-filter-row" aria-label="Style filter">
-            <span className="arch-filter-label">Style</span>
-            {STYLE_FILTERS.map((f, i) => (
-              <span key={f.key} style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-                {i > 0 && <span className="arch-filter-sep">/</span>}
-                <button
-                  className={`arch-filter-link${styleFilter === f.key ? ' active' : ''}`}
-                  onClick={() => setStyleFilter(f.key)}
-                >
-                  {f.label}
-                </button>
-              </span>
-            ))}
-          </div>
-          <button
-            className="arch-drawer-toggle"
-            onClick={() => setDrawerOpen(v => !v)}
-            aria-expanded={drawerOpen}
-            aria-label="Toggle profession filter"
-          >
-            {drawerOpen ? '▲ PROF' : '▼ PROF'}
-          </button>
+      {/* ── 4. Bottom filter bar ── */}
+      <div className="arch-filter-bar" role="navigation" aria-label="Template filters">
+
+        {/* Left: FILTER BY vertical label */}
+        <div className="arch-filter-label-vert">
+          <span>Filter by</span>
         </div>
 
-        {/* Profession row */}
-        <div className={`arch-drawer-profession${drawerOpen ? ' open' : ''}`} aria-label="Profession filter">
-          <span className="arch-filter-label">Profession</span>
-          {PROFESSION_FILTERS.map((f, i) => (
-            <span key={f.key} style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-              {i > 0 && <span className="arch-filter-sep">/</span>}
+        {/* Right: two rows */}
+        <div className="arch-filter-rows">
+          {/* Row 1: Style — Fraunces serif */}
+          <div className="arch-filter-row-style" aria-label="Style filter">
+            {STYLE_FILTERS.map((f) => (
               <button
-                className={`arch-filter-link${professionFilter === f.key ? ' active' : ''}`}
+                key={f.key}
+                className={`arch-filter-btn-style${styleFilter === f.key ? ' active' : ''}`}
+                onClick={() => setStyleFilter(f.key)}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Row 2: Profession — mono */}
+          <div className="arch-filter-row-prof" aria-label="Profession filter">
+            {PROFESSION_FILTERS.map((f) => (
+              <button
+                key={f.key}
+                className={`arch-filter-btn-prof${professionFilter === f.key ? ' active' : ''}`}
                 onClick={() => setProfessionFilter(f.key)}
               >
                 {f.label}
               </button>
-            </span>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </>
