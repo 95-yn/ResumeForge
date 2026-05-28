@@ -243,10 +243,15 @@ export default function TemplatesPage() {
         .arch-logo {
           font-family: 'Fraunces', Georgia, serif;
           font-style: italic;
-          font-weight: 400;
-          font-size: 16px;
+          font-weight: 500;
+          font-size: 22px;
           color: ${CHESTNUT};
-          letter-spacing: -0.01em;
+          letter-spacing: -0.015em;
+          cursor: pointer;
+          transition: color 0.2s ease-out;
+        }
+        .arch-logo:hover {
+          color: ${BRICK};
         }
         .arch-meta {
           font-family: 'JetBrains Mono', 'Courier New', monospace;
@@ -451,22 +456,33 @@ export default function TemplatesPage() {
         .archive-divider {
           display: flex;
           align-items: center;
-          gap: 20px;
-          margin-bottom: 56px;
+          gap: 28px;
+          margin: 96px 0 64px;
         }
         .archive-divider-line {
           flex: 1;
           height: 1px;
-          background: ${DUST};
+          background: ${CHESTNUT};
+          opacity: 0.2;
         }
         .archive-divider-label {
+          font-family: 'Fraunces', Georgia, serif;
+          font-style: italic;
+          font-weight: 400;
+          font-size: 22px;
+          letter-spacing: 0.02em;
+          color: ${CHESTNUT};
+          white-space: nowrap;
+        }
+        .archive-divider-label .num {
           font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-style: normal;
           font-size: 10px;
-          letter-spacing: 0.2em;
+          letter-spacing: 0.15em;
           text-transform: uppercase;
           color: ${STONE_MID};
-          opacity: 0.5;
-          white-space: nowrap;
+          opacity: 0.6;
+          margin-left: 12px;
         }
 
         /* ── Masonry grid ── */
@@ -705,7 +721,7 @@ export default function TemplatesPage() {
 
         {/* ── 1. Top nav ── */}
         <header className="arch-header">
-          <span className="arch-logo">ResumeForge</span>
+          <span className="arch-logo" onClick={() => router.push('/')}>ResumeForge</span>
           <span className="arch-meta">
             {total} Templates · 11 Professions · Updated 2026.05
           </span>
@@ -782,9 +798,12 @@ export default function TemplatesPage() {
 
               {/* ── Archive divider ── */}
               {restTemplates.length > 0 && (
-                <div className="archive-divider" style={{ gap: 20 }}>
+                <div className="archive-divider">
                   <div className="archive-divider-line" />
-                  <span className="archive-divider-label">Archive ↓</span>
+                  <span className="archive-divider-label">
+                    The Archive
+                    <span className="num">№ 002 — {String(restTemplates.length + 1).padStart(3, '0')}</span>
+                  </span>
                   <div className="archive-divider-line" />
                 </div>
               )}
