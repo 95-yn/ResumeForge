@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { TEMPLATES } from '@/data/templates';
 
@@ -183,12 +183,144 @@ function cardMarginBottom(idx: number): number {
   return MARGIN_RHYTHM[idx % MARGIN_RHYTHM.length];
 }
 
+/* ─── IntersectionObserver hook ───────────────────────────── */
+function useRevealOnScroll(threshold = 0.15) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [threshold]);
+
+  return { ref, visible };
+}
+
+/* ─── Masonry card with staggered reveal ──────────────────── */
+interface MasonryCardProps {
+  t: { slug: string; name: string; category: string };
+  idx: number;
+  onCardClick: (slug: string) => void;
+}
+
+function MasonryCard({ t, idx, onCardClick }: MasonryCardProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          // Stagger by index within a batch — capped to avoid huge delays
+          const delay = (idx % 6) * 60;
+          const timer = setTimeout(() => setVisible(true), delay);
+          observer.disconnect();
+          return () => clearTimeout(timer);
+        }
+      },
+      { threshold: 0.08 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [idx]);
+
+  const meta = TEMPLATE_META[t.slug] ?? { desc: '', profession: '通用' };
+  const num = String(idx + 2).padStart(3, '0');
+  const catDisplay = CATEGORY_DISPLAY[t.category] ?? t.category.toUpperCase();
+  const quote = getQuote(t.slug, idx + 1);
+
+  return (
+    <div
+      ref={ref}
+      className={`archive-card${visible ? ' card-visible' : ''}`}
+      style={{ marginBottom: cardMarginBottom(idx) }}
+      onClick={() => onCardClick(t.slug)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === 'Enter' && onCardClick(t.slug)}
+      aria-label={`使用模板：${t.name}`}
+    >
+      {/* Marginalia */}
+      <div className="archive-card-marginalia">
+        <div className="archive-card-num">№ {num}</div>
+        <p className="archive-card-pull-quote">{quote}</p>
+      </div>
+
+      {/* Thumbnail */}
+      <div className="archive-card-img-wrap">
+        {imgError ? (
+          <div className="archive-card-img-placeholder">
+            <span className="placeholder-label">preview pending</span>
+          </div>
+        ) : (
+          <img
+            src={`/thumbnails/${t.slug}.png`}
+            alt={t.name}
+            loading="lazy"
+            className="archive-card-img"
+            onError={() => setImgError(true)}
+          />
+        )}
+      </div>
+
+      {/* Card body */}
+      <div className="archive-card-body">
+        <h2 className="archive-card-name">{t.name}</h2>
+        <p className="archive-card-tags">
+          {catDisplay} · {meta.profession !== '通用' ? meta.profession : 'UNIVERSAL'}
+        </p>
+        <p className="archive-card-desc">{meta.desc}</p>
+      </div>
+    </div>
+  );
+}
+
 /* ─── Main component ───────────────────────────────────────── */
 export default function TemplatesPage() {
   const router = useRouter();
   const [styleFilter, setStyleFilter]         = useState<string>('all');
   const [professionFilter, setProfessionFilter] = useState<string>('all');
-  const [hoveredSlug, setHoveredSlug]         = useState<string | null>(null);
+
+  // Hero image error state
+  const [heroImgError, setHeroImgError] = useState(false);
+
+  // Hero card scroll reveal
+  const heroReveal = useRevealOnScroll(0.2);
+
+  // Divider scroll reveal
+  const dividerReveal = useRevealOnScroll(0.3);
+
+  // Hero title stagger — mount-triggered
+  const [titlePhase, setTitlePhase] = useState(0);
+  useEffect(() => {
+    // Pull quote: delay 200ms
+    const t1 = setTimeout(() => setTitlePhase(1), 200);
+    // Title: delay 300ms
+    const t2 = setTimeout(() => setTitlePhase(2), 300);
+    // Index row: delay 600ms
+    const t3 = setTimeout(() => setTitlePhase(3), 600);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+  }, []);
+
+  // Set page title
+  useEffect(() => {
+    document.title = 'ResumeForge — Template Archive';
+    return () => { document.title = 'ResumeForge'; };
+  }, []);
 
   const templates = TEMPLATES;
   const total = templates.length;
@@ -209,14 +341,23 @@ export default function TemplatesPage() {
       return 0;
     });
 
-  const handleCardClick = (slug: string) => {
+  const handleCardClick = useCallback((slug: string) => {
     const meta = TEMPLATE_META[slug];
     router.push(`/editor?template=${slug}&profession=${encodeURIComponent(meta?.profession || '通用')}`);
+  }, [router]);
+
+  const handleClearFilters = () => {
+    setStyleFilter('all');
+    setProfessionFilter('all');
   };
 
   /* Hero card is the first filtered result */
   const heroTemplate  = filtered[0] ?? null;
   const restTemplates = filtered.slice(1);
+
+  const heroMeta = heroTemplate ? (TEMPLATE_META[heroTemplate.slug] ?? { desc: '', profession: '通用' }) : null;
+  const heroCatDisplay = heroTemplate ? (CATEGORY_DISPLAY[heroTemplate.category] ?? heroTemplate.category.toUpperCase()) : '';
+  const heroQuote = heroTemplate ? getQuote(heroTemplate.slug, 0) : '';
 
   return (
     <>
@@ -266,6 +407,36 @@ export default function TemplatesPage() {
           padding: 96px 56px 64px;
         }
 
+        /* Staggered reveal animations */
+        .title-pull-quote {
+          opacity: 0;
+          transform: translateY(12px);
+          transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .title-pull-quote.phase-1,
+        .title-pull-quote.phase-2,
+        .title-pull-quote.phase-3 {
+          opacity: 0.7;
+          transform: translateY(0);
+        }
+
+        .title-display {
+          opacity: 0;
+          transition: opacity 0.7s ease-out;
+        }
+        .title-display.phase-2,
+        .title-display.phase-3 {
+          opacity: 1;
+        }
+
+        .title-index-row {
+          opacity: 0;
+          transition: opacity 0.5s ease-out;
+        }
+        .title-index-row.phase-3 {
+          opacity: 1;
+        }
+
         /* Display title: extreme scale */
         .arch-display-title {
           font-family: 'Fraunces', Georgia, serif;
@@ -289,7 +460,6 @@ export default function TemplatesPage() {
           color: ${CHESTNUT};
           max-width: 12ch;
           margin: 0 0 40px;
-          opacity: 0.75;
         }
 
         /* INDEX divider line */
@@ -318,6 +488,18 @@ export default function TemplatesPage() {
           padding: 48px 56px 0;
         }
 
+        /* ── Hero featured card reveal ── */
+        .hero-card-wrapper {
+          opacity: 0;
+          transform: translateY(24px);
+          transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .hero-card-wrapper.hero-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+
         /* ── Hero featured card ── */
         .hero-card {
           display: grid;
@@ -332,7 +514,11 @@ export default function TemplatesPage() {
           transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
         }
         .hero-card:hover {
-          transform: translateY(2px);
+          transform: translateY(-2px);
+        }
+        .hero-card:focus-visible {
+          outline: 2px solid ${BRICK};
+          outline-offset: 3px;
         }
 
         .hero-card-img-col {
@@ -353,7 +539,11 @@ export default function TemplatesPage() {
           object-position: top;
           display: block;
           filter: grayscale(15%);
-          transition: filter 0.4s ease-out;
+          transition: filter 0.4s ease-out,
+                      box-shadow 0.3s ease-out;
+          box-shadow: none;
+        }
+        .hero-card-wrapper.hero-visible .hero-card-img {
           box-shadow: 0 12px 40px rgba(45,24,16,0.10), 0 2px 8px rgba(45,24,16,0.06);
         }
         .hero-card:hover .hero-card-img {
@@ -373,6 +563,24 @@ export default function TemplatesPage() {
           background: ${BRICK};
           padding: 5px 10px;
           z-index: 2;
+        }
+
+        /* Hero image placeholder */
+        .hero-img-placeholder {
+          width: 100%;
+          height: 460px;
+          background: #EEE9E0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .placeholder-label {
+          font-family: 'Fraunces', Georgia, serif;
+          font-style: italic;
+          font-size: 13px;
+          color: ${STONE_MID};
+          opacity: 0.5;
+          letter-spacing: 0.02em;
         }
 
         .hero-card-body-col {
@@ -464,6 +672,24 @@ export default function TemplatesPage() {
           height: 1px;
           background: ${CHESTNUT};
           opacity: 0.2;
+          transform-origin: center;
+          transform: scaleX(0);
+          transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .archive-divider-line.left-line {
+          transform-origin: right;
+        }
+        .archive-divider-line.right-line {
+          transform-origin: left;
+        }
+        .archive-divider.divider-visible .archive-divider-line {
+          transform: scaleX(1);
+        }
+        .archive-divider.divider-visible .left-line {
+          transition-delay: 0ms;
+        }
+        .archive-divider.divider-visible .right-line {
+          transition-delay: 100ms;
         }
         .archive-divider-label {
           font-family: 'Fraunces', Georgia, serif;
@@ -473,6 +699,12 @@ export default function TemplatesPage() {
           letter-spacing: 0.02em;
           color: ${CHESTNUT};
           white-space: nowrap;
+          opacity: 0;
+          transition: opacity 0.4s ease-out;
+        }
+        .archive-divider.divider-visible .archive-divider-label {
+          opacity: 1;
+          transition-delay: 150ms;
         }
         .archive-divider-label .num {
           font-family: 'JetBrains Mono', 'Courier New', monospace;
@@ -510,6 +742,26 @@ export default function TemplatesPage() {
           display: block;
           cursor: pointer;
           position: relative;
+          opacity: 0;
+          transform: translateY(16px);
+          transition: opacity 0.5s ease-out,
+                      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .archive-card.card-visible {
+          opacity: 1;
+          transform: translateY(0);
+        }
+        /* Hover lift */
+        .archive-card:hover {
+          transform: translateY(-2px);
+        }
+        .archive-card.card-visible:hover {
+          transform: translateY(-2px);
+        }
+        .archive-card:focus-visible {
+          outline: 2px solid ${BRICK};
+          outline-offset: 4px;
+          border-radius: 2px;
         }
 
         .archive-card-marginalia {
@@ -545,12 +797,20 @@ export default function TemplatesPage() {
           display: block;
           object-fit: cover;
           object-position: top;
-          filter: grayscale(30%);
-          transition: filter 0.35s ease-out, transform 0.35s ease-out;
+          filter: grayscale(15%);
+          transition: filter 0.35s ease-out;
         }
         .archive-card:hover .archive-card-img {
           filter: grayscale(0%);
-          transform: scale(1.015);
+        }
+
+        /* Card image placeholder */
+        .archive-card-img-placeholder {
+          aspect-ratio: 595 / 400;
+          background: #F8F6F1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .archive-card-body {
@@ -588,6 +848,45 @@ export default function TemplatesPage() {
           opacity: 0.65;
           margin: 0;
         }
+
+        /* ── Empty state ── */
+        .arch-empty-state {
+          padding: 96px 0 80px;
+          text-align: center;
+        }
+        .arch-empty-headline {
+          font-family: 'Fraunces', Georgia, serif;
+          font-style: italic;
+          font-weight: 400;
+          font-size: 32px;
+          line-height: 1.2;
+          color: ${CHESTNUT};
+          opacity: 0.7;
+          margin: 0 0 16px;
+        }
+        .arch-empty-hint {
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 11px;
+          letter-spacing: 0.07em;
+          text-transform: uppercase;
+          color: ${STONE_MID};
+          margin: 0 0 6px;
+        }
+        .arch-empty-clear {
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 11px;
+          letter-spacing: 0.07em;
+          text-transform: uppercase;
+          color: ${BRICK};
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0;
+          text-decoration: underline;
+          text-underline-offset: 4px;
+          transition: opacity 0.15s ease-out;
+        }
+        .arch-empty-clear:hover { opacity: 0.7; }
 
         /* ── Bottom filter bar ── */
         .arch-filter-bar {
@@ -669,6 +968,12 @@ export default function TemplatesPage() {
           text-decoration-color: ${BRICK};
           text-decoration-thickness: 2px;
           text-underline-offset: 4px;
+          transition: opacity 0.15s ease, text-underline-offset 0.25s ease-out;
+        }
+        .arch-filter-btn-style:focus-visible {
+          outline: 2px solid ${BRICK};
+          outline-offset: 3px;
+          border-radius: 2px;
         }
 
         /* Row 2: PROFESSION — mono 11px */
@@ -704,16 +1009,12 @@ export default function TemplatesPage() {
           text-decoration-color: ${BRICK};
           text-decoration-thickness: 2px;
           text-underline-offset: 4px;
+          transition: opacity 0.15s ease, text-underline-offset 0.25s ease-out;
         }
-
-        /* ── Empty state ── */
-        .arch-empty {
-          padding: 80px 0;
-          font-family: 'Fraunces', Georgia, serif;
-          font-style: italic;
-          font-size: 18px;
-          color: ${INK_DIM};
-          opacity: 0.6;
+        .arch-filter-btn-prof:focus-visible {
+          outline: 2px solid ${BRICK};
+          outline-offset: 3px;
+          border-radius: 2px;
         }
       `}</style>
 
@@ -721,7 +1022,7 @@ export default function TemplatesPage() {
 
         {/* ── 1. Top nav ── */}
         <header className="arch-header">
-          <span className="arch-logo" onClick={() => router.push('/')}>ResumeForge</span>
+          <span className="arch-logo" onClick={() => router.push('/')} role="button" tabIndex={0} onKeyDown={e => e.key === 'Enter' && router.push('/')}>ResumeForge</span>
           <span className="arch-meta">
             {total} Templates · 11 Professions · Updated 2026.05
           </span>
@@ -729,14 +1030,19 @@ export default function TemplatesPage() {
 
         {/* ── 2. Hero title ── */}
         <div className="arch-title-area">
-          <h1 className="arch-display-title">Templates</h1>
-          <p className="arch-pull-quote">
+          {/* Pull quote: first to appear */}
+          <p className={`arch-pull-quote title-pull-quote${titlePhase >= 1 ? ` phase-${titlePhase}` : ''}`}>
             "A curated archive<br />
             for the working<br />
             professional."
           </p>
-          <div className="arch-index-rule">
-            <span className="arch-index-label">Index</span>
+          {/* Display title: second */}
+          <div className={`title-display${titlePhase >= 2 ? ` phase-${titlePhase}` : ''}`}>
+            <h1 className="arch-display-title">Templates</h1>
+          </div>
+          {/* Index row: third */}
+          <div className={`arch-index-rule title-index-row${titlePhase >= 3 ? ' phase-3' : ''}`}>
+            <span className="arch-index-label">Index · № 001 — {String(total).padStart(3, '0')}</span>
             <div className="arch-index-line" />
           </div>
         </div>
@@ -744,20 +1050,25 @@ export default function TemplatesPage() {
         {/* ── 3. Main content ── */}
         <div className="arch-content">
           {filtered.length === 0 ? (
-            <p className="arch-empty">该筛选组合暂无收录模板。</p>
+            /* Empty state */
+            <div className="arch-empty-state">
+              <p className="arch-empty-headline">Nothing in this corner of the archive.</p>
+              <p className="arch-empty-hint">Try another combination or clear filters.</p>
+              <button className="arch-empty-clear" onClick={handleClearFilters}>
+                Clear filters
+              </button>
+            </div>
           ) : (
             <>
               {/* ── Hero featured card (first result) ── */}
-              {heroTemplate && (() => {
-                const meta = TEMPLATE_META[heroTemplate.slug] ?? { desc: '', profession: '通用' };
-                const catDisplay = CATEGORY_DISPLAY[heroTemplate.category] ?? heroTemplate.category.toUpperCase();
-                const quote = getQuote(heroTemplate.slug, 0);
-                return (
+              {heroTemplate && heroMeta && (
+                <div
+                  ref={heroReveal.ref}
+                  className={`hero-card-wrapper${heroReveal.visible ? ' hero-visible' : ''}`}
+                >
                   <div
                     className="hero-card"
                     onClick={() => handleCardClick(heroTemplate.slug)}
-                    onMouseEnter={() => setHoveredSlug(heroTemplate.slug)}
-                    onMouseLeave={() => setHoveredSlug(null)}
                     role="button"
                     tabIndex={0}
                     onKeyDown={(e) => e.key === 'Enter' && handleCardClick(heroTemplate.slug)}
@@ -766,103 +1077,65 @@ export default function TemplatesPage() {
                     {/* Left: image */}
                     <div className="hero-card-img-col">
                       <span className="hero-card-badge">Featured / Editors Pick</span>
-                      <img
-                        src={`/thumbnails/${heroTemplate.slug}.png`}
-                        alt={heroTemplate.name}
-                        className="hero-card-img"
-                        onError={(e) => {
-                          const el = e.target as HTMLImageElement;
-                          el.style.display = 'none';
-                        }}
-                      />
+                      {heroImgError ? (
+                        <div className="hero-img-placeholder">
+                          <span className="placeholder-label">preview pending</span>
+                        </div>
+                      ) : (
+                        <img
+                          src={`/thumbnails/${heroTemplate.slug}.png`}
+                          alt={heroTemplate.name}
+                          className="hero-card-img"
+                          onError={() => setHeroImgError(true)}
+                        />
+                      )}
                     </div>
 
                     {/* Right: body */}
                     <div className="hero-card-body-col">
                       <div className="hero-card-top">
                         <span className="hero-card-num">№ 001</span>
-                        <p className="hero-card-quote">{quote}</p>
+                        <p className="hero-card-quote">{heroQuote}</p>
                         <h2 className="hero-card-name">{heroTemplate.name}</h2>
                         <p className="hero-card-tags">
-                          {catDisplay} · {meta.profession !== '通用' ? meta.profession : 'UNIVERSAL'}
+                          {heroCatDisplay} · {heroMeta.profession !== '通用' ? heroMeta.profession : 'UNIVERSAL'}
                         </p>
-                        <p className="hero-card-desc">{meta.desc}</p>
+                        <p className="hero-card-desc">{heroMeta.desc}</p>
                       </div>
                       <div className="hero-card-bottom">
                         <span className="hero-use-hint">Use this template →</span>
                       </div>
                     </div>
                   </div>
-                );
-              })()}
+                </div>
+              )}
 
               {/* ── Archive divider ── */}
               {restTemplates.length > 0 && (
-                <div className="archive-divider">
-                  <div className="archive-divider-line" />
+                <div
+                  ref={dividerReveal.ref}
+                  className={`archive-divider${dividerReveal.visible ? ' divider-visible' : ''}`}
+                >
+                  <div className="archive-divider-line left-line" />
                   <span className="archive-divider-label">
                     The Archive
                     <span className="num">№ 002 — {String(restTemplates.length + 1).padStart(3, '0')}</span>
                   </span>
-                  <div className="archive-divider-line" />
+                  <div className="archive-divider-line right-line" />
                 </div>
               )}
 
               {/* ── Masonry archive (remaining) ── */}
               {restTemplates.length > 0 && (
                 <div className="archive">
-                  {restTemplates.map((t, idx) => {
-                    const meta = TEMPLATE_META[t.slug] ?? { desc: '', profession: '通用' };
-                    const num = String(idx + 2).padStart(3, '0');
-                    const catDisplay = CATEGORY_DISPLAY[t.category] ?? t.category.toUpperCase();
-                    const quote = getQuote(t.slug, idx + 1);
-
-                    return (
-                      <div
-                        key={t.slug}
-                        className="archive-card"
-                        style={{ marginBottom: cardMarginBottom(idx) }}
-                        onClick={() => handleCardClick(t.slug)}
-                        onMouseEnter={() => setHoveredSlug(t.slug)}
-                        onMouseLeave={() => setHoveredSlug(null)}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => e.key === 'Enter' && handleCardClick(t.slug)}
-                        aria-label={`使用模板：${t.name}`}
-                      >
-                        {/* Marginalia */}
-                        <div className="archive-card-marginalia">
-                          <div className="archive-card-num">№ {num}</div>
-                          <p className="archive-card-pull-quote">{quote}</p>
-                        </div>
-
-                        {/* Thumbnail */}
-                        <div className="archive-card-img-wrap">
-                          <img
-                            src={`/thumbnails/${t.slug}.png`}
-                            alt={t.name}
-                            loading="lazy"
-                            className="archive-card-img"
-                            onError={(e) => {
-                              const el = e.target as HTMLImageElement;
-                              el.style.display = 'none';
-                              const wrap = el.parentElement;
-                              if (wrap) wrap.style.minHeight = '140px';
-                            }}
-                          />
-                        </div>
-
-                        {/* Card body */}
-                        <div className="archive-card-body">
-                          <h2 className="archive-card-name">{t.name}</h2>
-                          <p className="archive-card-tags">
-                            {catDisplay} · {meta.profession !== '通用' ? meta.profession : 'UNIVERSAL'}
-                          </p>
-                          <p className="archive-card-desc">{meta.desc}</p>
-                        </div>
-                      </div>
-                    );
-                  })}
+                  {restTemplates.map((t, idx) => (
+                    <MasonryCard
+                      key={t.slug}
+                      t={t}
+                      idx={idx}
+                      onCardClick={handleCardClick}
+                    />
+                  ))}
                 </div>
               )}
             </>
@@ -871,22 +1144,23 @@ export default function TemplatesPage() {
       </div>
 
       {/* ── 4. Bottom filter bar ── */}
-      <div className="arch-filter-bar" role="navigation" aria-label="Template filters">
+      <nav className="arch-filter-bar" aria-label="Template filters">
 
         {/* Left: FILTER BY vertical label */}
         <div className="arch-filter-label-vert">
           <span>Filter by</span>
         </div>
 
-        {/* Right: two rows */}
+        {/* Right: two rows — style first, then profession for logical tab order */}
         <div className="arch-filter-rows">
           {/* Row 1: Style — Fraunces serif */}
-          <div className="arch-filter-row-style" aria-label="Style filter">
+          <div className="arch-filter-row-style" role="group" aria-label="Style filter">
             {STYLE_FILTERS.map((f) => (
               <button
                 key={f.key}
                 className={`arch-filter-btn-style${styleFilter === f.key ? ' active' : ''}`}
                 onClick={() => setStyleFilter(f.key)}
+                aria-pressed={styleFilter === f.key}
               >
                 {f.label}
               </button>
@@ -894,19 +1168,20 @@ export default function TemplatesPage() {
           </div>
 
           {/* Row 2: Profession — mono */}
-          <div className="arch-filter-row-prof" aria-label="Profession filter">
+          <div className="arch-filter-row-prof" role="group" aria-label="Profession filter">
             {PROFESSION_FILTERS.map((f) => (
               <button
                 key={f.key}
                 className={`arch-filter-btn-prof${professionFilter === f.key ? ' active' : ''}`}
                 onClick={() => setProfessionFilter(f.key)}
+                aria-pressed={professionFilter === f.key}
               >
                 {f.label}
               </button>
             ))}
           </div>
         </div>
-      </div>
+      </nav>
     </>
   );
 }
