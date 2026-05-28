@@ -24,6 +24,7 @@ interface EditorStore {
   templateHtml: string | null;
   templateCss: string | null;
   templateNotFound: boolean;
+  currentProfession: string | null;
   sectionOrder: string[];
   activeSection: string | null;
   isDirty: boolean;
@@ -45,7 +46,7 @@ interface EditorStore {
   updateByPath: (path: string, value: unknown) => void;
   updateSettings: (key: string, value: unknown) => void;
   setZoom: (zoom: number) => void;
-  resetToDefault: () => void;
+  resetToDefault: () => Promise<void>;
   undo: () => void;
   redo: () => void;
   save: () => void;
@@ -86,6 +87,7 @@ let loadCounter = 0;
 export const useEditorStore = create<EditorStore>((set, get) => ({
   resume: null, templateId: null, templateHtml: null, templateCss: null,
   templateNotFound: false,
+  currentProfession: null,
   sectionOrder: [], activeSection: null, isDirty: false, saveStatus: 'saved',
   saveErrorMessage: null,
   history: [], historyIndex: -1, zoom: 1,
@@ -132,6 +134,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     set({
       resume: resumeData, templateId: templateSlug,
       templateHtml: tpl.html, templateCss: tpl.css,
+      currentProfession: profession ?? null,
       sectionOrder, history: [structuredClone(resumeData)], historyIndex: 0,
       isDirty: false, saveStatus: 'saved',
     });
@@ -210,15 +213,33 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     set(pushHistory(state, newData));
   },
 
-  resetToDefault: () => {
-    const resumeData = structuredClone(DEFAULT_RESUME_DATA) as ResumeData;
+  resetToDefault: async () => {
+    // Restore the *initial* template state — same data the user saw on first load.
+    // Uses currentProfession to fetch the right profession-default; falls back to
+    // DEFAULT_RESUME_DATA (通用) if no profession or import fails.
+    const { currentProfession, templateId } = get();
+    let resumeData: ResumeData;
+    if (currentProfession && PROFESSION_SLUG_MAP[currentProfession]) {
+      try {
+        const profMod = await import(`@/data/profession-defaults/${PROFESSION_SLUG_MAP[currentProfession]}`);
+        resumeData = structuredClone(profMod.default) as ResumeData;
+      } catch {
+        resumeData = structuredClone(DEFAULT_RESUME_DATA) as ResumeData;
+      }
+    } else {
+      resumeData = structuredClone(DEFAULT_RESUME_DATA) as ResumeData;
+    }
+    // Clear localStorage so next reload also picks up the default
+    if (templateId) {
+      try { localStorage.removeItem(GUEST_KEY_PREFIX + templateId); } catch { /* ignore */ }
+    }
     set({
       resume: resumeData,
       sectionOrder: [...DEFAULT_SECTION_ORDER],
       history: [structuredClone(resumeData)],
       historyIndex: 0,
-      isDirty: true,
-      saveStatus: 'unsaved',
+      isDirty: false,
+      saveStatus: 'saved',
     });
   },
 

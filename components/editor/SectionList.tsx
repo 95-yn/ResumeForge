@@ -856,16 +856,30 @@ function ArrayPanel({ sectionKey, items, addLabel, addArrayItem, removeArrayItem
       <button
         onClick={() => addArrayItem(sectionKey)}
         style={{
-          width: 'calc(100% - 8px)', margin: '2px 4px 4px', padding: '5px 0',
-          border: '1px dashed #E7E5E4', borderRadius: 6, background: 'transparent',
-          color: '#A8A29E', fontSize: 11, cursor: 'pointer', fontFamily: 'inherit',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-          transition: 'all 0.12s', outline: 'none',
+          width: 'calc(100% - 8px)', margin: '4px 4px 8px', padding: '8px 0',
+          border: '1px dashed #D6D3D1', borderRadius: 6, background: '#FAFAF9',
+          color: '#78716C', fontSize: 12, fontWeight: 500, cursor: 'pointer',
+          fontFamily: 'inherit',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+          transition: 'background 160ms ease-out, border-color 160ms ease-out, color 160ms ease-out',
+          outline: 'none',
         }}
-        onMouseEnter={e => { e.currentTarget.style.borderColor = '#1C1917'; e.currentTarget.style.color = '#1C1917'; }}
-        onMouseLeave={e => { e.currentTarget.style.borderColor = '#E7E5E4'; e.currentTarget.style.color = '#A8A29E'; }}
+        onMouseEnter={e => {
+          e.currentTarget.style.borderColor = '#1C1917';
+          e.currentTarget.style.borderStyle = 'solid';
+          e.currentTarget.style.background = '#F0EAE0';
+          e.currentTarget.style.color = '#1C1917';
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.borderColor = '#D6D3D1';
+          e.currentTarget.style.borderStyle = 'dashed';
+          e.currentTarget.style.background = '#FAFAF9';
+          e.currentTarget.style.color = '#78716C';
+        }}
+        onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
+        onBlur={e => { e.currentTarget.style.outline = 'none'; }}
       >
-        <PlusOutlined style={{ fontSize: 9 }} /> {addLabel || '添加条目'}
+        <PlusOutlined style={{ fontSize: 11 }} /> {addLabel || '添加条目'}
       </button>
     </div>
   );

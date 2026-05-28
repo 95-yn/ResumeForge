@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Tooltip } from 'antd';
-import { ArrowLeftOutlined, PrinterOutlined, UndoOutlined, RedoOutlined, ReloadOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, PrinterOutlined, UndoOutlined, RedoOutlined, RollbackOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
 import { compileTemplate } from '@/lib/mini-template';
 import { useEditorStore } from '@/lib/editor-store';
@@ -326,7 +326,7 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
             onBlur={e => { e.currentTarget.style.outline = 'none'; }}
             aria-label="还原默认内容"
           >
-            <ReloadOutlined />
+            <RollbackOutlined />
           </button>
         </Tooltip>
 
