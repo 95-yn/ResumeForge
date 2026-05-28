@@ -74,10 +74,12 @@ function ColorPicker({ colors, onSelect, onReset, onClose }: ColorPickerProps) {
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) onClose();
+      const target = e.target as Node | null;
+      if (!target || !document.contains(target)) return;  // detached node — ignore
+      if (ref.current && !ref.current.contains(target)) onClose();
     };
-    setTimeout(() => document.addEventListener('mousedown', handleClick), 50);
-    return () => document.removeEventListener('mousedown', handleClick);
+    setTimeout(() => document.addEventListener('mouseup', handleClick), 50);
+    return () => document.removeEventListener('mouseup', handleClick);
   }, [onClose]);
 
   return (
@@ -194,12 +196,21 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
   }, [editor, editingField.field, onConfirm]);
 
   // Click outside → implicit save (industry standard for inline editors). ESC → cancel.
+  // Use mouseup (not mousedown) + document.contains guard:
+  //   - mouseup fires AFTER React has flushed any onMouseDown handlers
+  //     (e.g. ColorPicker swatch closes itself in onMouseDown → DOM unmount).
+  //     If we read e.target during mousedown phase, it may be a detached node
+  //     that ContainerRef.contains() falsely judges "outside" → unexpected close.
+  //   - document.contains(target) skips events whose target was removed
+  //     between mousedown and our handler firing.
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) handleConfirm();
+      const target = e.target as Node | null;
+      if (!target || !document.contains(target)) return;  // stale / detached target
+      if (containerRef.current && !containerRef.current.contains(target)) handleConfirm();
     };
-    const timer = setTimeout(() => document.addEventListener('mousedown', handleClickOutside), 150);
-    return () => { clearTimeout(timer); document.removeEventListener('mousedown', handleClickOutside); };
+    const timer = setTimeout(() => document.addEventListener('mouseup', handleClickOutside), 150);
+    return () => { clearTimeout(timer); document.removeEventListener('mouseup', handleClickOutside); };
   }, [handleConfirm]);
 
   const handleLink = useCallback(() => {

@@ -115,16 +115,20 @@ export function InlineRichText({ value, onChange, placeholder = '输入内容...
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
-  // Close color picker on outside click
+  // Close color picker on outside click. Use mouseup + document.contains guard
+  // to avoid closing when an inner swatch unmounts itself in onMouseDown (the
+  // detached node would falsely register as "outside").
   useEffect(() => {
     if (!openPicker) return;
     const handler = (e: MouseEvent) => {
-      if (pickerRef.current && !pickerRef.current.contains(e.target as Node)) {
+      const target = e.target as Node | null;
+      if (!target || !document.contains(target)) return;
+      if (pickerRef.current && !pickerRef.current.contains(target)) {
         setOpenPicker(null);
       }
     };
-    const t = setTimeout(() => document.addEventListener('mousedown', handler), 50);
-    return () => { clearTimeout(t); document.removeEventListener('mousedown', handler); };
+    const t = setTimeout(() => document.addEventListener('mouseup', handler), 50);
+    return () => { clearTimeout(t); document.removeEventListener('mouseup', handler); };
   }, [openPicker]);
 
   const btnStyle = (active: boolean): React.CSSProperties => ({

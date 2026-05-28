@@ -555,15 +555,17 @@ function PortalDropdown({ anchorRef, open, onClose, children }: {
   useEffect(() => {
     if (!open) return;
     const handler = (e: MouseEvent) => {
+      const target = e.target as Node | null;
+      if (!target || !document.contains(target)) return;  // detached node — ignore
       if (
-        dropRef.current && !dropRef.current.contains(e.target as Node) &&
-        anchorRef.current && !anchorRef.current.contains(e.target as Node)
+        dropRef.current && !dropRef.current.contains(target) &&
+        anchorRef.current && !anchorRef.current.contains(target)
       ) {
         onClose();
       }
     };
-    setTimeout(() => document.addEventListener('mousedown', handler), 50);
-    return () => document.removeEventListener('mousedown', handler);
+    setTimeout(() => document.addEventListener('mouseup', handler), 50);
+    return () => document.removeEventListener('mouseup', handler);
   }, [open, onClose, anchorRef]);
 
   if (!open || !pos) return null;
