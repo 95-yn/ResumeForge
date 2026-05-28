@@ -4,213 +4,153 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { TEMPLATES } from '@/data/templates';
 
+/* ─── Palette ─────────────────────────────────────────────── */
+const PARCHMENT = '#F8F6F1';
+const CHESTNUT  = '#2D1810';
+const BRICK     = '#B0463A';
+const DUST      = '#E9E5DD';
+const INK_DIM   = 'rgba(45,24,16,0.42)';
+
+/* ─── Template metadata ────────────────────────────────────── */
 interface TemplateMeta {
   desc: string;
-  bg: string;
-  tc: string;
-  accent?: string;
-  layout?: 'two-col' | 'dark-header' | 'single';
   profession: string;
 }
 
 const TEMPLATE_META: Record<string, TemplateMeta> = {
-  classic:      { desc: '标准单栏布局，适合大多数行业', bg: '#F9FAFB', tc: '#374151', profession: '通用' },
-  professional: { desc: '深色顶部 header，商务专业感强', bg: '#1F2937', tc: '#F9FAFB', layout: 'dark-header', profession: '通用' },
-  executive:    { desc: '高管风格，大气稳重，金色分隔线点缀', bg: '#FFFFFF', tc: '#1C1C1C', accent: '#C9A84C', profession: '金融财会' },
-  corporate:    { desc: '企业标准配色，蓝色主调，规整表格感', bg: '#1E40AF', tc: '#FFFFFF', layout: 'dark-header', profession: '通用' },
-  banking:      { desc: '金融行业，保守配色，衬线标题字体', bg: '#FFFFFF', tc: '#111111', profession: '金融财会' },
-  consulting:   { desc: '咨询风格，左右对称双栏，黑白为主', bg: '#FFFFFF', tc: '#111111', layout: 'two-col', profession: '金融财会' },
-  sales:        { desc: '销售商务，突出业绩数字，橙色点缀', bg: '#FFF7ED', tc: '#EA580C', accent: '#EA580C', profession: '市场营销' },
-  hr:           { desc: '人力资源，温暖色调，柔和圆角标签', bg: '#FFFBEB', tc: '#B45309', accent: '#D97706', profession: '通用' },
-  manager:      { desc: '项目经理，时间线布局，蓝灰色调', bg: '#F8FAFC', tc: '#475569', profession: 'IT互联网' },
-  legal:        { desc: '法律行业，严肃衬线字体，全黑白无彩色', bg: '#FFFFFF', tc: '#000000', profession: '通用' },
-  modern:       { desc: '双栏布局，深色侧边栏突出个人品牌', bg: '#1F2937', tc: '#F9FAFB', layout: 'two-col', profession: '通用' },
-  fresh:        { desc: '蓝色竖条装饰，清新活力，年轻感十足', bg: '#EFF6FF', tc: '#1E40AF', accent: '#3B82F6', profession: '通用' },
-  creative:     { desc: '渐变色 header，进度条技能，设计感满满', bg: '#7C3AED', tc: '#fff', layout: 'dark-header', profession: '设计创意' },
-  designer:     { desc: '设计师风格，深色侧边栏，大量留白', bg: '#18181B', tc: '#FAFAFA', layout: 'two-col', profession: '设计创意' },
-  photographer: { desc: '摄影师风格，全宽深色 header，衬线大标题', bg: '#1C1C1C', tc: '#FFFFFF', layout: 'dark-header', profession: '设计创意' },
-  writer:       { desc: '书籍排版风格，Garamond 字体，文学气质', bg: '#FFFFFF', tc: '#1a1a1a', profession: '教育学术' },
-  marketing:    { desc: '市场营销，渐变标题底色，数据可视化风格', bg: '#DBEAFE', tc: '#1E3A5F', layout: 'two-col', profession: '市场营销' },
-  media:        { desc: '新媒体运营，卡片式布局，圆角边框', bg: '#111827', tc: '#F9FAFB', layout: 'dark-header', profession: '市场营销' },
-  artist:       { desc: '艺术家，大标题左对齐，棕色调', bg: '#FFFFFF', tc: '#78350F', accent: '#78350F', profession: '设计创意' },
-  architect:    { desc: '建筑师，极细线条，网格感布局，灰色调', bg: '#FFFFFF', tc: '#1A1A1A', layout: 'two-col', profession: '设计创意' },
-  minimal:      { desc: '衬线字体，极简排版，适合学术与创意行业', bg: '#FFFBEB', tc: '#92400E', profession: '通用' },
-  elegant:      { desc: '居中布局，衬线大标题，优雅简约风', bg: '#FAF8F5', tc: '#2D2D2D', accent: '#C4A882', profession: '通用' },
-  clean:        { desc: '纯净白，只用黑色和灰色，无任何装饰线', bg: '#FFFFFF', tc: '#111111', profession: '通用' },
-  swiss:        { desc: '瑞士排版风格，网格对齐，红色点缀', bg: '#FFFFFF', tc: '#111111', accent: '#DC2626', profession: '设计创意' },
-  nordic:       { desc: '北欧风，大量留白，浅蓝灰配色', bg: '#F8FAFC', tc: '#1E293B', accent: '#94A3B8', profession: '通用' },
-  japanese:     { desc: '日式简约，竖线分隔，留白极多', bg: '#FFFFFF', tc: '#1C1917', profession: '通用' },
-  paper:        { desc: '纸质感，微黄背景，打字机字体', bg: '#FEFCE8', tc: '#292524', profession: '教育学术' },
-  mono:         { desc: '单色风格，只用灰色深浅变化', bg: '#FFFFFF', tc: '#525252', profession: '通用' },
-  line:         { desc: '线条艺术，所有分隔都用细线装饰', bg: '#FFFFFF', tc: '#1a1a1a', profession: '通用' },
-  space:        { desc: '呼吸感设计，超大行距与section间距', bg: '#FFFFFF', tc: '#222222', profession: '教育学术' },
-  tech:         { desc: '等宽字体，tag 技能，暗色调技术风格', bg: '#0F172A', tc: '#CBD5E1', layout: 'dark-header', profession: 'IT互联网' },
-  developer:    { desc: '终端风格，绿色 # 前缀，代码感设计', bg: '#1E1E1E', tc: '#D4D4D4', layout: 'dark-header', profession: 'IT互联网' },
-  github:       { desc: 'GitHub Profile 风格，绿色点缀', bg: '#FFFFFF', tc: '#24292F', accent: '#166534', profession: 'IT互联网' },
-  terminal:     { desc: '完整终端风格，黑底绿字，仿真命令行', bg: '#0A0A0A', tc: '#4ADE80', layout: 'dark-header', profession: 'IT互联网' },
-  vscode:       { desc: 'VS Code 深色主题配色，侧边栏布局', bg: '#1E1E1E', tc: '#D4D4D4', layout: 'two-col', profession: 'IT互联网' },
-  data:         { desc: '数据科学家，表格风格展示技能，深蓝暗色', bg: '#0F172A', tc: '#E2E8F0', layout: 'dark-header', profession: 'IT互联网' },
-  devops:       { desc: 'DevOps 工程师，pipeline 时间线样式', bg: '#172554', tc: '#E2E8F0', layout: 'dark-header', profession: 'IT互联网' },
-  mobile:       { desc: '移动开发，圆角卡片，iOS 设计语言', bg: '#F2F2F7', tc: '#1C1C1E', profession: 'IT互联网' },
-  fullstack:    { desc: '全栈工程师，上深下白分栏布局', bg: '#1E293B', tc: '#F1F5F9', layout: 'dark-header', profession: 'IT互联网' },
-  ai:           { desc: 'AI/ML 工程师，蓝紫渐变 header', bg: '#1E1B4B', tc: '#E0E7FF', layout: 'dark-header', profession: 'IT互联网' },
-  'campus-general': { desc: '简洁单栏，教育置前，通用校招首选', bg: '#FFFFFF', tc: '#1C1917', profession: '通用' },
-  'campus-tech':    { desc: '深色 header，技能和项目突出，技术校招专属', bg: '#0F172A', tc: '#F1F5F9', layout: 'dark-header', profession: 'IT互联网' },
-  'campus-finance': { desc: '保守正式，衬线字体，金融校招专属', bg: '#FFFFFF', tc: '#1E3A5F', profession: '金融财会' },
-  'campus-design':  { desc: '有设计感的全黑白排版，设计校招专属', bg: '#FFFFFF', tc: '#111111', profession: '设计创意' },
-  'campus-intern':  { desc: '简洁明快，左侧蓝色装饰线，实习生专属', bg: '#FFFFFF', tc: '#374151', profession: '通用' },
-  'it-frontend':    { desc: '技能标签突出位置，深蓝 header，前端工程师专属', bg: '#1E293B', tc: '#F1F5F9', layout: 'dark-header', profession: 'IT互联网' },
-  'it-backend':     { desc: '纯白底，技能分组，代码风格标签，后端工程师专属', bg: '#FFFFFF', tc: '#1E293B', profession: 'IT互联网' },
-  'it-fullstack':   { desc: '双栏布局，深色侧边栏，全栈工程师专属', bg: '#0F172A', tc: '#F1F5F9', layout: 'two-col', profession: 'IT互联网' },
-  'finance-analyst':    { desc: '深蓝 section 标题，资质证书突出，金融分析师专属', bg: '#FFFFFF', tc: '#1E3A5F', profession: '金融财会' },
-  'finance-accounting': { desc: '纯黑白衬线标题，极严谨，会计审计专属', bg: '#FFFFFF', tc: '#111111', profession: '金融财会' },
-  'finance-banking':    { desc: '深灰 header，白底正文，银行保险专属', bg: '#1F2937', tc: '#F9FAFB', layout: 'dark-header', profession: '金融财会' },
-  'design-ui':      { desc: '双栏深色侧边栏，UI设计师专属', bg: '#18181B', tc: '#FAFAFA', layout: 'two-col', profession: '设计创意' },
-  'design-graphic': { desc: '全黑白，排版层次感，平面设计专属', bg: '#FFFFFF', tc: '#111111', profession: '设计创意' },
-  'design-video':   { desc: '深黑 header，视频动画专属', bg: '#0A0A0A', tc: '#FFFFFF', layout: 'dark-header', profession: '设计创意' },
-  'edu-teacher':    { desc: '深蓝 section 标题，教育经历置前，中小学教师专属', bg: '#FFFFFF', tc: '#1E3A5F', profession: '教育学术' },
-  'edu-professor':  { desc: '衬线字体，学术风格，大学教授专属', bg: '#FEFCE8', tc: '#1A1A1A', profession: '教育学术' },
-  'edu-trainer':    { desc: '灰色标题，温暖色调，培训讲师专属', bg: '#FFFBF7', tc: '#44403C', profession: '教育学术' },
-  'mkt-digital':  { desc: '深色 header，数据突出，数字营销专属', bg: '#0F172A', tc: '#F1F5F9', layout: 'dark-header', profession: '市场营销' },
-  'mkt-brand':    { desc: 'Editorial 杂志感，纯黑白，品牌营销专属', bg: '#FFFFFF', tc: '#111111', profession: '市场营销' },
-  'mkt-content':  { desc: '左侧 4px 装饰线，内容运营专属', bg: '#FFFFFF', tc: '#44403C', profession: '市场营销' },
-  'med-doctor':  { desc: '深蓝极保守，严谨专业，医生专属', bg: '#FFFFFF', tc: '#1E3A5F', profession: '医疗健康' },
-  'med-nurse':   { desc: '暖灰标题，柔和色调，护士专属', bg: '#FFFBF7', tc: '#44403C', profession: '医疗健康' },
-  'med-pharma':  { desc: '深灰 header，白底正文，药学专属', bg: '#1F2937', tc: '#F9FAFB', layout: 'dark-header', profession: '医疗健康' },
-  'pm-product':   { desc: '细线分隔，简洁克制，产品经理专属', bg: '#FFFFFF', tc: '#1C1917', profession: '产品运营' },
-  'pm-operation': { desc: '浅灰左栏，白底主栏，运营经理专属', bg: '#F5F5F4', tc: '#44403C', layout: 'two-col', profession: '产品运营' },
-  'pm-growth':    { desc: '深色 header，增长策略专属', bg: '#0F172A', tc: '#F1F5F9', layout: 'dark-header', profession: '产品运营' },
-  'hr-recruiter': { desc: '暖灰标题，温暖亲和，招聘HRBP专属', bg: '#FFFBF7', tc: '#44403C', profession: '人力行政' },
-  'hr-training':  { desc: '纯黑白简洁，培训发展专属', bg: '#FFFFFF', tc: '#111111', profession: '人力行政' },
-  'hr-admin':     { desc: '深灰 section 标题，行政管理专属', bg: '#FFFFFF', tc: '#1F2937', profession: '人力行政' },
-  'legal-lawyer':     { desc: '全黑白衬线字体，严肃正式，律师专属', bg: '#FFFFFF', tc: '#000000', profession: '法律合规' },
-  'legal-compliance': { desc: '深蓝标题，合规专员专属', bg: '#FFFFFF', tc: '#1E3A5F', profession: '法律合规' },
-  'legal-ip':         { desc: '深灰标题，知识产权专属', bg: '#FFFFFF', tc: '#292524', profession: '法律合规' },
+  classic:      { desc: '标准单栏布局，适合大多数行业', profession: '通用' },
+  professional: { desc: '深色顶部 header，商务专业感强', profession: '通用' },
+  executive:    { desc: '高管风格，大气稳重，金色分隔线点缀', profession: '金融财会' },
+  corporate:    { desc: '企业标准配色，蓝色主调，规整表格感', profession: '通用' },
+  banking:      { desc: '金融行业，保守配色，衬线标题字体', profession: '金融财会' },
+  consulting:   { desc: '咨询风格，左右对称双栏，黑白为主', profession: '金融财会' },
+  sales:        { desc: '销售商务，突出业绩数字，橙色点缀', profession: '市场营销' },
+  hr:           { desc: '人力资源，温暖色调，柔和圆角标签', profession: '通用' },
+  manager:      { desc: '项目经理，时间线布局，蓝灰色调', profession: 'IT互联网' },
+  legal:        { desc: '法律行业，严肃衬线字体，全黑白无彩色', profession: '通用' },
+  modern:       { desc: '双栏布局，深色侧边栏突出个人品牌', profession: '通用' },
+  fresh:        { desc: '蓝色竖条装饰，清新活力，年轻感十足', profession: '通用' },
+  creative:     { desc: '渐变色 header，进度条技能，设计感满满', profession: '设计创意' },
+  designer:     { desc: '设计师风格，深色侧边栏，大量留白', profession: '设计创意' },
+  photographer: { desc: '摄影师风格，全宽深色 header，衬线大标题', profession: '设计创意' },
+  writer:       { desc: '书籍排版风格，Garamond 字体，文学气质', profession: '教育学术' },
+  marketing:    { desc: '市场营销，渐变标题底色，数据可视化风格', profession: '市场营销' },
+  media:        { desc: '新媒体运营，卡片式布局，圆角边框', profession: '市场营销' },
+  artist:       { desc: '艺术家，大标题左对齐，棕色调', profession: '设计创意' },
+  architect:    { desc: '建筑师，极细线条，网格感布局，灰色调', profession: '设计创意' },
+  minimal:      { desc: '衬线字体，极简排版，适合学术与创意行业', profession: '通用' },
+  elegant:      { desc: '居中布局，衬线大标题，优雅简约风', profession: '通用' },
+  clean:        { desc: '纯净白，只用黑色和灰色，无任何装饰线', profession: '通用' },
+  swiss:        { desc: '瑞士排版风格，网格对齐，红色点缀', profession: '设计创意' },
+  nordic:       { desc: '北欧风，大量留白，浅蓝灰配色', profession: '通用' },
+  japanese:     { desc: '日式简约，竖线分隔，留白极多', profession: '通用' },
+  paper:        { desc: '纸质感，微黄背景，打字机字体', profession: '教育学术' },
+  mono:         { desc: '单色风格，只用灰色深浅变化', profession: '通用' },
+  line:         { desc: '线条艺术，所有分隔都用细线装饰', profession: '通用' },
+  space:        { desc: '呼吸感设计，超大行距与section间距', profession: '教育学术' },
+  tech:         { desc: '等宽字体，tag 技能，暗色调技术风格', profession: 'IT互联网' },
+  developer:    { desc: '终端风格，绿色 # 前缀，代码感设计', profession: 'IT互联网' },
+  github:       { desc: 'GitHub Profile 风格，绿色点缀', profession: 'IT互联网' },
+  terminal:     { desc: '完整终端风格，黑底绿字，仿真命令行', profession: 'IT互联网' },
+  vscode:       { desc: 'VS Code 深色主题配色，侧边栏布局', profession: 'IT互联网' },
+  data:         { desc: '数据科学家，表格风格展示技能，深蓝暗色', profession: 'IT互联网' },
+  devops:       { desc: 'DevOps 工程师，pipeline 时间线样式', profession: 'IT互联网' },
+  mobile:       { desc: '移动开发，圆角卡片，iOS 设计语言', profession: 'IT互联网' },
+  fullstack:    { desc: '全栈工程师，上深下白分栏布局', profession: 'IT互联网' },
+  ai:           { desc: 'AI/ML 工程师，蓝紫渐变 header', profession: 'IT互联网' },
+  'campus-general': { desc: '简洁单栏，教育置前，通用校招首选', profession: '通用' },
+  'campus-tech':    { desc: '深色 header，技能和项目突出，技术校招专属', profession: 'IT互联网' },
+  'campus-finance': { desc: '保守正式，衬线字体，金融校招专属', profession: '金融财会' },
+  'campus-design':  { desc: '有设计感的全黑白排版，设计校招专属', profession: '设计创意' },
+  'campus-intern':  { desc: '简洁明快，左侧蓝色装饰线，实习生专属', profession: '通用' },
+  'it-frontend':    { desc: '技能标签突出位置，深蓝 header，前端工程师专属', profession: 'IT互联网' },
+  'it-backend':     { desc: '纯白底，技能分组，代码风格标签，后端工程师专属', profession: 'IT互联网' },
+  'it-fullstack':   { desc: '双栏布局，深色侧边栏，全栈工程师专属', profession: 'IT互联网' },
+  'finance-analyst':    { desc: '深蓝 section 标题，资质证书突出，金融分析师专属', profession: '金融财会' },
+  'finance-accounting': { desc: '纯黑白衬线标题，极严谨，会计审计专属', profession: '金融财会' },
+  'finance-banking':    { desc: '深灰 header，白底正文，银行保险专属', profession: '金融财会' },
+  'design-ui':      { desc: '双栏深色侧边栏，UI设计师专属', profession: '设计创意' },
+  'design-graphic': { desc: '全黑白，排版层次感，平面设计专属', profession: '设计创意' },
+  'design-video':   { desc: '深黑 header，视频动画专属', profession: '设计创意' },
+  'edu-teacher':    { desc: '深蓝 section 标题，教育经历置前，中小学教师专属', profession: '教育学术' },
+  'edu-professor':  { desc: '衬线字体，学术风格，大学教授专属', profession: '教育学术' },
+  'edu-trainer':    { desc: '灰色标题，温暖色调，培训讲师专属', profession: '教育学术' },
+  'mkt-digital':  { desc: '深色 header，数据突出，数字营销专属', profession: '市场营销' },
+  'mkt-brand':    { desc: 'Editorial 杂志感，纯黑白，品牌营销专属', profession: '市场营销' },
+  'mkt-content':  { desc: '左侧 4px 装饰线，内容运营专属', profession: '市场营销' },
+  'med-doctor':  { desc: '深蓝极保守，严谨专业，医生专属', profession: '医疗健康' },
+  'med-nurse':   { desc: '暖灰标题，柔和色调，护士专属', profession: '医疗健康' },
+  'med-pharma':  { desc: '深灰 header，白底正文，药学专属', profession: '医疗健康' },
+  'pm-product':   { desc: '细线分隔，简洁克制，产品经理专属', profession: '产品运营' },
+  'pm-operation': { desc: '浅灰左栏，白底主栏，运营经理专属', profession: '产品运营' },
+  'pm-growth':    { desc: '深色 header，增长策略专属', profession: '产品运营' },
+  'hr-recruiter': { desc: '暖灰标题，温暖亲和，招聘HRBP专属', profession: '人力行政' },
+  'hr-training':  { desc: '纯黑白简洁，培训发展专属', profession: '人力行政' },
+  'hr-admin':     { desc: '深灰 section 标题，行政管理专属', profession: '人力行政' },
+  'legal-lawyer':     { desc: '全黑白衬线字体，严肃正式，律师专属', profession: '法律合规' },
+  'legal-compliance': { desc: '深蓝标题，合规专员专属', profession: '法律合规' },
+  'legal-ip':         { desc: '深灰标题，知识产权专属', profession: '法律合规' },
 };
 
-const CATEGORY_LABELS: Record<string, string> = {
-  business: '商务',
-  creative: '创意',
-  minimal: '极简',
-  tech: '技术',
-  profession: '职能',
-  campus: '校招',
+/* ─── Filter categories ────────────────────────────────────── */
+const STYLE_FILTERS = [
+  { key: 'all', label: 'ALL' },
+  { key: 'business', label: 'BUSINESS' },
+  { key: 'creative', label: 'CREATIVE' },
+  { key: 'minimal', label: 'MINIMAL' },
+  { key: 'tech', label: 'TECH' },
+  { key: 'campus', label: 'CAMPUS' },
+  { key: 'profession', label: 'PROFESSION' },
+];
+
+const PROFESSION_FILTERS = [
+  { key: 'all', label: 'ALL' },
+  { key: 'IT互联网', label: 'IT' },
+  { key: '金融财会', label: '金融' },
+  { key: '设计创意', label: '设计' },
+  { key: '教育学术', label: '教育' },
+  { key: '市场营销', label: '营销' },
+  { key: '医疗健康', label: '医疗' },
+  { key: '产品运营', label: '产品' },
+  { key: '人力行政', label: '人力' },
+  { key: '法律合规', label: '法律' },
+];
+
+/* ─── Category label map ───────────────────────────────────── */
+const CATEGORY_DISPLAY: Record<string, string> = {
+  business:   'BUSINESS',
+  creative:   'CREATIVE',
+  minimal:    'MINIMAL',
+  tech:       'TECH',
+  profession: 'PROFESSION',
+  campus:     'CAMPUS',
 };
 
-const styleCategories = [
-  { key: 'all', label: '全部' },
-  { key: 'business', label: '商务' },
-  { key: 'creative', label: '创意' },
-  { key: 'minimal', label: '极简' },
-  { key: 'tech', label: '技术' },
-  { key: 'profession', label: '职能' },
-  { key: 'campus', label: '校招' },
-];
-
-const professionCategories = [
-  { key: 'all', label: '全部' },
-  { key: 'IT互联网', label: 'IT互联网' },
-  { key: '金融财会', label: '金融财会' },
-  { key: '设计创意', label: '设计创意' },
-  { key: '教育学术', label: '教育学术' },
-  { key: '市场营销', label: '市场营销' },
-  { key: '医疗健康', label: '医疗健康' },
-  { key: '产品运营', label: '产品运营' },
-  { key: '人力行政', label: '人力行政' },
-  { key: '法律合规', label: '法律合规' },
-];
-
-function TemplatePreview({ slug }: { slug: string }) {
-  return (
-    <div style={{
-      height: 220, borderRadius: '10px 10px 0 0', overflow: 'hidden',
-      position: 'relative', background: '#F5F5F4',
-    }}>
-      <img
-        src={`/thumbnails/${slug}.png`}
-        alt={slug}
-        loading="lazy"
-        style={{
-          width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top',
-          display: 'block',
-        }}
-        onError={(e) => {
-          (e.target as HTMLImageElement).style.display = 'none';
-        }}
-      />
-      <div style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0, height: 40,
-        background: 'linear-gradient(to bottom, transparent, rgba(255,255,255,0.9))',
-        pointerEvents: 'none',
-      }} />
-    </div>
-  );
-}
-
-function FilterBar({
-  label,
-  categories,
-  selected,
-  onSelect,
-}: {
-  label: string;
-  categories: { key: string; label: string }[];
-  selected: string;
-  onSelect: (key: string) => void;
-}) {
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-      <span style={{ fontSize: 12, color: '#A8A29E', fontWeight: 500, flexShrink: 0, minWidth: 28 }}>{label}</span>
-      {categories.map(cat => {
-        const isActive = selected === cat.key;
-        return (
-          <button
-            key={cat.key}
-            onClick={() => onSelect(cat.key)}
-            style={{
-              padding: '5px 14px',
-              borderRadius: 20,
-              border: `1px solid ${isActive ? '#1C1917' : '#E7E5E4'}`,
-              background: isActive ? '#1C1917' : '#FFFFFF',
-              color: isActive ? '#FFFFFF' : '#78716C',
-              fontSize: 12,
-              fontWeight: isActive ? 600 : 400,
-              cursor: 'pointer',
-              transition: 'all 0.12s ease',
-              fontFamily: 'inherit',
-              lineHeight: 1,
-            }}
-          >
-            {cat.label}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
+/* ─── Featured order ───────────────────────────────────────── */
 const FEATURED_ORDER = ['classic', 'professional', 'elegant', 'modern', 'fresh', 'clean', 'swiss', 'minimal', 'tech', 'developer'];
 
+/* ─── Margin rhythm ────────────────────────────────────────── */
+function cardMarginBottom(idx: number): number {
+  return [32, 56, 40][idx % 3];
+}
+
+/* ─── Main component ───────────────────────────────────────── */
 export default function HomePage() {
   const router = useRouter();
-  const [category, setCategory] = useState<string>('all');
-  const [profession, setProfession] = useState<string>('all');
-  const [hoveredCard, setHoveredCard] = useState<string | null>(null);
+  const [styleFilter, setStyleFilter] = useState<string>('all');
+  const [professionFilter, setProfessionFilter] = useState<string>('all');
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+  const [hoveredSlug, setHoveredSlug] = useState<string | null>(null);
 
-  // Use local TEMPLATES data directly, no API needed
   const templates = TEMPLATES;
-
-  const handleUse = (slug: string) => {
-    const meta = TEMPLATE_META[slug];
-    router.push(`/editor?template=${slug}&profession=${encodeURIComponent(meta?.profession || '通用')}`);
-  };
+  const total = templates.length;
 
   const filtered = templates
     .filter(t => {
-      const categoryMatch = category === 'all' || t.category === category;
+      const styleMatch = styleFilter === 'all' || t.category === styleFilter;
       const meta = TEMPLATE_META[t.slug];
-      const professionMatch = profession === 'all' || (meta && meta.profession === profession);
-      return categoryMatch && professionMatch;
+      const profMatch = professionFilter === 'all' || (meta && meta.profession === professionFilter);
+      return styleMatch && profMatch;
     })
     .sort((a, b) => {
       const ai = FEATURED_ORDER.indexOf(a.slug);
@@ -221,141 +161,434 @@ export default function HomePage() {
       return 0;
     });
 
+  const handleCardClick = (slug: string) => {
+    const meta = TEMPLATE_META[slug];
+    router.push(`/editor?template=${slug}&profession=${encodeURIComponent(meta?.profession || '通用')}`);
+  };
+
+  const styleLabel = STYLE_FILTERS.find(f => f.key === styleFilter)?.label ?? 'ALL';
+  const profLabel  = PROFESSION_FILTERS.find(f => f.key === professionFilter)?.label ?? 'ALL';
+
   return (
-    <div style={{ minHeight: '100vh', background: '#FAFAF9' }}>
-      {/* Header */}
-      <header style={{
-        background: 'rgba(250,250,249,0.92)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        borderBottom: '1px solid #E7E5E4',
-        padding: '0 32px',
-        height: 54,
-        display: 'flex',
-        alignItems: 'center',
-        gap: 16,
-        position: 'sticky',
-        top: 0,
-        zIndex: 50,
-      }}>
-        <span style={{ fontSize: 15, fontWeight: 700, color: '#1C1917', letterSpacing: '-0.4px', fontFamily: 'inherit' }}>
-          ResumeForge
-        </span>
-        <div style={{ flex: 1 }} />
-      </header>
+    <>
+      {/* ── Font face injection ── */}
+      <style>{`
+        .archive-page {
+          min-height: 100vh;
+          background: ${PARCHMENT};
+          color: ${CHESTNUT};
+          font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+        }
 
-      <div style={{ maxWidth: 1060, margin: '0 auto', padding: '48px 24px 80px' }}>
-        {/* Hero */}
-        <div style={{ marginBottom: 36 }}>
-          <h1 style={{
-            margin: '0 0 8px',
-            fontSize: 28,
-            fontWeight: 700,
-            color: '#1C1917',
-            letterSpacing: '-0.6px',
-            lineHeight: 1.25,
-            fontFamily: 'inherit',
-          }}>
-            选择一个适合你的模板
-          </h1>
-          <p style={{ margin: 0, fontSize: 14, color: '#78716C', lineHeight: 1.6, fontFamily: 'inherit' }}>
-            免费使用 · 即时编辑 · 直接打印
-          </p>
+        /* ── Marginalia header ── */
+        .arch-header {
+          display: flex;
+          align-items: baseline;
+          justify-content: space-between;
+          padding: 28px 56px 20px;
+          border-bottom: 1px solid ${DUST};
+        }
+        .arch-logo {
+          font-family: 'Fraunces', Georgia, serif;
+          font-style: italic;
+          font-weight: 400;
+          font-size: 16px;
+          color: ${CHESTNUT};
+          letter-spacing: -0.01em;
+        }
+        .arch-meta {
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 10px;
+          color: ${INK_DIM};
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+        }
+
+        /* ── Title area ── */
+        .arch-title-area {
+          padding: 52px 56px 40px;
+        }
+        .arch-display-title {
+          font-family: 'Fraunces', Georgia, serif;
+          font-weight: 400;
+          font-size: clamp(64px, 8vw, 96px);
+          line-height: 0.95;
+          letter-spacing: -0.03em;
+          color: ${CHESTNUT};
+          margin: 0 0 16px;
+        }
+        .arch-subtitle {
+          font-family: 'Fraunces', Georgia, serif;
+          font-style: italic;
+          font-weight: 400;
+          font-size: 18px;
+          color: ${CHESTNUT};
+          margin: 0 0 14px;
+          opacity: 0.7;
+        }
+        .arch-catalog-id {
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 11px;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: ${INK_DIM};
+        }
+
+        /* ── Divider ── */
+        .arch-rule {
+          height: 1px;
+          background: ${DUST};
+          margin: 0 56px;
+        }
+
+        /* ── Content wrapper ── */
+        .arch-content {
+          padding: 48px 56px 120px;
+        }
+
+        /* ── Masonry grid ── */
+        .archive {
+          columns: 3;
+          column-gap: 48px;
+        }
+        @media (max-width: 1024px) {
+          .archive { columns: 2; }
+        }
+        @media (max-width: 640px) {
+          .archive { columns: 1; }
+          .arch-header { padding: 20px 24px; }
+          .arch-title-area { padding: 36px 24px 28px; }
+          .arch-content { padding: 32px 24px 100px; }
+          .arch-rule { margin: 0 24px; }
+        }
+
+        /* ── Card ── */
+        .archive-card {
+          break-inside: avoid;
+          display: block;
+          cursor: pointer;
+          position: relative;
+        }
+
+        .archive-card-num {
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 10px;
+          color: ${INK_DIM};
+          opacity: 0.5;
+          margin-bottom: 8px;
+          letter-spacing: 0.04em;
+        }
+
+        .archive-card-img-wrap {
+          overflow: hidden;
+          position: relative;
+          background: #EEE9E0;
+        }
+        .archive-card-img {
+          width: 100%;
+          display: block;
+          object-fit: cover;
+          object-position: top;
+          filter: grayscale(30%);
+          transition: filter 0.35s ease-out, transform 0.35s ease-out;
+        }
+        .archive-card:hover .archive-card-img {
+          filter: grayscale(0%);
+          transform: scale(1.015);
+        }
+
+        .archive-card-body {
+          padding: 12px 0 0;
+        }
+
+        .archive-card-name {
+          font-family: 'Fraunces', Georgia, serif;
+          font-weight: 500;
+          font-size: 22px;
+          line-height: 1.15;
+          letter-spacing: -0.02em;
+          color: ${CHESTNUT};
+          margin: 0 0 6px;
+          transition: color 0.2s ease-out;
+        }
+        .archive-card:hover .archive-card-name {
+          color: ${BRICK};
+        }
+
+        .archive-card-tags {
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 10px;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          color: ${INK_DIM};
+          opacity: 0.5;
+          margin: 0 0 8px;
+        }
+
+        .archive-card-desc {
+          font-family: 'Fraunces', Georgia, serif;
+          font-style: italic;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 1.6;
+          color: ${CHESTNUT};
+          opacity: 0.65;
+          margin: 0;
+        }
+
+        /* ── Bottom drawer ── */
+        .arch-drawer {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          z-index: 100;
+          background: ${PARCHMENT};
+          border-top: 1px solid ${DUST};
+          transition: height 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+          overflow: hidden;
+        }
+        .arch-drawer-inner {
+          padding: 0 56px;
+          height: 56px;
+          display: flex;
+          align-items: center;
+          gap: 32px;
+        }
+        .arch-drawer-state {
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 11px;
+          letter-spacing: 0.07em;
+          color: ${INK_DIM};
+          white-space: nowrap;
+          flex-shrink: 0;
+        }
+        .arch-drawer-divider {
+          width: 1px;
+          height: 18px;
+          background: ${DUST};
+          flex-shrink: 0;
+        }
+        .arch-filter-row {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          overflow-x: auto;
+          scrollbar-width: none;
+        }
+        .arch-filter-row::-webkit-scrollbar { display: none; }
+        .arch-filter-label {
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 10px;
+          letter-spacing: 0.06em;
+          color: ${INK_DIM};
+          opacity: 0.5;
+          margin-right: 6px;
+          flex-shrink: 0;
+          text-transform: uppercase;
+        }
+        .arch-filter-link {
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 11px;
+          letter-spacing: 0.05em;
+          text-transform: uppercase;
+          color: ${CHESTNUT};
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 4px 8px;
+          opacity: 0.45;
+          text-decoration: none;
+          transition: opacity 0.15s ease;
+          white-space: nowrap;
+          flex-shrink: 0;
+        }
+        .arch-filter-link:hover {
+          opacity: 0.75;
+        }
+        .arch-filter-link.active {
+          opacity: 1;
+          text-decoration: underline;
+          text-underline-offset: 3px;
+        }
+        .arch-filter-sep {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 10px;
+          color: ${INK_DIM};
+          opacity: 0.3;
+          flex-shrink: 0;
+        }
+
+        /* Profession row expansion */
+        .arch-drawer-profession {
+          height: 0;
+          overflow: hidden;
+          padding: 0 56px;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          transition: height 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .arch-drawer-profession.open {
+          height: 44px;
+          border-top: 1px solid ${DUST};
+        }
+
+        /* Toggle expand button */
+        .arch-drawer-toggle {
+          margin-left: auto;
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 10px;
+          letter-spacing: 0.06em;
+          text-transform: uppercase;
+          background: none;
+          border: none;
+          cursor: pointer;
+          color: ${INK_DIM};
+          opacity: 0.45;
+          padding: 4px 0;
+          flex-shrink: 0;
+          transition: opacity 0.15s ease;
+        }
+        .arch-drawer-toggle:hover { opacity: 0.8; }
+
+        /* Empty state */
+        .arch-empty {
+          padding: 80px 0;
+          font-family: 'Fraunces', Georgia, serif;
+          font-style: italic;
+          font-size: 18px;
+          color: ${INK_DIM};
+          opacity: 0.6;
+        }
+      `}</style>
+
+      <div className="archive-page">
+        {/* ── 1. Marginalia header ── */}
+        <header className="arch-header">
+          <span className="arch-logo">ResumeForge</span>
+          <span className="arch-meta">
+            {total} Templates · 11 Professions · Updated 2026.05
+          </span>
+        </header>
+
+        {/* ── 2. Editorial title ── */}
+        <div className="arch-title-area">
+          <h1 className="arch-display-title">Templates</h1>
+          <p className="arch-subtitle">A curated archive for the working professional.</p>
+          <p className="arch-catalog-id">№ 001 — {String(total).padStart(3, '0')} / Continuously Curated</p>
         </div>
 
-        {/* Filter bars */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 32 }}>
-          <FilterBar label="风格" categories={styleCategories} selected={category} onSelect={setCategory} />
-          <FilterBar label="职业" categories={professionCategories} selected={profession} onSelect={setProfession} />
-        </div>
+        <div className="arch-rule" />
 
-        {/* Template grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
-          {filtered.map((t) => {
-            const meta = TEMPLATE_META[t.slug] ?? { bg: '#F5F5F4', tc: '#374151', desc: '', profession: '通用' };
-            const isHovered = hoveredCard === t.slug;
-            return (
-              <div
-                key={t.slug}
-                style={{
-                  background: '#FFFFFF',
-                  border: '1px solid #E7E5E4',
-                  borderRadius: 10,
-                  overflow: 'hidden',
-                  transition: 'box-shadow 0.18s ease, transform 0.18s ease',
-                  boxShadow: isHovered
-                    ? '0 8px 25px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04)'
-                    : '0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06)',
-                  transform: isHovered ? 'translateY(-2px)' : 'translateY(0)',
-                }}
-                onMouseEnter={() => setHoveredCard(t.slug)}
-                onMouseLeave={() => setHoveredCard(null)}
-              >
-                <TemplatePreview slug={t.slug} />
+        {/* ── 3. Masonry archive ── */}
+        <div className="arch-content">
+          {filtered.length === 0 ? (
+            <p className="arch-empty">该筛选组合暂无收录模板。</p>
+          ) : (
+            <div className="archive">
+              {filtered.map((t, idx) => {
+                const meta = TEMPLATE_META[t.slug] ?? { desc: '', profession: '通用' };
+                const num = String(idx + 1).padStart(3, '0');
+                const catDisplay = CATEGORY_DISPLAY[t.category] ?? t.category.toUpperCase();
+                const isHovered = hoveredSlug === t.slug;
 
-                <div style={{ padding: '14px 16px 16px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 5, flexWrap: 'wrap' }}>
-                    <span style={{ fontSize: 14, fontWeight: 600, color: '#1C1917', fontFamily: 'inherit' }}>
-                      {t.name}
-                    </span>
-                    {t.category && (
-                      <span style={{
-                        fontSize: 10, padding: '2px 7px', borderRadius: 20, fontWeight: 500,
-                        background: '#F5F5F4', color: '#78716C', border: '1px solid #E7E5E4',
-                        fontFamily: 'inherit',
-                      }}>
-                        {CATEGORY_LABELS[t.category] ?? t.category}
-                      </span>
-                    )}
-                    {meta.profession && meta.profession !== '通用' && (
-                      <span style={{
-                        fontSize: 10, padding: '2px 7px', borderRadius: 20, fontWeight: 500,
-                        background: '#F5F5F4', color: '#78716C', border: '1px solid #E7E5E4',
-                        fontFamily: 'inherit',
-                      }}>
-                        {meta.profession}
-                      </span>
-                    )}
-                  </div>
-
-                  <div style={{
-                    fontSize: 12, color: '#78716C', marginBottom: 14, lineHeight: 1.55,
-                    fontFamily: 'inherit',
-                  }}>
-                    {meta.desc}
-                  </div>
-
-                  <button
-                    onClick={() => handleUse(t.slug)}
-                    style={{
-                      width: '100%', padding: '8px 0', borderRadius: 6,
-                      border: 'none',
-                      background: isHovered ? '#292524' : '#1C1917',
-                      color: '#FFFFFF',
-                      fontSize: 13, fontWeight: 500,
-                      cursor: 'pointer',
-                      transition: 'background 0.12s ease, transform 0.1s ease',
-                      transform: isHovered ? 'scale(1.01)' : 'scale(1)',
-                      fontFamily: 'inherit',
-                    }}
+                return (
+                  <div
+                    key={t.slug}
+                    className="archive-card"
+                    style={{ marginBottom: cardMarginBottom(idx) }}
+                    onClick={() => handleCardClick(t.slug)}
+                    onMouseEnter={() => setHoveredSlug(t.slug)}
+                    onMouseLeave={() => setHoveredSlug(null)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => e.key === 'Enter' && handleCardClick(t.slug)}
+                    aria-label={`使用模板：${t.name}`}
                   >
-                    使用此模板
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+                    {/* № index */}
+                    <div className="archive-card-num">№ {num}</div>
+
+                    {/* Thumbnail */}
+                    <div className="archive-card-img-wrap">
+                      <img
+                        src={`/thumbnails/${t.slug}.png`}
+                        alt={t.name}
+                        loading="lazy"
+                        className="archive-card-img"
+                        onError={(e) => {
+                          const el = e.target as HTMLImageElement;
+                          el.style.display = 'none';
+                          const wrap = el.parentElement;
+                          if (wrap) wrap.style.minHeight = '140px';
+                        }}
+                      />
+                    </div>
+
+                    {/* Card body */}
+                    <div className="archive-card-body">
+                      <h2 className="archive-card-name">{t.name}</h2>
+                      <p className="archive-card-tags">
+                        {catDisplay} · {meta.profession !== '通用' ? meta.profession : 'UNIVERSAL'}
+                      </p>
+                      <p className="archive-card-desc">{meta.desc}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* ── 4. Bottom fixed drawer ── */}
+      <div className="arch-drawer" style={{ height: drawerOpen ? 100 : 56 }}>
+        {/* Style row */}
+        <div className="arch-drawer-inner">
+          <span className="arch-drawer-state">
+            STYLE: {styleLabel} / PROF: {profLabel}
+          </span>
+          <div className="arch-drawer-divider" />
+          <div className="arch-filter-row" aria-label="Style filter">
+            <span className="arch-filter-label">Style</span>
+            {STYLE_FILTERS.map((f, i) => (
+              <span key={f.key} style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+                {i > 0 && <span className="arch-filter-sep">/</span>}
+                <button
+                  className={`arch-filter-link${styleFilter === f.key ? ' active' : ''}`}
+                  onClick={() => setStyleFilter(f.key)}
+                >
+                  {f.label}
+                </button>
+              </span>
+            ))}
+          </div>
+          <button
+            className="arch-drawer-toggle"
+            onClick={() => setDrawerOpen(v => !v)}
+            aria-expanded={drawerOpen}
+            aria-label="Toggle profession filter"
+          >
+            {drawerOpen ? '▲ PROF' : '▼ PROF'}
+          </button>
         </div>
 
-        {filtered.length === 0 && (
-          <div style={{
-            textAlign: 'center', color: '#A8A29E', padding: '64px 0', fontSize: 14,
-            fontFamily: 'inherit',
-          }}>
-            该分类暂无模板
-          </div>
-        )}
+        {/* Profession row */}
+        <div className={`arch-drawer-profession${drawerOpen ? ' open' : ''}`} aria-label="Profession filter">
+          <span className="arch-filter-label">Profession</span>
+          {PROFESSION_FILTERS.map((f, i) => (
+            <span key={f.key} style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
+              {i > 0 && <span className="arch-filter-sep">/</span>}
+              <button
+                className={`arch-filter-link${professionFilter === f.key ? ' active' : ''}`}
+                onClick={() => setProfessionFilter(f.key)}
+              >
+                {f.label}
+              </button>
+            </span>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
