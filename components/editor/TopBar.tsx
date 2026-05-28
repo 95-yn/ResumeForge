@@ -201,8 +201,10 @@ export function TopBar() {
 
     // A4 with sensible default margins. Most templates control their own internal
     // padding, so we use minimal page margins and let the resume container breathe.
-    // Empty <title> ⇒ browser header in print dialog shows nothing instead of "about:blank"
-    const pdfTitle = (resume.basics?.name as string | undefined) || '简历';
+    // Browser uses <title> as default PDF filename. Compose 姓名 _ 职位 for professional output.
+    const rawName = (resume.basics?.name as string | undefined)?.trim();
+    const rawTitle = (resume.basics?.title as string | undefined)?.trim();
+    const pdfTitle = [rawName, rawTitle].filter(Boolean).join(' · ') || '简历';
     const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>${pdfTitle}</title>
 <style>
 ${templateCss}

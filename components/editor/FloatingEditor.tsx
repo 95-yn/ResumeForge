@@ -150,6 +150,9 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
   const containerRef = useRef<HTMLDivElement>(null);
   const longField = isLongField(editingField.field);
   const [colorPickerOpen, setColorPickerOpen] = useState<'text' | 'bg' | null>(null);
+  const [linkPopupOpen, setLinkPopupOpen] = useState(false);
+  const [linkInputValue, setLinkInputValue] = useState('');
+  const linkInputRef = useRef<HTMLInputElement>(null);
 
   const editor = useEditor({
     extensions: [
@@ -224,11 +227,29 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
 
   const handleLink = useCallback(() => {
     if (!editor) return;
-    const prev = editor.getAttributes('link').href;
-    const url = window.prompt('输入链接地址', prev || 'https://');
-    if (url === null) return;
-    if (url === '') { editor.chain().focus().unsetLink().run(); return; }
-    editor.chain().focus().setLink({ href: url }).run();
+    const prev = (editor.getAttributes('link').href as string) || '';
+    setLinkInputValue(prev || 'https://');
+    setLinkPopupOpen(true);
+    // focus input next tick
+    setTimeout(() => linkInputRef.current?.select(), 30);
+  }, [editor]);
+
+  const applyLink = useCallback(() => {
+    if (!editor) return;
+    const url = linkInputValue.trim();
+    if (!url || url === 'https://') {
+      editor.chain().focus().unsetLink().run();
+    } else {
+      const safeUrl = /^https?:\/\/|^mailto:|^tel:/i.test(url) ? url : `https://${url}`;
+      editor.chain().focus().extendMarkRange('link').setLink({ href: safeUrl }).run();
+    }
+    setLinkPopupOpen(false);
+  }, [editor, linkInputValue]);
+
+  const removeLink = useCallback(() => {
+    if (!editor) return;
+    editor.chain().focus().unsetLink().run();
+    setLinkPopupOpen(false);
   }, [editor]);
 
   const t = iframeRect?.top ?? 0;
@@ -402,8 +423,76 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
         padding: '6px 8px', flexWrap: 'wrap',
         borderBottom: '1px solid #F5F5F4', background: '#FAFAF9',
         borderRadius: '14px 14px 0 0', overflow: 'visible',
+        position: 'relative',
       }}>
         {longField ? fullToolbar : compactToolbar}
+
+        {/* Link input popup — inline, replaces native window.prompt */}
+        {linkPopupOpen && (
+          <div
+            onMouseDown={e => e.stopPropagation()}
+            style={{
+              position: 'absolute', top: 'calc(100% + 4px)', left: 8, right: 8,
+              background: '#FFFFFF', border: '1px solid #E7E5E4', borderRadius: 8,
+              boxShadow: '0 12px 32px rgba(28,25,23,0.14)', padding: 10, zIndex: 10002,
+              display: 'flex', alignItems: 'center', gap: 6,
+              animation: 'fePopIn 160ms cubic-bezier(0.16,1,0.3,1)',
+              transformOrigin: 'top center',
+            }}
+          >
+            <span style={{
+              fontSize: 10, color: '#A8A29E',
+              fontFamily: "'JetBrains Mono', 'SF Mono', monospace",
+              letterSpacing: '0.06em', textTransform: 'uppercase', flexShrink: 0,
+            }}>URL</span>
+            <input
+              ref={linkInputRef}
+              type="url"
+              value={linkInputValue}
+              onChange={e => setLinkInputValue(e.target.value)}
+              onKeyDown={e => {
+                if (e.key === 'Enter') { e.preventDefault(); applyLink(); }
+                if (e.key === 'Escape') { e.preventDefault(); setLinkPopupOpen(false); }
+              }}
+              placeholder="https://example.com"
+              style={{
+                flex: 1, fontSize: 12, color: '#1C1917', background: '#FAFAF9',
+                border: '1px solid #E7E5E4', borderRadius: 5,
+                padding: '5px 8px', outline: 'none', fontFamily: 'inherit',
+                transition: 'border-color 120ms',
+              }}
+              onFocus={e => { e.currentTarget.style.borderColor = '#1C1917'; e.currentTarget.style.background = '#FFFFFF'; }}
+              onBlur={e => { e.currentTarget.style.borderColor = '#E7E5E4'; e.currentTarget.style.background = '#FAFAF9'; }}
+            />
+            <button
+              type="button"
+              onClick={removeLink}
+              title="移除链接"
+              style={{
+                fontSize: 10, color: '#78716C', background: 'transparent',
+                border: '1px solid #E7E5E4', borderRadius: 5, padding: '4px 8px',
+                cursor: 'pointer', fontFamily: 'inherit', outline: 'none', flexShrink: 0,
+                transition: 'background 120ms, color 120ms, border-color 120ms',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#FEF2F2'; e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.borderColor = '#FECACA'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; e.currentTarget.style.borderColor = '#E7E5E4'; }}
+            >移除</button>
+            <button
+              type="button"
+              onClick={applyLink}
+              title="确认 (Enter)"
+              style={{
+                fontSize: 11, color: '#FFFFFF', background: '#1C1917',
+                border: 'none', borderRadius: 5, padding: '5px 12px',
+                cursor: 'pointer', fontFamily: 'inherit', fontWeight: 600,
+                outline: 'none', flexShrink: 0,
+                transition: 'background 120ms',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.background = '#292524'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = '#1C1917'; }}
+            >确认</button>
+          </div>
+        )}
       </div>
 
       <div style={{
