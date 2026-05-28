@@ -61,6 +61,12 @@
 
 * { box-sizing: border-box; }
 
+html {
+  scroll-behavior: smooth;
+  /* Smoother scrolling via larger sub-pixel granularity */
+  text-rendering: optimizeLegibility;
+}
+
 body {
   margin: 0;
   font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif;
@@ -68,6 +74,20 @@ body {
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* 阻止垂直 over-scroll 弹性（保留横向手势返回），消除滚到顶/底时的 chain 卡顿 */
+  overscroll-behavior-y: none;
+}
+
+/* Sticky / scroll-reactive 元素提升到 compositor layer 减少 paint */
+.arch-filter-bar,
+.lp-nav {
+  will-change: background-color, box-shadow, backdrop-filter;
+  transform: translateZ(0);
+}
+
+/* Masonry 卡片 content-visibility 让 off-screen 不参与 paint */
+.archive-card {
+  contain: layout style paint;
 }
 
 /* Page-bg sync — 让 body 跟随当前页面，避免 over-scroll 露出两色 */
