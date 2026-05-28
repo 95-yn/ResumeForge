@@ -271,7 +271,11 @@ test.describe('Bug 4: InlineRichText — rich-text editor', () => {
     await page.waitForTimeout(100);
 
     let html = await editor.innerHTML();
-    expect(html.toLowerCase()).toContain('color: #dc2626');
+    // Browser may serialize #DC2626 as rgb(220, 38, 38) — check for either form
+    const hasColor = html.toLowerCase().includes('color: #dc2626') ||
+      html.toLowerCase().includes('color: rgb(220, 38, 38)') ||
+      html.toLowerCase().includes('color:#dc2626');
+    expect(hasColor).toBe(true);
 
     // Now apply highlight bg (yellow #FEF3C7)
     await page.keyboard.press('ControlOrMeta+A');
