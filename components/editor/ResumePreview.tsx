@@ -21,7 +21,8 @@ const EDIT_SCRIPT = `
 
     el.addEventListener('mouseenter', function() {
       if (el !== activeEl) {
-        el.style.background = 'rgba(28,25,23,0.05)';
+        // brick-red 5% hover —呼应 Archive 高亮色
+        el.style.background = 'rgba(176,70,58,0.05)';
         el.style.boxShadow = '';
       }
     });
@@ -39,8 +40,9 @@ const EDIT_SCRIPT = `
         activeEl.style.boxShadow = '';
       }
       activeEl = el;
-      el.style.background = 'rgba(28,25,23,0.08)';
-      el.style.boxShadow = 'inset 0 0 0 1.5px rgba(28,25,23,0.2)';
+      // active: brick-red 8% bg + brick-red inset border
+      el.style.background = 'rgba(176,70,58,0.08)';
+      el.style.boxShadow = 'inset 0 0 0 1.5px rgba(176,70,58,0.35)';
       var rect = el.getBoundingClientRect();
       parent.postMessage({
         type: 'field-clicked',
@@ -175,6 +177,7 @@ export function ResumePreview() {
   const [iframeRect, setIframeRect] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
   const [renderError, setRenderError] = useState(false);
   const [iframeReady, setIframeReady] = useState(false);
+  const [iframeLoading, setIframeLoading] = useState(true); // true until first load
 
   const isEmpty = !resume?.basics?.name && !resume?.basics?.email;
 
@@ -395,13 +398,32 @@ export function ResumePreview() {
   }
 
   return (
-    <div style={{
-      flex: 1, display: 'flex', justifyContent: 'center',
-      alignItems: 'flex-start', padding: 28, overflowY: 'auto', height: '100%',
-      position: 'relative',
-      // 纸纹背景：石灰白 + SVG 噪点
-      background: `#F5F2EB url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.85' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.24 0 0 0 0 0.16 0 0 0 0 0.10 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-    }}>
+    <div
+      data-preview-scroller
+      style={{
+        flex: 1, display: 'flex', justifyContent: 'center',
+        alignItems: 'flex-start', padding: 28, overflowY: 'auto', height: '100%',
+        position: 'relative',
+        // 纸纹背景：石灰白 + SVG 噪点
+        background: `#F5F2EB url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.85' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.24 0 0 0 0 0.16 0 0 0 0 0.10 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+      }}>
+      {/* Loading spinner — shows while iframe content is loading, paper-ash bg prevents white flash */}
+      {iframeLoading && (
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 10,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          background: '#F5F2EB',
+          pointerEvents: 'none',
+        }}>
+          <div style={{
+            width: 24, height: 24, borderRadius: '50%',
+            border: '2px solid #E7E5E4',
+            borderTopColor: '#78716C',
+            animation: 'rpSpin 700ms linear infinite',
+          }} />
+        </div>
+      )}
+
       <div style={{
         transformOrigin: 'top center',
         transform: `scale(${zoom})`,
@@ -439,15 +461,22 @@ export function ResumePreview() {
               });
             }
             setIframeReady(true);
+            setIframeLoading(false);
           }}
           style={{
             width: '210mm', minHeight: '297mm', background: '#fff', border: 'none',
-            boxShadow: [
+            // Deepen paper shadow when in editing state (active field selected)
+            boxShadow: editingField ? [
+              '0 12px 50px rgba(28,25,23,0.14)',
+              '0 3px 14px rgba(28,25,23,0.08)',
+              'inset 0 1px 0 rgba(255,255,255,0.4)',
+            ].join(', ') : [
               '0 8px 40px rgba(0,0,0,0.08)',
               '0 2px 10px rgba(0,0,0,0.04)',
               'inset 0 1px 0 rgba(255,255,255,0.4)',
             ].join(', '),
             display: 'block', borderRadius: 3, overflow: 'hidden',
+            transition: 'box-shadow 250ms cubic-bezier(0.16, 1, 0.3, 1)',
           }}
         />
       </div>
@@ -462,8 +491,12 @@ export function ResumePreview() {
       )}
 
       <style>{`
+        @keyframes rpSpin {
+          to { transform: rotate(360deg); }
+        }
         @media (prefers-reduced-motion: reduce) {
           * { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+          @keyframes rpSpin { to { transform: none; } }
         }
       `}</style>
     </div>
