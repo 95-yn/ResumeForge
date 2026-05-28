@@ -52,6 +52,17 @@ export function InlineRichText({ value, onChange, placeholder = '输入内容...
   const [openPicker, setOpenPicker] = useState<null | 'color' | 'bg'>(null);
   const pickerRef = useRef<HTMLDivElement>(null);
 
+  // Debounced commit — flush HTML to store 200ms after last update.
+  const onChangeRef = useRef(onChange);
+  onChangeRef.current = onChange;
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastSent = useRef<string>(value || '');
+  const flushCommit = (html: string) => {
+    if (html === lastSent.current) return;
+    lastSent.current = html;
+    onChangeRef.current(html);
+  };
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -77,8 +88,14 @@ export function InlineRichText({ value, onChange, placeholder = '输入内容...
         return sanitizePastedHtml(html);
       },
     },
+    // Real-time sync: debounce 200ms so iframe doesn't reload on every keystroke.
+    onUpdate: ({ editor }) => {
+      if (debounceTimer.current) clearTimeout(debounceTimer.current);
+      debounceTimer.current = setTimeout(() => flushCommit(editor.getHTML()), 200);
+    },
     onBlur: ({ editor }) => {
-      onChange(editor.getHTML());
+      if (debounceTimer.current) { clearTimeout(debounceTimer.current); debounceTimer.current = null; }
+      flushCommit(editor.getHTML());
       setFocused(false);
     },
     onFocus: () => setFocused(true),
@@ -198,6 +215,8 @@ export function InlineRichText({ value, onChange, placeholder = '输入内容...
                       } else {
                         editor?.chain().focus().toggleHighlight({ color: c }).run();
                       }
+                      // Flush immediately so iframe reflects color without waiting for blur/debounce
+                      if (editor) flushCommit(editor.getHTML());
                       setOpenPicker(null);
                     }}
                     style={{

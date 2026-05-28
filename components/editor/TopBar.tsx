@@ -136,21 +136,65 @@ export function TopBar() {
     const compiled = compileTemplate(templateHtml);
     const body = compiled(resume);
     const bgColor = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor || '#ffffff';
+
+    // A4 with sensible default margins. Most templates control their own internal
+    // padding, so we use minimal page margins and let the resume container breathe.
     const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
 <style>
 ${templateCss}
+
+/* Print-friendly overrides — applied on top of template's own CSS */
+html, body { margin: 0; padding: 0; background: ${bgColor} !important; }
 html, body, .resume { background: ${bgColor} !important; background-color: ${bgColor} !important; }
-* { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+* {
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+  color-adjust: exact !important;
+}
+
+/* Avoid orphan section headers and broken list items across pages */
+h1, h2, h3, h4 { page-break-after: avoid; break-after: avoid-page; }
+li, tr { page-break-inside: avoid; break-inside: avoid-page; }
+.section, section, .entry, [data-section], [data-entry] {
+  page-break-inside: avoid;
+  break-inside: avoid-page;
+}
+
+@page {
+  size: A4;
+  margin: 10mm 12mm;
+}
 @media print {
-  @page { margin: 0; }
-  html, body { margin: 0; background: ${bgColor} !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: ${bgColor} !important;
+  }
 }
 </style></head><body style="margin:0;background:${bgColor}">${body}</body></html>`;
-    const win = window.open('', '_blank');
-    if (!win) return;
-    win.document.write(html);
-    win.document.close();
-    win.onload = () => { win.print(); };
+
+    // Render in a hidden iframe — no popup window. Print is invoked inside the iframe,
+    // and the iframe is removed after the print dialog closes.
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('aria-hidden', 'true');
+    iframe.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden;';
+    document.body.appendChild(iframe);
+    const cw = iframe.contentWindow;
+    const cd = iframe.contentDocument;
+    if (!cw || !cd) { iframe.remove(); return; }
+    cd.open();
+    cd.write(html);
+    cd.close();
+    // Some browsers fire load synchronously after document.close, others async.
+    const doPrint = () => {
+      try { cw.focus(); cw.print(); } catch (err) { console.error('print failed:', err); }
+      // Cleanup after a short delay — print() is sync in Chrome but async in Safari.
+      setTimeout(() => iframe.remove(), 1500);
+    };
+    if (cd.readyState === 'complete') doPrint();
+    else iframe.onload = doPrint;
   };
 
   const statusText =
