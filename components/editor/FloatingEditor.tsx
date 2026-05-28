@@ -8,7 +8,7 @@ import Placeholder from '@tiptap/extension-placeholder';
 // Link is bundled by StarterKit v3 — adding @tiptap/extension-link would duplicate.
 // setLink/unsetLink commands are still available via the bundled extension.
 import TextAlign from '@tiptap/extension-text-align';
-import { TextStyle } from '@tiptap/extension-text-style';
+import { TextStyle, FontSize } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import { Highlight } from '@tiptap/extension-highlight';
 import { Button, Dropdown } from 'antd';
@@ -152,8 +152,9 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
     extensions: [
       StarterKit.configure({ heading: false }),
       Placeholder.configure({ placeholder: '输入内容...' }),
-      // Bug 3 fix: TextStyle must be registered; Color explicitly bound to textStyle mark
+      // Bug 3 fix: TextStyle must be registered; Color/FontSize explicitly bound
       TextStyle,
+      FontSize,
       Color.configure({ types: ['textStyle'] }),
       Highlight.configure({ multicolor: true }),
       TextAlign.configure({ types: ['paragraph'] }),
@@ -264,10 +265,14 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
   const compactToolbar = (
     <>
       <Dropdown menu={{
-        items: [12, 13, 14, 16, 18, 20, 24].map(s => ({
-          key: s, label: <span style={{ fontFamily: 'inherit' }}>{s}px</span>,
-          onClick: () => editor?.chain().focus().run(),
-        })),
+        items: [
+          { key: 'unset', label: <span style={{ fontFamily: 'inherit', color: '#78716C' }}>默认</span>,
+            onClick: () => editor?.chain().focus().unsetFontSize().run() },
+          ...[12, 13, 14, 16, 18, 20, 24].map(s => ({
+            key: String(s), label: <span style={{ fontFamily: 'inherit' }}>{s}px</span>,
+            onClick: () => editor?.chain().focus().setFontSize(`${s}px`).run(),
+          })),
+        ],
       }} trigger={['click']} overlayStyle={{ zIndex: 10000 }}>
         <button style={toolBtnStyle(false)} title="字体大小"
           onMouseEnter={e => hoverIn(e, false)} onMouseLeave={e => hoverOut(e, false)}
