@@ -164,10 +164,12 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
   break-inside: avoid-page;
 }
 
-/* Page margins live ONLY in @page — body must be 0 0 or padding stacks */
+/* Page margins live ONLY in @page — body must be 0 0 or padding stacks.
+   8mm / 10mm 是现代简历常用紧凑边距（约 0.31" / 0.39"），比 Word narrow
+   (0.5") 紧、比印刷 editorial (6mm) 松，平衡阅读舒适和单页容纳。 */
 @page {
   size: A4;
-  margin: 12mm 14mm;
+  margin: 8mm 10mm;
 }
 @media print {
   html, body {
