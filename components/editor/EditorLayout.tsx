@@ -35,9 +35,10 @@ function SaveToast({ visible }: { visible: boolean }) {
 
 export function EditorLayout() {
   useAutoSave();
-  const { undo, redo, save, saveStatus } = useEditorStore(s => ({
-    undo: s.undo, redo: s.redo, save: s.save, saveStatus: s.saveStatus,
-  }));
+  const undo = useEditorStore(s => s.undo);
+  const redo = useEditorStore(s => s.redo);
+  const save = useEditorStore(s => s.save);
+  const saveStatus = useEditorStore(s => s.saveStatus);
   const [sidebarWidth, setSidebarWidth] = useState(DEFAULT_SIDEBAR_WIDTH);
   const isResizing = useRef(false);
   const [resizeHover, setResizeHover] = useState(false);
