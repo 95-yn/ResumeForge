@@ -1,23 +1,37 @@
 {
-  "name": "resume-platform",
+  "name": "resumeforge",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev:server": "pnpm --filter @resume/server dev",
-    "dev:web": "pnpm --filter @resume/web dev",
-    "dev:mobile": "pnpm --filter @resume/mobile dev:h5",
-    "build": "pnpm -r build",
-    "lint": "eslint . --ext .ts,.tsx",
-    "test": "pnpm -r test"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "engines": {
-    "node": ">=20"
+  "dependencies": {
+    "next": "^15.0.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "handlebars": "^4.7.8",
+    "zustand": "^5.0.5",
+    "antd": "^5.25.2",
+    "@ant-design/icons": "^5.6.1",
+    "@tiptap/react": "^3.23.6",
+    "@tiptap/starter-kit": "^3.23.6",
+    "@tiptap/extension-placeholder": "^3.23.6",
+    "@tiptap/extension-underline": "^3.23.6",
+    "@tiptap/extension-link": "^3.23.6",
+    "@tiptap/extension-text-align": "^3.23.6",
+    "@tiptap/extension-text-style": "^3.23.6",
+    "@tiptap/extension-color": "^3.23.6",
+    "@tiptap/extension-highlight": "^3.23.6"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^8.60.0",
-    "@typescript-eslint/parser": "^8.60.0",
-    "eslint": "^10.4.0",
-    "eslint-config-prettier": "^10.1.8",
-    "prettier": "^3.8.3",
-    "typescript": "^6.0.3"
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "@types/node": "^20",
+    "typescript": "^5.8.3",
+    "eslint": "^8",
+    "eslint-config-next": "^15.0.0"
   }
 }
