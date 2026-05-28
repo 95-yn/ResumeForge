@@ -4,7 +4,7 @@ import { useEffect, useRef, useCallback, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
-import Underline from '@tiptap/extension-underline';
+// Underline is bundled by StarterKit v3 — adding @tiptap/extension-underline duplicates it
 import Link from '@tiptap/extension-link';
 import TextAlign from '@tiptap/extension-text-align';
 import { TextStyle } from '@tiptap/extension-text-style';
@@ -126,7 +126,6 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
     extensions: [
       StarterKit.configure({ heading: false }),
       Placeholder.configure({ placeholder: '输入内容...' }),
-      Underline,
       // Bug 3 fix: TextStyle must be registered; Color explicitly bound to textStyle mark
       TextStyle,
       Color.configure({ types: ['textStyle'] }),

@@ -22,7 +22,9 @@
 import { useEffect, useRef, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
+// Note: StarterKit v3 already ships Underline — adding @tiptap/extension-underline
+// causes "Duplicate extension names: ['underline']" warning AND silently breaks
+// chained commands like setColor() in some sessions.
 import { TextStyle } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
@@ -54,9 +56,8 @@ export function InlineRichText({ value, onChange, placeholder = '输入内容...
     extensions: [
       StarterKit.configure({
         heading: false,
-        // StarterKit ships bold/italic/strike/bulletList/orderedList/history with default shortcuts
+        // StarterKit v3 ships bold/italic/strike/underline/bulletList/orderedList/history
       }),
-      Underline, // Cmd+U
       TextStyle,
       Color.configure({ types: ['textStyle'] }),
       Highlight.configure({ multicolor: true }),
