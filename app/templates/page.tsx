@@ -316,7 +316,7 @@ export default function TemplatesPage() {
         /* ── Hero featured card ── */
         .hero-card {
           display: grid;
-          grid-template-columns: 1fr 1fr;
+          grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
           gap: 0;
           cursor: pointer;
           position: relative;
@@ -334,16 +334,22 @@ export default function TemplatesPage() {
           position: relative;
           background: #EEE9E0;
           overflow: hidden;
-          min-height: 480px;
+          min-height: 540px;
+          display: flex;
+          align-items: flex-start;
+          justify-content: center;
+          padding: 32px 32px 0;
         }
         .hero-card-img {
           width: 100%;
-          height: 100%;
-          object-fit: cover;
+          height: auto;
+          max-height: 540px;
+          object-fit: contain;
           object-position: top;
           display: block;
-          filter: grayscale(20%);
+          filter: grayscale(15%);
           transition: filter 0.4s ease-out;
+          box-shadow: 0 12px 40px rgba(45,24,16,0.10), 0 2px 8px rgba(45,24,16,0.06);
         }
         .hero-card:hover .hero-card-img {
           filter: grayscale(0%);
