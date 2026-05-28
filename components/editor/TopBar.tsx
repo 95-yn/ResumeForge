@@ -140,7 +140,9 @@ export function TopBar() {
 
     // A4 with sensible default margins. Most templates control their own internal
     // padding, so we use minimal page margins and let the resume container breathe.
-    const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
+    // Empty <title> ⇒ browser header in print dialog shows nothing instead of "about:blank"
+    const pdfTitle = (resume.basics?.name as string | undefined) || '简历';
+    const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>${pdfTitle}</title>
 <style>
 ${templateCss}
 
@@ -163,9 +165,10 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
   break-inside: avoid-page;
 }
 
+/* Page margins live ONLY in @page — body must be 0 0 or padding stacks */
 @page {
   size: A4;
-  margin: 10mm 12mm;
+  margin: 12mm 14mm;
 }
 @media print {
   html, body {
