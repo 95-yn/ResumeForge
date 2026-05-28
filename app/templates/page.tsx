@@ -3,15 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { TEMPLATE_LIST as TEMPLATES } from '@/data/template-list';
-
-/* ─── Palette ─────────────────────────────────────────────── */
-const PARCHMENT  = '#F8F6F1';
-const CHESTNUT   = '#2D1810';
-const BRICK      = '#B0463A';
-const DUST       = '#E9E5DD';
-const STONE_MID  = '#78716C';
-const INK_DIM    = 'rgba(45,24,16,0.42)';
-const CARD_WHITE = '#FEFEFE';
+import styles from './templates.module.css';
 
 /* ─── Template metadata ────────────────────────────────────── */
 interface TemplateMeta {
@@ -183,30 +175,6 @@ function cardMarginBottom(idx: number): number {
   return MARGIN_RHYTHM[idx % MARGIN_RHYTHM.length];
 }
 
-/* ─── IntersectionObserver hook ───────────────────────────── */
-function useRevealOnScroll(threshold = 0.15) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, [threshold]);
-
-  return { ref, visible };
-}
-
 /* ─── Masonry card with staggered reveal ──────────────────── */
 interface MasonryCardProps {
   t: { slug: string; name: string; category: string };
@@ -246,7 +214,7 @@ function MasonryCard({ t, idx, onCardClick }: MasonryCardProps) {
   return (
     <div
       ref={ref}
-      className={`archive-card${visible ? ' card-visible' : ''}`}
+      className={`${styles.card}${visible ? ` ${styles.cardVisible}` : ''}`}
       style={{ marginBottom: cardMarginBottom(idx) }}
       onClick={() => onCardClick(t.slug)}
       role="button"
@@ -255,35 +223,35 @@ function MasonryCard({ t, idx, onCardClick }: MasonryCardProps) {
       aria-label={`使用模板：${t.name}`}
     >
       {/* Marginalia */}
-      <div className="archive-card-marginalia">
-        <div className="archive-card-num">№ {num}</div>
-        <p className="archive-card-pull-quote">{quote}</p>
+      <div className={styles.cardMarginalia}>
+        <div className={styles.cardNum}>№ {num}</div>
+        <p className={styles.cardPullQuote}>{quote}</p>
       </div>
 
       {/* Thumbnail */}
-      <div className="archive-card-img-wrap">
+      <div className={styles.cardImgWrap}>
         {imgError ? (
-          <div className="archive-card-img-placeholder">
-            <span className="placeholder-label">preview pending</span>
+          <div className={styles.cardImgPlaceholder}>
+            <span className={styles.placeholderLabel}>preview pending</span>
           </div>
         ) : (
           <img
             src={`/thumbnails/${t.slug}.png`}
             alt={t.name}
             loading="lazy"
-            className="archive-card-img"
+            className={styles.cardImg}
             onError={() => setImgError(true)}
           />
         )}
       </div>
 
       {/* Card body */}
-      <div className="archive-card-body">
-        <h2 className="archive-card-name">{t.name}</h2>
-        <p className="archive-card-tags">
+      <div className={styles.cardBody}>
+        <h2 className={styles.cardName}>{t.name}</h2>
+        <p className={styles.cardTags}>
           {catDisplay} · {meta.profession !== '通用' ? meta.profession : 'UNIVERSAL'}
         </p>
-        <p className="archive-card-desc">{meta.desc}</p>
+        <p className={styles.cardDesc}>{meta.desc}</p>
       </div>
     </div>
   );
@@ -340,475 +308,63 @@ export default function TemplatesPage() {
     setProfessionFilter('all');
   };
 
+  // titlePhase class helper
+  const titlePhaseClass = titlePhase >= 1 ? (titlePhase >= 2 ? styles.phase2 : styles.phase1) : '';
+
   return (
-    <>
-      <style>{`
-        /* ── Reset & base ── */
-        * { box-sizing: border-box; }
+    <div className={styles.page}>
 
-        .archive-page {
-          min-height: 100vh;
-          background: ${PARCHMENT};
-          color: ${CHESTNUT};
-          font-family: 'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif;
-          padding-bottom: 80px;
-        }
+      {/* ── 1. Top nav ── */}
+      <header className={styles.header}>
+        <span className={styles.logo} onClick={() => router.push('/')} role="button" tabIndex={0} onKeyDown={e => e.key === 'Enter' && router.push('/')}>ResumeForge</span>
+        <span className={styles.meta}>
+          {total} Templates · 11 Professions · Updated 2026.05
+        </span>
+      </header>
 
-        /* ── Top nav ── */
-        .arch-header {
-          display: flex;
-          align-items: baseline;
-          justify-content: space-between;
-          padding: 28px 56px 20px;
-          border-bottom: 1px solid ${DUST};
-        }
-        .arch-logo {
-          font-family: 'Fraunces', Georgia, serif;
-          font-style: italic;
-          font-weight: 500;
-          font-size: 22px;
-          color: ${CHESTNUT};
-          letter-spacing: -0.015em;
-          cursor: pointer;
-          transition: color 0.2s ease-out;
-        }
-        .arch-logo:hover {
-          color: ${BRICK};
-        }
-        .arch-meta {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 10px;
-          color: ${INK_DIM};
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-        }
-
-        /* ── Compact Hero title area ── */
-        .arch-title-area {
-          padding: 40px 56px 32px;
-          display: flex;
-          align-items: baseline;
-          gap: 24px;
-        }
-
-        /* Display title: compact */
-        .arch-display-title {
-          font-family: 'Fraunces', Georgia, serif;
-          font-optical-sizing: auto;
-          font-variation-settings: 'opsz' 72;
-          font-weight: 400;
-          font-size: clamp(48px, 6vw, 88px);
-          line-height: 1;
-          letter-spacing: -0.03em;
-          color: ${CHESTNUT};
-          margin: 0;
-        }
-
-        /* Subtitle: mono small */
-        .arch-subtitle {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 11px;
-          letter-spacing: 0.06em;
-          color: ${STONE_MID};
-          white-space: nowrap;
-          align-self: flex-end;
-          padding-bottom: 6px;
-        }
-
-        /* Staggered reveal animations */
-        .title-display {
-          opacity: 0;
-          transition: opacity 0.7s ease-out;
-        }
-        .title-display.phase-1,
-        .title-display.phase-2 {
-          opacity: 1;
-        }
-
-        .filter-bar-fade {
-          opacity: 0;
-          transform: translateY(-6px);
-          transition: opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .filter-bar-fade.phase-2 {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        /* ── Sticky filter bar ── */
-        .arch-filter-bar {
-          position: sticky;
-          top: 0;
-          z-index: 50;
-          background: ${PARCHMENT};
-          border-bottom: 1px solid transparent;
-          height: 64px;
-          display: flex;
-          align-items: center;
-          padding: 0 56px;
-          gap: 32px;
-          transition: border-color 0.2s ease-out;
-        }
-        .arch-filter-bar.scrolled {
-          border-bottom-color: ${DUST};
-        }
-
-        /* Filter group */
-        .arch-filter-group {
-          display: flex;
-          align-items: center;
-          gap: 0;
-          flex-shrink: 0;
-        }
-
-        /* Group label */
-        .arch-filter-group-label {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 9px;
-          letter-spacing: 0.2em;
-          text-transform: uppercase;
-          color: ${STONE_MID};
-          margin-right: 12px;
-          white-space: nowrap;
-          flex-shrink: 0;
-          opacity: 0.6;
-        }
-
-        /* Divider between groups */
-        .arch-filter-divider {
-          width: 1px;
-          height: 20px;
-          background: ${DUST};
-          flex-shrink: 0;
-        }
-
-        /* Style chips — Fraunces 15px */
-        .arch-filter-btn-style {
-          font-family: 'Fraunces', Georgia, serif;
-          font-weight: 400;
-          font-size: 15px;
-          letter-spacing: -0.01em;
-          color: ${CHESTNUT};
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 0 10px 0 0;
-          opacity: 0.38;
-          transition: opacity 0.15s ease;
-          white-space: nowrap;
-          flex-shrink: 0;
-          text-decoration: none;
-          line-height: 1;
-        }
-        .arch-filter-btn-style:last-child { padding-right: 0; }
-        .arch-filter-btn-style:hover { opacity: 0.65; }
-        .arch-filter-btn-style.active {
-          opacity: 1;
-          text-decoration: underline;
-          text-decoration-color: ${BRICK};
-          text-decoration-thickness: 2px;
-          text-underline-offset: 4px;
-        }
-        .arch-filter-btn-style:focus-visible {
-          outline: 2px solid ${BRICK};
-          outline-offset: 3px;
-          border-radius: 2px;
-        }
-
-        /* Profession chips — mono 10px */
-        .arch-filter-btn-prof {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 10px;
-          letter-spacing: 0.07em;
-          text-transform: uppercase;
-          color: ${CHESTNUT};
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 0 9px 0 0;
-          opacity: 0.32;
-          transition: opacity 0.15s ease;
-          white-space: nowrap;
-          flex-shrink: 0;
-          line-height: 1;
-        }
-        .arch-filter-btn-prof:last-child { padding-right: 0; }
-        .arch-filter-btn-prof:hover { opacity: 0.6; }
-        .arch-filter-btn-prof.active {
-          opacity: 1;
-          text-decoration: underline;
-          text-decoration-color: ${BRICK};
-          text-decoration-thickness: 2px;
-          text-underline-offset: 4px;
-        }
-        .arch-filter-btn-prof:focus-visible {
-          outline: 2px solid ${BRICK};
-          outline-offset: 3px;
-          border-radius: 2px;
-        }
-
-        /* ── Content wrapper ── */
-        .arch-content {
-          padding: 40px 56px 0;
-        }
-
-        /* ── Masonry grid ── */
-        .archive {
-          columns: 3;
-          column-gap: 48px;
-        }
-        @media (max-width: 1100px) {
-          .archive { columns: 2; }
-        }
-        @media (max-width: 640px) {
-          .archive { columns: 1; }
-          .arch-header { padding: 20px 24px; }
-          .arch-title-area {
-            padding: 28px 24px 20px;
-            flex-wrap: wrap;
-            gap: 8px;
-          }
-          .arch-content { padding: 24px 24px 0; }
-        }
-
-        /* ── Small screen filter wrap ── */
-        @media (max-width: 900px) {
-          .arch-filter-bar {
-            height: auto;
-            flex-wrap: wrap;
-            padding: 12px 24px;
-            gap: 12px;
-          }
-          .arch-filter-divider { display: none; }
-          .arch-filter-group { flex-wrap: wrap; }
-        }
-
-        /* ── Regular card ── */
-        .archive-card {
-          break-inside: avoid;
-          display: block;
-          cursor: pointer;
-          position: relative;
-          opacity: 0;
-          transform: translateY(16px);
-          transition: opacity 0.5s ease-out,
-                      transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .archive-card.card-visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-        /* Hover lift */
-        .archive-card:hover {
-          transform: translateY(-2px);
-        }
-        .archive-card.card-visible:hover {
-          transform: translateY(-2px);
-        }
-        .archive-card:focus-visible {
-          outline: 2px solid ${BRICK};
-          outline-offset: 4px;
-          border-radius: 2px;
-        }
-
-        .archive-card-marginalia {
-          margin-bottom: 8px;
-        }
-        .archive-card-num {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 10px;
-          color: ${INK_DIM};
-          opacity: 0.5;
-          letter-spacing: 0.04em;
-          line-height: 1.4;
-        }
-        .archive-card-pull-quote {
-          font-family: 'Fraunces', Georgia, serif;
-          font-style: italic;
-          font-weight: 400;
-          font-size: 11px;
-          color: ${CHESTNUT};
-          opacity: 0.45;
-          margin: 0;
-          letter-spacing: 0.01em;
-          line-height: 1.4;
-        }
-
-        .archive-card-img-wrap {
-          overflow: hidden;
-          position: relative;
-          background: #EEE9E0;
-        }
-        .archive-card-img {
-          width: 100%;
-          display: block;
-          object-fit: cover;
-          object-position: top;
-          filter: grayscale(15%);
-          transition: filter 0.35s ease-out;
-        }
-        .archive-card:hover .archive-card-img {
-          filter: grayscale(0%);
-        }
-
-        /* Card image placeholder */
-        .archive-card-img-placeholder {
-          aspect-ratio: 595 / 400;
-          background: #F8F6F1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .placeholder-label {
-          font-family: 'Fraunces', Georgia, serif;
-          font-style: italic;
-          font-size: 13px;
-          color: ${STONE_MID};
-          opacity: 0.5;
-          letter-spacing: 0.02em;
-        }
-
-        .archive-card-body {
-          padding: 12px 0 0;
-        }
-        .archive-card-name {
-          font-family: 'Fraunces', Georgia, serif;
-          font-weight: 500;
-          font-size: 22px;
-          line-height: 1.15;
-          letter-spacing: -0.02em;
-          color: ${CHESTNUT};
-          margin: 0 0 6px;
-          transition: color 0.2s ease-out;
-        }
-        .archive-card:hover .archive-card-name {
-          color: ${BRICK};
-        }
-        .archive-card-tags {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 10px;
-          text-transform: uppercase;
-          letter-spacing: 0.06em;
-          color: ${INK_DIM};
-          opacity: 0.5;
-          margin: 0 0 8px;
-        }
-        .archive-card-desc {
-          font-family: 'Fraunces', Georgia, serif;
-          font-style: italic;
-          font-weight: 400;
-          font-size: 14px;
-          line-height: 1.6;
-          color: ${CHESTNUT};
-          opacity: 0.65;
-          margin: 0;
-        }
-
-        /* ── Empty state ── */
-        .arch-empty-state {
-          padding: 96px 0 80px;
-          text-align: center;
-        }
-        .arch-empty-headline {
-          font-family: 'Fraunces', Georgia, serif;
-          font-style: italic;
-          font-weight: 400;
-          font-size: 32px;
-          line-height: 1.2;
-          color: ${CHESTNUT};
-          opacity: 0.7;
-          margin: 0 0 16px;
-        }
-        .arch-empty-hint {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 11px;
-          letter-spacing: 0.07em;
-          text-transform: uppercase;
-          color: ${STONE_MID};
-          margin: 0 0 6px;
-        }
-        .arch-empty-clear {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 11px;
-          letter-spacing: 0.07em;
-          text-transform: uppercase;
-          color: ${BRICK};
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 0;
-          text-decoration: underline;
-          text-underline-offset: 4px;
-          transition: opacity 0.15s ease-out;
-        }
-        .arch-empty-clear:hover { opacity: 0.7; }
-
-        /* ── Reduced motion ── */
-        @media (prefers-reduced-motion: reduce) {
-          .title-display,
-          .filter-bar-fade,
-          .archive-card {
-            transition: none !important;
-            opacity: 1 !important;
-            transform: none !important;
-          }
-        }
-      `}</style>
-
-      <div className="archive-page">
-
-        {/* ── 1. Top nav ── */}
-        <header className="arch-header">
-          <span className="arch-logo" onClick={() => router.push('/')} role="button" tabIndex={0} onKeyDown={e => e.key === 'Enter' && router.push('/')}>ResumeForge</span>
-          <span className="arch-meta">
-            {total} Templates · 11 Professions · Updated 2026.05
-          </span>
-        </header>
-
-        {/* ── 2. Compact Hero title ── */}
-        <div className="arch-title-area">
-          <div className={`title-display${titlePhase >= 1 ? ` phase-${titlePhase}` : ''}`}>
-            <h1 className="arch-display-title">Templates</h1>
-          </div>
-          <span className="arch-subtitle">A curated archive of {total} specimens</span>
+      {/* ── 2. Compact Hero title ── */}
+      <div className={styles.titleArea}>
+        <div className={`${styles.titleDisplay}${titlePhase >= 1 ? ` ${titlePhaseClass}` : ''}`}>
+          <h1 className={styles.displayTitle}>Templates</h1>
         </div>
-
-        {/* ── 3. Sticky filter bar ── */}
-        <StickyFilterBar
-          styleFilter={styleFilter}
-          professionFilter={professionFilter}
-          onStyleChange={setStyleFilter}
-          onProfessionChange={setProfessionFilter}
-          titlePhase={titlePhase}
-        />
-
-        {/* ── 4. Main content ── */}
-        <div className="arch-content">
-          {filtered.length === 0 ? (
-            /* Empty state */
-            <div className="arch-empty-state">
-              <p className="arch-empty-headline">Nothing in this corner of the archive.</p>
-              <p className="arch-empty-hint">Try another combination or clear filters.</p>
-              <button className="arch-empty-clear" onClick={handleClearFilters}>
-                Clear filters
-              </button>
-            </div>
-          ) : (
-            /* ── Masonry archive ── */
-            <div className="archive">
-              {filtered.map((t, idx) => (
-                <MasonryCard
-                  key={t.slug}
-                  t={t}
-                  idx={idx}
-                  onCardClick={handleCardClick}
-                />
-              ))}
-            </div>
-          )}
-        </div>
+        <span className={styles.subtitle}>A curated archive of {total} specimens</span>
       </div>
-    </>
+
+      {/* ── 3. Sticky filter bar ── */}
+      <StickyFilterBar
+        styleFilter={styleFilter}
+        professionFilter={professionFilter}
+        onStyleChange={setStyleFilter}
+        onProfessionChange={setProfessionFilter}
+        titlePhase={titlePhase}
+      />
+
+      {/* ── 4. Main content ── */}
+      <div className={styles.content}>
+        {filtered.length === 0 ? (
+          /* Empty state */
+          <div className={styles.emptyState}>
+            <p className={styles.emptyHeadline}>Nothing in this corner of the archive.</p>
+            <p className={styles.emptyHint}>Try another combination or clear filters.</p>
+            <button className={styles.emptyClear} onClick={handleClearFilters}>
+              Clear filters
+            </button>
+          </div>
+        ) : (
+          /* ── Masonry archive ── */
+          <div className={styles.archive}>
+            {filtered.map((t, idx) => (
+              <MasonryCard
+                key={t.slug}
+                t={t}
+                idx={idx}
+                onCardClick={handleCardClick}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -832,18 +388,25 @@ function StickyFilterBar({ styleFilter, professionFilter, onStyleChange, onProfe
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const filterBarClass = [
+    styles.filterBar,
+    styles.filterBarFade,
+    titlePhase >= 2 ? styles.phase2 : '',
+    scrolled ? styles.scrolled : '',
+  ].filter(Boolean).join(' ');
+
   return (
     <nav
-      className={`arch-filter-bar filter-bar-fade${titlePhase >= 2 ? ' phase-2' : ''}${scrolled ? ' scrolled' : ''}`}
+      className={filterBarClass}
       aria-label="Template filters"
     >
       {/* Style group */}
-      <div className="arch-filter-group" role="group" aria-label="Style filter">
-        <span className="arch-filter-group-label">Style</span>
+      <div className={styles.filterGroup} role="group" aria-label="Style filter">
+        <span className={styles.filterGroupLabel}>Style</span>
         {STYLE_FILTERS.map((f) => (
           <button
             key={f.key}
-            className={`arch-filter-btn-style${styleFilter === f.key ? ' active' : ''}`}
+            className={`${styles.filterBtnStyle}${styleFilter === f.key ? ` ${styles.active}` : ''}`}
             onClick={() => onStyleChange(f.key)}
             aria-pressed={styleFilter === f.key}
           >
@@ -853,15 +416,15 @@ function StickyFilterBar({ styleFilter, professionFilter, onStyleChange, onProfe
       </div>
 
       {/* Divider */}
-      <div className="arch-filter-divider" aria-hidden="true" />
+      <div className={styles.filterDivider} aria-hidden="true" />
 
       {/* Profession group */}
-      <div className="arch-filter-group" role="group" aria-label="Profession filter">
-        <span className="arch-filter-group-label">Profession</span>
+      <div className={styles.filterGroup} role="group" aria-label="Profession filter">
+        <span className={styles.filterGroupLabel}>Profession</span>
         {PROFESSION_FILTERS.map((f) => (
           <button
             key={f.key}
-            className={`arch-filter-btn-prof${professionFilter === f.key ? ' active' : ''}`}
+            className={`${styles.filterBtnProf}${professionFilter === f.key ? ` ${styles.active}` : ''}`}
             onClick={() => onProfessionChange(f.key)}
             aria-pressed={professionFilter === f.key}
           >

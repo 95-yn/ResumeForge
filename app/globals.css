@@ -79,20 +79,44 @@ body {
 }
 
 /* Sticky / scroll-reactive 元素提升到 compositor layer 减少 paint */
-.arch-filter-bar,
-.lp-nav {
+/* CSS Module 类名带 hash，用属性子串匹配 */
+[class*="templates_filterBar"],
+[class*="landing_nav"] {
   will-change: background-color, box-shadow, backdrop-filter;
   transform: translateZ(0);
 }
 
 /* Masonry 卡片 content-visibility 让 off-screen 不参与 paint */
-.archive-card {
+[class*="templates_card"] {
   contain: layout style paint;
 }
 
+/* ─── Landing page CSS variables ──────────────────── */
+:root {
+  --paper: #F5F1E8;
+  --ink: #3D2A1A;
+  --ink-faint: rgba(61, 42, 26, 0.12);
+  --ink-mid: rgba(61, 42, 26, 0.45);
+  --accent: #1E5A6B;
+  --accent-faint: rgba(30, 90, 107, 0.08);
+  --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ─── Templates page CSS variables ────────────────── */
+:root {
+  --arch-parchment:  #F8F6F1;
+  --arch-chestnut:   #2D1810;
+  --arch-brick:      #B0463A;
+  --arch-dust:       #E9E5DD;
+  --arch-stone-mid:  #78716C;
+  --arch-ink-dim:    rgba(45, 24, 16, 0.42);
+  --arch-card-white: #FEFEFE;
+}
+
 /* Page-bg sync — 让 body 跟随当前页面，避免 over-scroll 露出两色 */
-body:has(.archive-page) { background: #F8F6F1; }
-body:has(.lp-root)      { background: #F5F1E8; }
+/* CSS Module 类名带 hash，用属性子串匹配兼容 */
+body:has([class*="templates_page"]) { background: #F8F6F1; }
+body:has([class*="landing_root"])   { background: #F5F1E8; }
 
 /* Warm scrollbar — 12px 易抓，thumb 用 padding-box 营造内嵌感 */
 * { scrollbar-width: thin; scrollbar-color: #B8B2A8 transparent; }
