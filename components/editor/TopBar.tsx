@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { Tooltip } from 'antd';
-import { ArrowLeftOutlined, PrinterOutlined, UndoOutlined, RedoOutlined, ReloadOutlined, FilePdfOutlined, LoadingOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, PrinterOutlined, UndoOutlined, RedoOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
 import { compileTemplate } from '@/lib/mini-template';
 import { useEditorStore } from '@/lib/editor-store';
@@ -122,7 +122,6 @@ export function TopBar() {
     undo, redo, historyIndex, history,
     templateHtml, templateCss, resume, resetToDefault,
   } = useEditorStore();
-  const [exportingPdf, setExportingPdf] = useState(false);
 
   // Dismiss error toast after 5s
   useEffect(() => {
@@ -199,81 +198,6 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
     };
     if (cd.readyState === 'complete') doPrint();
     else iframe.onload = doPrint;
-  };
-
-  // Export to PDF — Strategy A: capture the live preview iframe's body directly.
-  // No hidden container, no rebuild — html2canvas reads the exact DOM the user sees.
-  // Editor-injected hover/outline styles are invisible to canvas (no hover during capture).
-  const handleExportPdf = async () => {
-    if (!templateHtml || !templateCss || !resume) return;
-    setExportingPdf(true);
-    try {
-      const iframe = document.querySelector<HTMLIFrameElement>('iframe[title="preview"]');
-      const idoc = iframe?.contentDocument;
-      const ibody = idoc?.body;
-      if (!iframe || !idoc || !ibody) {
-        throw new Error('Preview iframe not ready');
-      }
-
-      // Wait for any pending fonts inside the iframe
-      try { await (idoc as Document & { fonts?: { ready: Promise<unknown> } }).fonts?.ready; } catch { /* no-op */ }
-      await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-
-      const bgColor = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor || '#ffffff';
-
-      // Temporarily strip editor-injected style attrs on data-field elements
-      // (cursor: text, outline, borderRadius, transition) so canvas isn't influenced
-      // by transient hover background applied during interaction.
-      const fields = Array.from(ibody.querySelectorAll<HTMLElement>('[data-field]'));
-      const snapshot = fields.map(el => ({ el, style: el.getAttribute('style') }));
-      fields.forEach(el => el.removeAttribute('style'));
-
-      try {
-        const mod = await import('html2pdf.js');
-        type Html2PdfChain = {
-          set: (opts: unknown) => Html2PdfChain;
-          from: (el: HTMLElement) => Html2PdfChain;
-          save: () => Promise<void>;
-        };
-        const html2pdf = ((mod as { default?: () => Html2PdfChain }).default
-          ?? (mod as unknown as () => Html2PdfChain));
-
-        const filename = `${resume.basics?.name || '简历'}.pdf`;
-
-        await html2pdf()
-          .set({
-            margin: [8, 10, 8, 10],
-            filename,
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: {
-              scale: 2,
-              useCORS: true,
-              allowTaint: true,
-              backgroundColor: bgColor,
-              letterRendering: true,
-              logging: false,
-              width: ibody.scrollWidth,
-              height: ibody.scrollHeight,
-              windowWidth: ibody.scrollWidth,
-              windowHeight: ibody.scrollHeight,
-            },
-            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
-            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
-          })
-          .from(ibody)
-          .save();
-      } finally {
-        // Restore editor inline styles so editing UX is unchanged
-        snapshot.forEach(({ el, style }) => {
-          if (style != null) el.setAttribute('style', style);
-        });
-      }
-    } catch (err) {
-      console.error('PDF export failed:', err);
-      alert(`PDF 导出失败：${err instanceof Error ? err.message : String(err)}\n\n请改用「打印」按钮，在打印对话框中选「另存为 PDF」。`);
-    } finally {
-      setExportingPdf(false);
-    }
   };
 
   const statusText =
@@ -428,58 +352,28 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
           保存
         </button>
 
-        <Tooltip title="浏览器原生打印 / 另存为 PDF">
+        <Tooltip title="打印或另存为 PDF（建议关闭页眉页脚 + 勾选背景图形）">
           <button
             onClick={handlePrint}
             style={{
               display: 'flex', alignItems: 'center', gap: 6,
-              padding: '0 14px', height: 32, borderRadius: 6,
-              border: '1px solid #E7E5E4',
-              background: '#FFFFFF', color: '#44403C',
-              fontSize: 12, fontWeight: 500,
+              padding: '0 16px', height: 32, borderRadius: 6,
+              border: 'none',
+              background: '#1C1917', color: '#FFFFFF',
+              fontSize: 12, fontWeight: 600,
               cursor: 'pointer',
-              transition: 'background 0.12s, color 0.12s',
+              transition: 'background 0.12s, box-shadow 0.12s',
               fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
               outline: 'none',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#F0EAE0'; e.currentTarget.style.color = '#1C1917'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.color = '#44403C'; }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#292524'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(28,25,23,0.18)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#1C1917'; e.currentTarget.style.boxShadow = 'none'; }}
             onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
             onBlur={e => { e.currentTarget.style.outline = 'none'; }}
             aria-label="打印或另存为 PDF"
           >
             <PrinterOutlined style={{ fontSize: 12 }} />
-            打印
-          </button>
-        </Tooltip>
-
-        <Tooltip title="高清 PDF 直接下载（不弹打印对话框）">
-          <button
-            onClick={handleExportPdf}
-            disabled={exportingPdf}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 6,
-              padding: '0 16px', height: 32, borderRadius: 6,
-              border: 'none',
-              background: exportingPdf ? '#78716C' : '#1C1917', color: '#FFFFFF',
-              fontSize: 12, fontWeight: 600,
-              cursor: exportingPdf ? 'wait' : 'pointer',
-              transition: 'background 0.12s, box-shadow 0.12s',
-              fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
-              outline: 'none',
-            }}
-            onMouseEnter={e => {
-              if (!exportingPdf) { e.currentTarget.style.background = '#292524'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(28,25,23,0.18)'; }
-            }}
-            onMouseLeave={e => {
-              if (!exportingPdf) { e.currentTarget.style.background = '#1C1917'; e.currentTarget.style.boxShadow = 'none'; }
-            }}
-            onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
-            onBlur={e => { e.currentTarget.style.outline = 'none'; }}
-            aria-label="导出 PDF 文件"
-          >
-            {exportingPdf ? <LoadingOutlined style={{ fontSize: 12 }} /> : <FilePdfOutlined style={{ fontSize: 12 }} />}
-            {exportingPdf ? '导出中…' : '导出 PDF'}
+            打印 / 导出 PDF
           </button>
         </Tooltip>
       </div>
