@@ -228,6 +228,37 @@ export function InlineRichText({ value, onChange, placeholder = '输入内容...
                     aria-label={c}
                   />
                 ))}
+                {/* Custom color picker — opens native browser color popup */}
+                <label
+                  title="自定义颜色"
+                  style={{
+                    width: 22, height: 22, borderRadius: '50%',
+                    border: '1.5px solid #E7E5E4',
+                    background: 'conic-gradient(red, yellow, lime, cyan, blue, magenta, red)',
+                    cursor: 'pointer', padding: 0, position: 'relative',
+                    overflow: 'hidden', display: 'inline-block', flexShrink: 0,
+                  }}
+                  onMouseDown={e => e.preventDefault()}
+                >
+                  <input
+                    type="color"
+                    defaultValue="#1C1917"
+                    onChange={e => {
+                      const c = e.target.value;
+                      if (openPicker === 'color') {
+                        editor?.chain().focus().setColor(c).run();
+                      } else {
+                        editor?.chain().focus().toggleHighlight({ color: c }).run();
+                      }
+                      if (editor) flushCommit(editor.getHTML());
+                      setOpenPicker(null);
+                    }}
+                    style={{
+                      position: 'absolute', inset: 0, width: '100%', height: '100%',
+                      opacity: 0, cursor: 'pointer', border: 'none', padding: 0,
+                    }}
+                  />
+                </label>
                 <button
                   type="button"
                   onMouseDown={e => {
@@ -237,6 +268,7 @@ export function InlineRichText({ value, onChange, placeholder = '输入内容...
                     } else {
                       editor?.chain().focus().unsetHighlight().run();
                     }
+                    if (editor) flushCommit(editor.getHTML());
                     setOpenPicker(null);
                   }}
                   style={{ fontSize: 9, color: '#78716C', background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'inherit', outline: 'none' }}

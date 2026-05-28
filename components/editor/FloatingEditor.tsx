@@ -103,6 +103,29 @@ function ColorPicker({ colors, onSelect, onReset, onClose }: ColorPickerProps) {
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.borderColor = '#E7E5E4'; }}
           />
         ))}
+        {/* Custom color via native browser popup */}
+        <label
+          title="自定义颜色"
+          style={{
+            width: 20, height: 20, borderRadius: '50%', border: '2px solid #E7E5E4',
+            background: 'conic-gradient(red, yellow, lime, cyan, blue, magenta, red)',
+            cursor: 'pointer', padding: 0, flexShrink: 0, position: 'relative',
+            overflow: 'hidden', display: 'inline-block',
+          }}
+          onMouseDown={e => e.preventDefault()}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.2)'; (e.currentTarget as HTMLElement).style.borderColor = '#1C1917'; }}
+          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.borderColor = '#E7E5E4'; }}
+        >
+          <input
+            type="color"
+            defaultValue="#1C1917"
+            onChange={e => { onSelect(e.target.value); onClose(); }}
+            style={{
+              position: 'absolute', inset: 0, width: '100%', height: '100%',
+              opacity: 0, cursor: 'pointer', border: 'none', padding: 0,
+            }}
+          />
+        </label>
       </div>
       <button
         onMouseDown={e => { e.preventDefault(); onReset(); onClose(); }}
