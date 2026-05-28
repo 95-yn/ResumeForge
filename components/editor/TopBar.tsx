@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Tooltip } from 'antd';
 import { ArrowLeftOutlined, PrinterOutlined, UndoOutlined, RedoOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
-import Handlebars from 'handlebars';
+import { compileTemplate } from '@/lib/mini-template';
 import { useEditorStore } from '@/lib/editor-store';
 
 /** Grip icon — 6 dots, 2×3 SVG */
@@ -133,7 +133,7 @@ export function TopBar() {
 
   const handlePrint = () => {
     if (!templateHtml || !templateCss || !resume) return;
-    const compiled = Handlebars.compile(templateHtml);
+    const compiled = compileTemplate(templateHtml);
     const body = compiled(resume);
     const bgColor = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor || '#ffffff';
     const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">

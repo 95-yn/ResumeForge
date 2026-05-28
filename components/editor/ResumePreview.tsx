@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useMemo, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import Handlebars from 'handlebars';
+import { compileTemplate } from '@/lib/mini-template';
 import { useEditorStore } from '@/lib/editor-store';
 import { FloatingEditor } from './FloatingEditor';
 
@@ -189,7 +189,7 @@ export function ResumePreview() {
       </style></head><body><div class="placeholder"><h2>点击左侧模块开始编辑</h2><p>填写信息后这里会实时预览简历效果</p></div></body></html>`;
     }
     try {
-      const template = Handlebars.compile(templateHtml);
+      const template = compileTemplate(templateHtml);
       const body = template(resume);
       const bgColor = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor || '#ffffff';
       const bgOverride = `<style>
