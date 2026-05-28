@@ -11,7 +11,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import { TextStyle, FontSize } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import { Highlight } from '@tiptap/extension-highlight';
-import { Button, Dropdown } from 'antd';
+import { Dropdown } from 'antd';
 import {
   BoldOutlined, ItalicOutlined, UnderlineOutlined, StrikethroughOutlined,
   UnorderedListOutlined, OrderedListOutlined, LinkOutlined,
@@ -95,13 +95,15 @@ function ColorPicker({ colors, onSelect, onReset, onClose }: ColorPickerProps) {
             title={label}
             onMouseDown={e => { e.preventDefault(); onSelect(color); onClose(); }}
             style={{
-              width: 20, height: 20, borderRadius: '50%', border: '2px solid #E7E5E4',
+              width: 20, height: 20, borderRadius: '50%',
+              // 1.5px border instead of 2px, tighter
+              border: '1.5px solid #E7E5E4',
               background: color === 'transparent' ? 'linear-gradient(135deg, #fff 45%, #f44 45%, #f44 55%, #fff 55%)' : color,
               cursor: 'pointer', padding: 0, flexShrink: 0,
-              transition: 'transform 0.1s, border-color 0.1s',
+              transition: 'transform 120ms cubic-bezier(0.16,1,0.3,1), border-color 120ms',
               outline: 'none',
             }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.2)'; (e.currentTarget as HTMLElement).style.borderColor = '#1C1917'; }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.2)'; (e.currentTarget as HTMLElement).style.borderColor = '#B0463A'; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.borderColor = '#E7E5E4'; }}
           />
         ))}
@@ -109,13 +111,14 @@ function ColorPicker({ colors, onSelect, onReset, onClose }: ColorPickerProps) {
         <label
           title="自定义颜色"
           style={{
-            width: 20, height: 20, borderRadius: '50%', border: '2px solid #E7E5E4',
+            width: 20, height: 20, borderRadius: '50%', border: '1.5px solid #E7E5E4',
             background: 'conic-gradient(red, yellow, lime, cyan, blue, magenta, red)',
             cursor: 'pointer', padding: 0, flexShrink: 0, position: 'relative',
             overflow: 'hidden', display: 'inline-block',
+            transition: 'transform 120ms cubic-bezier(0.16,1,0.3,1), border-color 120ms',
           }}
           onMouseDown={e => e.preventDefault()}
-          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.2)'; (e.currentTarget as HTMLElement).style.borderColor = '#1C1917'; }}
+          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.2)'; (e.currentTarget as HTMLElement).style.borderColor = '#B0463A'; }}
           onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.borderColor = '#E7E5E4'; }}
         >
           <input
@@ -271,10 +274,11 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
     <>
       <Dropdown menu={{
         items: [
-          { key: 'unset', label: <span style={{ fontFamily: 'inherit', color: '#78716C' }}>默认</span>,
+          { key: 'unset', label: <span style={{ fontFamily: 'inherit', color: '#78716C', fontSize: 13 }}>默认</span>,
             onClick: () => editor?.chain().focus().unsetFontSize().run() },
           ...[12, 13, 14, 16, 18, 20, 24].map(s => ({
-            key: String(s), label: <span style={{ fontFamily: 'inherit' }}>{s}px</span>,
+            key: String(s),
+            label: <span style={{ fontFamily: "'Plus Jakarta Sans', -apple-system, sans-serif", fontSize: s, lineHeight: 1.3 }}>{s}px</span>,
             onClick: () => editor?.chain().focus().setFontSize(`${s}px`).run(),
           })),
         ],
@@ -385,9 +389,11 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
     <div ref={containerRef} style={{
       position: 'fixed', top, left, width: editorWidth, zIndex: 9999,
       background: '#FFFFFF', border: '1px solid #E7E5E4', borderRadius: 14,
-      boxShadow: '0 20px 60px rgba(0,0,0,0.16), 0 4px 16px rgba(0,0,0,0.06)',
+      // Deeper shadow (0.18 opacity, warm-tinted) + entrance animation
+      boxShadow: '0 20px 60px rgba(28,25,23,0.18), 0 4px 16px rgba(28,25,23,0.08)',
       overflow: 'visible',
       fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
+      animation: 'fePopIn 200ms cubic-bezier(0.16,1,0.3,1)',
     }}>
       {/* Toolbar */}
       <div style={{
@@ -416,40 +422,41 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
           {longField ? '支持富文本格式' : 'Esc 取消'}
         </span>
         <div style={{ display: 'flex', gap: 6 }}>
-          <Button
-            size="small"
+          {/* Ghost cancel */}
+          <button
             onClick={onCancel}
-            style={{ fontSize: 12, borderRadius: 6, fontFamily: 'inherit' }}
-          >
-            取消
-          </Button>
-          <Button
-            size="small"
-            type="primary"
+            style={{
+              padding: '5px 14px', borderRadius: 6, border: '1px solid #E7E5E4',
+              background: 'transparent', color: '#78716C', fontSize: 12, fontWeight: 500,
+              cursor: 'pointer', fontFamily: 'inherit',
+              transition: 'background 120ms cubic-bezier(0.16,1,0.3,1), color 120ms',
+              outline: 'none',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F0EAE0'; e.currentTarget.style.color = '#1C1917'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; }}
+          >取消</button>
+          {/* Primary confirm — ink-warm black */}
+          <button
             onClick={handleConfirm}
             style={{
-              fontSize: 12, borderRadius: 6,
-              background: '#1C1917', borderColor: '#1C1917',
-              fontFamily: 'inherit',
+              padding: '5px 16px', borderRadius: 6, border: 'none',
+              background: '#1C1917', color: '#FAFAF9', fontSize: 12, fontWeight: 600,
+              cursor: 'pointer', fontFamily: 'inherit',
+              transition: 'background 120ms cubic-bezier(0.16,1,0.3,1)',
               boxShadow: '0 2px 6px rgba(28,25,23,0.3), 0 1px 2px rgba(28,25,23,0.2)',
+              outline: 'none',
             }}
-            onMouseEnter={e => {
-              const btn = e.currentTarget as HTMLButtonElement;
-              btn.style.background = '#292524';
-              btn.style.boxShadow = '0 4px 10px rgba(28,25,23,0.35), 0 1px 3px rgba(28,25,23,0.2)';
-            }}
-            onMouseLeave={e => {
-              const btn = e.currentTarget as HTMLButtonElement;
-              btn.style.background = '#1C1917';
-              btn.style.boxShadow = '0 2px 6px rgba(28,25,23,0.3), 0 1px 2px rgba(28,25,23,0.2)';
-            }}
-          >
-            确认
-          </Button>
+            onMouseEnter={e => { e.currentTarget.style.background = '#292524'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#1C1917'; }}
+          >确认</button>
         </div>
       </div>
 
       <style>{`
+        @keyframes fePopIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to   { opacity: 1; transform: scale(1); }
+        }
         .tiptap { outline: none; font-family: 'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif; }
         .tiptap p { margin: 0 0 4px; }
         .tiptap p:last-child { margin-bottom: 0; }
@@ -466,6 +473,7 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
         button:focus-visible { outline: 1px solid #1C1917 !important; outline-offset: 2px !important; }
         @media (prefers-reduced-motion: reduce) {
           * { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+          @keyframes fePopIn { from { opacity:1; transform:scale(1); } }
         }
       `}</style>
     </div>
