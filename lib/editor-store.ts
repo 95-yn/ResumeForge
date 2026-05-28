@@ -2,8 +2,21 @@
 
 import { create } from 'zustand';
 import type { ResumeData } from '@/data/types';
-import { DEFAULT_RESUME_DATA, DEFAULT_SECTION_ORDER, PROFESSION_RESUME_DATA } from '@/data/defaults';
-import { TEMPLATES } from '@/data/templates';
+import { DEFAULT_RESUME_DATA, DEFAULT_SECTION_ORDER } from '@/data/defaults';
+
+// Profession Chinese name → file slug mapping
+const PROFESSION_SLUG_MAP: Record<string, string> = {
+  'IT互联网': 'it',
+  '金融财会': 'finance',
+  '设计创意': 'design',
+  '教育学术': 'education',
+  '市场营销': 'marketing',
+  '医疗健康': 'medical',
+  '产品运营': 'product',
+  '人力行政': 'hr',
+  '法律合规': 'legal',
+  '校招': 'campus',
+};
 
 interface EditorStore {
   resume: ResumeData | null;
@@ -20,7 +33,7 @@ interface EditorStore {
   historyIndex: number;
   zoom: number;
 
-  loadTemplate: (templateSlug: string, profession?: string) => void;
+  loadTemplate: (templateSlug: string, profession?: string) => Promise<void>;
   updateField: (sectionKey: string, fieldKey: string, value: unknown) => void;
   updateArrayItem: (sectionKey: string, index: number, fieldKey: string, value: unknown) => void;
   addArrayItem: (sectionKey: string) => void;
@@ -67,6 +80,9 @@ function pushHistory(state: EditorStore, newData: ResumeData): Partial<EditorSto
   return { history, historyIndex: history.length - 1, resume: newData, isDirty: true, saveStatus: 'unsaved' as const };
 }
 
+// Race-condition guard: incremented on every loadTemplate call
+let loadCounter = 0;
+
 export const useEditorStore = create<EditorStore>((set, get) => ({
   resume: null, templateId: null, templateHtml: null, templateCss: null,
   templateNotFound: false,
@@ -74,20 +90,43 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   saveErrorMessage: null,
   history: [], historyIndex: -1, zoom: 1,
 
-  loadTemplate: (templateSlug, profession) => {
-    // Find template from local data (no API call)
-    const tpl = TEMPLATES.find(t => t.slug === templateSlug);
-    if (!tpl) {
+  loadTemplate: async (templateSlug, profession) => {
+    // Race-condition guard: tag this load attempt, abort if a newer one starts
+    const loadId = ++loadCounter;
+
+    // Dynamic import: only fetch the one template needed
+    let tpl: { html: string; css: string };
+    try {
+      const mod = await import(`@/data/templates/${templateSlug}`);
+      tpl = mod.default;
+    } catch {
       console.warn(`Template not found: ${templateSlug}`);
+      if (loadCounter !== loadId) return; // superseded
       set({ templateNotFound: true });
       return;
     }
+
+    if (loadCounter !== loadId) return; // superseded by a newer loadTemplate call
     set({ templateNotFound: false });
 
+    // Dynamic import of profession default data (lazy)
+    let resumeData: ResumeData;
     const local = loadFromLocal(templateSlug);
-    const resumeData: ResumeData = local
-      ? local.data
-      : ((PROFESSION_RESUME_DATA[profession || '通用'] || DEFAULT_RESUME_DATA) as ResumeData);
+    if (local) {
+      resumeData = local.data;
+    } else if (profession && PROFESSION_SLUG_MAP[profession]) {
+      try {
+        const profMod = await import(`@/data/profession-defaults/${PROFESSION_SLUG_MAP[profession]}`);
+        resumeData = profMod.default as ResumeData;
+      } catch {
+        resumeData = structuredClone(DEFAULT_RESUME_DATA) as ResumeData;
+      }
+    } else {
+      resumeData = structuredClone(DEFAULT_RESUME_DATA) as ResumeData;
+    }
+
+    if (loadCounter !== loadId) return; // superseded
+
     const sectionOrder: string[] = local ? local.sectionOrder : DEFAULT_SECTION_ORDER;
 
     set({
