@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from 'react';
 import { Tooltip } from 'antd';
 import { ArrowLeftOutlined, PrinterOutlined, UndoOutlined, RedoOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
-import { Modal } from 'antd';
 import Handlebars from 'handlebars';
 import { useEditorStore } from '@/lib/editor-store';
 
@@ -136,10 +135,17 @@ export function TopBar() {
     if (!templateHtml || !templateCss || !resume) return;
     const compiled = Handlebars.compile(templateHtml);
     const body = compiled(resume);
+    const bgColor = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor || '#ffffff';
     const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8">
-<style>${templateCss}
-@media print { @page { margin: 0; } body { margin: 0; } }
-</style></head><body style="margin:0">${body}</body></html>`;
+<style>
+${templateCss}
+html, body, .resume { background: ${bgColor} !important; background-color: ${bgColor} !important; }
+* { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
+@media print {
+  @page { margin: 0; }
+  html, body { margin: 0; background: ${bgColor} !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+}
+</style></head><body style="margin:0;background:${bgColor}">${body}</body></html>`;
     const win = window.open('', '_blank');
     if (!win) return;
     win.document.write(html);
@@ -260,11 +266,11 @@ export function TopBar() {
               fontSize: 13, transition: 'all 0.12s',
               outline: 'none',
             }}
-            onClick={() => Modal.confirm({
-              title: '还原为默认内容？', content: '当前编辑的内容将被替换',
-              okText: '还原', cancelText: '取消', okButtonProps: { danger: true },
-              onOk: resetToDefault,
-            })}
+            onClick={() => {
+              if (window.confirm('还原为默认内容？\n当前编辑的内容将被替换。')) {
+                try { resetToDefault(); } catch (err) { console.error('reset failed:', err); }
+              }
+            }}
             onMouseEnter={e => { e.currentTarget.style.background = '#F0EAE0'; }}
             onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
             onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}

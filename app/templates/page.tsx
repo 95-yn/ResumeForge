@@ -332,8 +332,8 @@ export default function TemplatesPage() {
 
   const handleCardClick = useCallback((slug: string) => {
     const meta = TEMPLATE_META[slug];
-    router.push(`/editor?template=${slug}&profession=${encodeURIComponent(meta?.profession || '通用')}`);
-  }, [router]);
+    window.open(`/editor?template=${slug}&profession=${encodeURIComponent(meta?.profession || '通用')}`, '_blank', 'noopener,noreferrer');
+  }, []);
 
   const handleClearFilters = () => {
     setStyleFilter('all');
