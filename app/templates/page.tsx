@@ -239,9 +239,9 @@ function MasonryCard({ t, idx, onCardClick }: MasonryCardProps) {
   }, [idx]);
 
   const meta = TEMPLATE_META[t.slug] ?? { desc: '', profession: '通用' };
-  const num = String(idx + 2).padStart(3, '0');
+  const num = String(idx + 1).padStart(3, '0');
   const catDisplay = CATEGORY_DISPLAY[t.category] ?? t.category.toUpperCase();
-  const quote = getQuote(t.slug, idx + 1);
+  const quote = getQuote(t.slug, idx);
 
   return (
     <div
@@ -295,25 +295,14 @@ export default function TemplatesPage() {
   const [styleFilter, setStyleFilter]         = useState<string>('all');
   const [professionFilter, setProfessionFilter] = useState<string>('all');
 
-  // Hero image error state
-  const [heroImgError, setHeroImgError] = useState(false);
-
-  // Hero card scroll reveal
-  const heroReveal = useRevealOnScroll(0.2);
-
-  // Divider scroll reveal
-  const dividerReveal = useRevealOnScroll(0.3);
-
   // Hero title stagger — mount-triggered
   const [titlePhase, setTitlePhase] = useState(0);
   useEffect(() => {
-    // Pull quote: delay 200ms
-    const t1 = setTimeout(() => setTitlePhase(1), 200);
     // Title: delay 300ms
-    const t2 = setTimeout(() => setTitlePhase(2), 300);
-    // Index row: delay 600ms
-    const t3 = setTimeout(() => setTitlePhase(3), 600);
-    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+    const t1 = setTimeout(() => setTitlePhase(1), 300);
+    // Filter bar: delay 500ms
+    const t2 = setTimeout(() => setTitlePhase(2), 500);
+    return () => { clearTimeout(t1); clearTimeout(t2); };
   }, []);
 
   // Set page title
@@ -351,14 +340,6 @@ export default function TemplatesPage() {
     setProfessionFilter('all');
   };
 
-  /* Hero card is the first filtered result */
-  const heroTemplate  = filtered[0] ?? null;
-  const restTemplates = filtered.slice(1);
-
-  const heroMeta = heroTemplate ? (TEMPLATE_META[heroTemplate.slug] ?? { desc: '', profession: '通用' }) : null;
-  const heroCatDisplay = heroTemplate ? (CATEGORY_DISPLAY[heroTemplate.category] ?? heroTemplate.category.toUpperCase()) : '';
-  const heroQuote = heroTemplate ? getQuote(heroTemplate.slug, 0) : '';
-
   return (
     <>
       <style>{`
@@ -370,7 +351,7 @@ export default function TemplatesPage() {
           background: ${PARCHMENT};
           color: ${CHESTNUT};
           font-family: 'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif;
-          padding-bottom: 160px;
+          padding-bottom: 80px;
         }
 
         /* ── Top nav ── */
@@ -402,319 +383,173 @@ export default function TemplatesPage() {
           text-transform: uppercase;
         }
 
-        /* ── Hero title area ── */
+        /* ── Compact Hero title area ── */
         .arch-title-area {
-          padding: 96px 56px 64px;
+          padding: 40px 56px 32px;
+          display: flex;
+          align-items: baseline;
+          gap: 24px;
+        }
+
+        /* Display title: compact */
+        .arch-display-title {
+          font-family: 'Fraunces', Georgia, serif;
+          font-optical-sizing: auto;
+          font-variation-settings: 'opsz' 72;
+          font-weight: 400;
+          font-size: clamp(48px, 6vw, 88px);
+          line-height: 1;
+          letter-spacing: -0.03em;
+          color: ${CHESTNUT};
+          margin: 0;
+        }
+
+        /* Subtitle: mono small */
+        .arch-subtitle {
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 11px;
+          letter-spacing: 0.06em;
+          color: ${STONE_MID};
+          white-space: nowrap;
+          align-self: flex-end;
+          padding-bottom: 6px;
         }
 
         /* Staggered reveal animations */
-        .title-pull-quote {
-          opacity: 0;
-          transform: translateY(12px);
-          transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .title-pull-quote.phase-1,
-        .title-pull-quote.phase-2,
-        .title-pull-quote.phase-3 {
-          opacity: 0.7;
-          transform: translateY(0);
-        }
-
         .title-display {
           opacity: 0;
           transition: opacity 0.7s ease-out;
         }
-        .title-display.phase-2,
-        .title-display.phase-3 {
+        .title-display.phase-1,
+        .title-display.phase-2 {
           opacity: 1;
         }
 
-        .title-index-row {
+        .filter-bar-fade {
           opacity: 0;
-          transition: opacity 0.5s ease-out;
+          transform: translateY(-6px);
+          transition: opacity 0.5s ease-out, transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        .title-index-row.phase-3 {
-          opacity: 1;
-        }
-
-        /* Display title: extreme scale */
-        .arch-display-title {
-          font-family: 'Fraunces', Georgia, serif;
-          font-optical-sizing: auto;
-          font-variation-settings: 'opsz' 144;
-          font-weight: 400;
-          font-size: clamp(140px, 16vw, 280px);
-          line-height: 0.85;
-          letter-spacing: -0.04em;
-          color: ${CHESTNUT};
-          margin: 0 0 20px;
-        }
-
-        /* Pull quote — Fraunces italic, 28px, max 12ch */
-        .arch-pull-quote {
-          font-family: 'Fraunces', Georgia, serif;
-          font-style: italic;
-          font-weight: 400;
-          font-size: 28px;
-          line-height: 1.15;
-          color: ${CHESTNUT};
-          max-width: 12ch;
-          margin: 0 0 40px;
-        }
-
-        /* INDEX divider line */
-        .arch-index-rule {
-          display: flex;
-          align-items: center;
-          gap: 16px;
-        }
-        .arch-index-label {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 9px;
-          letter-spacing: 0.3em;
-          text-transform: uppercase;
-          color: ${STONE_MID};
-          white-space: nowrap;
-          flex-shrink: 0;
-        }
-        .arch-index-line {
-          flex: 1;
-          height: 1px;
-          background: ${DUST};
-        }
-
-        /* ── Content wrapper ── */
-        .arch-content {
-          padding: 48px 56px 0;
-        }
-
-        /* ── Hero featured card reveal ── */
-        .hero-card-wrapper {
-          opacity: 0;
-          transform: translateY(24px);
-          transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
-                      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .hero-card-wrapper.hero-visible {
+        .filter-bar-fade.phase-2 {
           opacity: 1;
           transform: translateY(0);
         }
 
-        /* ── Hero featured card ── */
-        .hero-card {
-          display: grid;
-          grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
-          gap: 0;
-          cursor: pointer;
-          position: relative;
-          margin-bottom: 80px;
-          background: ${CARD_WHITE};
-          border: 1px solid ${DUST};
-          overflow: hidden;
-          transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .hero-card:hover {
-          transform: translateY(-2px);
-        }
-        .hero-card:focus-visible {
-          outline: 2px solid ${BRICK};
-          outline-offset: 3px;
-        }
-
-        .hero-card-img-col {
-          position: relative;
-          background: #EEE9E0;
-          overflow: hidden;
-          min-height: 540px;
+        /* ── Sticky filter bar ── */
+        .arch-filter-bar {
+          position: sticky;
+          top: 0;
+          z-index: 50;
+          background: ${PARCHMENT};
+          border-bottom: 1px solid transparent;
+          height: 64px;
           display: flex;
-          align-items: flex-start;
-          justify-content: center;
-          padding: 32px 32px 0;
+          align-items: center;
+          padding: 0 56px;
+          gap: 32px;
+          transition: border-color 0.2s ease-out;
         }
-        .hero-card-img {
-          width: 100%;
-          height: auto;
-          max-height: 540px;
-          object-fit: contain;
-          object-position: top;
-          display: block;
-          filter: grayscale(15%);
-          transition: filter 0.4s ease-out,
-                      box-shadow 0.3s ease-out;
-          box-shadow: none;
-        }
-        .hero-card-wrapper.hero-visible .hero-card-img {
-          box-shadow: 0 12px 40px rgba(45,24,16,0.10), 0 2px 8px rgba(45,24,16,0.06);
-        }
-        .hero-card:hover .hero-card-img {
-          filter: grayscale(0%);
+        .arch-filter-bar.scrolled {
+          border-bottom-color: ${DUST};
         }
 
-        /* EDITORS PICK label — top right of image col */
-        .hero-card-badge {
-          position: absolute;
-          top: 20px;
-          right: 20px;
+        /* Filter group */
+        .arch-filter-group {
+          display: flex;
+          align-items: center;
+          gap: 0;
+          flex-shrink: 0;
+        }
+
+        /* Group label */
+        .arch-filter-group-label {
           font-family: 'JetBrains Mono', 'Courier New', monospace;
           font-size: 9px;
           letter-spacing: 0.2em;
           text-transform: uppercase;
-          color: ${CARD_WHITE};
-          background: ${BRICK};
-          padding: 5px 10px;
-          z-index: 2;
-        }
-
-        /* Hero image placeholder */
-        .hero-img-placeholder {
-          width: 100%;
-          height: 460px;
-          background: #EEE9E0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-        .placeholder-label {
-          font-family: 'Fraunces', Georgia, serif;
-          font-style: italic;
-          font-size: 13px;
           color: ${STONE_MID};
-          opacity: 0.5;
-          letter-spacing: 0.02em;
-        }
-
-        .hero-card-body-col {
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          padding: 32px 36px;
-        }
-        .hero-card-top {
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-        }
-
-        /* № num — right-aligned, mono 14px */
-        .hero-card-num {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 14px;
-          color: ${INK_DIM};
-          letter-spacing: 0.04em;
-          align-self: flex-end;
-        }
-        .hero-card-quote {
-          font-family: 'Fraunces', Georgia, serif;
-          font-style: italic;
-          font-weight: 400;
-          font-size: 11px;
-          color: ${CHESTNUT};
-          opacity: 0.45;
-          margin: 0;
-          letter-spacing: 0.01em;
-        }
-
-        .hero-card-name {
-          font-family: 'Fraunces', Georgia, serif;
-          font-weight: 400;
-          font-size: 36px;
-          line-height: 1.1;
-          letter-spacing: -0.02em;
-          color: ${CHESTNUT};
-          margin: 0;
-          transition: color 0.2s ease-out;
-        }
-        .hero-card:hover .hero-card-name {
-          color: ${BRICK};
-        }
-
-        .hero-card-tags {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 10px;
-          text-transform: uppercase;
-          letter-spacing: 0.06em;
-          color: ${INK_DIM};
-          opacity: 0.55;
-          margin: 0;
-        }
-        .hero-card-desc {
-          font-family: 'Fraunces', Georgia, serif;
-          font-style: italic;
-          font-weight: 400;
-          font-size: 16px;
-          line-height: 1.55;
-          color: ${CHESTNUT};
-          opacity: 0.65;
-          margin: 0;
-        }
-
-        .hero-card-bottom {
-          margin-top: 24px;
-        }
-        .hero-use-hint {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 10px;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          color: ${STONE_MID};
-          opacity: 0.6;
-        }
-
-        /* ── Archive divider ── */
-        .archive-divider {
-          display: flex;
-          align-items: center;
-          gap: 28px;
-          margin: 96px 0 64px;
-        }
-        .archive-divider-line {
-          flex: 1;
-          height: 1px;
-          background: ${CHESTNUT};
-          opacity: 0.2;
-          transform-origin: center;
-          transform: scaleX(0);
-          transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-        }
-        .archive-divider-line.left-line {
-          transform-origin: right;
-        }
-        .archive-divider-line.right-line {
-          transform-origin: left;
-        }
-        .archive-divider.divider-visible .archive-divider-line {
-          transform: scaleX(1);
-        }
-        .archive-divider.divider-visible .left-line {
-          transition-delay: 0ms;
-        }
-        .archive-divider.divider-visible .right-line {
-          transition-delay: 100ms;
-        }
-        .archive-divider-label {
-          font-family: 'Fraunces', Georgia, serif;
-          font-style: italic;
-          font-weight: 400;
-          font-size: 22px;
-          letter-spacing: 0.02em;
-          color: ${CHESTNUT};
+          margin-right: 12px;
           white-space: nowrap;
-          opacity: 0;
-          transition: opacity 0.4s ease-out;
-        }
-        .archive-divider.divider-visible .archive-divider-label {
-          opacity: 1;
-          transition-delay: 150ms;
-        }
-        .archive-divider-label .num {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-style: normal;
-          font-size: 10px;
-          letter-spacing: 0.15em;
-          text-transform: uppercase;
-          color: ${STONE_MID};
+          flex-shrink: 0;
           opacity: 0.6;
-          margin-left: 12px;
+        }
+
+        /* Divider between groups */
+        .arch-filter-divider {
+          width: 1px;
+          height: 20px;
+          background: ${DUST};
+          flex-shrink: 0;
+        }
+
+        /* Style chips — Fraunces 15px */
+        .arch-filter-btn-style {
+          font-family: 'Fraunces', Georgia, serif;
+          font-weight: 400;
+          font-size: 15px;
+          letter-spacing: -0.01em;
+          color: ${CHESTNUT};
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0 10px 0 0;
+          opacity: 0.38;
+          transition: opacity 0.15s ease;
+          white-space: nowrap;
+          flex-shrink: 0;
+          text-decoration: none;
+          line-height: 1;
+        }
+        .arch-filter-btn-style:last-child { padding-right: 0; }
+        .arch-filter-btn-style:hover { opacity: 0.65; }
+        .arch-filter-btn-style.active {
+          opacity: 1;
+          text-decoration: underline;
+          text-decoration-color: ${BRICK};
+          text-decoration-thickness: 2px;
+          text-underline-offset: 4px;
+        }
+        .arch-filter-btn-style:focus-visible {
+          outline: 2px solid ${BRICK};
+          outline-offset: 3px;
+          border-radius: 2px;
+        }
+
+        /* Profession chips — mono 10px */
+        .arch-filter-btn-prof {
+          font-family: 'JetBrains Mono', 'Courier New', monospace;
+          font-size: 10px;
+          letter-spacing: 0.07em;
+          text-transform: uppercase;
+          color: ${CHESTNUT};
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 0 9px 0 0;
+          opacity: 0.32;
+          transition: opacity 0.15s ease;
+          white-space: nowrap;
+          flex-shrink: 0;
+          line-height: 1;
+        }
+        .arch-filter-btn-prof:last-child { padding-right: 0; }
+        .arch-filter-btn-prof:hover { opacity: 0.6; }
+        .arch-filter-btn-prof.active {
+          opacity: 1;
+          text-decoration: underline;
+          text-decoration-color: ${BRICK};
+          text-decoration-thickness: 2px;
+          text-underline-offset: 4px;
+        }
+        .arch-filter-btn-prof:focus-visible {
+          outline: 2px solid ${BRICK};
+          outline-offset: 3px;
+          border-radius: 2px;
+        }
+
+        /* ── Content wrapper ── */
+        .arch-content {
+          padding: 40px 56px 0;
         }
 
         /* ── Masonry grid ── */
@@ -728,12 +563,24 @@ export default function TemplatesPage() {
         @media (max-width: 640px) {
           .archive { columns: 1; }
           .arch-header { padding: 20px 24px; }
-          .arch-title-area { padding: 60px 24px 40px; }
-          .arch-content { padding: 32px 24px 0; }
-          .arch-display-title { font-size: clamp(80px, 20vw, 160px); }
-          .arch-pull-quote { font-size: 20px; }
-          .hero-card { grid-template-columns: 1fr; }
-          .hero-card-img-col { min-height: 260px; }
+          .arch-title-area {
+            padding: 28px 24px 20px;
+            flex-wrap: wrap;
+            gap: 8px;
+          }
+          .arch-content { padding: 24px 24px 0; }
+        }
+
+        /* ── Small screen filter wrap ── */
+        @media (max-width: 900px) {
+          .arch-filter-bar {
+            height: auto;
+            flex-wrap: wrap;
+            padding: 12px 24px;
+            gap: 12px;
+          }
+          .arch-filter-divider { display: none; }
+          .arch-filter-group { flex-wrap: wrap; }
         }
 
         /* ── Regular card ── */
@@ -812,6 +659,14 @@ export default function TemplatesPage() {
           align-items: center;
           justify-content: center;
         }
+        .placeholder-label {
+          font-family: 'Fraunces', Georgia, serif;
+          font-style: italic;
+          font-size: 13px;
+          color: ${STONE_MID};
+          opacity: 0.5;
+          letter-spacing: 0.02em;
+        }
 
         .archive-card-body {
           padding: 12px 0 0;
@@ -888,133 +743,15 @@ export default function TemplatesPage() {
         }
         .arch-empty-clear:hover { opacity: 0.7; }
 
-        /* ── Bottom filter bar ── */
-        .arch-filter-bar {
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          z-index: 100;
-          background: ${PARCHMENT};
-          border-top: 1px solid ${DUST};
-          height: 80px;
-          display: flex;
-          align-items: stretch;
-        }
-
-        /* Left vertical label */
-        .arch-filter-label-vert {
-          width: 80px;
-          flex-shrink: 0;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-right: 1px solid ${DUST};
-        }
-        .arch-filter-label-vert span {
-          writing-mode: vertical-rl;
-          text-orientation: mixed;
-          transform: rotate(180deg);
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 14px;
-          letter-spacing: 0.3em;
-          text-transform: uppercase;
-          color: ${STONE_MID};
-          padding: 16px 0;
-        }
-
-        /* Right section: two rows */
-        .arch-filter-rows {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          padding: 0 40px;
-          gap: 8px;
-          overflow: hidden;
-        }
-
-        /* Row 1: STYLE — Fraunces 16px */
-        .arch-filter-row-style {
-          display: flex;
-          align-items: baseline;
-          gap: 0;
-          overflow-x: auto;
-          scrollbar-width: none;
-        }
-        .arch-filter-row-style::-webkit-scrollbar { display: none; }
-
-        .arch-filter-btn-style {
-          font-family: 'Fraunces', Georgia, serif;
-          font-weight: 400;
-          font-size: 16px;
-          letter-spacing: -0.01em;
-          color: ${CHESTNUT};
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 0 12px 0 0;
-          opacity: 0.4;
-          transition: opacity 0.15s ease;
-          white-space: nowrap;
-          flex-shrink: 0;
-          text-decoration: none;
-          line-height: 1;
-        }
-        .arch-filter-btn-style:hover { opacity: 0.7; }
-        .arch-filter-btn-style.active {
-          opacity: 1;
-          text-decoration: underline;
-          text-decoration-color: ${BRICK};
-          text-decoration-thickness: 2px;
-          text-underline-offset: 4px;
-          transition: opacity 0.15s ease, text-underline-offset 0.25s ease-out;
-        }
-        .arch-filter-btn-style:focus-visible {
-          outline: 2px solid ${BRICK};
-          outline-offset: 3px;
-          border-radius: 2px;
-        }
-
-        /* Row 2: PROFESSION — mono 11px */
-        .arch-filter-row-prof {
-          display: flex;
-          align-items: center;
-          gap: 0;
-          overflow-x: auto;
-          scrollbar-width: none;
-        }
-        .arch-filter-row-prof::-webkit-scrollbar { display: none; }
-
-        .arch-filter-btn-prof {
-          font-family: 'JetBrains Mono', 'Courier New', monospace;
-          font-size: 11px;
-          letter-spacing: 0.07em;
-          text-transform: uppercase;
-          color: ${CHESTNUT};
-          background: none;
-          border: none;
-          cursor: pointer;
-          padding: 0 10px 0 0;
-          opacity: 0.35;
-          transition: opacity 0.15s ease;
-          white-space: nowrap;
-          flex-shrink: 0;
-          line-height: 1;
-        }
-        .arch-filter-btn-prof:hover { opacity: 0.65; }
-        .arch-filter-btn-prof.active {
-          opacity: 1;
-          text-decoration: underline;
-          text-decoration-color: ${BRICK};
-          text-decoration-thickness: 2px;
-          text-underline-offset: 4px;
-          transition: opacity 0.15s ease, text-underline-offset 0.25s ease-out;
-        }
-        .arch-filter-btn-prof:focus-visible {
-          outline: 2px solid ${BRICK};
-          outline-offset: 3px;
-          border-radius: 2px;
+        /* ── Reduced motion ── */
+        @media (prefers-reduced-motion: reduce) {
+          .title-display,
+          .filter-bar-fade,
+          .archive-card {
+            transition: none !important;
+            opacity: 1 !important;
+            transform: none !important;
+          }
         }
       `}</style>
 
@@ -1028,26 +765,24 @@ export default function TemplatesPage() {
           </span>
         </header>
 
-        {/* ── 2. Hero title ── */}
+        {/* ── 2. Compact Hero title ── */}
         <div className="arch-title-area">
-          {/* Pull quote: first to appear */}
-          <p className={`arch-pull-quote title-pull-quote${titlePhase >= 1 ? ` phase-${titlePhase}` : ''}`}>
-            "A curated archive<br />
-            for the working<br />
-            professional."
-          </p>
-          {/* Display title: second */}
-          <div className={`title-display${titlePhase >= 2 ? ` phase-${titlePhase}` : ''}`}>
+          <div className={`title-display${titlePhase >= 1 ? ` phase-${titlePhase}` : ''}`}>
             <h1 className="arch-display-title">Templates</h1>
           </div>
-          {/* Index row: third */}
-          <div className={`arch-index-rule title-index-row${titlePhase >= 3 ? ' phase-3' : ''}`}>
-            <span className="arch-index-label">Index · № 001 — {String(total).padStart(3, '0')}</span>
-            <div className="arch-index-line" />
-          </div>
+          <span className="arch-subtitle">A curated archive of {total} specimens</span>
         </div>
 
-        {/* ── 3. Main content ── */}
+        {/* ── 3. Sticky filter bar ── */}
+        <StickyFilterBar
+          styleFilter={styleFilter}
+          professionFilter={professionFilter}
+          onStyleChange={setStyleFilter}
+          onProfessionChange={setProfessionFilter}
+          titlePhase={titlePhase}
+        />
+
+        {/* ── 4. Main content ── */}
         <div className="arch-content">
           {filtered.length === 0 ? (
             /* Empty state */
@@ -1059,129 +794,81 @@ export default function TemplatesPage() {
               </button>
             </div>
           ) : (
-            <>
-              {/* ── Hero featured card (first result) ── */}
-              {heroTemplate && heroMeta && (
-                <div
-                  ref={heroReveal.ref}
-                  className={`hero-card-wrapper${heroReveal.visible ? ' hero-visible' : ''}`}
-                >
-                  <div
-                    className="hero-card"
-                    onClick={() => handleCardClick(heroTemplate.slug)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => e.key === 'Enter' && handleCardClick(heroTemplate.slug)}
-                    aria-label={`使用模板：${heroTemplate.name}`}
-                  >
-                    {/* Left: image */}
-                    <div className="hero-card-img-col">
-                      <span className="hero-card-badge">Featured / Editors Pick</span>
-                      {heroImgError ? (
-                        <div className="hero-img-placeholder">
-                          <span className="placeholder-label">preview pending</span>
-                        </div>
-                      ) : (
-                        <img
-                          src={`/thumbnails/${heroTemplate.slug}.png`}
-                          alt={heroTemplate.name}
-                          className="hero-card-img"
-                          onError={() => setHeroImgError(true)}
-                        />
-                      )}
-                    </div>
-
-                    {/* Right: body */}
-                    <div className="hero-card-body-col">
-                      <div className="hero-card-top">
-                        <span className="hero-card-num">№ 001</span>
-                        <p className="hero-card-quote">{heroQuote}</p>
-                        <h2 className="hero-card-name">{heroTemplate.name}</h2>
-                        <p className="hero-card-tags">
-                          {heroCatDisplay} · {heroMeta.profession !== '通用' ? heroMeta.profession : 'UNIVERSAL'}
-                        </p>
-                        <p className="hero-card-desc">{heroMeta.desc}</p>
-                      </div>
-                      <div className="hero-card-bottom">
-                        <span className="hero-use-hint">Use this template →</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* ── Archive divider ── */}
-              {restTemplates.length > 0 && (
-                <div
-                  ref={dividerReveal.ref}
-                  className={`archive-divider${dividerReveal.visible ? ' divider-visible' : ''}`}
-                >
-                  <div className="archive-divider-line left-line" />
-                  <span className="archive-divider-label">
-                    The Archive
-                    <span className="num">№ 002 — {String(restTemplates.length + 1).padStart(3, '0')}</span>
-                  </span>
-                  <div className="archive-divider-line right-line" />
-                </div>
-              )}
-
-              {/* ── Masonry archive (remaining) ── */}
-              {restTemplates.length > 0 && (
-                <div className="archive">
-                  {restTemplates.map((t, idx) => (
-                    <MasonryCard
-                      key={t.slug}
-                      t={t}
-                      idx={idx}
-                      onCardClick={handleCardClick}
-                    />
-                  ))}
-                </div>
-              )}
-            </>
+            /* ── Masonry archive ── */
+            <div className="archive">
+              {filtered.map((t, idx) => (
+                <MasonryCard
+                  key={t.slug}
+                  t={t}
+                  idx={idx}
+                  onCardClick={handleCardClick}
+                />
+              ))}
+            </div>
           )}
         </div>
       </div>
-
-      {/* ── 4. Bottom filter bar ── */}
-      <nav className="arch-filter-bar" aria-label="Template filters">
-
-        {/* Left: FILTER BY vertical label */}
-        <div className="arch-filter-label-vert">
-          <span>Filter by</span>
-        </div>
-
-        {/* Right: two rows — style first, then profession for logical tab order */}
-        <div className="arch-filter-rows">
-          {/* Row 1: Style — Fraunces serif */}
-          <div className="arch-filter-row-style" role="group" aria-label="Style filter">
-            {STYLE_FILTERS.map((f) => (
-              <button
-                key={f.key}
-                className={`arch-filter-btn-style${styleFilter === f.key ? ' active' : ''}`}
-                onClick={() => setStyleFilter(f.key)}
-                aria-pressed={styleFilter === f.key}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Row 2: Profession — mono */}
-          <div className="arch-filter-row-prof" role="group" aria-label="Profession filter">
-            {PROFESSION_FILTERS.map((f) => (
-              <button
-                key={f.key}
-                className={`arch-filter-btn-prof${professionFilter === f.key ? ' active' : ''}`}
-                onClick={() => setProfessionFilter(f.key)}
-                aria-pressed={professionFilter === f.key}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      </nav>
     </>
+  );
+}
+
+/* ─── Sticky filter bar component ────────────────────────── */
+interface StickyFilterBarProps {
+  styleFilter: string;
+  professionFilter: string;
+  onStyleChange: (key: string) => void;
+  onProfessionChange: (key: string) => void;
+  titlePhase: number;
+}
+
+function StickyFilterBar({ styleFilter, professionFilter, onStyleChange, onProfessionChange, titlePhase }: StickyFilterBarProps) {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 8);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <nav
+      className={`arch-filter-bar filter-bar-fade${titlePhase >= 2 ? ' phase-2' : ''}${scrolled ? ' scrolled' : ''}`}
+      aria-label="Template filters"
+    >
+      {/* Style group */}
+      <div className="arch-filter-group" role="group" aria-label="Style filter">
+        <span className="arch-filter-group-label">Style</span>
+        {STYLE_FILTERS.map((f) => (
+          <button
+            key={f.key}
+            className={`arch-filter-btn-style${styleFilter === f.key ? ' active' : ''}`}
+            onClick={() => onStyleChange(f.key)}
+            aria-pressed={styleFilter === f.key}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Divider */}
+      <div className="arch-filter-divider" aria-hidden="true" />
+
+      {/* Profession group */}
+      <div className="arch-filter-group" role="group" aria-label="Profession filter">
+        <span className="arch-filter-group-label">Profession</span>
+        {PROFESSION_FILTERS.map((f) => (
+          <button
+            key={f.key}
+            className={`arch-filter-btn-prof${professionFilter === f.key ? ' active' : ''}`}
+            onClick={() => onProfessionChange(f.key)}
+            aria-pressed={professionFilter === f.key}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+    </nav>
   );
 }
