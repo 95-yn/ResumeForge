@@ -192,7 +192,11 @@ export function ResumePreview() {
       const template = Handlebars.compile(templateHtml);
       const body = template(resume);
       const bgColor = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor || '#ffffff';
-      const bgOverride = `<style>html, body, .resume { background: ${bgColor} !important; background-color: ${bgColor} !important; }</style>`;
+      const bgOverride = `<style>
+        html, body, .resume { background: ${bgColor} !important; background-color: ${bgColor} !important; }
+        html, body { overflow: hidden !important; scrollbar-width: none; }
+        html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; height: 0; }
+      </style>`;
       setRenderError(false);
       return `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>${templateCss}</style>${bgOverride}</head><body style="margin:0;background:${bgColor}">${body}</body></html>`;
     } catch {
