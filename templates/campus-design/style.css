@@ -154,3 +154,10 @@ li p, li div { margin: 0; padding: 0; display: inline; }
   .resume.campus-design { margin: 0; padding: 16mm 18mm; }
   @page { margin: 0; size: A4; }
 }
+
+
+/* skill-no-wrap */
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
+  white-space: nowrap;
+  word-break: keep-all;
+}

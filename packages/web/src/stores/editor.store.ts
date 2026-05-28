@@ -39,15 +39,15 @@ interface EditorStore {
   save: () => Promise<void>;
 }
 
-const GUEST_KEY = 'resumeforge_guest';
+const GUEST_KEY_PREFIX = 'resumeforge_guest_';
 
 function saveToLocal(templateId: string, data: ResumeData, sectionOrder: string[]) {
-  try { localStorage.setItem(GUEST_KEY, JSON.stringify({ templateId, data, sectionOrder })); } catch {}
+  try { localStorage.setItem(GUEST_KEY_PREFIX + templateId, JSON.stringify({ data, sectionOrder })); } catch {}
 }
 
-function loadFromLocal(): { templateId: string; data: ResumeData; sectionOrder: string[] } | null {
+function loadFromLocal(templateId: string): { data: ResumeData; sectionOrder: string[] } | null {
   try {
-    const raw = localStorage.getItem(GUEST_KEY);
+    const raw = localStorage.getItem(GUEST_KEY_PREFIX + templateId);
     return raw ? JSON.parse(raw) : null;
   } catch { return null; }
 }
@@ -81,20 +81,12 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     const { data: tplRes } = await api.get(`/templates/${templateSlug}`);
     const tpl = tplRes.data;
 
-    const state = get();
-    // 如果当前已有编辑数据，保留它；否则从 localStorage 或默认数据加载
-    let resumeData: ResumeData;
-    let sectionOrder: string[];
-
-    if (state.resume && state.resume.basics?.name) {
-      // 有已编辑的数据，保留
-      resumeData = state.resume;
-      sectionOrder = state.sectionOrder;
-    } else {
-      const local = loadFromLocal();
-      resumeData = local ? local.data : ((PROFESSION_RESUME_DATA[profession || '通用'] || DEFAULT_RESUME_DATA) as ResumeData);
-      sectionOrder = local ? local.sectionOrder : DEFAULT_SECTION_ORDER;
-    }
+    // 每个模板独立存储——只加载当前模板的本地数据，没有就用职能默认
+    const local = loadFromLocal(templateSlug);
+    const resumeData: ResumeData = local
+      ? local.data
+      : ((PROFESSION_RESUME_DATA[profession || '通用'] || DEFAULT_RESUME_DATA) as ResumeData);
+    const sectionOrder: string[] = local ? local.sectionOrder : DEFAULT_SECTION_ORDER;
 
     set({
       mode: 'guest', resumeId: null, resume: resumeData, templateId: templateSlug,

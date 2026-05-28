@@ -4,6 +4,7 @@ import { Login } from './pages/Login';
 import { Dashboard } from './pages/Dashboard';
 import { Templates } from './pages/Templates';
 import { Editor } from './pages/Editor';
+import { EditorV2 } from './pages/EditorV2';
 import { ProtectedRoute } from './components/common/ProtectedRoute';
 
 export const router = createBrowserRouter([
@@ -17,6 +18,8 @@ export const router = createBrowserRouter([
       { path: 'templates', element: <Templates /> },
       { path: 'editor', element: <Editor /> },
       { path: 'editor/:resumeId', element: <ProtectedRoute><Editor /></ProtectedRoute> },
+      { path: 'design', element: <EditorV2 /> },
+      { path: 'design/:resumeId', element: <ProtectedRoute><EditorV2 /></ProtectedRoute> },
     ],
   },
 ]);
