@@ -198,59 +198,76 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
     else iframe.onload = doPrint;
   };
 
-  // Export to PDF via html2pdf.js — renders to canvas then PDF (preserves background,
-  // custom fonts, colors better than browser print in many cases). Loads lib lazily.
+  // Export to PDF — Strategy A: capture the live preview iframe's body directly.
+  // No hidden container, no rebuild — html2canvas reads the exact DOM the user sees.
+  // Editor-injected hover/outline styles are invisible to canvas (no hover during capture).
   const handleExportPdf = async () => {
     if (!templateHtml || !templateCss || !resume) return;
     setExportingPdf(true);
     try {
-      const compiled = compileTemplate(templateHtml);
-      const body = compiled(resume);
-      const bgColor = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor || '#ffffff';
+      const iframe = document.querySelector<HTMLIFrameElement>('iframe[title="preview"]');
+      const idoc = iframe?.contentDocument;
+      const ibody = idoc?.body;
+      if (!iframe || !idoc || !ibody) {
+        throw new Error('Preview iframe not ready');
+      }
 
-      const styleBlock = `
-        ${templateCss}
-        html, body, .resume { background: ${bgColor} !important; background-color: ${bgColor} !important; }
-        body { margin: 0; padding: 0; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-        * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; color-adjust: exact !important; }
-      `;
-
-      // Build a hidden, A4-width container in the actual page (so fonts/CSS apply correctly)
-      const container = document.createElement('div');
-      container.style.cssText = `position:fixed;left:-9999px;top:0;width:210mm;background:${bgColor};`;
-      container.innerHTML = `<style>${styleBlock}</style><div class="pdf-page">${body}</div>`;
-      document.body.appendChild(container);
-
-      // Wait one frame so fonts/layout settle
+      // Wait for any pending fonts inside the iframe
+      try { await (idoc as Document & { fonts?: { ready: Promise<unknown> } }).fonts?.ready; } catch { /* no-op */ }
       await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
 
-      const mod = await import('html2pdf.js');
-      const html2pdf = (mod as { default: (...args: unknown[]) => unknown }).default || (mod as unknown as (...args: unknown[]) => unknown);
+      const bgColor = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor || '#ffffff';
 
-      const filename = `${resume.basics?.name || '简历'}.pdf`;
-      await (html2pdf as (...args: unknown[]) => { set: (opts: unknown) => { from: (el: HTMLElement) => { save: () => Promise<void> } } })()
-        .set({
-          margin: [10, 12, 10, 12],
-          filename,
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: {
-            scale: 2,
-            useCORS: true,
-            backgroundColor: bgColor,
-            letterRendering: true,
-            logging: false,
-            windowWidth: container.scrollWidth,
-          },
-          jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
-          pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
-        })
-        .from(container.firstElementChild as HTMLElement)
-        .save();
+      // Temporarily strip editor-injected style attrs on data-field elements
+      // (cursor: text, outline, borderRadius, transition) so canvas isn't influenced
+      // by transient hover background applied during interaction.
+      const fields = Array.from(ibody.querySelectorAll<HTMLElement>('[data-field]'));
+      const snapshot = fields.map(el => ({ el, style: el.getAttribute('style') }));
+      fields.forEach(el => el.removeAttribute('style'));
 
-      container.remove();
+      try {
+        const mod = await import('html2pdf.js');
+        type Html2PdfChain = {
+          set: (opts: unknown) => Html2PdfChain;
+          from: (el: HTMLElement) => Html2PdfChain;
+          save: () => Promise<void>;
+        };
+        const html2pdf = ((mod as { default?: () => Html2PdfChain }).default
+          ?? (mod as unknown as () => Html2PdfChain));
+
+        const filename = `${resume.basics?.name || '简历'}.pdf`;
+
+        await html2pdf()
+          .set({
+            margin: [8, 10, 8, 10],
+            filename,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+              scale: 2,
+              useCORS: true,
+              allowTaint: true,
+              backgroundColor: bgColor,
+              letterRendering: true,
+              logging: false,
+              width: ibody.scrollWidth,
+              height: ibody.scrollHeight,
+              windowWidth: ibody.scrollWidth,
+              windowHeight: ibody.scrollHeight,
+            },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait', compress: true },
+            pagebreak: { mode: ['avoid-all', 'css', 'legacy'] },
+          })
+          .from(ibody)
+          .save();
+      } finally {
+        // Restore editor inline styles so editing UX is unchanged
+        snapshot.forEach(({ el, style }) => {
+          if (style != null) el.setAttribute('style', style);
+        });
+      }
     } catch (err) {
       console.error('PDF export failed:', err);
-      alert('PDF 导出失败，请改用「打印」并选择"另存为 PDF"');
+      alert(`PDF 导出失败：${err instanceof Error ? err.message : String(err)}\n\n请改用「打印」按钮，在打印对话框中选「另存为 PDF」。`);
     } finally {
       setExportingPdf(false);
     }
