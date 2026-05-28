@@ -110,11 +110,11 @@ export function InlineRichText({ value, onChange, placeholder = '输入内容...
   }, [openPicker]);
 
   const btnStyle = (active: boolean): React.CSSProperties => ({
-    width: 22, height: 22, borderRadius: 4, border: 'none', padding: 0,
+    width: 28, height: 28, borderRadius: 5, border: 'none', padding: 0,
     background: active ? 'rgba(28,25,23,0.1)' : 'transparent',
     color: active ? '#1C1917' : '#78716C',
     cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-    fontSize: 11, fontWeight: 700, fontFamily: 'inherit', flexShrink: 0, outline: 'none',
+    fontSize: 13, fontWeight: 700, fontFamily: 'inherit', flexShrink: 0, outline: 'none',
   });
 
   const Sep = () => <div style={{ width: 1, height: 14, background: '#E7E5E4', margin: '0 2px', flexShrink: 0 }} />;
@@ -198,7 +198,7 @@ export function InlineRichText({ value, onChange, placeholder = '输入内容...
                       setOpenPicker(null);
                     }}
                     style={{
-                      width: 18, height: 18, borderRadius: '50%',
+                      width: 22, height: 22, borderRadius: '50%',
                       border: '1.5px solid #E7E5E4', background: c,
                       cursor: 'pointer', padding: 0, outline: 'none',
                     }}
@@ -242,10 +242,10 @@ export function InlineRichText({ value, onChange, placeholder = '输入内容...
         </div>
       )}
       <div style={{
-        fontSize: 11, color: '#1C1917', background: focused ? '#FFF' : '#FAFAF9',
+        fontSize: 13, color: '#1C1917', background: focused ? '#FFF' : '#FAFAF9',
         border: `1px solid ${focused ? '#1C1917' : '#E7E5E4'}`,
         borderRadius: focused ? '0 0 6px 6px' : 6,
-        padding: '3px 6px', minHeight, boxSizing: 'border-box',
+        padding: '6px 9px', minHeight, boxSizing: 'border-box',
         transition: 'border-color 0.12s, background 0.12s',
         lineHeight: 1.6, wordBreak: 'break-word',
         position: 'relative',

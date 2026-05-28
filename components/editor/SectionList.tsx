@@ -113,8 +113,8 @@ function getItemSummary(key: string, item: Record<string, unknown>): string {
 }
 
 const inputCss: React.CSSProperties = {
-  width: '100%', fontSize: 12, color: '#1C1917', background: '#FAFAF9',
-  border: '1px solid #E7E5E4', borderRadius: 6, padding: '5px 8px',
+  width: '100%', fontSize: 13, color: '#1C1917', background: '#FAFAF9',
+  border: '1px solid #E7E5E4', borderRadius: 6, padding: '7px 10px',
   outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' as const,
   transition: 'border-color 0.12s, background 0.12s',
 };
