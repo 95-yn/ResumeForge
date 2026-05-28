@@ -300,28 +300,53 @@ export function SectionList() {
                   cursor: isDraggable ? 'grab' : 'pointer',
                   background: activeSection === key ? '#F0EAE0' : 'transparent',
                   transition: 'background 180ms cubic-bezier(0.16, 1, 0.3, 1)',
-                  borderTop: isDrop && dropTarget?.pos === 'before' ? '2px solid #1C1917' : '2px solid transparent',
-                  borderBottom: isDrop && dropTarget?.pos === 'after' ? '2px solid #1C1917' : '2px solid transparent',
+                  // Drop indicator: brick-red 1px line instead of ink dark 2px
+                  borderTop: isDrop && dropTarget?.pos === 'before' ? '1px solid #B0463A' : '1px solid transparent',
+                  borderBottom: isDrop && dropTarget?.pos === 'after' ? '1px solid #B0463A' : '1px solid transparent',
                   opacity: dragKey === key ? 0.4 : 1,
                   outline: 'none',
                 }}
                 onMouseEnter={e => {
                   if (activeSection !== key) (e.currentTarget as HTMLElement).style.background = '#F0EAE0';
+                  // Section icon tints to ink-warm on hover
+                  const icon = (e.currentTarget as HTMLElement).querySelector<HTMLSpanElement>('.section-icon-wrap');
+                  if (icon) icon.style.color = '#1C1917';
+                  // Grip appears on hover
+                  const grip = (e.currentTarget as HTMLElement).querySelector<HTMLSpanElement>('.section-grip');
+                  if (grip) grip.style.color = '#A8A29E';
                   const btn = (e.currentTarget as HTMLElement).querySelector<HTMLButtonElement>('.section-delete-btn');
                   if (btn) btn.style.opacity = '0.5';
                 }}
                 onMouseLeave={e => {
                   if (activeSection !== key) (e.currentTarget as HTMLElement).style.background = 'transparent';
+                  const icon = (e.currentTarget as HTMLElement).querySelector<HTMLSpanElement>('.section-icon-wrap');
+                  if (icon) icon.style.color = '#78716C';
+                  const grip = (e.currentTarget as HTMLElement).querySelector<HTMLSpanElement>('.section-grip');
+                  if (grip) grip.style.color = 'transparent';
                   const btn = (e.currentTarget as HTMLElement).querySelector<HTMLButtonElement>('.section-delete-btn');
                   if (btn) btn.style.opacity = '0';
                 }}
               >
                 {isDraggable && (
-                  <span style={{ color: '#D6D3D1', cursor: 'grab', lineHeight: 1, display: 'inline-flex', alignItems: 'center' }}>
+                  <span
+                    className="section-grip"
+                    style={{
+                      color: 'transparent', cursor: 'grab', lineHeight: 1,
+                      display: 'inline-flex', alignItems: 'center', flexShrink: 0,
+                      transition: 'color 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+                    }}
+                  >
                     <GripDots />
                   </span>
                 )}
-                <span style={{ width: 18, height: 18, display: 'inline-flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color: '#78716C' }}>
+                <span
+                  className="section-icon-wrap"
+                  style={{
+                    width: 18, height: 18, display: 'inline-flex', alignItems: 'center',
+                    justifyContent: 'center', flexShrink: 0, color: '#78716C',
+                    transition: 'color 150ms cubic-bezier(0.16, 1, 0.3, 1)',
+                  }}
+                >
                   <SectionIcon name={iconName} size={15} />
                 </span>
                 <span style={{
@@ -332,10 +357,13 @@ export function SectionList() {
                 </span>
                 {isArray && items.length > 0 && (
                   <span style={{
-                    fontSize: 11, color: '#78716C',
-                    // chestnut 5% bg — paper-badge feel
+                    fontSize: 10,
+                    fontFamily: "'JetBrains Mono', 'SF Mono', monospace",
+                    fontWeight: 500,
+                    letterSpacing: '0.04em',
+                    color: '#78716C',
                     background: 'rgba(45,24,16,0.07)',
-                    borderRadius: 10, padding: '1px 7px', fontWeight: 500, flexShrink: 0,
+                    borderRadius: 8, padding: '1px 5px', flexShrink: 0,
                   }}>
                     {items.length}
                   </span>
