@@ -7,6 +7,55 @@ import { useRouter } from 'next/navigation';
 import { compileTemplate } from '@/lib/mini-template';
 import { useEditorStore } from '@/lib/editor-store';
 
+/** Inline confirm modal — replaces window.confirm for the Reset action */
+function ResetConfirmModal({ onOk, onCancel }: { onOk: () => void; onCancel: () => void }) {
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 99999,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      background: 'rgba(28,25,23,0.30)',
+    }}
+      onClick={e => { if (e.target === e.currentTarget) onCancel(); }}
+    >
+      <div style={{
+        background: '#FEFEFE', borderRadius: 10, border: '1px solid #E7E5E4',
+        boxShadow: '0 20px 60px rgba(28,25,23,0.18), 0 4px 16px rgba(28,25,23,0.08)',
+        padding: '24px 24px 18px', width: 320,
+        fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
+        animation: 'rfModalIn 180ms cubic-bezier(0.16,1,0.3,1)',
+      }}>
+        <p style={{ fontSize: 13, fontWeight: 600, color: '#1C1917', margin: '0 0 6px' }}>还原默认内容</p>
+        <p style={{ fontSize: 12, color: '#78716C', margin: '0 0 20px', lineHeight: 1.6 }}>
+          当前编辑的内容将被模板默认内容替换，此操作无法撤销。
+        </p>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
+          <button
+            onClick={onCancel}
+            style={{
+              padding: '6px 16px', borderRadius: 6, border: '1px solid #E7E5E4',
+              background: 'transparent', color: '#78716C', fontSize: 12, fontWeight: 500,
+              cursor: 'pointer', fontFamily: 'inherit',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F0EAE0'; e.currentTarget.style.color = '#1C1917'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; }}
+          >取消</button>
+          <button
+            onClick={onOk}
+            style={{
+              padding: '6px 16px', borderRadius: 6, border: 'none',
+              background: '#1C1917', color: '#FAFAF9', fontSize: 12, fontWeight: 600,
+              cursor: 'pointer', fontFamily: 'inherit',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#292524'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#1C1917'; }}
+          >还原</button>
+        </div>
+      </div>
+      <style>{`@keyframes rfModalIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }`}</style>
+    </div>
+  );
+}
+
 /** Grip icon — 6 dots, 2×3 SVG */
 function GripIcon() {
   return (
@@ -99,7 +148,7 @@ function StatusDot({ status }: { status: 'saved' | 'saving' | 'unsaved' | 'error
         opacity: pulse ? 0.5 : 0,
         transform: pulse ? 'scale(2.4)' : 'scale(1)',
         transition: pulse
-          ? 'opacity 400ms ease-out, transform 400ms cubic-bezier(0.16, 1, 0.3, 1)'
+          ? 'opacity 400ms 300ms ease-out, transform 400ms 300ms cubic-bezier(0.16, 1, 0.3, 1)'
           : 'none',
         pointerEvents: 'none',
       }} />
@@ -122,6 +171,19 @@ export function TopBar() {
     undo, redo, historyIndex, history,
     templateHtml, templateCss, resume, resetToDefault,
   } = useEditorStore();
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Scroll-shadow: listen on the preview scroller (closest scrollable ancestor in the editor layout)
+  useEffect(() => {
+    const scroller = document.querySelector<HTMLElement>('[data-preview-scroller]') ?? window;
+    const handler = () => {
+      const y = scroller instanceof Window ? window.scrollY : (scroller as HTMLElement).scrollTop;
+      setScrolled(y > 2);
+    };
+    scroller.addEventListener('scroll', handler, { passive: true });
+    return () => scroller.removeEventListener('scroll', handler);
+  }, []);
 
   // Dismiss error toast after 5s
   useEffect(() => {
@@ -219,6 +281,9 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
       borderBottom: '1px solid #E7E5E4',
       flexShrink: 0,
       position: 'relative',
+      // Scroll-aware shadow: appears only when content scrolls under the bar
+      boxShadow: scrolled ? '0 2px 12px rgba(28,25,23,0.08), 0 1px 3px rgba(28,25,23,0.04)' : 'none',
+      transition: 'box-shadow 200ms cubic-bezier(0.16, 1, 0.3, 1)',
     }}>
       {/* Error toast banner */}
       {saveStatus === 'error' && saveErrorMessage && (
@@ -288,66 +353,73 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
         </div>
       </div>
 
-      {/* Right */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <UndoRedoBtn
-          disabled={historyIndex <= 0}
-          onClick={undo}
-          title="撤销 (⌘Z)"
-        >
-          <UndoOutlined />
-        </UndoRedoBtn>
-        <UndoRedoBtn
-          disabled={historyIndex >= history.length - 1}
-          onClick={redo}
-          title="重做 (⌘⇧Z)"
-        >
-          <RedoOutlined />
-        </UndoRedoBtn>
-        <Tooltip title="还原默认内容">
-          <button
-            style={{
-              width: 30, height: 30, borderRadius: 6,
-              border: 'none', padding: 0,
-              background: 'transparent', color: '#78716C',
-              cursor: 'pointer',
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 13, transition: 'all 0.12s',
-              outline: 'none',
-            }}
-            onClick={() => {
-              if (window.confirm('还原为默认内容？\n当前编辑的内容将被替换。')) {
-                try { resetToDefault(); } catch (err) { console.error('reset failed:', err); }
-              }
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#F0EAE0'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
-            onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
-            onBlur={e => { e.currentTarget.style.outline = 'none'; }}
-            aria-label="还原默认内容"
-          >
-            <RollbackOutlined />
-          </button>
-        </Tooltip>
+      {/* Reset confirm modal */}
+      {showResetConfirm && (
+        <ResetConfirmModal
+          onOk={() => { setShowResetConfirm(false); try { resetToDefault(); } catch (err) { console.error('reset failed:', err); } }}
+          onCancel={() => setShowResetConfirm(false)}
+        />
+      )}
 
-        <div style={{ width: 1, height: 18, background: '#E7E5E4', margin: '0 6px' }} />
+      {/* Right */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        {/* Undo/Redo cluster */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          <UndoRedoBtn
+            disabled={historyIndex <= 0}
+            onClick={undo}
+            title="撤销 (⌘Z)"
+          >
+            <UndoOutlined style={{ fontSize: 12 }} />
+          </UndoRedoBtn>
+          <UndoRedoBtn
+            disabled={historyIndex >= history.length - 1}
+            onClick={redo}
+            title="重做 (⌘⇧Z)"
+          >
+            <RedoOutlined style={{ fontSize: 12 }} />
+          </UndoRedoBtn>
+          <Tooltip title="还原默认内容">
+            <button
+              style={{
+                width: 30, height: 30, borderRadius: 6,
+                border: 'none', padding: 0,
+                background: 'transparent', color: '#78716C',
+                cursor: 'pointer',
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 12, transition: 'background 120ms cubic-bezier(0.16, 1, 0.3, 1)',
+                outline: 'none',
+              }}
+              onClick={() => setShowResetConfirm(true)}
+              onMouseEnter={e => { e.currentTarget.style.background = '#F0EAE0'; }}
+              onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
+              onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
+              onBlur={e => { e.currentTarget.style.outline = 'none'; }}
+              aria-label="还原默认内容"
+            >
+              <RollbackOutlined style={{ fontSize: 12 }} />
+            </button>
+          </Tooltip>
+        </div>
+
+        <div style={{ width: 1, height: 18, background: '#E7E5E4' }} />
 
         <button
           onClick={save}
           disabled={saveStatus === 'saved'}
           style={{
-            padding: '0 14px', height: 32, borderRadius: 6,
-            border: '1px solid #E7E5E4',
-            background: saveStatus === 'saved' ? '#F5F5F4' : '#FFFFFF',
-            color: saveStatus === 'saved' ? '#A8A29E' : '#78716C',
-            fontSize: 12, fontWeight: 500,
+            padding: '0 16px', height: 32, borderRadius: 6,
+            border: 'none',
+            background: saveStatus === 'saved' ? '#F5F5F4' : '#1C1917',
+            color: saveStatus === 'saved' ? '#A8A29E' : '#FAFAF9',
+            fontSize: 12, fontWeight: 600,
             cursor: saveStatus === 'saved' ? 'default' : 'pointer',
-            transition: 'all 0.12s',
+            transition: 'background 150ms cubic-bezier(0.16, 1, 0.3, 1), color 150ms cubic-bezier(0.16, 1, 0.3, 1)',
             fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
             outline: 'none',
           }}
-          onMouseEnter={e => { if (saveStatus !== 'saved') { e.currentTarget.style.background = '#F0EAE0'; e.currentTarget.style.color = '#1C1917'; } }}
-          onMouseLeave={e => { e.currentTarget.style.background = saveStatus === 'saved' ? '#F5F5F4' : '#FFFFFF'; e.currentTarget.style.color = saveStatus === 'saved' ? '#A8A29E' : '#78716C'; }}
+          onMouseEnter={e => { if (saveStatus !== 'saved') { e.currentTarget.style.background = '#292524'; } }}
+          onMouseLeave={e => { e.currentTarget.style.background = saveStatus === 'saved' ? '#F5F5F4' : '#1C1917'; }}
           onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
           onBlur={e => { e.currentTarget.style.outline = 'none'; }}
         >
