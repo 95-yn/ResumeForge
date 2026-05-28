@@ -127,8 +127,8 @@ export function InlineRichText({ value, onChange, placeholder = '输入内容...
         setOpenPicker(null);
       }
     };
-    const t = setTimeout(() => document.addEventListener('mouseup', handler), 50);
-    return () => { clearTimeout(t); document.removeEventListener('mouseup', handler); };
+    const t = setTimeout(() => document.addEventListener('click', handler), 250);
+    return () => { clearTimeout(t); document.removeEventListener('click', handler); };
   }, [openPicker]);
 
   const btnStyle = (active: boolean): React.CSSProperties => ({

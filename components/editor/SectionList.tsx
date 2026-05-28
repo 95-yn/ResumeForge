@@ -564,8 +564,8 @@ function PortalDropdown({ anchorRef, open, onClose, children }: {
         onClose();
       }
     };
-    setTimeout(() => document.addEventListener('mouseup', handler), 50);
-    return () => document.removeEventListener('mouseup', handler);
+    setTimeout(() => document.addEventListener('click', handler), 250);
+    return () => document.removeEventListener('click', handler);
   }, [open, onClose, anchorRef]);
 
   if (!open || !pos) return null;

@@ -78,8 +78,8 @@ function ColorPicker({ colors, onSelect, onReset, onClose }: ColorPickerProps) {
       if (!target || !document.contains(target)) return;  // detached node — ignore
       if (ref.current && !ref.current.contains(target)) onClose();
     };
-    setTimeout(() => document.addEventListener('mouseup', handleClick), 50);
-    return () => document.removeEventListener('mouseup', handleClick);
+    setTimeout(() => document.addEventListener('click', handleClick), 250);
+    return () => document.removeEventListener('click', handleClick);
   }, [onClose]);
 
   return (
@@ -208,10 +208,15 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as Node | null;
       if (!target || !document.contains(target)) return;  // stale / detached target
+      // Skip clicks inside Antd Dropdown/Tooltip/Popover portals (they're rendered
+      // at document.body root, not inside containerRef).
+      if (target instanceof Element) {
+        if (target.closest('.ant-dropdown, .ant-tooltip, .ant-popover, .ant-select-dropdown, .ant-message')) return;
+      }
       if (containerRef.current && !containerRef.current.contains(target)) handleConfirm();
     };
-    const timer = setTimeout(() => document.addEventListener('mouseup', handleClickOutside), 150);
-    return () => { clearTimeout(timer); document.removeEventListener('mouseup', handleClickOutside); };
+    const timer = setTimeout(() => document.addEventListener('click', handleClickOutside, true), 150);
+    return () => { clearTimeout(timer); document.removeEventListener('click', handleClickOutside, true); };
   }, [handleConfirm]);
 
   const handleLink = useCallback(() => {
