@@ -141,8 +141,9 @@ export function ResumePreview() {
     try {
       const template = Handlebars.compile(templateHtml);
       const body = template(resume);
-      const bgColor = resume.settings?.backgroundColor || '#ffffff';
-      return `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>${templateCss}</style></head><body style="margin:0;background:${bgColor}">${body}</body></html>`;
+      const bgColor = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor || '#ffffff';
+      const bgOverride = `<style>html, body, .resume { background: ${bgColor} !important; background-color: ${bgColor} !important; }</style>`;
+      return `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>${templateCss}</style>${bgOverride}</head><body style="margin:0;background:${bgColor}">${body}</body></html>`;
     } catch { return '<html><body><p style="color:red;padding:20px">模板渲染错误</p></body></html>'; }
   }, [resume, templateHtml, templateCss, isEmpty]);
 
@@ -285,10 +286,25 @@ export function ResumePreview() {
         <iframe
           ref={iframeRef}
           title="preview"
+          onLoad={(e) => {
+            const f = e.currentTarget;
+            const doc = f.contentDocument;
+            if (!doc) return;
+            const updateHeight = () => {
+              const h = Math.max(doc.body?.scrollHeight ?? 0, 1123); // 297mm ≈ 1123px
+              f.style.height = h + 'px';
+            };
+            updateHeight();
+            // Re-measure after content changes
+            if (typeof ResizeObserver !== 'undefined') {
+              const ro = new ResizeObserver(updateHeight);
+              if (doc.body) ro.observe(doc.body);
+            }
+          }}
           style={{
-            width: '210mm', height: '297mm', background: '#fff', border: 'none',
+            width: '210mm', minHeight: '297mm', background: '#fff', border: 'none',
             boxShadow: '0 8px 40px rgba(0,0,0,0.08), 0 2px 10px rgba(0,0,0,0.04)',
-            display: 'block', borderRadius: 3,
+            display: 'block', borderRadius: 3, overflow: 'hidden',
           }}
         />
       </div>
