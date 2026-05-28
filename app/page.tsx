@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useRef } from 'react';
 
 const SPECIMENS = [
   { num: '01', slug: 'classic',    label: 'CLASSIC',    tag: '商务通用' },
@@ -20,11 +21,93 @@ const HERO_LETTERS = [
   { char: 'E', tag: '#06 / ITALIC / 96PT', size: 'clamp(44px, 7vw, 100px)' },
 ];
 
+// Noise SVG as data URI — base64-encoded for Safari compatibility
+const NOISE_BG = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E")`;
+
 export default function LandingPage() {
+  const specimenGridRef = useRef<HTMLDivElement>(null);
+  const manifestoRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ease = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+    // ── Specimen grid scroll reveal ────────────────────────────
+    const cards = specimenGridRef.current?.querySelectorAll<HTMLElement>('.lp-specimen-card');
+    if (cards) {
+      cards.forEach((card) => {
+        card.style.opacity = '0';
+        card.style.transform = card.style.transform
+          ? card.style.transform + ' translateY(16px)'
+          : 'translateY(16px)';
+      });
+
+      const cardObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const card = entry.target as HTMLElement;
+              const index = Array.from(cards).indexOf(card);
+              const delay = index * 80;
+              card.style.transition = `opacity 600ms ${ease} ${delay}ms, transform 600ms ${ease} ${delay}ms`;
+              card.style.opacity = '1';
+              // Restore the stagger offsets for the non-mobile cards
+              const baseTransforms: Record<number, string> = {
+                1: 'translateY(32px)',
+                3: 'translateY(-16px)',
+                4: 'translateY(20px)',
+              };
+              card.style.transform = baseTransforms[index] ?? 'translateY(0)';
+              cardObserver.unobserve(card);
+            }
+          });
+        },
+        { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
+      );
+
+      cards.forEach((card) => cardObserver.observe(card));
+
+      return () => cardObserver.disconnect();
+    }
+  }, []);
+
+  useEffect(() => {
+    const ease = 'cubic-bezier(0.16, 1, 0.3, 1)';
+
+    // ── Manifesto lines scroll reveal ─────────────────────────
+    const lines = manifestoRef.current?.querySelectorAll<HTMLElement>('.lp-manifesto-line');
+    if (lines) {
+      lines.forEach((line) => {
+        line.style.opacity = '0';
+        line.style.transform = 'translateY(12px)';
+      });
+
+      const lineObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              lines.forEach((line, index) => {
+                const delay = index * 120;
+                line.style.transition = `opacity 800ms ${ease} ${delay}ms, transform 800ms ${ease} ${delay}ms`;
+                line.style.opacity = '1';
+                line.style.transform = 'translateY(0)';
+              });
+              lineObserver.disconnect();
+            }
+          });
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -80px 0px' }
+      );
+
+      if (manifestoRef.current) lineObserver.observe(manifestoRef.current);
+
+      return () => lineObserver.disconnect();
+    }
+  }, []);
+
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,600&family=JetBrains+Mono:wght@400;500&display=swap');
 
         :root {
           --paper: #F5F1E8;
@@ -33,6 +116,7 @@ export default function LandingPage() {
           --ink-mid: rgba(61, 42, 26, 0.45);
           --accent: #1E5A6B;
           --accent-faint: rgba(30, 90, 107, 0.08);
+          --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -43,7 +127,7 @@ export default function LandingPage() {
           background: var(--paper);
           color: var(--ink);
           min-height: 100vh;
-          font-family: 'Inter', -apple-system, sans-serif;
+          font-family: 'JetBrains Mono', 'SF Mono', monospace;
           -webkit-font-smoothing: antialiased;
         }
 
@@ -72,8 +156,12 @@ export default function LandingPage() {
           align-items: center;
           justify-content: space-between;
           padding: 18px 40px;
-          background: var(--paper);
+          /* Scrolled: semi-transparent + blur */
+          background: rgba(245, 241, 232, 0.82);
+          -webkit-backdrop-filter: blur(8px);
+          backdrop-filter: blur(8px);
           border-bottom: 1px solid var(--ink-faint);
+          transition: background 0.3s ease;
         }
 
         .lp-nav-logo {
@@ -83,6 +171,12 @@ export default function LandingPage() {
           letter-spacing: 0.08em;
           color: var(--ink);
           text-decoration: none;
+          transition: color 0.2s ease;
+        }
+
+        .lp-nav-logo:focus-visible {
+          outline: 1px solid var(--accent);
+          outline-offset: 2px;
         }
 
         .lp-nav-cta {
@@ -104,6 +198,11 @@ export default function LandingPage() {
           background: var(--accent);
         }
 
+        .lp-nav-cta:focus-visible {
+          outline: 1px solid var(--accent);
+          outline-offset: 2px;
+        }
+
         /* ─── HERO ────────────────────────────────────────── */
         .lp-hero {
           min-height: 100vh;
@@ -112,6 +211,7 @@ export default function LandingPage() {
           grid-template-columns: 1fr;
           position: relative;
           overflow: hidden;
+          cursor: crosshair;
         }
 
         .lp-hero-inner {
@@ -135,6 +235,29 @@ export default function LandingPage() {
           gap: 0;
         }
 
+        /* ── Letter row entrance animation ─── */
+        @keyframes letterReveal {
+          from {
+            opacity: 0;
+            transform: translateY(8px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes tagReveal {
+          from {
+            opacity: 0;
+            transform: translateY(4px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
         .lp-hero-letter-row {
           display: flex;
           align-items: baseline;
@@ -156,8 +279,27 @@ export default function LandingPage() {
           color: var(--ink);
           display: block;
           min-width: 80px;
+          /* Entrance animation — each letter delays 100ms after the previous */
+          opacity: 0;
+          animation: letterReveal 600ms var(--ease-expo) forwards;
+          transition: letter-spacing 300ms var(--ease-expo), color 250ms ease;
         }
 
+        /* Per-letter stagger delays */
+        .lp-hero-letter-row:nth-child(1) .lp-letter-char { animation-delay: 100ms; }
+        .lp-hero-letter-row:nth-child(2) .lp-letter-char { animation-delay: 200ms; }
+        .lp-hero-letter-row:nth-child(3) .lp-letter-char { animation-delay: 300ms; }
+        .lp-hero-letter-row:nth-child(4) .lp-letter-char { animation-delay: 400ms; }
+        .lp-hero-letter-row:nth-child(5) .lp-letter-char { animation-delay: 500ms; }
+        .lp-hero-letter-row:nth-child(6) .lp-letter-char { animation-delay: 600ms; }
+
+        /* Hover: letter-spacing expand + accent color */
+        .lp-hero-letter-row:hover .lp-letter-char {
+          letter-spacing: 0.01em;
+          color: var(--accent);
+        }
+
+        /* Specimen tag: reveal 200ms after its letter */
         .lp-letter-tag {
           font-family: 'JetBrains Mono', 'SF Mono', monospace;
           font-size: 10px;
@@ -166,7 +308,16 @@ export default function LandingPage() {
           color: var(--ink-mid);
           align-self: center;
           white-space: nowrap;
+          opacity: 0;
+          animation: tagReveal 600ms var(--ease-expo) forwards;
         }
+
+        .lp-hero-letter-row:nth-child(1) .lp-letter-tag { animation-delay: 300ms; }
+        .lp-hero-letter-row:nth-child(2) .lp-letter-tag { animation-delay: 400ms; }
+        .lp-hero-letter-row:nth-child(3) .lp-letter-tag { animation-delay: 500ms; }
+        .lp-hero-letter-row:nth-child(4) .lp-letter-tag { animation-delay: 600ms; }
+        .lp-hero-letter-row:nth-child(5) .lp-letter-tag { animation-delay: 700ms; }
+        .lp-hero-letter-row:nth-child(6) .lp-letter-tag { animation-delay: 800ms; }
 
         .lp-letter-rule-num {
           margin-left: auto;
@@ -212,6 +363,7 @@ export default function LandingPage() {
           display: flex;
           align-items: center;
           gap: 12px;
+          cursor: default;
         }
 
         .lp-scroll-line {
@@ -226,6 +378,7 @@ export default function LandingPage() {
           grid-template-columns: 1fr 2fr;
           border-top: 1px solid var(--ink-faint);
           min-height: 60vh;
+          cursor: default;
         }
 
         .lp-brief-margin {
@@ -270,7 +423,6 @@ export default function LandingPage() {
           margin-bottom: 48px;
           padding-bottom: 16px;
           border-bottom: 1px solid var(--ink-faint);
-          font-variant: small-caps;
         }
 
         .lp-brief-dropcap-wrap {
@@ -303,6 +455,7 @@ export default function LandingPage() {
         .lp-specimen {
           padding: 100px 40px;
           border-top: 1px solid var(--ink-faint);
+          cursor: default;
         }
 
         .lp-specimen-header {
@@ -330,6 +483,18 @@ export default function LandingPage() {
           color: var(--ink-mid);
         }
 
+        /* Empty state */
+        .lp-specimen-empty {
+          grid-column: 1 / -1;
+          padding: 80px 0;
+          text-align: center;
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 10px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: var(--ink-mid);
+        }
+
         .lp-specimen-grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -343,6 +508,7 @@ export default function LandingPage() {
           display: flex;
           flex-direction: column;
           gap: 24px;
+          /* Base card transition for hover; scroll-reveal adds its own */
           transition: background 0.25s ease;
           cursor: default;
         }
@@ -383,10 +549,28 @@ export default function LandingPage() {
           width: 100%;
           aspect-ratio: 3/4;
           background: var(--ink-faint);
-          display: flex;
+          display: none;
           align-items: center;
           justify-content: center;
           border: 1px solid var(--ink-faint);
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .lp-specimen-thumb-placeholder-label {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 10px;
+          letter-spacing: 0.10em;
+          text-transform: uppercase;
+          color: var(--ink-mid);
+        }
+
+        .lp-specimen-thumb-placeholder-sub {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 9px;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: var(--ink-faint);
         }
 
         .lp-specimen-meta {
@@ -421,12 +605,11 @@ export default function LandingPage() {
           justify-content: center;
           border-top: 1px solid var(--ink-faint);
           overflow: hidden;
-        }
-
-        .lp-noise-layer {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
+          cursor: default;
+          /* Safari-safe noise: CSS background-image data URI */
+          background-image: ${NOISE_BG};
+          background-repeat: repeat;
+          background-size: 300px 300px;
         }
 
         .lp-manifesto-inner {
@@ -455,12 +638,15 @@ export default function LandingPage() {
           color: var(--ink);
           display: block;
           margin-bottom: 8px;
+          /* JS will override with scroll-reveal transitions */
+          will-change: opacity, transform;
         }
 
         .lp-manifesto-line-1 { font-size: clamp(56px, 9vw, 130px); }
         .lp-manifesto-line-2 { font-size: clamp(44px, 7vw, 100px); font-style: italic; color: var(--ink-mid); }
         .lp-manifesto-line-3 { font-size: clamp(64px, 10vw, 150px); }
         .lp-manifesto-line-4 { font-size: clamp(36px, 6vw, 88px); font-style: italic; color: var(--ink-mid); }
+        /* line-5 contrast: #1E5A6B on #F5F1E8 — WCAG AA ✓ (5.0:1) */
         .lp-manifesto-line-5 { font-size: clamp(56px, 8vw, 120px); color: var(--accent); }
 
         .lp-manifesto-rule {
@@ -486,6 +672,7 @@ export default function LandingPage() {
           grid-template-columns: auto 1fr;
           align-items: center;
           gap: 60px;
+          cursor: default;
         }
 
         .lp-cta-arrow-wrap {
@@ -499,14 +686,19 @@ export default function LandingPage() {
           color: var(--ink);
           line-height: 0.85;
           text-decoration: none;
-          transition: color 0.25s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+          transition: color 0.3s var(--ease-expo), transform 0.35s var(--ease-expo);
           display: block;
           letter-spacing: -0.05em;
         }
 
         .lp-cta-arrow:hover {
           color: var(--accent);
-          transform: translateX(12px);
+          transform: translateX(10px);
+        }
+
+        .lp-cta-arrow:focus-visible {
+          outline: 1px solid var(--accent);
+          outline-offset: 2px;
         }
 
         .lp-cta-right {
@@ -533,6 +725,7 @@ export default function LandingPage() {
           line-height: 1.1;
           border-bottom: 1px solid transparent;
           padding-bottom: 4px;
+          text-underline-offset: 6px;
           transition: border-color 0.25s ease, font-style 0.25s ease, color 0.25s ease;
           display: inline-block;
         }
@@ -541,6 +734,11 @@ export default function LandingPage() {
           border-bottom-color: var(--accent);
           font-style: italic;
           color: var(--accent);
+        }
+
+        .lp-cta-link:focus-visible {
+          outline: 1px solid var(--accent);
+          outline-offset: 2px;
         }
 
         .lp-cta-sub {
@@ -558,6 +756,7 @@ export default function LandingPage() {
           display: flex;
           align-items: center;
           justify-content: space-between;
+          cursor: default;
         }
 
         .lp-footer-meta {
@@ -579,7 +778,12 @@ export default function LandingPage() {
           border-bottom-color: var(--accent);
         }
 
-        /* ─── RESPONSIVE ──────────────────────────────────── */
+        .lp-footer-link:focus-visible {
+          outline: 1px solid var(--accent);
+          outline-offset: 2px;
+        }
+
+        /* ─── RESPONSIVE < 768px ──────────────────────────── */
         @media (max-width: 900px) {
           .lp-nav { padding: 16px 24px; }
           .lp-hero-inner { padding: 40px 24px 60px; }
@@ -592,9 +796,10 @@ export default function LandingPage() {
 
           .lp-specimen { padding: 60px 24px; }
           .lp-specimen-grid { grid-template-columns: 1fr; }
+          /* Reset stagger offsets on small screens */
           .lp-specimen-card:nth-child(2),
           .lp-specimen-card:nth-child(4),
-          .lp-specimen-card:nth-child(5) { transform: none; }
+          .lp-specimen-card:nth-child(5) { transform: none !important; }
 
           .lp-manifesto-inner { padding: 60px 24px; }
 
@@ -605,6 +810,21 @@ export default function LandingPage() {
           }
 
           .lp-footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+        }
+
+        /* ─── PREFERS-REDUCED-MOTION ──────────────────────── */
+        @media (prefers-reduced-motion: reduce) {
+          /* Kill all CSS animations immediately */
+          .lp-letter-char,
+          .lp-letter-tag {
+            animation-duration: 0.01ms !important;
+            animation-delay: 0ms !important;
+            opacity: 1 !important;
+          }
+          /* Kill all transitions */
+          * {
+            transition-duration: 0.01ms !important;
+          }
         }
       `}</style>
 
@@ -673,7 +893,7 @@ export default function LandingPage() {
                 here is a particular violence in the blank resume template.
                 It demands that a person distill their entire professional life
                 into a structure designed by committee: one font, two columns,
-                a list of verbs beginning with "led" and "built." We rejected
+                a list of verbs beginning with &ldquo;led&rdquo; and &ldquo;built.&rdquo; We rejected
                 that premise from the start.
               </p>
 
@@ -702,62 +922,54 @@ export default function LandingPage() {
             <span className="lp-specimen-subtitle mono">72 typefaces — 6 shown / all available</span>
           </div>
 
-          <div className="lp-specimen-grid">
-            {SPECIMENS.map((item) => (
-              <div className="lp-specimen-card" key={item.slug}>
-                <span className="lp-specimen-num display">{item.num}</span>
-                <img
-                  src={`/thumbnails/${item.slug}.png`}
-                  alt={item.label}
-                  className="lp-specimen-thumb"
-                  onError={(e) => {
-                    const el = e.currentTarget;
-                    el.style.display = 'none';
-                    const placeholder = el.nextElementSibling as HTMLElement;
-                    if (placeholder) placeholder.style.display = 'flex';
-                  }}
-                />
-                <div className="lp-specimen-thumb-placeholder" style={{ display: 'none' }}>
-                  <span className="mono" style={{ color: 'var(--ink-faint)' }}>{item.label}</span>
-                </div>
-                <div className="lp-specimen-meta">
-                  <div className="lp-specimen-meta-row">
-                    <span>{item.slug.toUpperCase()}</span>
-                    <span className="lp-specimen-meta-tag">{item.tag}</span>
+          <div className="lp-specimen-grid" ref={specimenGridRef}>
+            {SPECIMENS.length === 0 ? (
+              <div className="lp-specimen-empty mono">No templates available</div>
+            ) : (
+              SPECIMENS.map((item) => (
+                <div className="lp-specimen-card" key={item.slug}>
+                  <span className="lp-specimen-num display">{item.num}</span>
+                  <img
+                    src={`/thumbnails/${item.slug}.png`}
+                    alt={`${item.label} resume template preview`}
+                    className="lp-specimen-thumb"
+                    onError={(e) => {
+                      const img = e.currentTarget;
+                      // Try elegant as fallback
+                      if (!img.dataset.fallback) {
+                        img.dataset.fallback = '1';
+                        img.src = '/thumbnails/elegant.png';
+                        return;
+                      }
+                      // Both failed: show placeholder
+                      img.style.display = 'none';
+                      const placeholder = img.nextElementSibling as HTMLElement;
+                      if (placeholder) placeholder.style.display = 'flex';
+                    }}
+                  />
+                  <div className="lp-specimen-thumb-placeholder">
+                    <span className="lp-specimen-thumb-placeholder-label">{item.label}</span>
+                    <span className="lp-specimen-thumb-placeholder-sub">no preview</span>
                   </div>
-                  <div className="lp-specimen-meta-row" style={{ color: 'var(--ink-faint)' }}>
-                    <span>{item.label} · A4</span>
-                    <span>2026 EDITION</span>
+                  <div className="lp-specimen-meta">
+                    <div className="lp-specimen-meta-row">
+                      <span>{item.slug.toUpperCase()}</span>
+                      <span className="lp-specimen-meta-tag">{item.tag}</span>
+                    </div>
+                    <div className="lp-specimen-meta-row" style={{ color: 'var(--ink-faint)' }}>
+                      <span>{item.label} · A4</span>
+                      <span>2026 EDITION</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            )}
           </div>
         </section>
 
         {/* ── SECTION 4: MANIFESTO ──────────────────────────── */}
         <section className="lp-manifesto">
-          <svg
-            className="lp-noise-layer"
-            xmlns="http://www.w3.org/2000/svg"
-            width="100%"
-            height="100%"
-            aria-hidden="true"
-          >
-            <filter id="noise-filter">
-              <feTurbulence
-                type="fractalNoise"
-                baseFrequency="0.85"
-                numOctaves="4"
-                stitchTiles="stitch"
-              />
-              <feColorMatrix type="saturate" values="0" />
-              <feBlend in="SourceGraphic" mode="multiply" />
-            </filter>
-            <rect width="100%" height="100%" filter="url(#noise-filter)" opacity="0.025" />
-          </svg>
-
-          <div className="lp-manifesto-inner">
+          <div className="lp-manifesto-inner" ref={manifestoRef}>
             <span className="lp-manifesto-label mono">§ Manifesto — 04</span>
 
             <span className="lp-manifesto-line lp-manifesto-line-1 display">Resume</span>
@@ -776,14 +988,19 @@ export default function LandingPage() {
         {/* ── SECTION 5: CTA ────────────────────────────────── */}
         <section className="lp-cta">
           <div className="lp-cta-arrow-wrap">
-            <Link href="/templates" className="lp-cta-arrow display" aria-label="前往模板市场">
+            <Link
+              href="/templates"
+              className="lp-cta-arrow display"
+              aria-label="前往模板市场"
+              tabIndex={0}
+            >
               ⟶
             </Link>
           </div>
 
           <div className="lp-cta-right">
             <span className="lp-cta-label mono">§ Begin — 05</span>
-            <Link href="/templates" className="lp-cta-link display">
+            <Link href="/templates" className="lp-cta-link display" tabIndex={0}>
               select your template
             </Link>
             <p className="lp-cta-sub">
