@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { TEMPLATES } from '@/data/templates';
+import { TEMPLATE_LIST as TEMPLATES } from '@/data/template-list';
 
 /* ─── Palette ─────────────────────────────────────────────── */
 const PARCHMENT  = '#F8F6F1';

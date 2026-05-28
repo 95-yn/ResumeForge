@@ -444,7 +444,8 @@ export function SectionList() {
           >
             <input
               type="color"
-              value={(resume?.settings?.backgroundColor as string | undefined) || '#ffffff'}
+              key={(resume?.settings?.backgroundColor as string | undefined) || '#ffffff'}
+              defaultValue={(resume?.settings?.backgroundColor as string | undefined) || '#ffffff'}
               onChange={e => updateSettings('backgroundColor', e.target.value)}
               style={{
                 position: 'absolute', inset: 0, width: '100%', height: '100%',
