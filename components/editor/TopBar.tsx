@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import { Tooltip } from 'antd';
 import { ArrowLeftOutlined, PrinterOutlined, UndoOutlined, RedoOutlined, ReloadOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
@@ -7,9 +8,129 @@ import { Modal } from 'antd';
 import Handlebars from 'handlebars';
 import { useEditorStore } from '@/lib/editor-store';
 
+/** Grip icon — 6 dots, 2×3 SVG */
+function GripIcon() {
+  return (
+    <svg width="10" height="14" viewBox="0 0 10 14" fill="none" aria-hidden="true">
+      <circle cx="2.5" cy="2.5" r="1.2" fill="currentColor" />
+      <circle cx="7.5" cy="2.5" r="1.2" fill="currentColor" />
+      <circle cx="2.5" cy="7"   r="1.2" fill="currentColor" />
+      <circle cx="7.5" cy="7"   r="1.2" fill="currentColor" />
+      <circle cx="2.5" cy="11.5" r="1.2" fill="currentColor" />
+      <circle cx="7.5" cy="11.5" r="1.2" fill="currentColor" />
+    </svg>
+  );
+}
+
+export { GripIcon };
+
+type UndoRedoBtnProps = {
+  disabled: boolean;
+  onClick: () => void;
+  title: string;
+  children: React.ReactNode;
+};
+
+function UndoRedoBtn({ disabled, onClick, title, children }: UndoRedoBtnProps) {
+  const [pressing, setPressing] = useState(false);
+
+  return (
+    <Tooltip title={title}>
+      <button
+        disabled={disabled}
+        onClick={onClick}
+        onMouseDown={() => { if (!disabled) setPressing(true); }}
+        onMouseUp={() => setPressing(false)}
+        onMouseLeave={() => setPressing(false)}
+        style={{
+          width: 30, height: 30, borderRadius: 6,
+          border: 'none', padding: 0,
+          background: 'transparent',
+          color: '#78716C',
+          cursor: disabled ? 'not-allowed' : 'pointer',
+          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 13,
+          opacity: disabled ? 0.3 : 1,
+          transform: pressing ? 'translateY(1px) scale(0.97)' : 'none',
+          transition: [
+            'opacity 300ms cubic-bezier(0.16, 1, 0.3, 1)',
+            'transform 50ms ease-out',
+            'background 120ms',
+          ].join(', '),
+          outline: 'none',
+        }}
+        onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
+        onBlur={e => { e.currentTarget.style.outline = 'none'; }}
+        onMouseEnter={e => { if (!disabled) e.currentTarget.style.background = '#F0EAE0'; }}
+        aria-label={title}
+      >
+        {children}
+      </button>
+    </Tooltip>
+  );
+}
+
+/** Status dot with pulse animation on change */
+function StatusDot({ status }: { status: 'saved' | 'saving' | 'unsaved' | 'error' }) {
+  const prevStatus = useRef(status);
+  const [pulse, setPulse] = useState(false);
+
+  useEffect(() => {
+    if (prevStatus.current !== status) {
+      prevStatus.current = status;
+      setPulse(true);
+      const t = setTimeout(() => setPulse(false), 450);
+      return () => clearTimeout(t);
+    }
+  }, [status]);
+
+  const color =
+    status === 'saved'   ? '#22C55E' :
+    status === 'saving'  ? '#F59E0B' :
+    status === 'error'   ? '#DC2626' :
+    '#A8A29E';
+
+  return (
+    <div style={{ position: 'relative', width: 6, height: 6, flexShrink: 0 }}>
+      {/* Pulse ring */}
+      <div style={{
+        position: 'absolute', inset: -3,
+        borderRadius: '50%',
+        background: color,
+        opacity: pulse ? 0.5 : 0,
+        transform: pulse ? 'scale(2.4)' : 'scale(1)',
+        transition: pulse
+          ? 'opacity 400ms ease-out, transform 400ms cubic-bezier(0.16, 1, 0.3, 1)'
+          : 'none',
+        pointerEvents: 'none',
+      }} />
+      {/* Dot */}
+      <div style={{
+        width: 6, height: 6, borderRadius: '50%',
+        background: color,
+        transition: 'background 300ms cubic-bezier(0.16, 1, 0.3, 1)',
+        boxShadow: status === 'saved' ? '0 0 0 2px rgba(34,197,94,0.15)' : 'none',
+        position: 'relative',
+      }} />
+    </div>
+  );
+}
+
 export function TopBar() {
   const router = useRouter();
-  const { save, saveStatus, undo, redo, historyIndex, history, templateHtml, templateCss, resume, resetToDefault } = useEditorStore();
+  const {
+    save, saveStatus, saveErrorMessage, clearSaveError,
+    undo, redo, historyIndex, history,
+    templateHtml, templateCss, resume, resetToDefault,
+  } = useEditorStore();
+
+  // Dismiss error toast after 5s
+  useEffect(() => {
+    if (saveStatus === 'error') {
+      const t = setTimeout(() => clearSaveError(), 5000);
+      return () => clearTimeout(t);
+    }
+  }, [saveStatus, clearSaveError]);
 
   const handlePrint = () => {
     if (!templateHtml || !templateCss || !resume) return;
@@ -26,18 +147,11 @@ export function TopBar() {
     win.onload = () => { win.print(); };
   };
 
-  const statusText = saveStatus === 'saved' ? '已保存' : saveStatus === 'saving' ? '保存中' : '未保存';
-  const dotColor = saveStatus === 'saved' ? '#22C55E' : saveStatus === 'saving' ? '#F59E0B' : '#A8A29E';
-
-  const iconBtnStyle = (disabled?: boolean): React.CSSProperties => ({
-    width: 30, height: 30, borderRadius: 6,
-    border: 'none', padding: 0,
-    background: 'transparent',
-    color: disabled ? '#D6D3D1' : '#78716C',
-    cursor: disabled ? 'not-allowed' : 'pointer',
-    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-    fontSize: 13, transition: 'all 0.1s',
-  });
+  const statusText =
+    saveStatus === 'saved'   ? '已保存' :
+    saveStatus === 'saving'  ? '保存中' :
+    saveStatus === 'error'   ? '保存失败' :
+    '未保存';
 
   return (
     <div style={{
@@ -49,7 +163,26 @@ export function TopBar() {
       background: '#FFFFFF',
       borderBottom: '1px solid #E7E5E4',
       flexShrink: 0,
+      position: 'relative',
     }}>
+      {/* Error toast banner */}
+      {saveStatus === 'error' && saveErrorMessage && (
+        <div style={{
+          position: 'absolute', top: '100%', left: '50%', transform: 'translateX(-50%)',
+          background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: 8,
+          padding: '8px 16px', fontSize: 12, color: '#DC2626',
+          boxShadow: '0 4px 12px rgba(0,0,0,0.08)', zIndex: 9999,
+          display: 'flex', alignItems: 'center', gap: 8, whiteSpace: 'nowrap',
+          fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
+        }}>
+          <span>{saveErrorMessage}</span>
+          <button
+            onClick={clearSaveError}
+            style={{ border: 'none', background: 'none', color: '#DC2626', cursor: 'pointer', fontSize: 14, padding: 0, lineHeight: 1 }}
+          >×</button>
+        </div>
+      )}
+
       {/* Left */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         <button
@@ -59,18 +192,32 @@ export function TopBar() {
             background: 'transparent', cursor: 'pointer', color: '#78716C',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             fontSize: 12, transition: 'all 0.12s',
+            outline: 'none',
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; }}
+          onMouseEnter={e => { e.currentTarget.style.background = '#F0EAE0'; e.currentTarget.style.color = '#1C1917'; }}
           onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; }}
-          title="返回"
+          onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
+          onBlur={e => { e.currentTarget.style.outline = 'none'; }}
+          title="返回模板市场"
+          aria-label="返回模板市场"
         >
           <ArrowLeftOutlined />
         </button>
 
-        <span style={{
-          fontSize: 12, fontWeight: 600, color: '#A8A29E',
-          letterSpacing: '-0.2px', fontFamily: 'inherit',
-        }}>
+        {/* Logo — Fraunces italic 14px, clickable */}
+        <span
+          onClick={() => router.push('/templates')}
+          style={{
+            fontSize: 14,
+            fontWeight: 400,
+            fontStyle: 'italic',
+            color: '#44403C',
+            letterSpacing: '-0.3px',
+            fontFamily: "'Fraunces', Georgia, serif",
+            cursor: 'pointer',
+            userSelect: 'none',
+          }}
+        >
           ResumeForge
         </span>
 
@@ -78,50 +225,51 @@ export function TopBar() {
 
         {/* Save status */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-          <div style={{
-            width: 6, height: 6, borderRadius: '50%',
-            background: dotColor,
-            transition: 'background 0.25s',
-            boxShadow: saveStatus === 'saved' ? '0 0 0 2px rgba(34,197,94,0.15)' : 'none',
-          }} />
-          <span style={{ fontSize: 11, color: '#A8A29E', fontFamily: 'inherit' }}>{statusText}</span>
+          <StatusDot status={saveStatus} />
+          <span style={{
+            fontSize: 11, color: '#A8A29E',
+            fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
+          }}>{statusText}</span>
         </div>
       </div>
 
       {/* Right */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <Tooltip title="撤销 (⌘Z)">
-          <button
-            style={iconBtnStyle(historyIndex <= 0)}
-            disabled={historyIndex <= 0}
-            onClick={undo}
-            onMouseEnter={e => { if (historyIndex > 0) e.currentTarget.style.background = '#F5F5F4'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
-          >
-            <UndoOutlined />
-          </button>
-        </Tooltip>
-        <Tooltip title="重做 (⌘⇧Z)">
-          <button
-            style={iconBtnStyle(historyIndex >= history.length - 1)}
-            disabled={historyIndex >= history.length - 1}
-            onClick={redo}
-            onMouseEnter={e => { if (historyIndex < history.length - 1) e.currentTarget.style.background = '#F5F5F4'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
-          >
-            <RedoOutlined />
-          </button>
-        </Tooltip>
+        <UndoRedoBtn
+          disabled={historyIndex <= 0}
+          onClick={undo}
+          title="撤销 (⌘Z)"
+        >
+          <UndoOutlined />
+        </UndoRedoBtn>
+        <UndoRedoBtn
+          disabled={historyIndex >= history.length - 1}
+          onClick={redo}
+          title="重做 (⌘⇧Z)"
+        >
+          <RedoOutlined />
+        </UndoRedoBtn>
         <Tooltip title="还原默认内容">
           <button
-            style={iconBtnStyle(false)}
+            style={{
+              width: 30, height: 30, borderRadius: 6,
+              border: 'none', padding: 0,
+              background: 'transparent', color: '#78716C',
+              cursor: 'pointer',
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 13, transition: 'all 0.12s',
+              outline: 'none',
+            }}
             onClick={() => Modal.confirm({
               title: '还原为默认内容？', content: '当前编辑的内容将被替换',
               okText: '还原', cancelText: '取消', okButtonProps: { danger: true },
               onOk: resetToDefault,
             })}
-            onMouseEnter={e => { e.currentTarget.style.background = '#F5F5F4'; }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F0EAE0'; }}
             onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
+            onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
+            onBlur={e => { e.currentTarget.style.outline = 'none'; }}
+            aria-label="还原默认内容"
           >
             <ReloadOutlined />
           </button>
@@ -140,10 +288,13 @@ export function TopBar() {
             fontSize: 12, fontWeight: 500,
             cursor: saveStatus === 'saved' ? 'default' : 'pointer',
             transition: 'all 0.12s',
-            fontFamily: 'inherit',
+            fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
+            outline: 'none',
           }}
-          onMouseEnter={e => { if (saveStatus !== 'saved') { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; } }}
+          onMouseEnter={e => { if (saveStatus !== 'saved') { e.currentTarget.style.background = '#F0EAE0'; e.currentTarget.style.color = '#1C1917'; } }}
           onMouseLeave={e => { e.currentTarget.style.background = saveStatus === 'saved' ? '#F5F5F4' : '#FFFFFF'; e.currentTarget.style.color = saveStatus === 'saved' ? '#A8A29E' : '#78716C'; }}
+          onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
+          onBlur={e => { e.currentTarget.style.outline = 'none'; }}
         >
           保存
         </button>
@@ -157,16 +308,32 @@ export function TopBar() {
             background: '#1C1917', color: '#FFFFFF',
             fontSize: 12, fontWeight: 600,
             cursor: 'pointer',
-            transition: 'background 0.12s',
-            fontFamily: 'inherit',
+            transition: 'background 0.12s, box-shadow 0.12s',
+            fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
+            outline: 'none',
           }}
-          onMouseEnter={e => { e.currentTarget.style.background = '#292524'; }}
-          onMouseLeave={e => { e.currentTarget.style.background = '#1C1917'; }}
+          onMouseEnter={e => {
+            e.currentTarget.style.background = '#292524';
+            e.currentTarget.style.boxShadow = '0 1px 3px rgba(28,25,23,0.18)';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.background = '#1C1917';
+            e.currentTarget.style.boxShadow = 'none';
+          }}
+          onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
+          onBlur={e => { e.currentTarget.style.outline = 'none'; }}
+          aria-label="打印或导出简历"
         >
           <PrinterOutlined style={{ fontSize: 12 }} />
           打印 / 导出
         </button>
       </div>
+
+      <style>{`
+        @media (prefers-reduced-motion: reduce) {
+          * { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+        }
+      `}</style>
     </div>
   );
 }

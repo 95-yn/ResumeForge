@@ -1,21 +1,102 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { TopBar } from './TopBar';
 import { SectionList } from './SectionList';
 import { ResumePreview } from './ResumePreview';
 import { useAutoSave } from '@/lib/use-autosave';
+import { useEditorStore } from '@/lib/editor-store';
 
 const MIN_SIDEBAR_WIDTH = 160;
 const MAX_SIDEBAR_WIDTH = 360;
 const DEFAULT_SIDEBAR_WIDTH = 220;
 
+/** Lightweight toast for keyboard shortcut feedback */
+function SaveToast({ visible }: { visible: boolean }) {
+  return (
+    <div style={{
+      position: 'fixed', bottom: 24, left: '50%',
+      transform: `translateX(-50%) translateY(${visible ? 0 : 12}px)`,
+      opacity: visible ? 1 : 0,
+      pointerEvents: 'none',
+      background: '#1C1917', color: '#FAFAF9',
+      borderRadius: 8, padding: '8px 18px',
+      fontSize: 12, fontWeight: 500,
+      fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
+      boxShadow: '0 4px 16px rgba(28,25,23,0.22)',
+      transition: 'opacity 300ms cubic-bezier(0.16, 1, 0.3, 1), transform 300ms cubic-bezier(0.16, 1, 0.3, 1)',
+      zIndex: 9998,
+      letterSpacing: '-0.1px',
+    }}>
+      已保存
+    </div>
+  );
+}
+
 export function EditorLayout() {
   useAutoSave();
+  const { undo, redo, save, saveStatus } = useEditorStore(s => ({
+    undo: s.undo, redo: s.redo, save: s.save, saveStatus: s.saveStatus,
+  }));
   const [sidebarWidth, setSidebarWidth] = useState(DEFAULT_SIDEBAR_WIDTH);
   const isResizing = useRef(false);
   const [resizeHover, setResizeHover] = useState(false);
   const [resizeActive, setResizeActive] = useState(false);
+  const [showSaveToast, setShowSaveToast] = useState(false);
+  const saveToastTimer = useRef<ReturnType<typeof setTimeout>>();
+  const prevSaveStatus = useRef(saveStatus);
+
+  // Show toast when save transitions to 'saved'
+  useEffect(() => {
+    if (prevSaveStatus.current !== 'saved' && saveStatus === 'saved') {
+      setShowSaveToast(true);
+      clearTimeout(saveToastTimer.current);
+      saveToastTimer.current = setTimeout(() => setShowSaveToast(false), 1800);
+    }
+    prevSaveStatus.current = saveStatus;
+    return () => clearTimeout(saveToastTimer.current);
+  }, [saveStatus]);
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => {
+      const meta = e.metaKey || e.ctrlKey;
+      if (!meta) return;
+
+      // Don't intercept when typing in input/textarea/contenteditable
+      const tag = (e.target as HTMLElement).tagName;
+      const editable = (e.target as HTMLElement).isContentEditable;
+      const inForm = tag === 'INPUT' || tag === 'TEXTAREA' || editable;
+
+      if (e.key === 'z' && !e.shiftKey) {
+        if (inForm) return;
+        e.preventDefault();
+        undo();
+        return;
+      }
+      if ((e.key === 'z' && e.shiftKey) || e.key === 'y') {
+        if (inForm) return;
+        e.preventDefault();
+        redo();
+        return;
+      }
+      if (e.key === 's') {
+        e.preventDefault();
+        save();
+        return;
+      }
+      if (e.key === 'p') {
+        e.preventDefault();
+        // Trigger print via TopBar's print button click (find it or dispatch a custom event)
+        const printBtn = document.querySelector<HTMLButtonElement>('[aria-label="打印或导出简历"]');
+        if (printBtn) printBtn.click();
+        return;
+      }
+    };
+
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [undo, redo, save]);
 
   const handleMouseDown = useCallback(() => {
     isResizing.current = true;
@@ -57,7 +138,7 @@ export function EditorLayout() {
           style={{
             width: 4,
             cursor: 'col-resize',
-            background: resizeActive ? '#3B82F6' : resizeHover ? '#D1D5DB' : 'transparent',
+            background: resizeActive ? '#1C1917' : resizeHover ? '#D6D3D1' : 'transparent',
             transition: resizeActive ? 'none' : 'background 0.15s',
             flexShrink: 0,
             position: 'relative',
@@ -73,6 +154,8 @@ export function EditorLayout() {
         </div>
         <ResumePreview />
       </div>
+
+      <SaveToast visible={showSaveToast} />
     </div>
   );
 }

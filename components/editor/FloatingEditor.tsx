@@ -96,6 +96,7 @@ function ColorPicker({ colors, onSelect, onReset, onClose }: ColorPickerProps) {
               background: color === 'transparent' ? 'linear-gradient(135deg, #fff 45%, #f44 45%, #f44 55%, #fff 55%)' : color,
               cursor: 'pointer', padding: 0, flexShrink: 0,
               transition: 'transform 0.1s, border-color 0.1s',
+              outline: 'none',
             }}
             onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1.2)'; (e.currentTarget as HTMLElement).style.borderColor = '#1C1917'; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = 'scale(1)'; (e.currentTarget as HTMLElement).style.borderColor = '#E7E5E4'; }}
@@ -107,6 +108,7 @@ function ColorPicker({ colors, onSelect, onReset, onClose }: ColorPickerProps) {
         style={{
           fontSize: 11, color: '#78716C', background: 'transparent', border: 'none',
           cursor: 'pointer', padding: '2px 4px', borderRadius: 4, fontFamily: 'inherit',
+          outline: 'none',
         }}
         onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#F5F5F4'; }}
         onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = 'transparent'; }}
@@ -186,21 +188,31 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
   if (left + editorWidth > window.innerWidth - 20) left = window.innerWidth - editorWidth - 20;
   if (left < 10) left = 10;
 
+  // Active state: brick-red 5% bg + chestnut text
   const toolBtnStyle = (active: boolean): React.CSSProperties => ({
     width: 28, height: 28, borderRadius: 5, border: 'none', padding: 0,
-    background: active ? '#F5F5F4' : 'transparent',
-    color: active ? '#1C1917' : '#78716C',
+    background: active ? 'rgba(176,70,58,0.06)' : 'transparent',
+    color: active ? '#2D1810' : '#78716C',
     cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-    fontSize: 13, transition: 'all 0.1s', fontFamily: 'inherit', position: 'relative' as const,
+    fontSize: 13,
+    transition: 'background 120ms, color 120ms',
+    fontFamily: 'inherit', position: 'relative' as const,
+    outline: 'none',
   });
 
   const sep = <div style={{ width: 1, height: 16, background: '#E7E5E4', margin: '0 2px', flexShrink: 0 }} />;
 
   const hoverIn = (e: React.MouseEvent<HTMLButtonElement>, active: boolean) => {
-    if (!active) { e.currentTarget.style.background = '#F5F5F4'; e.currentTarget.style.color = '#1C1917'; }
+    if (!active) {
+      e.currentTarget.style.background = 'rgba(176,70,58,0.05)';
+      e.currentTarget.style.color = '#1C1917';
+    }
   };
   const hoverOut = (e: React.MouseEvent<HTMLButtonElement>, active: boolean) => {
-    if (!active) { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; }
+    if (!active) {
+      e.currentTarget.style.background = 'transparent';
+      e.currentTarget.style.color = '#78716C';
+    }
   };
 
   const compactToolbar = (
@@ -317,12 +329,15 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
     <div ref={containerRef} style={{
       position: 'fixed', top, left, width: editorWidth, zIndex: 9999,
       background: '#FFFFFF', border: '1px solid #E7E5E4', borderRadius: 14,
-      boxShadow: '0 16px 50px rgba(0,0,0,0.12)',
+      boxShadow: '0 20px 60px rgba(0,0,0,0.16), 0 4px 16px rgba(0,0,0,0.06)',
       overflow: 'visible',
       fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
     }}>
+      {/* Toolbar */}
       <div style={{
-        display: 'flex', alignItems: 'center', gap: 1, padding: '6px 8px', flexWrap: 'wrap',
+        display: 'flex', alignItems: 'center',
+        gap: 4,  // 2px → 4px per spec
+        padding: '6px 8px', flexWrap: 'wrap',
         borderBottom: '1px solid #F5F5F4', background: '#FAFAF9',
         borderRadius: '14px 14px 0 0', overflow: 'visible',
       }}>
@@ -345,14 +360,36 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
           {longField ? '支持富文本格式' : 'Esc 取消'}
         </span>
         <div style={{ display: 'flex', gap: 6 }}>
-          <Button size="small" onClick={onCancel}
+          <Button
+            size="small"
+            onClick={onCancel}
             style={{ fontSize: 12, borderRadius: 6, fontFamily: 'inherit' }}
-          >取消</Button>
-          <Button size="small" type="primary" onClick={handleConfirm}
-            style={{ fontSize: 12, borderRadius: 6, background: '#1C1917', borderColor: '#1C1917', fontFamily: 'inherit' }}
-            onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#292524'; }}
-            onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#1C1917'; }}
-          >确认</Button>
+          >
+            取消
+          </Button>
+          <Button
+            size="small"
+            type="primary"
+            onClick={handleConfirm}
+            style={{
+              fontSize: 12, borderRadius: 6,
+              background: '#1C1917', borderColor: '#1C1917',
+              fontFamily: 'inherit',
+              boxShadow: '0 2px 6px rgba(28,25,23,0.3), 0 1px 2px rgba(28,25,23,0.2)',
+            }}
+            onMouseEnter={e => {
+              const btn = e.currentTarget as HTMLButtonElement;
+              btn.style.background = '#292524';
+              btn.style.boxShadow = '0 4px 10px rgba(28,25,23,0.35), 0 1px 3px rgba(28,25,23,0.2)';
+            }}
+            onMouseLeave={e => {
+              const btn = e.currentTarget as HTMLButtonElement;
+              btn.style.background = '#1C1917';
+              btn.style.boxShadow = '0 2px 6px rgba(28,25,23,0.3), 0 1px 2px rgba(28,25,23,0.2)';
+            }}
+          >
+            确认
+          </Button>
         </div>
       </div>
 
@@ -370,6 +407,10 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
         .tiptap s { text-decoration: line-through; }
         .tiptap u { text-decoration: underline; }
         .tiptap mark { padding: 0 2px; border-radius: 2px; }
+        button:focus-visible { outline: 1px solid #1C1917 !important; outline-offset: 2px !important; }
+        @media (prefers-reduced-motion: reduce) {
+          * { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+        }
       `}</style>
     </div>
   );

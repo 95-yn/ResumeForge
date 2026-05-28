@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useMemo, useState, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import Handlebars from 'handlebars';
 import { useEditorStore } from '@/lib/editor-store';
 import { FloatingEditor } from './FloatingEditor';
@@ -119,12 +120,61 @@ interface EditingField {
   rect: { top: number; left: number; width: number; height: number };
 }
 
+/** Error state — elegant template render failure */
+function RenderErrorState() {
+  const router = useRouter();
+  return (
+    <div style={{
+      width: '210mm', minHeight: '297mm',
+      display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',
+      background: '#FEFEFE', gap: 20,
+      boxShadow: '0 8px 40px rgba(0,0,0,0.08), 0 2px 10px rgba(0,0,0,0.04)',
+      borderRadius: 3,
+      fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
+    }}>
+      <p style={{
+        fontSize: 11, color: '#A8A29E', margin: 0,
+        fontFamily: "'JetBrains Mono', monospace",
+        letterSpacing: '0.08em', textTransform: 'uppercase',
+      }}>渲染错误</p>
+      <h2 style={{
+        fontFamily: "'Fraunces', Georgia, serif",
+        fontStyle: 'italic', fontWeight: 400,
+        fontSize: 28, color: '#2D1810', margin: 0, textAlign: 'center',
+      }}>
+        模板渲染失败
+      </h2>
+      <p style={{ fontSize: 13, color: '#78716C', margin: 0, textAlign: 'center', maxWidth: 280 }}>
+        此模板遇到了渲染问题，请尝试其他模板
+      </p>
+      <button
+        onClick={() => router.push('/templates')}
+        style={{
+          padding: '9px 20px', borderRadius: 6,
+          border: '1px solid #E7E5E4',
+          background: '#FFFFFF', color: '#44403C',
+          fontSize: 12, fontWeight: 500, cursor: 'pointer',
+          fontFamily: 'inherit',
+          transition: 'all 0.12s',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.background = '#F0EAE0'; e.currentTarget.style.color = '#1C1917'; }}
+        onMouseLeave={e => { e.currentTarget.style.background = '#FFFFFF'; e.currentTarget.style.color = '#44403C'; }}
+      >
+        换个模板
+      </button>
+    </div>
+  );
+}
+
 export function ResumePreview() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const isEditingRef = useRef(false);
+  const hasAnimatedRef = useRef(false); // only animate first load
   const { resume, templateHtml, templateCss, updateByPath, zoom, sectionOrder, addArrayItem, removeArrayItem } = useEditorStore();
   const [editingField, setEditingField] = useState<EditingField | null>(null);
   const [iframeRect, setIframeRect] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
+  const [renderError, setRenderError] = useState(false);
+  const [iframeReady, setIframeReady] = useState(false);
 
   const isEmpty = !resume?.basics?.name && !resume?.basics?.email;
 
@@ -143,8 +193,12 @@ export function ResumePreview() {
       const body = template(resume);
       const bgColor = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor || '#ffffff';
       const bgOverride = `<style>html, body, .resume { background: ${bgColor} !important; background-color: ${bgColor} !important; }</style>`;
+      setRenderError(false);
       return `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>${templateCss}</style>${bgOverride}</head><body style="margin:0;background:${bgColor}">${body}</body></html>`;
-    } catch { return '<html><body><p style="color:red;padding:20px">模板渲染错误</p></body></html>'; }
+    } catch {
+      setRenderError(true);
+      return '';
+    }
   }, [resume, templateHtml, templateCss, isEmpty]);
 
   const reorderedHtml = useMemo(() => {
@@ -271,6 +325,19 @@ export function ResumePreview() {
     return () => window.removeEventListener('message', handleMessage);
   }, [updateByPath, addArrayItem, removeArrayItem]);
 
+  if (renderError) {
+    return (
+      <div style={{
+        flex: 1, display: 'flex', justifyContent: 'center',
+        alignItems: 'center', padding: 28, overflowY: 'auto',
+        background: `#F5F2EB url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.85' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.24 0 0 0 0 0.16 0 0 0 0 0.10 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        position: 'relative',
+      }}>
+        <RenderErrorState />
+      </div>
+    );
+  }
+
   return (
     <div style={{
       flex: 1, display: 'flex', justifyContent: 'center',
@@ -279,11 +346,18 @@ export function ResumePreview() {
       // 纸纹背景：石灰白 + SVG 噪点
       background: `#F5F2EB url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.85' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.24 0 0 0 0 0.16 0 0 0 0 0.10 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
     }}>
+      {/* Vignette overlay — focuses eye to center */}
+      <div style={{
+        position: 'absolute', inset: 0, pointerEvents: 'none', zIndex: 0,
+        background: 'radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.04) 100%)',
+      }} />
+
       <div style={{
         transformOrigin: 'top center',
         transform: `scale(${zoom})`,
         flexShrink: 0,
-        marginBottom: zoom < 1 ? `calc(297mm * ${zoom} - 297mm)` : `calc(297mm * ${zoom} - 297mm)`,
+        marginBottom: `calc(297mm * ${zoom} - 297mm)`,
+        position: 'relative', zIndex: 1,
       }}>
         <iframe
           ref={iframeRef}
@@ -293,25 +367,42 @@ export function ResumePreview() {
             const doc = f.contentDocument;
             if (!doc) return;
             const updateHeight = () => {
-              const h = Math.max(doc.body?.scrollHeight ?? 0, 1123); // 297mm ≈ 1123px
+              const h = Math.max(doc.body?.scrollHeight ?? 0, 1123);
               f.style.height = h + 'px';
             };
             updateHeight();
-            // Re-measure after content changes
             if (typeof ResizeObserver !== 'undefined') {
               const ro = new ResizeObserver(updateHeight);
               if (doc.body) ro.observe(doc.body);
             }
+            // First-time entrance animation only
+            if (!hasAnimatedRef.current) {
+              hasAnimatedRef.current = true;
+              f.style.opacity = '0';
+              f.style.transform = 'scale(0.98)';
+              f.style.transition = 'opacity 600ms cubic-bezier(0.16, 1, 0.3, 1), transform 600ms cubic-bezier(0.16, 1, 0.3, 1)';
+              requestAnimationFrame(() => {
+                requestAnimationFrame(() => {
+                  f.style.opacity = '1';
+                  f.style.transform = 'scale(1)';
+                });
+              });
+            }
+            setIframeReady(true);
           }}
           style={{
             width: '210mm', minHeight: '297mm', background: '#fff', border: 'none',
-            boxShadow: '0 8px 40px rgba(0,0,0,0.08), 0 2px 10px rgba(0,0,0,0.04)',
+            boxShadow: [
+              '0 8px 40px rgba(0,0,0,0.08)',
+              '0 2px 10px rgba(0,0,0,0.04)',
+              'inset 0 1px 0 rgba(255,255,255,0.4)',
+            ].join(', '),
             display: 'block', borderRadius: 3, overflow: 'hidden',
           }}
         />
       </div>
 
-      {editingField && (
+      {iframeReady && editingField && (
         <FloatingEditor
           editingField={editingField}
           iframeRect={iframeRect}
@@ -319,6 +410,12 @@ export function ResumePreview() {
           onCancel={handleCancel}
         />
       )}
+
+      <style>{`
+        @media (prefers-reduced-motion: reduce) {
+          * { transition-duration: 0ms !important; animation-duration: 0ms !important; }
+        }
+      `}</style>
     </div>
   );
 }

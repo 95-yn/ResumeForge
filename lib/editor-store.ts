@@ -10,10 +10,12 @@ interface EditorStore {
   templateId: string | null;
   templateHtml: string | null;
   templateCss: string | null;
+  templateNotFound: boolean;
   sectionOrder: string[];
   activeSection: string | null;
   isDirty: boolean;
-  saveStatus: 'saved' | 'saving' | 'unsaved';
+  saveStatus: 'saved' | 'saving' | 'unsaved' | 'error';
+  saveErrorMessage: string | null;
   history: ResumeData[];
   historyIndex: number;
   zoom: number;
@@ -34,12 +36,21 @@ interface EditorStore {
   undo: () => void;
   redo: () => void;
   save: () => void;
+  clearSaveError: () => void;
 }
 
 const GUEST_KEY_PREFIX = 'resumeforge_guest_';
 
-function saveToLocal(templateId: string, data: ResumeData, sectionOrder: string[]) {
-  try { localStorage.setItem(GUEST_KEY_PREFIX + templateId, JSON.stringify({ data, sectionOrder })); } catch {}
+function saveToLocal(templateId: string, data: ResumeData, sectionOrder: string[]): 'ok' | 'quota' {
+  try {
+    localStorage.setItem(GUEST_KEY_PREFIX + templateId, JSON.stringify({ data, sectionOrder }));
+    return 'ok';
+  } catch (err) {
+    if (err instanceof DOMException && (
+      err.name === 'QuotaExceededError' || err.name === 'NS_ERROR_DOM_QUOTA_REACHED'
+    )) return 'quota';
+    return 'quota';
+  }
 }
 
 function loadFromLocal(templateId: string): { data: ResumeData; sectionOrder: string[] } | null {
@@ -58,7 +69,9 @@ function pushHistory(state: EditorStore, newData: ResumeData): Partial<EditorSto
 
 export const useEditorStore = create<EditorStore>((set, get) => ({
   resume: null, templateId: null, templateHtml: null, templateCss: null,
+  templateNotFound: false,
   sectionOrder: [], activeSection: null, isDirty: false, saveStatus: 'saved',
+  saveErrorMessage: null,
   history: [], historyIndex: -1, zoom: 1,
 
   loadTemplate: (templateSlug, profession) => {
@@ -66,8 +79,10 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     const tpl = TEMPLATES.find(t => t.slug === templateSlug);
     if (!tpl) {
       console.warn(`Template not found: ${templateSlug}`);
+      set({ templateNotFound: true });
       return;
     }
+    set({ templateNotFound: false });
 
     const local = loadFromLocal(templateSlug);
     const resumeData: ResumeData = local
@@ -201,11 +216,21 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 
   save: () => {
     const state = get();
-    if (!state.isDirty || !state.resume) return;
+    if (!state.isDirty || !state.resume) {
+      // Even if not dirty, show saved toast for explicit Cmd+S
+      if (!state.isDirty) set({ saveStatus: 'saved' });
+      return;
+    }
     set({ saveStatus: 'saving' });
     if (state.templateId) {
-      saveToLocal(state.templateId, state.resume, state.sectionOrder);
+      const result = saveToLocal(state.templateId, state.resume, state.sectionOrder);
+      if (result === 'quota') {
+        set({ saveStatus: 'error', saveErrorMessage: '存储空间不足，请清理浏览器数据后重试' });
+        return;
+      }
     }
-    set({ isDirty: false, saveStatus: 'saved' });
+    set({ isDirty: false, saveStatus: 'saved', saveErrorMessage: null });
   },
+
+  clearSaveError: () => set({ saveStatus: 'unsaved', saveErrorMessage: null }),
 }));
