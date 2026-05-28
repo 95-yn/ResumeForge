@@ -5,7 +5,8 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 // Underline is bundled by StarterKit v3 — adding @tiptap/extension-underline duplicates it
-import Link from '@tiptap/extension-link';
+// Link is bundled by StarterKit v3 — adding @tiptap/extension-link would duplicate.
+// setLink/unsetLink commands are still available via the bundled extension.
 import TextAlign from '@tiptap/extension-text-align';
 import { TextStyle } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
@@ -130,7 +131,6 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
       TextStyle,
       Color.configure({ types: ['textStyle'] }),
       Highlight.configure({ multicolor: true }),
-      Link.configure({ openOnClick: false, HTMLAttributes: { class: 'editor-link' } }),
       TextAlign.configure({ types: ['paragraph'] }),
     ],
     content: editingField.value || '',
@@ -155,14 +155,6 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
     return () => document.removeEventListener('keydown', handleKey);
   }, [onCancel]);
 
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) onCancel();
-    };
-    const timer = setTimeout(() => document.addEventListener('mousedown', handleClickOutside), 150);
-    return () => { clearTimeout(timer); document.removeEventListener('mousedown', handleClickOutside); };
-  }, [onCancel]);
-
   const handleConfirm = useCallback(() => {
     if (!editor) return;
     let html = editor.getHTML();
@@ -177,6 +169,15 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
     }
     onConfirm(editingField.field, html);
   }, [editor, editingField.field, onConfirm]);
+
+  // Click outside → implicit save (industry standard for inline editors). ESC → cancel.
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) handleConfirm();
+    };
+    const timer = setTimeout(() => document.addEventListener('mousedown', handleClickOutside), 150);
+    return () => { clearTimeout(timer); document.removeEventListener('mousedown', handleClickOutside); };
+  }, [handleConfirm]);
 
   const handleLink = useCallback(() => {
     if (!editor) return;
