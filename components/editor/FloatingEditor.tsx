@@ -127,14 +127,16 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
       StarterKit.configure({ heading: false }),
       Placeholder.configure({ placeholder: '输入内容...' }),
       Underline,
+      // Bug 3 fix: TextStyle must be registered; Color explicitly bound to textStyle mark
       TextStyle,
-      Color,
+      Color.configure({ types: ['textStyle'] }),
       Highlight.configure({ multicolor: true }),
       Link.configure({ openOnClick: false, HTMLAttributes: { class: 'editor-link' } }),
       TextAlign.configure({ types: ['paragraph'] }),
     ],
     content: editingField.value || '',
     autofocus: 'end',
+    immediatelyRender: false,
   });
 
   useEffect(() => {
