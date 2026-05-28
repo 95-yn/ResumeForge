@@ -166,7 +166,17 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
 
   const handleConfirm = useCallback(() => {
     if (!editor) return;
-    onConfirm(editingField.field, editor.getHTML());
+    let html = editor.getHTML();
+    // Unwrap single <p>...</p> so inline fields (skill.name, position 等)
+    // don't render as block element → no spurious line break in <li>/<span>.
+    if (typeof document !== 'undefined') {
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      if (div.children.length === 1 && div.firstElementChild?.tagName === 'P') {
+        html = div.firstElementChild.innerHTML;
+      }
+    }
+    onConfirm(editingField.field, html);
   }, [editor, editingField.field, onConfirm]);
 
   const handleLink = useCallback(() => {

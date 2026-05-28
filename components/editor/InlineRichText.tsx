@@ -121,9 +121,11 @@ export function InlineRichText({ value, onChange, placeholder = '输入内容...
 
   return (
     <div style={{ position: 'relative' }}>
-      {/* Mini toolbar — shown when focused */}
-      {focused && (
-        <div style={{
+      {/* Mini toolbar — shown when focused OR picker open (so click in picker doesn't blur away the toolbar) */}
+      {(focused || openPicker) && (
+        <div
+          onMouseDown={e => e.preventDefault()}
+          style={{
           display: 'flex', alignItems: 'center', gap: 2, marginBottom: 2,
           padding: '2px 4px',
           background: '#F5F5F4', borderRadius: '4px 4px 0 0',
