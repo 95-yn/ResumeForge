@@ -161,13 +161,15 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
   color-adjust: exact !important;
 }
 
-/* Avoid orphan section headers and broken list items across pages */
+/* 分页只约束"原子块"，不约束整段 section 容器。
+   若对整个 section / [data-section] 也 avoid，当它放不下当前页剩余空间时会被整体
+   推到下一页，导致页底留下大片空白。这里只保证：
+   - 标题不与紧随内容分离（避免孤行标题）
+   - 单个条目 / 列表项 / 表格行不被跨页劈开
+   section 容器本身允许自然跨页流动。 */
 h1, h2, h3, h4 { page-break-after: avoid; break-after: avoid-page; }
 li, tr { page-break-inside: avoid; break-inside: avoid-page; }
-.section, section, .entry, [data-section], [data-entry] {
-  page-break-inside: avoid;
-  break-inside: avoid-page;
-}
+.entry, [data-entry] { page-break-inside: avoid; break-inside: avoid-page; }
 
 /* Page margins live ONLY in @page — body must be 0 0 or padding stacks.
    8mm / 10mm 是现代简历常用紧凑边距（约 0.31" / 0.39"），比 Word narrow
