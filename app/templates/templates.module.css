@@ -33,12 +33,35 @@
   color: var(--arch-brick);
 }
 
+.headerRight {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 18px;
+}
+
 .meta {
   font-family: 'JetBrains Mono', 'Courier New', monospace;
   font-size: 10px;
   color: var(--arch-ink-dim);
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.headerLink {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--arch-chestnut);
+  text-decoration: none;
+  padding-bottom: 1px;
+  border-bottom: 1px solid var(--arch-dust);
+  transition: color 0.2s ease-out, border-color 0.2s ease-out;
+}
+
+.headerLink:hover {
+  color: var(--arch-brick);
+  border-bottom-color: var(--arch-brick);
 }
 
 /* ── Compact Hero title area ── */
@@ -125,8 +148,8 @@
 /* Group label */
 .filterGroupLabel {
   font-family: 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 9px;
-  letter-spacing: 0.2em;
+  font-size: 10px;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--arch-stone-mid);
   margin-right: 12px;
@@ -231,18 +254,18 @@
   border-radius: 2px;
 }
 
-/* Profession chips — mono 10px */
+/* Profession chips — mono 12px（含中文，10px 偏小不易读，提到 12px） */
 .filterBtnProf {
   font-family: 'JetBrains Mono', 'Courier New', monospace;
-  font-size: 10px;
-  letter-spacing: 0.07em;
+  font-size: 12px;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--arch-chestnut);
   background: none;
   border: none;
   cursor: pointer;
-  padding: 0 9px 0 0;
-  opacity: 0.32;
+  padding: 0 10px 0 0;
+  opacity: 0.42;
   transition: opacity 0.15s ease;
   white-space: nowrap;
   flex-shrink: 0;
@@ -250,7 +273,7 @@
 }
 
 .filterBtnProf:last-child { padding-right: 0; }
-.filterBtnProf:hover { opacity: 0.6; }
+.filterBtnProf:hover { opacity: 0.72; }
 
 .filterBtnProf.active {
   opacity: 1;
