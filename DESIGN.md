@@ -15,6 +15,7 @@ colors:
   stone-light: "#A8A29E"
   stone-border: "#E7E5E4"
   stone-divider: "#F5F5F4"
+  stone-hover-warm: "#F0EAE0"
   cyan-marine: "#1E5A6B"
   brick-red: "#B0463A"
   electric-pink: "#FF2D6F"
@@ -120,7 +121,8 @@ ResumeForge 是一个有三个房间的编辑工作室。每个房间有自己�
 - **Stone Mid** (#78716C): 次要文字。
 - **Stone Light** (#A8A29E): 占位、禁用、Mono label。
 - **Stone Border** (#E7E5E4): 所有边框。
-- **Stone Divider** (#F5F5F4): hover 底色、分隔区。
+- **Stone Divider** (#F5F5F4): 列表/菜单项 hover 底色、分隔区（偏冷）。
+- **Stone Hover Warm** (#F0EAE0): 编辑器内 ghost 按钮 / 图标按钮的 hover 底色（偏暖，呼应 paper-cream，比 Stone Divider 更贴近工作坊的温暖基调）。
 
 ### Accent（点缀，<5%）
 - **Cyan Marine** (#1E5A6B): Type Specimen 标签 + Landing CTA 强调。

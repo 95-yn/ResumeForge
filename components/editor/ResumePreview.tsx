@@ -2,9 +2,14 @@
 
 import { useEffect, useRef, useMemo, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import dynamic from 'next/dynamic';
 import { compileTemplate } from '@/lib/mini-template';
 import { useEditorStore } from '@/lib/editor-store';
-import { FloatingEditor } from './FloatingEditor';
+
+// FloatingEditor 只在点击字段进入编辑时才挂载，且自带一整套 TipTap 扩展
+// （TextAlign / FontSize / Color / Highlight 等）。动态加载把它的 chunk 移出
+// 编辑器首屏，缩小 First Load JS。
+const FloatingEditor = dynamic(() => import('./FloatingEditor').then(m => m.FloatingEditor), { ssr: false });
 
 const ARRAY_SECTIONS = ['experience', 'education', 'skills', 'projects'];
 
