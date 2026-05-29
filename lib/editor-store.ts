@@ -329,7 +329,8 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 
   pushToast: (message, type = 'info') => {
     const id = `toast_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
-    set(s => ({ toasts: [...s.toasts, { id, message, type }] }));
+    // 去重：同文案同类型的 toast 不堆叠（如反复保存只刷新同一条）。
+    set(s => ({ toasts: [...s.toasts.filter(t => !(t.message === message && t.type === type)), { id, message, type }] }));
     // Auto-dismiss after 4s
     setTimeout(() => {
       set(s => ({ toasts: s.toasts.filter(t => t.id !== id) }));

@@ -6,71 +6,7 @@ import { ArrowLeftOutlined, PrinterOutlined, UndoOutlined, RedoOutlined, Rollbac
 import { useRouter } from 'next/navigation';
 import { compileTemplate } from '@/lib/mini-template';
 import { useEditorStore } from '@/lib/editor-store';
-
-/** Inline confirm modal — replaces window.confirm for the Reset action */
-function ResetConfirmModal({ onOk, onCancel }: { onOk: () => void; onCancel: () => void }) {
-  return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 99999,
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      background: 'rgba(28,25,23,0.30)',
-    }}
-      onClick={e => { if (e.target === e.currentTarget) onCancel(); }}
-    >
-      <div style={{
-        background: '#FEFEFE', borderRadius: 10, border: '1px solid #E7E5E4',
-        boxShadow: '0 20px 60px rgba(28,25,23,0.18), 0 4px 16px rgba(28,25,23,0.08)',
-        padding: '24px 24px 18px', width: 320,
-        fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
-        animation: 'rfModalIn 180ms cubic-bezier(0.16,1,0.3,1)',
-      }}>
-        <p style={{ fontSize: 13, fontWeight: 600, color: '#1C1917', margin: '0 0 6px' }}>还原默认内容</p>
-        <p style={{ fontSize: 12, color: '#78716C', margin: '0 0 20px', lineHeight: 1.6 }}>
-          当前编辑的内容将被模板默认内容替换，此操作无法撤销。
-        </p>
-        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
-          <button
-            onClick={onCancel}
-            style={{
-              padding: '6px 16px', borderRadius: 6, border: '1px solid #E7E5E4',
-              background: 'transparent', color: '#78716C', fontSize: 12, fontWeight: 500,
-              cursor: 'pointer', fontFamily: 'inherit',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#F0EAE0'; e.currentTarget.style.color = '#1C1917'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; }}
-          >取消</button>
-          <button
-            onClick={onOk}
-            style={{
-              padding: '6px 16px', borderRadius: 6, border: 'none',
-              background: '#1C1917', color: '#FAFAF9', fontSize: 12, fontWeight: 600,
-              cursor: 'pointer', fontFamily: 'inherit',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#292524'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#1C1917'; }}
-          >还原</button>
-        </div>
-      </div>
-      <style>{`@keyframes rfModalIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }`}</style>
-    </div>
-  );
-}
-
-/** Grip icon — 6 dots, 2×3 SVG */
-function GripIcon() {
-  return (
-    <svg width="10" height="14" viewBox="0 0 10 14" fill="none" aria-hidden="true">
-      <circle cx="2.5" cy="2.5" r="1.2" fill="currentColor" />
-      <circle cx="7.5" cy="2.5" r="1.2" fill="currentColor" />
-      <circle cx="2.5" cy="7"   r="1.2" fill="currentColor" />
-      <circle cx="7.5" cy="7"   r="1.2" fill="currentColor" />
-      <circle cx="2.5" cy="11.5" r="1.2" fill="currentColor" />
-      <circle cx="7.5" cy="11.5" r="1.2" fill="currentColor" />
-    </svg>
-  );
-}
-
-export { GripIcon };
+import { confirmDialog } from './ConfirmDialog';
 
 type UndoRedoBtnProps = {
   disabled: boolean;
@@ -171,7 +107,6 @@ export function TopBar() {
     undo, redo, historyIndex, history,
     templateHtml, templateCss, resume, resetToDefault, pushToast,
   } = useEditorStore();
-  const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   // Scroll-shadow: listen on the preview scroller (closest scrollable ancestor in the editor layout)
@@ -368,8 +303,8 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
 
         <div style={{ width: 1, height: 16, background: '#E7E5E4' }} />
 
-        {/* Save status */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+        {/* Save status — aria-live 让读屏用户也能听到保存状态变化 */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }} aria-live="polite" role="status">
           <StatusDot status={saveStatus} />
           <span style={{
             fontSize: 11, color: '#A8A29E',
@@ -378,13 +313,6 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
         </div>
       </div>
 
-      {/* Reset confirm modal */}
-      {showResetConfirm && (
-        <ResetConfirmModal
-          onOk={() => { setShowResetConfirm(false); try { resetToDefault(); pushToast('已还原为模板初始内容', 'success'); } catch (err) { console.error('reset failed:', err); pushToast('还原失败，请重试', 'error'); } }}
-          onCancel={() => setShowResetConfirm(false)}
-        />
-      )}
 
       {/* Right */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -415,7 +343,16 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
                 fontSize: 12, transition: 'background 120ms cubic-bezier(0.16, 1, 0.3, 1)',
                 outline: 'none',
               }}
-              onClick={() => setShowResetConfirm(true)}
+              onClick={async () => {
+                if (await confirmDialog({
+                  title: '还原默认内容',
+                  message: '当前编辑的内容将被模板默认内容替换，此操作无法撤销。',
+                  confirmLabel: '还原',
+                })) {
+                  try { resetToDefault(); pushToast('已还原为模板初始内容', 'success'); }
+                  catch (err) { console.error('reset failed:', err); pushToast('还原失败，请重试', 'error'); }
+                }
+              }}
               onMouseEnter={e => { e.currentTarget.style.background = '#F0EAE0'; }}
               onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
               onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}

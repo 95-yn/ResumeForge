@@ -184,18 +184,95 @@ function RenderErrorState() {
   );
 }
 
+/** 预览缩放控件 — 浮于预览区右下角，不随内容滚动。缩放 50%–200%，点百分比复位 100%。 */
+function ZoomControl({ zoom, setZoom }: { zoom: number; setZoom: (z: number) => void }) {
+  const pct = Math.round(zoom * 100);
+  const step = (delta: number) => setZoom(Math.round((zoom + delta) * 100) / 100);
+  const btn: React.CSSProperties = {
+    width: 26, height: 26, border: 'none', background: 'transparent',
+    color: '#78716C', cursor: 'pointer', fontSize: 16, lineHeight: 1,
+    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+    borderRadius: 6, fontFamily: 'inherit', outline: 'none',
+    transition: 'background 120ms cubic-bezier(0.16,1,0.3,1), color 120ms',
+  };
+  const hover = (e: React.MouseEvent<HTMLButtonElement>, on: boolean) => {
+    e.currentTarget.style.background = on ? '#F0EAE0' : 'transparent';
+    e.currentTarget.style.color = on ? '#1C1917' : '#78716C';
+  };
+  return (
+    <div
+      style={{
+        position: 'absolute', right: 18, bottom: 18, zIndex: 7,
+        display: 'flex', alignItems: 'center', gap: 2,
+        background: '#FEFEFE', border: '1px solid #E7E5E4', borderRadius: 8,
+        padding: 3, boxShadow: '0 4px 16px rgba(28,25,23,0.10)',
+        fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
+      }}
+    >
+      <button
+        style={{ ...btn, color: zoom <= 0.5 ? '#D6D3D1' : '#78716C', cursor: zoom <= 0.5 ? 'default' : 'pointer' }}
+        disabled={zoom <= 0.5}
+        onClick={() => step(-0.1)}
+        onMouseEnter={e => { if (zoom > 0.5) hover(e, true); }}
+        onMouseLeave={e => hover(e, false)}
+        aria-label="缩小"
+      >−</button>
+      <button
+        onClick={() => setZoom(1)}
+        title="点击复位到 100%"
+        aria-label={`当前缩放 ${pct}%，点击复位`}
+        style={{
+          minWidth: 44, height: 26, border: 'none', background: 'transparent',
+          color: '#44403C', cursor: 'pointer', fontSize: 12, fontWeight: 500,
+          fontFamily: "'JetBrains Mono', 'SF Mono', monospace", letterSpacing: '0.02em',
+          borderRadius: 6, outline: 'none', transition: 'background 120ms',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.background = '#F0EAE0'; }}
+        onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; }}
+      >{pct}%</button>
+      <button
+        style={{ ...btn, color: zoom >= 2 ? '#D6D3D1' : '#78716C', cursor: zoom >= 2 ? 'default' : 'pointer' }}
+        disabled={zoom >= 2}
+        onClick={() => step(0.1)}
+        onMouseEnter={e => { if (zoom < 2) hover(e, true); }}
+        onMouseLeave={e => hover(e, false)}
+        aria-label="放大"
+      >+</button>
+    </div>
+  );
+}
+
 export function ResumePreview() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const isEditingRef = useRef(false);
   const hasAnimatedRef = useRef(false); // only animate first load
-  const { resume, templateHtml, templateCss, updateByPath, zoom, sectionOrder, addArrayItem, removeArrayItem } = useEditorStore();
+  const { resume, templateHtml, templateCss, updateByPath, zoom, setZoom, sectionOrder, addArrayItem, removeArrayItem } = useEditorStore();
   const [editingField, setEditingField] = useState<EditingField | null>(null);
   const [iframeRect, setIframeRect] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
   const [renderError, setRenderError] = useState(false);
   const [iframeReady, setIframeReady] = useState(false);
   const [iframeLoading, setIframeLoading] = useState(true); // true until first load
+  const [showCoachmark, setShowCoachmark] = useState(false);
 
   const isEmpty = !resume?.basics?.name && !resume?.basics?.email;
+
+  const dismissCoachmark = useCallback(() => {
+    setShowCoachmark(false);
+    try { localStorage.setItem('resumeforge_coachmark_seen', '1'); } catch { /* ignore */ }
+  }, []);
+
+  // 首次进入预填模板时显示「点击即可编辑」引导（空状态已有自带提示，无需重复）。
+  useEffect(() => {
+    if (!iframeReady || isEmpty) return;
+    try {
+      if (!localStorage.getItem('resumeforge_coachmark_seen')) setShowCoachmark(true);
+    } catch { /* ignore */ }
+  }, [iframeReady, isEmpty]);
+
+  // 一旦用户开始编辑任意字段，引导即完成使命，自动消失。
+  useEffect(() => {
+    if (editingField) setShowCoachmark(false);
+  }, [editingField]);
 
   const renderedHtml = useMemo(() => {
     if (!templateHtml || !templateCss || !resume) return '';
@@ -414,6 +491,7 @@ export function ResumePreview() {
   }
 
   return (
+    <div style={{ flex: 1, position: 'relative', display: 'flex', minHeight: 0 }}>
     <div
       data-preview-scroller
       style={{
@@ -437,6 +515,44 @@ export function ResumePreview() {
             borderTopColor: '#78716C',
             animation: 'rpSpin 700ms linear infinite',
           }} />
+        </div>
+      )}
+
+      {/* 首次引导：点击即可编辑（编辑器 chrome，浮于纸面之上，不注入 iframe 文档） */}
+      {showCoachmark && !iframeLoading && (
+        <div
+          role="status"
+          style={{
+            position: 'sticky', top: 0, alignSelf: 'center', zIndex: 6,
+            marginBottom: -38, // 不挤占纸张布局，悬浮即可
+            display: 'flex', alignItems: 'center', gap: 10,
+            background: '#1C1917', color: '#FAFAF9',
+            borderRadius: 999, padding: '7px 10px 7px 14px',
+            fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
+            fontSize: 12, fontWeight: 500, letterSpacing: '-0.1px',
+            boxShadow: '0 8px 28px rgba(28,25,23,0.28), 0 2px 8px rgba(28,25,23,0.16)',
+            animation: 'rpCoachIn 360ms cubic-bezier(0.16,1,0.3,1)',
+          }}
+        >
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}>
+            <span style={{
+              width: 5, height: 5, borderRadius: '50%', background: '#B0463A',
+              boxShadow: '0 0 0 3px rgba(176,70,58,0.28)', flexShrink: 0,
+              animation: 'rpCoachPulse 1.8s ease-in-out infinite',
+            }} />
+            点击简历上的任意文字，即可直接编辑
+          </span>
+          <button
+            onClick={dismissCoachmark}
+            aria-label="知道了，关闭提示"
+            style={{
+              border: 'none', background: 'transparent', color: '#A8A29E',
+              cursor: 'pointer', fontSize: 15, lineHeight: 1, padding: '0 2px',
+              fontFamily: 'inherit', outline: 'none', flexShrink: 0,
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#FAFAF9'; }}
+            onMouseLeave={e => { e.currentTarget.style.color = '#A8A29E'; }}
+          >×</button>
         </div>
       )}
 
@@ -510,11 +626,21 @@ export function ResumePreview() {
         @keyframes rpSpin {
           to { transform: rotate(360deg); }
         }
+        @keyframes rpCoachIn {
+          from { opacity: 0; transform: translateY(-8px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes rpCoachPulse {
+          0%, 100% { box-shadow: 0 0 0 3px rgba(176,70,58,0.28); }
+          50%      { box-shadow: 0 0 0 5px rgba(176,70,58,0.10); }
+        }
         @media (prefers-reduced-motion: reduce) {
           * { transition-duration: 0ms !important; animation-duration: 0ms !important; }
           @keyframes rpSpin { to { transform: none; } }
         }
       `}</style>
+    </div>
+    <ZoomControl zoom={zoom} setZoom={setZoom} />
     </div>
   );
 }

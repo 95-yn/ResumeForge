@@ -676,3 +676,81 @@ test('Bug 6: undo restores deleted & reordered sections', async ({ page }) => {
   expect(result.reorderApplied).toBe(true);
   expect(result.undoRestoredOrder).toBe(true);
 });
+
+// ─── Bug 7: unified ConfirmDialog (replaces antd Modal.confirm) ───────────────
+
+test('Bug 7: delete uses custom ConfirmDialog and removes the item', async ({ page }) => {
+  await page.goto(EDITOR_URL);
+  await waitForIframe(page);
+  await openFirstExperience(page);
+  await page.waitForFunction(() => !!(window as unknown as { __editorStore?: unknown }).__editorStore, null, { timeout: 5000 });
+
+  const before = await page.evaluate(() => {
+    const s = (window as unknown as { __editorStore: { getState: () => { resume: { experience?: unknown[] } } } }).__editorStore.getState();
+    return (s.resume.experience ?? []).length;
+  });
+  if (before < 1) { test.skip(true, 'No experience items to delete'); return; }
+
+  // Click the first experience ITEM delete (aria-label "删除 <company> · <position>" — note the
+  // space; basics field-removes are "删除职位头衔" with no space and bypass the dialog).
+  await page.locator('button[aria-label^="删除 公司"]').first().click({ force: true });
+
+  // The unified ConfirmDialog appears (role=dialog) — NOT antd's modal
+  const dialog = page.locator('div[role="dialog"]');
+  await expect(dialog).toBeVisible({ timeout: 3000 });
+  // No antd modal in the DOM
+  expect(await page.locator('.ant-modal-confirm').count()).toBe(0);
+
+  // Confirm deletion
+  await dialog.locator('button', { hasText: '删除' }).click();
+  await page.waitForTimeout(300);
+
+  const after = await page.evaluate(() => {
+    const s = (window as unknown as { __editorStore: { getState: () => { resume: { experience?: unknown[] } } } }).__editorStore.getState();
+    return (s.resume.experience ?? []).length;
+  });
+  expect(after).toBe(before - 1);
+});
+
+// ─── Bug 8: zoom control adjusts preview scale ───────────────────────────────
+
+test('Bug 8: zoom control changes and resets preview scale', async ({ page }) => {
+  await page.goto(EDITOR_URL);
+  await waitForIframe(page);
+  await page.waitForFunction(() => !!(window as unknown as { __editorStore?: unknown }).__editorStore, null, { timeout: 5000 });
+
+  const getZoom = () => page.evaluate(() =>
+    (window as unknown as { __editorStore: { getState: () => { zoom: number } } }).__editorStore.getState().zoom);
+
+  expect(await getZoom()).toBeCloseTo(1, 2);
+
+  await page.locator('button[aria-label="放大"]').click();
+  await page.waitForTimeout(100);
+  expect(await getZoom()).toBeGreaterThan(1);
+
+  // Clicking the percentage label resets to 100%
+  await page.locator('button[aria-label^="当前缩放"]').click();
+  await page.waitForTimeout(100);
+  expect(await getZoom()).toBeCloseTo(1, 2);
+});
+
+// ─── Bug 9: first-run coachmark appears and dismisses ────────────────────────
+
+test('Bug 9: editing coachmark shows on first load and dismisses', async ({ page }) => {
+  await page.addInitScript(() => { try { localStorage.removeItem('resumeforge_coachmark_seen'); } catch { /* ignore */ } });
+  await page.goto(EDITOR_URL);
+  await waitForIframe(page);
+
+  const coach = page.locator('div[role="status"]', { hasText: '点击简历上的任意文字' });
+  await expect(coach).toBeVisible({ timeout: 5000 });
+
+  // Dismiss via × button
+  await coach.locator('button[aria-label="知道了，关闭提示"]').click();
+  await expect(coach).toBeHidden({ timeout: 2000 });
+
+  // Persisted: a reload does not show it again
+  const seen = await page.evaluate(() => {
+    try { return localStorage.getItem('resumeforge_coachmark_seen'); } catch { return null; }
+  });
+  expect(seen).toBe('1');
+});

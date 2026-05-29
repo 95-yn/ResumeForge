@@ -5,6 +5,7 @@ import { TopBar } from './TopBar';
 import { SectionList } from './SectionList';
 import { ResumePreview } from './ResumePreview';
 import { ToastContainer } from './ToastContainer';
+import { ConfirmDialogHost } from './ConfirmDialog';
 import { useAutoSave } from '@/lib/use-autosave';
 import { useEditorStore } from '@/lib/editor-store';
 
@@ -12,52 +13,26 @@ const MIN_SIDEBAR_WIDTH = 160;
 const MAX_SIDEBAR_WIDTH = 360;
 const DEFAULT_SIDEBAR_WIDTH = 220;
 
-/** Lightweight toast for keyboard shortcut feedback */
-function SaveToast({ visible }: { visible: boolean }) {
-  return (
-    <div style={{
-      position: 'fixed', bottom: 24, left: '50%',
-      transform: `translateX(-50%) translateY(${visible ? 0 : 12}px)`,
-      opacity: visible ? 1 : 0,
-      pointerEvents: 'none',
-      background: '#1C1917', color: '#FAFAF9',
-      borderRadius: 8, padding: '8px 18px',
-      fontSize: 12, fontWeight: 500,
-      fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
-      boxShadow: '0 4px 16px rgba(28,25,23,0.22)',
-      transition: 'opacity 300ms cubic-bezier(0.16, 1, 0.3, 1), transform 300ms cubic-bezier(0.16, 1, 0.3, 1)',
-      zIndex: 9998,
-      letterSpacing: '-0.1px',
-    }}>
-      已保存
-    </div>
-  );
-}
-
 export function EditorLayout() {
   useAutoSave();
   const undo = useEditorStore(s => s.undo);
   const redo = useEditorStore(s => s.redo);
   const save = useEditorStore(s => s.save);
   const saveStatus = useEditorStore(s => s.saveStatus);
+  const pushToast = useEditorStore(s => s.pushToast);
   const [sidebarWidth, setSidebarWidth] = useState(DEFAULT_SIDEBAR_WIDTH);
   const isResizing = useRef(false);
   const [resizeHover, setResizeHover] = useState(false);
   const [resizeActive, setResizeActive] = useState(false);
-  const [showSaveToast, setShowSaveToast] = useState(false);
-  const saveToastTimer = useRef<ReturnType<typeof setTimeout>>();
   const prevSaveStatus = useRef(saveStatus);
 
-  // Show toast when save transitions to 'saved'
+  // 保存成功 → 走统一 toast 系统（去重，避免与其它 toast 重叠/堆叠）。
   useEffect(() => {
     if (prevSaveStatus.current !== 'saved' && saveStatus === 'saved') {
-      setShowSaveToast(true);
-      clearTimeout(saveToastTimer.current);
-      saveToastTimer.current = setTimeout(() => setShowSaveToast(false), 1800);
+      pushToast('已保存', 'success');
     }
     prevSaveStatus.current = saveStatus;
-    return () => clearTimeout(saveToastTimer.current);
-  }, [saveStatus]);
+  }, [saveStatus, pushToast]);
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -164,8 +139,8 @@ export function EditorLayout() {
         <ResumePreview />
       </div>
 
-      <SaveToast visible={showSaveToast} />
       <ToastContainer />
+      <ConfirmDialogHost />
     </div>
   );
 }

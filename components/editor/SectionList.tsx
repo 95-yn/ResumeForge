@@ -3,10 +3,10 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
-import { Modal } from 'antd';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { useEditorStore } from '@/lib/editor-store';
 import { InlineRichText } from './InlineRichText';
+import { confirmDialog } from './ConfirmDialog';
 
 const RESUME_BG_COLORS = [
   { color: '#FFFFFF', label: '白' },
@@ -383,14 +383,13 @@ export function SectionList() {
                 )}
                 {!isBasics && (
                   <button
-                    onClick={e => {
+                    onClick={async e => {
                       e.stopPropagation();
-                      Modal.confirm({
+                      if (await confirmDialog({
                         title: '删除模块',
-                        content: `确定删除「${label}」模块？删除后可通过"添加模块"恢复。`,
-                        okText: '删除', cancelText: '取消', okButtonProps: { danger: true },
-                        onOk: () => removeSection(key),
-                      });
+                        message: `确定删除「${label}」模块？删除后可通过"添加模块"恢复，或用 Cmd+Z 撤销。`,
+                        confirmLabel: '删除', danger: true,
+                      })) removeSection(key);
                     }}
                     title="删除模块"
                     aria-label={`删除 ${label}`}
@@ -401,7 +400,7 @@ export function SectionList() {
                       lineHeight: 1, flexShrink: 0,
                     }}
                     className="section-delete-btn"
-                    onMouseEnter={e => { e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.opacity = '1'; }}
+                    onMouseEnter={e => { e.currentTarget.style.color = '#B0463A'; e.currentTarget.style.opacity = '1'; }}
                     onMouseLeave={e => { e.currentTarget.style.color = '#D6D3D1'; e.currentTarget.style.opacity = '0'; }}
                   >
                     <DeleteOutlined style={{ fontSize: 11 }} />
@@ -660,7 +659,7 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
                   padding: 0, fontSize: 10, lineHeight: 1, opacity: 0.5,
                   transition: 'opacity 0.1s, color 0.1s', outline: 'none',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.opacity = '1'; }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#B0463A'; e.currentTarget.style.opacity = '1'; }}
                 onMouseLeave={e => { e.currentTarget.style.color = '#D6D3D1'; e.currentTarget.style.opacity = '0.5'; }}
               >
                 <DeleteOutlined style={{ fontSize: 10 }} />
@@ -689,7 +688,7 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
               padding: 0, fontSize: 10, lineHeight: 1, opacity: 0.5,
               transition: 'opacity 0.1s, color 0.1s', outline: 'none',
             }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#DC2626'; e.currentTarget.style.opacity = '1'; }}
+            onMouseEnter={e => { e.currentTarget.style.color = '#B0463A'; e.currentTarget.style.opacity = '1'; }}
             onMouseLeave={e => { e.currentTarget.style.color = '#D6D3D1'; e.currentTarget.style.opacity = '0.5'; }}
           >
             <DeleteOutlined style={{ fontSize: 10 }} />
@@ -807,21 +806,19 @@ function ArrayPanel({ sectionKey, items, addLabel, addArrayItem, removeArrayItem
                 {summary}
               </span>
               <button
-                onClick={e => {
+                onClick={async e => {
                   e.stopPropagation();
-                  Modal.confirm({
-                    title: '删除',
-                    content: `删除「${summary}」？`,
-                    okText: '删除', cancelText: '取消', okButtonProps: { danger: true },
-                    onOk: () => removeArrayItem(sectionKey, idx),
-                  });
+                  if (await confirmDialog({
+                    title: '删除', message: `删除「${summary}」？`,
+                    confirmLabel: '删除', danger: true,
+                  })) removeArrayItem(sectionKey, idx);
                 }}
                 aria-label={`删除 ${summary}`}
                 style={{
                   border: 'none', background: 'none', color: '#D6D3D1', cursor: 'pointer',
                   padding: 0, fontSize: 11, opacity: 0.6, transition: 'opacity 0.1s', outline: 'none',
                 }}
-                onMouseEnter={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.color = '#DC2626'; }}
+                onMouseEnter={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.color = '#B0463A'; }}
                 onMouseLeave={e => { e.currentTarget.style.opacity = '0.6'; e.currentTarget.style.color = '#D6D3D1'; }}
               >
                 <DeleteOutlined />
