@@ -69,15 +69,11 @@ const template: TemplateData = {
   {{#if skills.length}}
   <section class="cr-section">
     <h2 class="cr-section-title">专业技能</h2>
-    <div class="cr-skills-grid">
+    <div class="cr-skills">
       {{#each skills}}
-      <div class="cr-skill-row">
-        <span class="cr-skill-name" data-field="skills.{{@index}}.name">{{{name}}}</span>
-        <div class="cr-skill-bar">
-          <div class="cr-skill-fill cr-level-{{{level}}}"></div>
-        </div>
-        <span class="cr-skill-level" data-field="skills.{{@index}}.level">{{{level}}}</span>
-      </div>
+      <span class="cr-skill-tag" data-entry="skills" data-entry-index="{{@index}}">
+        <span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}} <span class="cr-skill-lv" data-field="skills.{{@index}}.level">{{{level}}}</span>{{/if}}
+      </span>
       {{/each}}
     </div>
   </section>
@@ -103,37 +99,32 @@ const template: TemplateData = {
 `,
     css: `* { word-wrap: break-word; overflow-wrap: break-word; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
-.resume.creative { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Source Han Sans SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 10pt; line-height: 1.6; color: #1F2937; background: #fff; }
-.cr-header { padding: 24px 28px 20px; background: linear-gradient(135deg, #7C3AED 0%, #4F46E5 100%); color: #fff; }
-.cr-header h1 { font-size: 26pt; font-weight: 900; letter-spacing: -0.5px; color: #fff; }
-.cr-tagline { font-size: 12pt; color: rgba(255,255,255,0.8); margin-top: 4px; font-weight: 300; }
-.cr-contacts { margin-top: 10px; display: flex; flex-wrap: wrap; gap: 4px 16px; }
-.cr-contact { font-size: 9pt; color: rgba(255,255,255,0.75); }
-.cr-section { padding: 12px 28px; }
-.cr-section-title { display: inline-block; font-size: 9pt; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; background: #7C3AED; color: #fff; padding: 2px 10px; border-radius: 2px; margin-bottom: 10px; }
-.cr-entry { margin-bottom: 10px; }
+.resume.creative { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Source Han Sans SC", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 10pt; line-height: 1.6; color: #292524; background: #fff; }
+/* 头部：实色 ink 块 + 一道砖红强调（取代原紫色渐变，去 slop、回到品牌色） */
+.cr-header { padding: 30px 28px 24px; background: #1C1917; color: #fff; border-bottom: 3px solid #B0463A; }
+.cr-header h1 { font-size: 28pt; font-weight: 800; letter-spacing: -0.5px; line-height: 1.05; color: #fff; }
+.cr-tagline { font-size: 12pt; color: rgba(255,255,255,0.72); margin-top: 6px; font-weight: 400; }
+.cr-contacts { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 4px 18px; }
+.cr-contact { font-size: 9pt; color: rgba(255,255,255,0.68); letter-spacing: 0.02em; }
+.cr-section { padding: 13px 28px; }
+/* 区块标题：砖红下划线小标签 */
+.cr-section-title { display: inline-block; font-size: 8.5pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #B0463A; border-bottom: 1.5px solid #B0463A; padding-bottom: 3px; margin-bottom: 11px; }
+.cr-entry { margin-bottom: 11px; }
 .cr-entry:last-child { margin-bottom: 0; }
-.cr-entry-head { display: flex; justify-content: space-between; align-items: flex-start; }
+.cr-entry-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 .cr-meta { display: flex; flex-direction: column; }
-.cr-entity { font-size: 11pt; font-weight: 700; color: #111827; }
-.cr-role { font-size: 9.5pt; color: #6B7280; margin-top: 1px; }
-.cr-date { font-size: 9pt; color: #9CA3AF; white-space: nowrap; margin-left: 12px; padding-top: 2px; }
-.cr-body { font-size: 9.5pt; color: #4B5563; margin-top: 4px; }
+.cr-entity { font-size: 11pt; font-weight: 700; color: #1C1917; }
+.cr-role { font-size: 9.5pt; color: #78716C; margin-top: 1px; }
+.cr-date { font-size: 9pt; color: #A8A29E; white-space: nowrap; flex-shrink: 0; padding-top: 2px; }
+.cr-body { font-size: 9.5pt; color: #44403C; margin-top: 4px; }
 .cr-highlights { padding-left: 16px; margin-top: 4px; }
-.cr-highlights li { font-size: 9.5pt; color: #374151; margin-bottom: 2px; }
-.cr-skills-grid { display: flex; flex-direction: column; gap: 8px; }
-.cr-skill-row { display: flex; align-items: center; gap: 10px; }
-.cr-skill-name { width: 160px; font-size: 9.5pt; font-weight: 600; color: #374151; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.cr-skill-bar { flex: 1; height: 6px; background: #E5E7EB; border-radius: 3px; overflow: hidden; }
-.cr-skill-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #7C3AED, #4F46E5); }
-.cr-level-精通 .cr-skill-fill, .cr-skill-fill.cr-level-精通 { width: 95%; }
-.cr-level-掌握 .cr-skill-fill, .cr-skill-fill.cr-level-掌握 { width: 75%; }
-.cr-level-熟悉 .cr-skill-fill, .cr-skill-fill.cr-level-熟悉 { width: 55%; }
-.cr-level-了解 .cr-skill-fill, .cr-skill-fill.cr-level-了解 { width: 35%; }
-.cr-skill-fill { width: 60%; }
-.cr-skill-level { width: 30px; font-size: 8.5pt; color: #9CA3AF; flex-shrink: 0; }
+.cr-highlights li { font-size: 9.5pt; color: #44403C; margin-bottom: 2px; line-height: 1.5; }
+/* 技能：标签胶囊，无进度条 → 长名也不会与任何元素重合 */
+.cr-skills { display: flex; flex-wrap: wrap; gap: 6px 8px; }
+.cr-skill-tag { display: inline-flex; align-items: baseline; gap: 5px; font-size: 9pt; color: #292524; background: #F7F3EE; border: 1px solid #E7E0D6; border-radius: 4px; padding: 3px 10px; }
+.cr-skill-lv { font-size: 8pt; color: #B0463A; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.creative { margin: 0; } }
+@media print { .resume.creative { margin: 0; } @page { size: A4; margin: 0; } }
 
 
 /* skill-no-wrap */
