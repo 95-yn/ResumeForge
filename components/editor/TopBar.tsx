@@ -169,7 +169,6 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
    section 容器本身允许自然跨页流动。 */
 h1, h2, h3, h4 { page-break-after: avoid; break-after: avoid-page; }
 li, tr { page-break-inside: avoid; break-inside: avoid-page; }
-.entry, [data-entry] { page-break-inside: avoid; break-inside: avoid-page; }
 
 /* Page margins live ONLY in @page — body must be 0 0 or padding stacks.
    8mm / 10mm 是现代简历常用紧凑边距（约 0.31" / 0.39"），比 Word narrow
