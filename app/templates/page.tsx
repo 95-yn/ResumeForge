@@ -85,6 +85,10 @@ const TEMPLATE_META: Record<string, TemplateMeta> = {
   'legal-lawyer':     { desc: '全黑白衬线字体，严肃正式，律师专属', profession: '法律合规' },
   'legal-compliance': { desc: '深蓝标题，合规专员专属', profession: '法律合规' },
   'legal-ip':         { desc: '深灰标题，知识产权专属', profession: '法律合规' },
+  'pm-metrics':       { desc: '海蓝细线分隔，暖墨单栏，数据指标清晰利落', profession: '产品运营' },
+  'pm-canvas':        { desc: '大量留白单栏左对齐，沉稳高级砖红点缀', profession: '产品运营' },
+  'campus-clean':     { desc: '清爽留白，墨青标题，教育项目优先', profession: '校招' },
+  'campus-spark':     { desc: '砖红点缀，项目技能优先的清爽校招版式', profession: '校招' },
 };
 
 /* ─── Template editorial quotes ───────────────────────────── */

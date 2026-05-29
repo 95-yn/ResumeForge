@@ -371,5 +371,25 @@ export const TEMPLATE_LIST: TemplateMeta[] = [
     "slug": "legal-ip",
     "name": "知识产权",
     "category": "profession"
+  },
+  {
+    "slug": "pm-metrics",
+    "name": "产品·数据指标",
+    "category": "profession"
+  },
+  {
+    "slug": "pm-canvas",
+    "name": "产品·现代留白",
+    "category": "profession"
+  },
+  {
+    "slug": "campus-clean",
+    "name": "校招·清爽",
+    "category": "campus"
+  },
+  {
+    "slug": "campus-spark",
+    "name": "校招·项目导向",
+    "category": "campus"
   }
 ];
