@@ -134,7 +134,8 @@ export function TopBar() {
     if (!templateHtml || !templateCss || !resume) return;
     const compiled = compileTemplate(templateHtml);
     const body = compiled(resume);
-    const bgColor = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor || '#ffffff';
+    // 用户没主动选背景色时，不覆盖，让模板自带背景生效；选了才强制覆盖。
+    const userBg = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor;
 
     // A4 with sensible default margins. Most templates control their own internal
     // padding, so we use minimal page margins and let the resume container breathe.
@@ -151,8 +152,8 @@ export function TopBar() {
 ${templateCss}
 
 /* Print-friendly overrides — applied on top of template's own CSS */
-html, body { margin: 0; padding: 0; background: ${bgColor} !important; }
-html, body, .resume { background: ${bgColor} !important; background-color: ${bgColor} !important; }
+html, body { margin: 0; padding: 0; }
+${userBg ? `html, body, .resume { background: ${userBg} !important; background-color: ${userBg} !important; }` : ''}
 body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
 * {
@@ -199,11 +200,10 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
 @media print {
   html, body {
     margin: 0 !important;
-    padding: 0 !important;
-    background: ${bgColor} !important;
+    padding: 0 !important;${userBg ? `\n    background: ${userBg} !important;` : ''}
   }
 }
-</style></head><body style="margin:0;background:${bgColor}">${body}</body></html>`;
+</style></head><body style="margin:0;${userBg ? `background:${userBg};` : ''}">${body}</body></html>`;
 
     // Render in a hidden iframe — no popup window. Print is invoked inside the iframe,
     // and the iframe is removed after the print dialog closes.

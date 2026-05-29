@@ -450,9 +450,31 @@ export function SectionList() {
       <div style={{ padding: '8px 12px', borderTop: '1px solid #F5F5F4' }}>
         <div style={{ fontSize: 10, color: '#A8A29E', marginBottom: 6, fontWeight: 500, letterSpacing: '0.06em', textTransform: 'uppercase', fontFamily: "'JetBrains Mono', 'SF Mono', monospace" }}>简历背景色</div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap' }}>
+          {/* 默认：清除覆盖，使用模板自带背景色 */}
+          {(() => {
+            const current = resume?.settings?.backgroundColor as string | undefined;
+            const isDefault = !current;
+            return (
+              <button
+                title="使用模板自带背景"
+                aria-label="背景色: 模板默认"
+                onClick={() => updateSettings('backgroundColor', '')}
+                style={{
+                  height: 20, padding: '0 8px', borderRadius: 10,
+                  border: isDefault ? '1.5px solid #1C1917' : '1.5px solid #E7E5E4',
+                  background: 'transparent', color: isDefault ? '#1C1917' : '#A8A29E',
+                  cursor: 'pointer', flexShrink: 0, fontSize: 10, fontWeight: 500,
+                  fontFamily: "'Plus Jakarta Sans', -apple-system, sans-serif",
+                  transition: 'border-color 0.1s, color 0.1s', outline: 'none',
+                }}
+                onMouseEnter={e => { if (!isDefault) { (e.currentTarget as HTMLElement).style.borderColor = '#1C1917'; (e.currentTarget as HTMLElement).style.color = '#1C1917'; } }}
+                onMouseLeave={e => { if (!isDefault) { (e.currentTarget as HTMLElement).style.borderColor = '#E7E5E4'; (e.currentTarget as HTMLElement).style.color = '#A8A29E'; } }}
+              >默认</button>
+            );
+          })()}
           {RESUME_BG_COLORS.map(({ color, label }) => {
             const current = resume?.settings?.backgroundColor as string | undefined;
-            const isActive = (current || '#FFFFFF') === color;
+            const isActive = current === color;
             return (
               <button
                 key={color}

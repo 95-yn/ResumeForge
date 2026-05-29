@@ -304,11 +304,13 @@ export function ResumePreview() {
     try {
       const template = compileTemplate(templateHtml);
       let body = template(resume);
-      const bgColor = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor || '#ffffff';
+      // 用户没主动选背景色时，不注入任何背景覆盖，让模板 CSS 自带的背景生效
+      // （深色侧栏、奶白底等都保留）；只有显式选色才用 !important 覆盖全局。
+      const userBg = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor;
       const bgOverride = `<style>
-        html, body, .resume { background: ${bgColor} !important; background-color: ${bgColor} !important; }
         html, body { overflow: hidden !important; scrollbar-width: none; }
         html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; height: 0; }
+        ${userBg ? `html, body, .resume { background: ${userBg} !important; background-color: ${userBg} !important; }` : ''}
       </style>`;
 
       // 模板若没渲染 website/linkedin/github/wechat，则补进联系区。
@@ -366,7 +368,7 @@ export function ResumePreview() {
         }
       }
 
-      return { html: `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>${templateCss}</style>${bgOverride}</head><body style="margin:0;background:${bgColor}">${body}</body></html>`, error: false };
+      return { html: `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>${templateCss}</style>${bgOverride}</head><body style="margin:0;${userBg ? `background:${userBg};` : ''}">${body}</body></html>`, error: false };
     } catch {
       return { html: '', error: true };
     }
