@@ -266,7 +266,6 @@ export function ResumePreview() {
   const { resume, templateHtml, templateCss, updateByPath, zoom, setZoom, sectionOrder, addArrayItem, removeArrayItem } = useEditorStore();
   const [editingField, setEditingField] = useState<EditingField | null>(null);
   const [iframeRect, setIframeRect] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
-  const [renderError, setRenderError] = useState(false);
   const [iframeReady, setIframeReady] = useState(false);
   const [iframeLoading, setIframeLoading] = useState(true); // true until first load
   const [showCoachmark, setShowCoachmark] = useState(false);
@@ -291,15 +290,16 @@ export function ResumePreview() {
     if (editingField) setShowCoachmark(false);
   }, [editingField]);
 
-  const renderedHtml = useMemo(() => {
-    if (!templateHtml || !templateCss || !resume) return '';
+  // 渲染结果与错误标记一并由 memo 返回，避免在 render 期间调用 setState（React 反模式）。
+  const { html: renderedHtml, error: renderError } = useMemo<{ html: string; error: boolean }>(() => {
+    if (!templateHtml || !templateCss || !resume) return { html: '', error: false };
     if (isEmpty) {
-      return `<!DOCTYPE html><html><head><style>
+      return { html: `<!DOCTYPE html><html><head><style>
         body { margin: 0; display: flex; align-items: center; justify-content: center; min-height: 297mm; font-family: -apple-system, sans-serif; background: #fff; }
         .placeholder { text-align: center; color: #bbb; }
         .placeholder h2 { font-size: 20px; font-weight: 400; margin-bottom: 8px; }
         .placeholder p { font-size: 14px; }
-      </style></head><body><div class="placeholder"><h2>点击左侧模块开始编辑</h2><p>填写信息后这里会实时预览简历效果</p></div></body></html>`;
+      </style></head><body><div class="placeholder"><h2>点击左侧模块开始编辑</h2><p>填写信息后这里会实时预览简历效果</p></div></body></html>`, error: false };
     }
     try {
       const template = compileTemplate(templateHtml);
@@ -362,11 +362,9 @@ export function ResumePreview() {
         }
       }
 
-      setRenderError(false);
-      return `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>${templateCss}</style>${bgOverride}</head><body style="margin:0;background:${bgColor}">${body}</body></html>`;
+      return { html: `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>${templateCss}</style>${bgOverride}</head><body style="margin:0;background:${bgColor}">${body}</body></html>`, error: false };
     } catch {
-      setRenderError(true);
-      return '';
+      return { html: '', error: true };
     }
   }, [resume, templateHtml, templateCss, isEmpty]);
 
