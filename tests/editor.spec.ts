@@ -806,3 +806,24 @@ test('Bug 11: font-size menu opens and keeps the editor open', async ({ page }) 
   await expect(menu).toBeHidden({ timeout: 2000 });
   await expect(floatingEditor.first()).toBeVisible();
 });
+
+// ─── Bug 12: custom Tooltip appears and stays within the viewport ────────────
+// The far-right print button has a long tooltip; edge-collision clamping must
+// keep it inside the viewport (no right-edge clipping).
+
+test('Bug 12: top-bar tooltip shows and is clamped within the viewport', async ({ page }) => {
+  await page.goto(EDITOR_URL);
+  await waitForIframe(page);
+
+  // Hover the rightmost (print) button — its tooltip is long and near the right edge
+  await page.locator('button[aria-label="打印或另存为 PDF"]').hover();
+  const tip = page.locator('[role="tooltip"]');
+  await expect(tip).toBeVisible({ timeout: 2000 });
+
+  const box = await tip.boundingBox();
+  const vw = page.viewportSize()!.width;
+  expect(box).not.toBeNull();
+  // Right edge within viewport (allow 1px rounding), left edge ≥ 0
+  expect(box!.x + box!.width).toBeLessThanOrEqual(vw + 1);
+  expect(box!.x).toBeGreaterThanOrEqual(-1);
+});
