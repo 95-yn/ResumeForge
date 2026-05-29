@@ -311,26 +311,30 @@ export function ResumePreview() {
         html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; height: 0; }
       </style>`;
 
-      // Bug 2: inject website/linkedin/github into contact area if template doesn't render them
+      // 模板若没渲染 website/linkedin/github/wechat，则补进联系区。
+      // 不再用 🌐/in/GH 等图标/缩写前缀（读着像 slop）；链接只显示值本身，
+      // 微信不是链接、按文本注入（此前完全没注入，导致右侧不显示微信）。
       const basics = resume.basics as Record<string, string> | undefined;
-      const linksToInject: { label: string; value: string; href: string }[] = [];
+      const bitStyle = 'color:inherit;text-decoration:none;margin-left:8px;font-size:0.9em;white-space:nowrap;';
+      const contactBits: string[] = [];
       if (basics?.website && !body.includes(basics.website)) {
         const href = basics.website.startsWith('http') ? basics.website : 'https://' + basics.website;
-        linksToInject.push({ label: '🌐', value: basics.website, href });
+        contactBits.push(`<a href="${href}" style="${bitStyle}" target="_blank" rel="noopener">${basics.website}</a>`);
       }
       if (basics?.linkedin && !body.includes(basics.linkedin)) {
         const href = basics.linkedin.startsWith('http') ? basics.linkedin : 'https://linkedin.com/in/' + basics.linkedin;
-        linksToInject.push({ label: 'in', value: basics.linkedin, href });
+        contactBits.push(`<a href="${href}" style="${bitStyle}" target="_blank" rel="noopener">${basics.linkedin}</a>`);
       }
       if (basics?.github && !body.includes(basics.github)) {
         const href = basics.github.startsWith('http') ? basics.github : 'https://github.com/' + basics.github;
-        linksToInject.push({ label: 'GH', value: basics.github, href });
+        contactBits.push(`<a href="${href}" style="${bitStyle}" target="_blank" rel="noopener">${basics.github}</a>`);
+      }
+      if (basics?.wechat && !body.includes(basics.wechat)) {
+        contactBits.push(`<span style="margin-left:8px;font-size:0.9em;white-space:nowrap;">微信：${basics.wechat}</span>`);
       }
 
-      if (linksToInject.length > 0) {
-        const linksHtml = linksToInject.map(({ label, value, href }) =>
-          `<a href="${href}" style="color:inherit;text-decoration:none;margin-left:8px;font-size:0.9em;white-space:nowrap;" target="_blank" rel="noopener">${label} ${value}</a>`
-        ).join('');
+      if (contactBits.length > 0) {
+        const linksHtml = contactBits.join('');
 
         // Try to find email element and inject after it; fall back to after phone, or into basics container
         const emailVal = basics?.email || '';

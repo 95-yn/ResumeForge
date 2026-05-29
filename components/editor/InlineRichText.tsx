@@ -316,13 +316,21 @@ export function InlineRichText({ value, onChange, placeholder = '点击此处开
         .tiptap-inline li { margin: 0; }
         .tiptap-inline li p { margin: 0; }
         .tiptap-inline mark { padding: 0 2px; border-radius: 2px; }
-        /* Placeholder via @tiptap/extension-placeholder */
+        /* Placeholder via @tiptap/extension-placeholder。
+           不用 TipTap 默认的 float:left;height:0（会让行高塌成 0，长占位文案溢出到下方）。
+           改为绝对定位、限定宽度换行、最多 2 行截断，光标仍停在真正起点。 */
+        .tiptap-inline { position: relative; }
         .tiptap-inline p.is-editor-empty:first-child::before {
           content: attr(data-placeholder);
-          float: left;
+          position: absolute;
+          left: 0; right: 0; top: 0;
           color: #A8A29E;
           pointer-events: none;
-          height: 0;
+          white-space: normal;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
         }
       `}</style>
     </div>

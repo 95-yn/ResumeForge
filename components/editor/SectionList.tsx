@@ -848,7 +848,7 @@ function ArrayPanel({ sectionKey, items, addLabel, addArrayItem, removeArrayItem
                               <InlineRichText
                                 value={h}
                                 onChange={html => { const a = [...arr]; a[hi] = html; updateArrayItem(sectionKey, idx, f.key, a); }}
-                                placeholder="用数据量化成就，如：营收增长 30%，团队规模 10 人"
+                                placeholder="一条可量化的成果"
                                 minHeight={32}
                               />
                             </div>
@@ -879,7 +879,7 @@ function ArrayPanel({ sectionKey, items, addLabel, addArrayItem, removeArrayItem
                         <InlineRichText
                           value={(item[f.key] as string) || ''}
                           onChange={html => updateArrayItem(sectionKey, idx, f.key, html)}
-                          placeholder="项目背景 + 你的角色 + 用到的技术或方法"
+                          placeholder="一句话说明职责与成果"
                           minHeight={48}
                         />
                       ) : (
