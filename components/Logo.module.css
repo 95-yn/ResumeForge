@@ -1,0 +1,112 @@
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+}
+
+.brand:focus-visible {
+  outline: 1px solid var(--logo-focus, #1E5A6B);
+  outline-offset: 3px;
+}
+
+.mark {
+  flex-shrink: 0;
+  display: block;
+}
+
+.wordmark {
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Landing — Type Specimen room */
+.landing {
+  --logo-ink: #3D2A1A;
+  --logo-accent: #1E5A6B;
+  --logo-focus: #1E5A6B;
+}
+
+.landing .wordmark {
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+}
+
+.landing .wordmark strong {
+  font-weight: 500;
+  color: var(--logo-ink);
+}
+
+.landing .wordmark span {
+  color: #78716C;
+  font-weight: 400;
+}
+
+.landing:hover .wordmark strong {
+  color: var(--logo-accent);
+}
+
+/* Archive — Editorial room */
+.archive {
+  --logo-ink: #2D1810;
+  --logo-accent: #B0463A;
+  --logo-focus: #B0463A;
+}
+
+.archive .wordmark {
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 22px;
+  letter-spacing: -0.015em;
+  color: var(--logo-ink);
+  transition: color 0.2s ease-out;
+}
+
+.archive:hover .wordmark {
+  color: var(--logo-accent);
+}
+
+/* Editor — Quiet Workshop */
+.editor {
+  --logo-ink: #44403C;
+  --logo-accent: #292524;
+  --logo-focus: #1C1917;
+}
+
+.editor .wordmark {
+  font-family: 'Fraunces', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: -0.3px;
+  color: var(--logo-ink);
+  transition: color 0.12s ease;
+}
+
+.editor:hover .wordmark {
+  color: var(--logo-accent);
+}
+
+.editor .mark {
+  width: 22px;
+  height: 22px;
+}
+
+.landing .mark {
+  width: 26px;
+  height: 26px;
+}
+
+.archive .mark {
+  width: 28px;
+  height: 28px;
+}

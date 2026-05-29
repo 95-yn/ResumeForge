@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo, useDeferredValue } from 'react';
 import { useRouter } from 'next/navigation';
+import { Logo } from '@/components/Logo';
 import { TEMPLATE_LIST as TEMPLATES } from '@/data/template-list';
 import styles from './templates.module.css';
 
@@ -345,7 +346,11 @@ export default function TemplatesPage() {
 
       {/* ── 1. Top nav ── */}
       <header className={styles.header}>
-        <span className={styles.logo} onClick={() => router.push('/')} role="button" tabIndex={0} onKeyDown={e => e.key === 'Enter' && router.push('/')}>ResumeForge</span>
+        <Logo
+          variant="archive"
+          onClick={() => router.push('/landing')}
+          aria-label="返回 ResumeForge 首页"
+        />
         <span className={styles.meta}>
           {total} Templates · 11 Professions · Updated 2026.05
         </span>

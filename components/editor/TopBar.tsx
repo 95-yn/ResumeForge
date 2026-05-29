@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ArrowLeftOutlined, PrinterOutlined, UndoOutlined, RedoOutlined, RollbackOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
+import { Logo } from '@/components/Logo';
 import { compileTemplate } from '@/lib/mini-template';
 import { useEditorStore } from '@/lib/editor-store';
 import { confirmDialog } from './ConfirmDialog';
@@ -68,10 +69,11 @@ function StatusDot({ status }: { status: 'saved' | 'saving' | 'unsaved' | 'error
     }
   }, [status]);
 
+  // 对齐 DESIGN.md 功能色 token：safe-green / alert-amber / brick-red（取代 Tailwind 默认色）
   const color =
-    status === 'saved'   ? '#22C55E' :
-    status === 'saving'  ? '#F59E0B' :
-    status === 'error'   ? '#DC2626' :
+    status === 'saved'   ? '#16A34A' :
+    status === 'saving'  ? '#D97706' :
+    status === 'error'   ? '#B0463A' :
     '#A8A29E';
 
   return (
@@ -93,7 +95,7 @@ function StatusDot({ status }: { status: 'saved' | 'saving' | 'unsaved' | 'error
         width: 6, height: 6, borderRadius: '50%',
         background: color,
         transition: 'background 300ms cubic-bezier(0.16, 1, 0.3, 1)',
-        boxShadow: status === 'saved' ? '0 0 0 2px rgba(34,197,94,0.15)' : 'none',
+        boxShadow: status === 'saved' ? '0 0 0 2px rgba(22,163,74,0.15)' : 'none',
         position: 'relative',
       }} />
     </div>
@@ -284,22 +286,11 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
           <ArrowLeftOutlined />
         </button>
 
-        {/* Logo — Fraunces italic 14px, clickable */}
-        <span
+        <Logo
+          variant="editor"
           onClick={() => router.push('/templates')}
-          style={{
-            fontSize: 14,
-            fontWeight: 400,
-            fontStyle: 'italic',
-            color: '#44403C',
-            letterSpacing: '-0.3px',
-            fontFamily: "'Fraunces', Georgia, serif",
-            cursor: 'pointer',
-            userSelect: 'none',
-          }}
-        >
-          ResumeForge
-        </span>
+          aria-label="返回模板市场"
+        />
 
         <div style={{ width: 1, height: 16, background: '#E7E5E4' }} />
 

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
+import { Logo } from '@/components/Logo';
 import styles from './landing.module.css';
 
 const SPECIMENS = [
@@ -107,7 +108,7 @@ export default function LandingPage() {
 
       {/* NAV */}
       <nav className={styles.nav}>
-        <Link href="/landing" className={styles.navLogo}>RF · ResumeForge</Link>
+        <Logo variant="landing" href="/landing" aria-label="ResumeForge 品牌页" />
         <Link href="/" className={styles.navCta}>开始创建 →</Link>
       </nav>
 
