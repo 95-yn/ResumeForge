@@ -123,7 +123,7 @@ const template: TemplateData = {
 .cr-highlights li { font-size: 9.5pt; color: #374151; margin-bottom: 2px; }
 .cr-skills-grid { display: flex; flex-direction: column; gap: 8px; }
 .cr-skill-row { display: flex; align-items: center; gap: 10px; }
-.cr-skill-name { width: 80px; font-size: 9.5pt; font-weight: 600; color: #374151; flex-shrink: 0; }
+.cr-skill-name { width: 160px; font-size: 9.5pt; font-weight: 600; color: #374151; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cr-skill-bar { flex: 1; height: 6px; background: #E5E7EB; border-radius: 3px; overflow: hidden; }
 .cr-skill-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #7C3AED, #4F46E5); }
 .cr-level-精通 .cr-skill-fill, .cr-skill-fill.cr-level-精通 { width: 95%; }
