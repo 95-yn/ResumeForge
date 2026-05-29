@@ -364,7 +364,15 @@ export function ResumePreview() {
       parentMap.forEach((sectionsMap, container) => {
         draggableOrder.forEach(key => {
           const el = sectionsMap.get(key);
-          if (el) container.appendChild(el);
+          if (!el) return;
+          // 有些模板（如 manifesto）把区块标题 <h2 class="section-title"> 放在
+          // [data-section] 元素的「前一个兄弟」，而不是包在里面。只移动 data-section
+          // 会把标题留在原地、内容堆到末尾。所以若紧邻前一个兄弟是标题，则一并移动。
+          const prev = el.previousElementSibling;
+          if (prev && (/^H[1-6]$/.test(prev.tagName) || (typeof prev.className === 'string' && /title/i.test(prev.className)))) {
+            container.appendChild(prev);
+          }
+          container.appendChild(el);
         });
       });
 
