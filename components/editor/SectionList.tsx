@@ -95,6 +95,19 @@ const EXTRA_FIELDS = [
   { key: 'wechat',   label: '微信' },
 ];
 
+/** 专业招聘语境占位文案 */
+const BASICS_PLACEHOLDERS: Record<string, string> = {
+  name:     '你的真实姓名',
+  title:    '目标职位，如：前端工程师 / 产品经理',
+  email:    '常用邮箱，招聘方将通过此联系你',
+  phone:    '11 位手机号',
+  location: '求职城市，如：北京 / 上海',
+  website:  'https://yoursite.com',
+  linkedin: 'linkedin.com/in/yourname',
+  github:   'github.com/yourname',
+  wechat:   '微信号（选填）',
+};
+
 const CUSTOM_MODULES = [
   { key: 'awards',         label: '荣誉奖项', iconName: 'awards' },
   { key: 'certifications', label: '证书资质', iconName: 'certifications' },
@@ -656,7 +669,7 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
             <input
               value={val}
               onChange={e => updateField('basics', fKey, e.target.value)}
-              placeholder={`输入${def.label}`}
+              placeholder={BASICS_PLACEHOLDERS[fKey] ?? `填写${def.label}`}
               style={inputCss}
               onFocus={e => { e.currentTarget.style.borderColor = '#1C1917'; e.currentTarget.style.background = '#FFF'; }}
               onBlur={e => { e.currentTarget.style.borderColor = '#E7E5E4'; e.currentTarget.style.background = '#FAFAF9'; }}
@@ -685,7 +698,7 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
         <InlineRichText
           value={(basics.summary as string) || ''}
           onChange={html => updateField('basics', 'summary', html)}
-          placeholder="输入个人简介..."
+          placeholder="一句话说清你是谁、有什么核心价值，建议 30 字内"
           minHeight={64}
         />
       </div>
@@ -830,7 +843,7 @@ function ArrayPanel({ sectionKey, items, addLabel, addArrayItem, removeArrayItem
                               <InlineRichText
                                 value={h}
                                 onChange={html => { const a = [...arr]; a[hi] = html; updateArrayItem(sectionKey, idx, f.key, a); }}
-                                placeholder="输入亮点..."
+                                placeholder="用数据量化成就，如：营收增长 30%，团队规模 10 人"
                                 minHeight={32}
                               />
                             </div>
@@ -861,7 +874,7 @@ function ArrayPanel({ sectionKey, items, addLabel, addArrayItem, removeArrayItem
                         <InlineRichText
                           value={(item[f.key] as string) || ''}
                           onChange={html => updateArrayItem(sectionKey, idx, f.key, html)}
-                          placeholder="输入描述..."
+                          placeholder="项目背景 + 你的角色 + 用到的技术或方法"
                           minHeight={48}
                         />
                       ) : (

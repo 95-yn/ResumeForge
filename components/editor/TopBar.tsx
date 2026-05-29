@@ -169,7 +169,7 @@ export function TopBar() {
   const {
     save, saveStatus, saveErrorMessage, clearSaveError,
     undo, redo, historyIndex, history,
-    templateHtml, templateCss, resume, resetToDefault,
+    templateHtml, templateCss, resume, resetToDefault, pushToast,
   } = useEditorStore();
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -201,10 +201,14 @@ export function TopBar() {
 
     // A4 with sensible default margins. Most templates control their own internal
     // padding, so we use minimal page margins and let the resume container breathe.
-    // Browser uses <title> as default PDF filename. Compose 姓名 _ 职位 for professional output.
+    // Browser uses <title> as default PDF filename. Compose 姓名 · 职位 for professional output.
     const rawName = (resume.basics?.name as string | undefined)?.trim();
     const rawTitle = (resume.basics?.title as string | undefined)?.trim();
     const pdfTitle = [rawName, rawTitle].filter(Boolean).join(' · ') || '简历';
+
+    // Footer text: 姓名 · 职位 (same as title, CSS-escaped for content: "...")
+    const footerName = pdfTitle.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+
     const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>${pdfTitle}</title>
 <style>
 ${templateCss}
@@ -230,10 +234,29 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
 
 /* Page margins live ONLY in @page — body must be 0 0 or padding stacks.
    8mm / 10mm 是现代简历常用紧凑边距（约 0.31" / 0.39"），比 Word narrow
-   (0.5") 紧、比印刷 editorial (6mm) 松，平衡阅读舒适和单页容纳。 */
+   (0.5") 紧、比印刷 editorial (6mm) 松，平衡阅读舒适和单页容纳。
+   多页时底部加 14mm 留给页脚（9pt × 行高 + 间距）。 */
 @page {
   size: A4;
-  margin: 8mm 10mm;
+  margin: 8mm 10mm 14mm 10mm;
+  @bottom-center {
+    content: "${footerName}";
+    font-family: 'JetBrains Mono', 'SF Mono', 'Courier New', monospace;
+    font-size: 8pt;
+    color: #A8A29E;
+  }
+  @bottom-right {
+    content: "第 " counter(page) " 页 / 共 " counter(pages) " 页";
+    font-family: 'JetBrains Mono', 'SF Mono', 'Courier New', monospace;
+    font-size: 8pt;
+    color: #A8A29E;
+  }
+}
+/* 首页不显示页脚（单页简历不需要页码干扰视觉） */
+@page :first {
+  margin-bottom: 8mm;
+  @bottom-center { content: none; }
+  @bottom-right { content: none; }
 }
 @media print {
   html, body {
@@ -258,7 +281,7 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
     cd.close();
     // Some browsers fire load synchronously after document.close, others async.
     const doPrint = () => {
-      try { cw.focus(); cw.print(); } catch (err) { console.error('print failed:', err); }
+      try { cw.focus(); cw.print(); } catch (err) { console.error('print failed:', err); pushToast('打印失败，请重试或检查浏览器设置', 'error'); }
       // Cleanup after a short delay — print() is sync in Chrome but async in Safari.
       setTimeout(() => iframe.remove(), 1500);
     };
@@ -358,7 +381,7 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
       {/* Reset confirm modal */}
       {showResetConfirm && (
         <ResetConfirmModal
-          onOk={() => { setShowResetConfirm(false); try { resetToDefault(); } catch (err) { console.error('reset failed:', err); } }}
+          onOk={() => { setShowResetConfirm(false); try { resetToDefault(); pushToast('已还原为模板初始内容', 'success'); } catch (err) { console.error('reset failed:', err); pushToast('还原失败，请重试', 'error'); } }}
           onCancel={() => setShowResetConfirm(false)}
         />
       )}

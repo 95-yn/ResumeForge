@@ -47,7 +47,7 @@ interface InlineRichTextProps {
   minHeight?: number;
 }
 
-export function InlineRichText({ value, onChange, placeholder = '输入内容...', minHeight = 48 }: InlineRichTextProps) {
+export function InlineRichText({ value, onChange, placeholder = '点击此处开始编辑', minHeight = 48 }: InlineRichTextProps) {
   const [focused, setFocused] = useState(false);
   const [openPicker, setOpenPicker] = useState<null | 'color' | 'bg'>(null);
   const pickerRef = useRef<HTMLDivElement>(null);

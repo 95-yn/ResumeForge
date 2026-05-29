@@ -4,6 +4,7 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { TopBar } from './TopBar';
 import { SectionList } from './SectionList';
 import { ResumePreview } from './ResumePreview';
+import { ToastContainer } from './ToastContainer';
 import { useAutoSave } from '@/lib/use-autosave';
 import { useEditorStore } from '@/lib/editor-store';
 
@@ -93,6 +94,13 @@ export function EditorLayout() {
         if (printBtn) printBtn.click();
         return;
       }
+      if (e.key === 'k') {
+        // Cmd+K: trigger link popup inside FloatingEditor (if one is open)
+        // We dispatch a custom event; FloatingEditor listens and calls handleLink()
+        e.preventDefault();
+        document.dispatchEvent(new CustomEvent('editor:trigger-link'));
+        return;
+      }
     };
 
     window.addEventListener('keydown', handleKey);
@@ -157,6 +165,7 @@ export function EditorLayout() {
       </div>
 
       <SaveToast visible={showSaveToast} />
+      <ToastContainer />
     </div>
   );
 }

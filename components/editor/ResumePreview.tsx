@@ -72,6 +72,22 @@ const EDIT_SCRIPT = `
       if (e.key === 'Tab') {
         e.preventDefault();
         var nextIdx = e.shiftKey ? idx - 1 : idx + 1;
+        // Wrap around
+        if (nextIdx < 0) nextIdx = allFields.length - 1;
+        if (nextIdx >= allFields.length) nextIdx = 0;
+        // Activate focus ring on next field
+        if (activeEl) {
+          activeEl.style.background = '';
+          activeEl.style.boxShadow = '';
+        }
+        var nextEl = allFields[nextIdx];
+        if (nextEl) {
+          activeEl = nextEl;
+          nextEl.style.background = 'rgba(176,70,58,0.08)';
+          nextEl.style.boxShadow = 'inset 0 0 0 1.5px rgba(176,70,58,0.35)';
+          // 滚动到视野中央
+          nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         parent.postMessage({ type: 'field-keydown', key: 'Tab', idx: nextIdx, total: allFields.length }, '*');
       }
     });

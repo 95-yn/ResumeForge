@@ -18,6 +18,12 @@ const PROFESSION_SLUG_MAP: Record<string, string> = {
   '校招': 'campus',
 };
 
+export interface Toast {
+  id: string;
+  message: string;
+  type: 'info' | 'error' | 'success';
+}
+
 interface EditorStore {
   resume: ResumeData | null;
   templateId: string | null;
@@ -33,6 +39,7 @@ interface EditorStore {
   history: ResumeData[];
   historyIndex: number;
   zoom: number;
+  toasts: Toast[];
 
   loadTemplate: (templateSlug: string, profession?: string) => Promise<void>;
   updateField: (sectionKey: string, fieldKey: string, value: unknown) => void;
@@ -51,6 +58,8 @@ interface EditorStore {
   redo: () => void;
   save: () => void;
   clearSaveError: () => void;
+  pushToast: (message: string, type?: 'info' | 'error' | 'success') => void;
+  dismissToast: (id: string) => void;
 }
 
 const GUEST_KEY_PREFIX = 'resumeforge_guest_';
@@ -90,7 +99,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   currentProfession: null,
   sectionOrder: [], activeSection: null, isDirty: false, saveStatus: 'saved',
   saveErrorMessage: null,
-  history: [], historyIndex: -1, zoom: 1,
+  history: [], historyIndex: -1, zoom: 1, toasts: [],
 
   loadTemplate: async (templateSlug, profession) => {
     // Race-condition guard: tag this load attempt, abort if a newer one starts
@@ -293,4 +302,15 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
   },
 
   clearSaveError: () => set({ saveStatus: 'unsaved', saveErrorMessage: null }),
+
+  pushToast: (message, type = 'info') => {
+    const id = `toast_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    set(s => ({ toasts: [...s.toasts, { id, message, type }] }));
+    // Auto-dismiss after 4s
+    setTimeout(() => {
+      set(s => ({ toasts: s.toasts.filter(t => t.id !== id) }));
+    }, 4000);
+  },
+
+  dismissToast: (id) => set(s => ({ toasts: s.toasts.filter(t => t.id !== id) })),
 }));

@@ -157,7 +157,7 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
   const editor = useEditor({
     extensions: [
       StarterKit.configure({ heading: false }),
-      Placeholder.configure({ placeholder: '输入内容...' }),
+      Placeholder.configure({ placeholder: '点击此处开始编辑内容' }),
       // Bug 3 fix: TextStyle must be registered; Color/FontSize explicitly bound
       TextStyle,
       FontSize,
@@ -251,6 +251,14 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
     editor.chain().focus().unsetLink().run();
     setLinkPopupOpen(false);
   }, [editor]);
+
+  // Cmd+K from EditorLayout global shortcut → trigger link popup (only for longField editors with link button)
+  useEffect(() => {
+    if (!longField) return;
+    const handler = () => { handleLink(); };
+    document.addEventListener('editor:trigger-link', handler as EventListener);
+    return () => document.removeEventListener('editor:trigger-link', handler as EventListener);
+  }, [longField, handleLink]);
 
   const t = iframeRect?.top ?? 0;
   const l = iframeRect?.left ?? 0;
