@@ -314,25 +314,28 @@ export function ResumePreview() {
       </style>`;
 
       // 模板若没渲染 website/linkedin/github/wechat，则补进联系区。
-      // 不再用 🌐/in/GH 等图标/缩写前缀（读着像 slop）；链接只显示值本身，
-      // 微信不是链接、按文本注入（此前完全没注入，导致右侧不显示微信）。
+      // 统一处理，避免与模板原生联系项（邮箱/电话，多数无 label）不一致：
+      //  - 一律不加 label（去掉之前微信的「微信：」前缀），只显示值；
+      //  - color:inherit !important 强制继承周围联系区颜色（盖过模板 a{} 的链接色，
+      //    修正注入项颜色不对的问题）。
       const basics = resume.basics as Record<string, string> | undefined;
-      const bitStyle = 'color:inherit;text-decoration:none;margin-left:8px;font-size:0.9em;white-space:nowrap;';
+      const linkStyle = 'color:inherit!important;text-decoration:none;margin-left:8px;font-size:0.9em;white-space:nowrap;';
+      const textStyle = 'color:inherit;margin-left:8px;font-size:0.9em;white-space:nowrap;';
       const contactBits: string[] = [];
       if (basics?.website && !body.includes(basics.website)) {
         const href = basics.website.startsWith('http') ? basics.website : 'https://' + basics.website;
-        contactBits.push(`<a href="${href}" style="${bitStyle}" target="_blank" rel="noopener">${basics.website}</a>`);
+        contactBits.push(`<a href="${href}" style="${linkStyle}" target="_blank" rel="noopener">${basics.website}</a>`);
       }
       if (basics?.linkedin && !body.includes(basics.linkedin)) {
         const href = basics.linkedin.startsWith('http') ? basics.linkedin : 'https://linkedin.com/in/' + basics.linkedin;
-        contactBits.push(`<a href="${href}" style="${bitStyle}" target="_blank" rel="noopener">${basics.linkedin}</a>`);
+        contactBits.push(`<a href="${href}" style="${linkStyle}" target="_blank" rel="noopener">${basics.linkedin}</a>`);
       }
       if (basics?.github && !body.includes(basics.github)) {
         const href = basics.github.startsWith('http') ? basics.github : 'https://github.com/' + basics.github;
-        contactBits.push(`<a href="${href}" style="${bitStyle}" target="_blank" rel="noopener">${basics.github}</a>`);
+        contactBits.push(`<a href="${href}" style="${linkStyle}" target="_blank" rel="noopener">${basics.github}</a>`);
       }
       if (basics?.wechat && !body.includes(basics.wechat)) {
-        contactBits.push(`<span style="margin-left:8px;font-size:0.9em;white-space:nowrap;">微信：${basics.wechat}</span>`);
+        contactBits.push(`<span style="${textStyle}">${basics.wechat}</span>`);
       }
 
       if (contactBits.length > 0) {
