@@ -105,6 +105,21 @@ function pushHistory(state: EditorStore, newData: ResumeData, newOrder?: string[
   };
 }
 
+// 按模板 HTML 里 data-section 的出现顺序推导初始模块顺序，使每套模板按自带顺序打开
+// （如校招模板教育/项目优先）。basics 永远在最前；模板未显式出现的用默认顺序补齐。
+function sectionOrderFromTemplate(html: string | null | undefined): string[] {
+  const order: string[] = ['basics'];
+  if (html) {
+    const re = /data-section="([^"]+)"/g;
+    let m: RegExpExecArray | null;
+    while ((m = re.exec(html)) !== null) {
+      if (!order.includes(m[1])) order.push(m[1]);
+    }
+  }
+  for (const k of DEFAULT_SECTION_ORDER) if (!order.includes(k)) order.push(k);
+  return order;
+}
+
 // Race-condition guard: incremented on every loadTemplate call
 let loadCounter = 0;
 
@@ -153,7 +168,8 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 
     if (loadCounter !== loadId) return; // superseded
 
-    const sectionOrder: string[] = local ? local.sectionOrder : DEFAULT_SECTION_ORDER;
+    // 无本地存档时，按模板自带的模块顺序打开（而非一刀切的 DEFAULT 顺序）
+    const sectionOrder: string[] = local ? local.sectionOrder : sectionOrderFromTemplate(tpl.html);
 
     set({
       resume: resumeData, templateId: templateSlug,
@@ -248,7 +264,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     // Restore the *initial* template state — same data the user saw on first load.
     // Uses currentProfession to fetch the right profession-default; falls back to
     // DEFAULT_RESUME_DATA (通用) if no profession or import fails.
-    const { currentProfession, templateId } = get();
+    const { currentProfession, templateId, templateHtml } = get();
     let resumeData: ResumeData;
     if (currentProfession && PROFESSION_SLUG_MAP[currentProfession]) {
       try {
@@ -264,10 +280,12 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     if (templateId) {
       try { localStorage.removeItem(GUEST_KEY_PREFIX + templateId); } catch { /* ignore */ }
     }
+    // 还原也回到模板自带的模块顺序（与 loadTemplate 一致）
+    const resetOrder = sectionOrderFromTemplate(templateHtml);
     set({
       resume: resumeData,
-      sectionOrder: [...DEFAULT_SECTION_ORDER],
-      history: [{ data: structuredClone(resumeData), order: [...DEFAULT_SECTION_ORDER] }],
+      sectionOrder: resetOrder,
+      history: [{ data: structuredClone(resumeData), order: [...resetOrder] }],
       historyIndex: 0,
       isDirty: false,
       saveStatus: 'saved',
