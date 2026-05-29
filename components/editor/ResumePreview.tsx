@@ -303,7 +303,7 @@ export function ResumePreview() {
     }
     try {
       const template = compileTemplate(templateHtml);
-      let body = template(resume);
+      const body = template(resume);
       // 用户没主动选背景色时，不注入任何背景覆盖，让模板 CSS 自带的背景生效
       // （深色侧栏、奶白底等都保留）；只有显式选色才用 !important 覆盖全局。
       const userBg = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor;
@@ -312,65 +312,8 @@ export function ResumePreview() {
         html::-webkit-scrollbar, body::-webkit-scrollbar { display: none; width: 0; height: 0; }
         ${userBg ? `html, body, .resume { background: ${userBg} !important; background-color: ${userBg} !important; }` : ''}
       </style>`;
-
-      // 模板若没渲染 website/linkedin/github/wechat，则补进联系区。
-      // 统一处理，避免与模板原生联系项（邮箱/电话，多数无 label）不一致：
-      //  - 一律不加 label（去掉之前微信的「微信：」前缀），只显示值；
-      //  - color:inherit !important 强制继承周围联系区颜色（盖过模板 a{} 的链接色，
-      //    修正注入项颜色不对的问题）。
-      const basics = resume.basics as Record<string, string> | undefined;
-      const linkStyle = 'color:inherit!important;text-decoration:none;margin-left:8px;font-size:0.9em;white-space:nowrap;';
-      const textStyle = 'color:inherit;margin-left:8px;font-size:0.9em;white-space:nowrap;';
-      const contactBits: string[] = [];
-      if (basics?.website && !body.includes(basics.website)) {
-        const href = basics.website.startsWith('http') ? basics.website : 'https://' + basics.website;
-        contactBits.push(`<a href="${href}" style="${linkStyle}" target="_blank" rel="noopener">${basics.website}</a>`);
-      }
-      if (basics?.linkedin && !body.includes(basics.linkedin)) {
-        const href = basics.linkedin.startsWith('http') ? basics.linkedin : 'https://linkedin.com/in/' + basics.linkedin;
-        contactBits.push(`<a href="${href}" style="${linkStyle}" target="_blank" rel="noopener">${basics.linkedin}</a>`);
-      }
-      if (basics?.github && !body.includes(basics.github)) {
-        const href = basics.github.startsWith('http') ? basics.github : 'https://github.com/' + basics.github;
-        contactBits.push(`<a href="${href}" style="${linkStyle}" target="_blank" rel="noopener">${basics.github}</a>`);
-      }
-      if (basics?.wechat && !body.includes(basics.wechat)) {
-        contactBits.push(`<span style="${textStyle}">${basics.wechat}</span>`);
-      }
-
-      if (contactBits.length > 0) {
-        const linksHtml = contactBits.join('');
-
-        // Try to find email element and inject after it; fall back to after phone, or into basics container
-        const emailVal = basics?.email || '';
-        const phoneVal = basics?.phone || '';
-        const emailEscaped = emailVal.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const phoneEscaped = phoneVal.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-
-        let injected = false;
-        if (emailVal) {
-          // Inject after the closing tag of the element containing the email
-          body = body.replace(
-            new RegExp(`(${emailEscaped})(</[a-zA-Z]+>)`),
-            (_, m1, m2) => { injected = true; return m1 + m2 + linksHtml; }
-          );
-        }
-        if (!injected && phoneVal) {
-          body = body.replace(
-            new RegExp(`(${phoneEscaped})(</[a-zA-Z]+>)`),
-            (_, m1, m2) => { injected = true; return m1 + m2 + linksHtml; }
-          );
-        }
-        if (!injected) {
-          // Last resort: append before </header> or first </section>
-          if (body.includes('</header>')) {
-            body = body.replace('</header>', linksHtml + '</header>');
-          } else if (body.includes('data-section="basics"')) {
-            body = body.replace(/(<[^>]+data-section="basics"[^>]*>)([\s\S]*?)<\//, (m) => m.replace(/(<\/[a-zA-Z]+>\s*)$/, linksHtml + '$1'));
-          }
-        }
-      }
-
+      // 联系方式额外字段（website/linkedin/github/wechat）的注入移到 reorderedHtml 的
+      // DOM 阶段处理：克隆原生联系项元素 → 对齐+同色，并带 data-field → 可点击编辑。
       return { html: `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><style>${templateCss}</style>${bgOverride}</head><body style="margin:0;${userBg ? `background:${userBg};` : ''}">${body}</body></html>`, error: false };
     } catch {
       return { html: '', error: true };
@@ -382,8 +325,32 @@ export function ResumePreview() {
     try {
       const parser = new DOMParser();
       const doc = parser.parseFromString(renderedHtml, 'text/html');
+
+      // —— 注入缺失的联系方式字段 ——
+      // 克隆模板原生的联系项元素（邮箱/电话/城市），继承其 class → 自动对齐 + 同色 +
+      // 同样的分隔符；并写上 data-field → EDIT_SCRIPT 会把它变成可点击编辑的字段。
+      const b = resume?.basics as Record<string, string> | undefined;
+      if (b) {
+        const ref = doc.querySelector('[data-field="basics.email"]')
+          || doc.querySelector('[data-field="basics.phone"]')
+          || doc.querySelector('[data-field="basics.location"]');
+        if (ref && ref.parentElement) {
+          const extras = (['website', 'linkedin', 'github', 'wechat'] as const)
+            .filter(k => b[k] && b[k].trim() && !doc.querySelector(`[data-field="basics.${k}"]`));
+          let anchor: Element = ref;
+          for (const k of extras) {
+            const node = ref.cloneNode(false) as Element;
+            node.setAttribute('data-field', `basics.${k}`);
+            node.removeAttribute('id');
+            node.textContent = b[k];
+            anchor.parentElement!.insertBefore(node, anchor.nextSibling);
+            anchor = node;
+          }
+        }
+      }
+
       const allSections = doc.querySelectorAll('[data-section]');
-      if (allSections.length === 0) return renderedHtml;
+      if (allSections.length === 0) return '<!DOCTYPE html>' + doc.documentElement.outerHTML;
 
       const parentMap = new Map<Element, Map<string, Element>>();
       allSections.forEach(el => {
@@ -405,7 +372,7 @@ export function ResumePreview() {
     } catch {
       return renderedHtml;
     }
-  }, [renderedHtml, isEmpty, sectionOrder]);
+  }, [renderedHtml, isEmpty, sectionOrder, resume]);
 
   const finalHtml = useMemo(() => {
     if (!reorderedHtml || isEmpty) return reorderedHtml;
