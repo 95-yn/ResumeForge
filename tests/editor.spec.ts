@@ -754,3 +754,26 @@ test('Bug 9: editing coachmark shows on first load and dismisses', async ({ page
   });
   expect(seen).toBe('1');
 });
+
+// ─── Bug 10: keyboard user can enter the preview-edit flow ───────────────────
+// Preview fields must be focusable (tabindex/role/aria-label) and openable via
+// Enter — previously the iframe edit flow required a mouse click.
+
+test('Bug 10: preview fields are keyboard-focusable and open editor on Enter', async ({ page }) => {
+  await page.goto(EDITOR_URL);
+  await waitForIframe(page);
+
+  const frame = page.frameLocator('iframe[title="preview"]');
+  const field = frame.locator('[data-field]').first();
+  await expect(field).toHaveAttribute('tabindex', '0');
+  await expect(field).toHaveAttribute('role', 'button');
+  await expect(field).toHaveAttribute('aria-label', /编辑/);
+
+  // Focus via keyboard model, then activate with Enter
+  await field.focus();
+  await page.keyboard.press('Enter');
+
+  // Parent FloatingEditor (rounded 14px fixed popup) should appear
+  const floatingEditor = page.locator('div[style*="position: fixed"][style*="border-radius: 14px"]');
+  await expect(floatingEditor.first()).toBeVisible({ timeout: 3000 });
+});

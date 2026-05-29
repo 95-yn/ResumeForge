@@ -11,13 +11,43 @@ const ARRAY_SECTIONS = ['experience', 'education', 'skills', 'projects'];
 const EDIT_SCRIPT = `
 (function() {
   var activeEl = null;
+  var editingStarted = false; // 编辑已开始（焦点移到外层 FloatingEditor）→ blur 时保留高亮
   var allFields = Array.from(document.querySelectorAll('[data-field]'));
 
-  allFields.forEach(function(el, idx) {
+  function showActive(el) {
+    if (activeEl && activeEl !== el) {
+      activeEl.style.background = '';
+      activeEl.style.boxShadow = '';
+    }
+    activeEl = el;
+    // active: brick-red 8% bg + brick-red inset border
+    el.style.background = 'rgba(176,70,58,0.08)';
+    el.style.boxShadow = 'inset 0 0 0 1.5px rgba(176,70,58,0.35)';
+  }
+
+  function startEdit(el) {
+    showActive(el);
+    editingStarted = true;
+    var rect = el.getBoundingClientRect();
+    parent.postMessage({
+      type: 'field-clicked',
+      field: el.dataset.field,
+      value: el.textContent.trim(),
+      rect: { top: rect.top, left: rect.left, width: rect.width, height: rect.height }
+    }, '*');
+    parent.postMessage({ type: 'editing-started' }, '*');
+  }
+
+  allFields.forEach(function(el) {
     el.style.cursor = 'text';
     el.style.outline = 'none';
     el.style.borderRadius = '2px';
     el.style.transition = 'background 0.12s, box-shadow 0.12s';
+    // 键盘可达性：每个字段可聚焦、有角色与标签，读屏可枚举并激活
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('role', 'button');
+    var label = (el.textContent || '').trim().slice(0, 40);
+    el.setAttribute('aria-label', label ? ('编辑：' + label) : '编辑此处');
 
     el.addEventListener('mouseenter', function() {
       if (el !== activeEl) {
@@ -33,24 +63,24 @@ const EDIT_SCRIPT = `
       }
     });
 
+    // 键盘 Tab 进入字段 → 显示高亮（让焦点可见），但不立即编辑
+    el.addEventListener('focus', function() {
+      if (el !== activeEl) showActive(el);
+      el.scrollIntoView({ block: 'nearest' });
+    });
+    el.addEventListener('blur', function() {
+      // 编辑已开始（焦点移到外层弹窗）则保留高亮；否则若焦点不再落在本字段上则清除
+      if (editingStarted) return;
+      if (activeEl === el) {
+        el.style.background = '';
+        el.style.boxShadow = '';
+        activeEl = null;
+      }
+    });
+
     el.addEventListener('click', function(e) {
       e.stopPropagation();
-      if (activeEl && activeEl !== el) {
-        activeEl.style.background = '';
-        activeEl.style.boxShadow = '';
-      }
-      activeEl = el;
-      // active: brick-red 8% bg + brick-red inset border
-      el.style.background = 'rgba(176,70,58,0.08)';
-      el.style.boxShadow = 'inset 0 0 0 1.5px rgba(176,70,58,0.35)';
-      var rect = el.getBoundingClientRect();
-      parent.postMessage({
-        type: 'field-clicked',
-        field: el.dataset.field,
-        value: el.textContent.trim(),
-        rect: { top: rect.top, left: rect.left, width: rect.width, height: rect.height }
-      }, '*');
-      parent.postMessage({ type: 'editing-started' }, '*');
+      startEdit(el);
     });
 
     el.addEventListener('keydown', function(e) {
@@ -64,32 +94,13 @@ const EDIT_SCRIPT = `
         }
         return;
       }
-      if (e.key === 'Enter' && !e.shiftKey) {
+      // Enter / Space 在聚焦字段上 → 开始编辑（等同点击）
+      if ((e.key === 'Enter' && !e.shiftKey) || e.key === ' ' || e.key === 'Spacebar') {
         e.preventDefault();
-        parent.postMessage({ type: 'field-keydown', key: 'Enter', idx: idx, total: allFields.length }, '*');
+        startEdit(el);
         return;
       }
-      if (e.key === 'Tab') {
-        e.preventDefault();
-        var nextIdx = e.shiftKey ? idx - 1 : idx + 1;
-        // Wrap around
-        if (nextIdx < 0) nextIdx = allFields.length - 1;
-        if (nextIdx >= allFields.length) nextIdx = 0;
-        // Activate focus ring on next field
-        if (activeEl) {
-          activeEl.style.background = '';
-          activeEl.style.boxShadow = '';
-        }
-        var nextEl = allFields[nextIdx];
-        if (nextEl) {
-          activeEl = nextEl;
-          nextEl.style.background = 'rgba(176,70,58,0.08)';
-          nextEl.style.boxShadow = 'inset 0 0 0 1.5px rgba(176,70,58,0.35)';
-          // 滚动到视野中央
-          nextEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }
-        parent.postMessage({ type: 'field-keydown', key: 'Tab', idx: nextIdx, total: allFields.length }, '*');
-      }
+      // Tab 交给浏览器原生焦点顺序处理（不再劫持），读屏与键盘焦点一致推进
     });
   });
 
@@ -123,6 +134,7 @@ const EDIT_SCRIPT = `
 
   window.addEventListener('message', function(e) {
     if (!e.data || e.data.type !== 'clear-active-field') return;
+    editingStarted = false;
     if (activeEl) {
       activeEl.style.background = '';
       activeEl.style.boxShadow = '';
