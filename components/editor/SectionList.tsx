@@ -151,11 +151,11 @@ const CONTENT_EDITABLE_STYLE = `
 /** Animated collapsible panel — height 0 → auto with spring */
 function CollapsiblePanel({ open, children }: { open: boolean; children: React.ReactNode }) {
   const innerRef = useRef<HTMLDivElement>(null);
-  const [maxH, setMaxH] = useState(open ? 9999 : 0);
+  // 'auto' = 展开完成后解锁为自适应高度（关键：内部 TipTap 等异步内容晚于首帧布局，
+  // 若把 maxHeight 永久冻结在打开瞬间测得的 scrollHeight，会把后续字段裁掉）。
+  const [maxH, setMaxH] = useState<number | 'auto'>(open ? 'auto' : 0);
   const [opacity, setOpacity] = useState(open ? 1 : 0);
 
-  // On open: animate height in, then unlock to auto
-  // On close: collapse
   const rafRef = useRef<number>();
   const prevOpen = useRef(open);
 
@@ -171,10 +171,10 @@ function CollapsiblePanel({ open, children }: { open: boolean; children: React.R
         setOpacity(1);
       });
     } else {
+      // auto → 先固定到当前实测像素，再下一帧收到 0，才能产生过渡动画
       const h = innerRef.current?.scrollHeight ?? 0;
       setMaxH(h);
       setOpacity(0);
-      // Must set to actual px first, then immediately to 0
       cancelAnimationFrame(rafRef.current!);
       rafRef.current = requestAnimationFrame(() => {
         setMaxH(0);
@@ -182,16 +182,24 @@ function CollapsiblePanel({ open, children }: { open: boolean; children: React.R
     }
   }
 
+  // 展开动画结束后解锁为 auto，使晚到的内容（TipTap 编辑器、新增亮点等）完整显示
+  const handleTransitionEnd = (e: React.TransitionEvent) => {
+    if (e.propertyName === 'max-height' && open) setMaxH('auto');
+  };
+
   return (
-    <div style={{
-      maxHeight: maxH,
-      opacity,
-      overflow: 'hidden',
-      transition: [
-        `max-height 280ms cubic-bezier(0.16, 1, 0.3, 1)`,
-        `opacity 220ms cubic-bezier(0.16, 1, 0.3, 1)`,
-      ].join(', '),
-    }}>
+    <div
+      onTransitionEnd={handleTransitionEnd}
+      style={{
+        maxHeight: maxH === 'auto' ? 'none' : maxH,
+        opacity,
+        overflow: 'hidden',
+        transition: [
+          `max-height 280ms cubic-bezier(0.16, 1, 0.3, 1)`,
+          `opacity 220ms cubic-bezier(0.16, 1, 0.3, 1)`,
+        ].join(', '),
+      }}
+    >
       <div ref={innerRef}>
         {children}
       </div>
