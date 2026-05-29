@@ -29,16 +29,10 @@ import { TextStyle } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
 import Placeholder from '@tiptap/extension-placeholder';
+import { TEXT_COLORS, BG_COLORS } from '@/lib/editor-colors';
 
-const TEXT_COLORS = [
-  '#1C1917', '#DC2626', '#EA580C', '#CA8A04',
-  '#16A34A', '#2563EB', '#7C3AED', '#78716C',
-];
-
-const BG_COLORS = [
-  '#FEF3C7', '#FED7AA', '#FECACA', '#FBCFE8',
-  '#DDD6FE', '#BFDBFE', '#A7F3D0', '#E7E5E4',
-];
+// 高亮底色不含 transparent（本编辑器用"重置"按钮清除底色）
+const BG_SWATCHES = BG_COLORS.filter(c => c.color !== 'transparent');
 
 interface InlineRichTextProps {
   value: string;
@@ -208,16 +202,16 @@ export function InlineRichText({ value, onChange, placeholder = '点击此处开
                 boxShadow: '0 4px 12px rgba(0,0,0,0.12)', padding: 6,
                 display: 'flex', gap: 4, flexWrap: 'wrap', width: 96,
               }}>
-                {(openPicker === 'color' ? TEXT_COLORS : BG_COLORS).map(c => (
+                {(openPicker === 'color' ? TEXT_COLORS : BG_SWATCHES).map(({ color, label }) => (
                   <button
                     type="button"
-                    key={c}
+                    key={color}
                     onMouseDown={e => {
                       e.preventDefault();
                       if (openPicker === 'color') {
-                        editor?.chain().focus().setColor(c).run();
+                        editor?.chain().focus().setColor(color).run();
                       } else {
-                        editor?.chain().focus().toggleHighlight({ color: c }).run();
+                        editor?.chain().focus().toggleHighlight({ color }).run();
                       }
                       // Flush immediately so iframe reflects color without waiting for blur/debounce
                       if (editor) flushCommit(editor.getHTML());
@@ -225,11 +219,11 @@ export function InlineRichText({ value, onChange, placeholder = '点击此处开
                     }}
                     style={{
                       width: 22, height: 22, borderRadius: '50%',
-                      border: '1.5px solid #E7E5E4', background: c,
+                      border: '1.5px solid #E7E5E4', background: color,
                       cursor: 'pointer', padding: 0, outline: 'none',
                     }}
-                    title={c}
-                    aria-label={c}
+                    title={label}
+                    aria-label={label}
                   />
                 ))}
                 {/* Custom color picker — opens native browser color popup */}

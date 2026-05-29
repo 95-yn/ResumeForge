@@ -96,7 +96,8 @@ test('Bug 2: website field renders in preview iframe', async ({ page }) => {
 
   // Find the website input and fill it
   // The input is the last added field in the basics panel
-  const websiteInput = page.locator('input[placeholder="输入个人网站"]');
+  // Placeholder copy was professionalized: 个人网站 field now hints the URL format.
+  const websiteInput = page.locator('input[placeholder="https://yoursite.com"]');
   await websiteInput.fill('myportfolio.example.com');
   // Trigger blur to commit change
   await websiteInput.blur();
@@ -264,24 +265,25 @@ test.describe('Bug 4: InlineRichText — rich-text editor', () => {
       return;
     }
 
-    // Open text color picker, pick red #DC2626
+    // Open text color picker, pick 砖红 (brick-red #B0463A — the unified on-brand palette).
+    // Swatches are now labelled by name (title="砖红"), not by hex.
     await colorBtn.click();
     await page.waitForTimeout(100);
-    await page.locator('button[title="#DC2626"]').first().click();
+    await page.locator('button[title="砖红"]').first().click();
     await page.waitForTimeout(100);
 
     let html = await editor.innerHTML();
-    // Browser may serialize #DC2626 as rgb(220, 38, 38) — check for either form
-    const hasColor = html.toLowerCase().includes('color: #dc2626') ||
-      html.toLowerCase().includes('color: rgb(220, 38, 38)') ||
-      html.toLowerCase().includes('color:#dc2626');
+    // Browser may serialize #B0463A as rgb(176, 70, 58) — check for either form
+    const hasColor = html.toLowerCase().includes('color: #b0463a') ||
+      html.toLowerCase().includes('color: rgb(176, 70, 58)') ||
+      html.toLowerCase().includes('color:#b0463a');
     expect(hasColor).toBe(true);
 
-    // Now apply highlight bg (yellow #FEF3C7)
+    // Now apply highlight bg (浅金 #F3ECD9)
     await page.keyboard.press('ControlOrMeta+A');
     await page.locator('button[aria-label="高亮背景"]').first().click();
     await page.waitForTimeout(100);
-    await page.locator('button[title="#FEF3C7"]').first().click();
+    await page.locator('button[title="浅金"]').first().click();
     await page.waitForTimeout(100);
 
     html = await editor.innerHTML();
@@ -609,4 +611,68 @@ test('Bug 5c: editor loads without JS errors', async ({ page }) => {
   );
 
   expect(criticalErrors).toHaveLength(0);
+});
+
+// ─── Bug 6: undo restores section structure (reorder + delete) ───────────────
+// Regression guard for the history fix: reorderSections / removeSection used to
+// bypass pushHistory, so Cmd+Z couldn't restore a deleted or reordered section.
+// Drives the store directly via the dev-only window.__editorStore hook.
+
+test('Bug 6: undo restores deleted & reordered sections', async ({ page }) => {
+  await page.goto(EDITOR_URL);
+  await waitForIframe(page);
+
+  // Wait for the dev store hook to be mounted
+  await page.waitForFunction(() => !!(window as unknown as { __editorStore?: unknown }).__editorStore, null, { timeout: 5000 });
+
+  const result = await page.evaluate(() => {
+    type Store = {
+      getState: () => {
+        sectionOrder: string[];
+        removeSection: (k: string) => void;
+        reorderSections: (o: string[]) => void;
+        undo: () => void;
+        redo: () => void;
+      };
+    };
+    const store = (window as unknown as { __editorStore: Store }).__editorStore;
+    const s = () => store.getState();
+
+    const initial = [...s().sectionOrder];
+    if (initial.length < 2) return { skipped: true };
+
+    // 1. Delete the last section, then undo → should come back
+    const victim = initial[initial.length - 1];
+    s().removeSection(victim);
+    const afterDelete = [...s().sectionOrder];
+    s().undo();
+    const afterUndo = [...s().sectionOrder];
+
+    // 2. Reorder (swap first two), then undo → original order restored
+    const swapped = [...afterUndo];
+    [swapped[0], swapped[1]] = [swapped[1], swapped[0]];
+    s().reorderSections(swapped);
+    const afterReorder = [...s().sectionOrder];
+    s().undo();
+    const afterReorderUndo = [...s().sectionOrder];
+
+    return {
+      skipped: false,
+      initial,
+      deleteRemoved: !afterDelete.includes(victim),
+      undoRestoredDelete: JSON.stringify(afterUndo) === JSON.stringify(initial),
+      reorderApplied: JSON.stringify(afterReorder) === JSON.stringify(swapped),
+      undoRestoredOrder: JSON.stringify(afterReorderUndo) === JSON.stringify(afterUndo),
+    };
+  });
+
+  if (result.skipped) {
+    test.skip(true, 'Fewer than 2 sections; nothing to reorder');
+    return;
+  }
+
+  expect(result.deleteRemoved).toBe(true);
+  expect(result.undoRestoredDelete).toBe(true);
+  expect(result.reorderApplied).toBe(true);
+  expect(result.undoRestoredOrder).toBe(true);
 });

@@ -18,6 +18,7 @@ import {
   AlignLeftOutlined, AlignCenterOutlined, AlignRightOutlined,
   FontSizeOutlined, FontColorsOutlined, BgColorsOutlined,
 } from '@ant-design/icons';
+import { TEXT_COLORS, BG_COLORS, LINK_COLOR } from '@/lib/editor-colors';
 
 export interface EditingField {
   field: string;
@@ -39,28 +40,6 @@ function isLongField(field: string): boolean {
   if (/\.highlights\.\d+$/.test(field)) return true;
   return false;
 }
-
-const TEXT_COLORS = [
-  { color: '#1C1917', label: '默认黑' },
-  { color: '#DC2626', label: '红' },
-  { color: '#EA580C', label: '橙' },
-  { color: '#CA8A04', label: '黄' },
-  { color: '#16A34A', label: '绿' },
-  { color: '#2563EB', label: '蓝' },
-  { color: '#7C3AED', label: '紫' },
-  { color: '#78716C', label: '灰' },
-];
-
-const BG_COLORS = [
-  { color: 'transparent', label: '无背景' },
-  { color: '#FEF2F2', label: '浅红' },
-  { color: '#FFF7ED', label: '浅橙' },
-  { color: '#FEFCE8', label: '浅黄' },
-  { color: '#F0FDF4', label: '浅绿' },
-  { color: '#EFF6FF', label: '浅蓝' },
-  { color: '#F5F3FF', label: '浅紫' },
-  { color: '#F5F5F4', label: '浅灰' },
-];
 
 interface ColorPickerProps {
   colors: { color: string; label: string }[];
@@ -563,7 +542,7 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
         .tiptap ul, .tiptap ol { margin: 4px 0; padding-left: 20px; }
         .tiptap li { margin: 2px 0; }
         .tiptap strong { font-weight: 600; }
-        .tiptap a, .editor-link { color: #0369A1; text-decoration: underline; cursor: pointer; }
+        .tiptap a, .editor-link { color: ${LINK_COLOR}; text-decoration: underline; cursor: pointer; }
         .tiptap s { text-decoration: line-through; }
         .tiptap u { text-decoration: underline; }
         .tiptap mark { padding: 0 2px; border-radius: 2px; }

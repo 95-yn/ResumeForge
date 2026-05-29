@@ -4,6 +4,13 @@ import { create } from 'zustand';
 import type { ResumeData } from '@/data/types';
 import { DEFAULT_RESUME_DATA, DEFAULT_SECTION_ORDER } from '@/data/defaults';
 
+// 撤销/重做快照：同时记录文档数据与模块顺序，
+// 这样删除/重排模块也能被 Cmd+Z 还原（此前 history 只存 data，结构变动丢失）。
+interface HistorySnapshot {
+  data: ResumeData;
+  order: string[];
+}
+
 // Profession Chinese name → file slug mapping
 const PROFESSION_SLUG_MAP: Record<string, string> = {
   'IT互联网': 'it',
@@ -36,7 +43,7 @@ interface EditorStore {
   isDirty: boolean;
   saveStatus: 'saved' | 'saving' | 'unsaved' | 'error';
   saveErrorMessage: string | null;
-  history: ResumeData[];
+  history: HistorySnapshot[];
   historyIndex: number;
   zoom: number;
   toasts: Toast[];
@@ -83,11 +90,19 @@ function loadFromLocal(templateId: string): { data: ResumeData; sectionOrder: st
   } catch { return null; }
 }
 
-function pushHistory(state: EditorStore, newData: ResumeData): Partial<EditorStore> {
+function pushHistory(state: EditorStore, newData: ResumeData, newOrder?: string[]): Partial<EditorStore> {
+  const order = newOrder ?? state.sectionOrder;
   const history = state.history.slice(0, state.historyIndex + 1);
-  history.push(structuredClone(newData));
+  history.push({ data: structuredClone(newData), order: [...order] });
   if (history.length > 50) history.shift();
-  return { history, historyIndex: history.length - 1, resume: newData, isDirty: true, saveStatus: 'unsaved' as const };
+  return {
+    history,
+    historyIndex: history.length - 1,
+    resume: newData,
+    sectionOrder: order,
+    isDirty: true,
+    saveStatus: 'unsaved' as const,
+  };
 }
 
 // Race-condition guard: incremented on every loadTemplate call
@@ -144,7 +159,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
       resume: resumeData, templateId: templateSlug,
       templateHtml: tpl.html, templateCss: tpl.css,
       currentProfession: profession ?? null,
-      sectionOrder, history: [structuredClone(resumeData)], historyIndex: 0,
+      sectionOrder, history: [{ data: structuredClone(resumeData), order: [...sectionOrder] }], historyIndex: 0,
       isDirty: false, saveStatus: 'saved',
     });
   },
@@ -200,17 +215,24 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     const newData = structuredClone(state.resume);
     if (!(key in newData)) newData[key] = [];
     const newOrder = state.sectionOrder.includes(key) ? state.sectionOrder : [...state.sectionOrder, key];
-    set({ ...pushHistory(state, newData), sectionOrder: newOrder });
+    set(pushHistory(state, newData, newOrder));
   },
 
   removeSection: (key) => {
     const state = get();
+    if (!state.resume) return;
     const newOrder = state.sectionOrder.filter(k => k !== key);
-    set({ sectionOrder: newOrder, isDirty: true, saveStatus: 'unsaved' });
+    // 经由 pushHistory 记录结构变动，使删除可被 Cmd+Z 还原
+    set(pushHistory(state, state.resume, newOrder));
   },
 
   setActiveSection: (key) => set({ activeSection: key }),
-  reorderSections: (order) => set({ sectionOrder: order, isDirty: true, saveStatus: 'unsaved' }),
+  reorderSections: (order) => {
+    const state = get();
+    if (!state.resume) return;
+    // 重排同样进 history，撤销可回到上一次顺序
+    set(pushHistory(state, state.resume, order));
+  },
   setZoom: (zoom) => set({ zoom: Math.max(0.5, Math.min(2, zoom)) }),
 
   updateSettings: (key, value) => {
@@ -245,7 +267,7 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     set({
       resume: resumeData,
       sectionOrder: [...DEFAULT_SECTION_ORDER],
-      history: [structuredClone(resumeData)],
+      history: [{ data: structuredClone(resumeData), order: [...DEFAULT_SECTION_ORDER] }],
       historyIndex: 0,
       isDirty: false,
       saveStatus: 'saved',
@@ -273,14 +295,16 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
     const state = get();
     if (state.historyIndex <= 0) return;
     const newIndex = state.historyIndex - 1;
-    set({ resume: structuredClone(state.history[newIndex]), historyIndex: newIndex, isDirty: true, saveStatus: 'unsaved' });
+    const snap = state.history[newIndex];
+    set({ resume: structuredClone(snap.data), sectionOrder: [...snap.order], historyIndex: newIndex, isDirty: true, saveStatus: 'unsaved' });
   },
 
   redo: () => {
     const state = get();
     if (state.historyIndex >= state.history.length - 1) return;
     const newIndex = state.historyIndex + 1;
-    set({ resume: structuredClone(state.history[newIndex]), historyIndex: newIndex, isDirty: true, saveStatus: 'unsaved' });
+    const snap = state.history[newIndex];
+    set({ resume: structuredClone(snap.data), sectionOrder: [...snap.order], historyIndex: newIndex, isDirty: true, saveStatus: 'unsaved' });
   },
 
   save: () => {
@@ -314,3 +338,8 @@ export const useEditorStore = create<EditorStore>((set, get) => ({
 
   dismissToast: (id) => set(s => ({ toasts: s.toasts.filter(t => t.id !== id) })),
 }));
+
+// 开发期调试钩子：把 store 暴露到 window，便于 e2e 直接驱动 reducer（生产环境不挂载）。
+if (typeof window !== 'undefined' && process.env.NODE_ENV !== 'production') {
+  (window as unknown as { __editorStore?: typeof useEditorStore }).__editorStore = useEditorStore;
+}
