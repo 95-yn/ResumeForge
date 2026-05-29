@@ -11,7 +11,6 @@ import TextAlign from '@tiptap/extension-text-align';
 import { TextStyle, FontSize } from '@tiptap/extension-text-style';
 import { Color } from '@tiptap/extension-color';
 import { Highlight } from '@tiptap/extension-highlight';
-import { Dropdown } from 'antd';
 import {
   BoldOutlined, ItalicOutlined, UnderlineOutlined, StrikethroughOutlined,
   UnorderedListOutlined, OrderedListOutlined, LinkOutlined,
@@ -39,6 +38,51 @@ function isLongField(field: string): boolean {
   if (/^experience\.\d+\.description$/.test(field)) return true;
   if (/\.highlights\.\d+$/.test(field)) return true;
   return false;
+}
+
+const FONT_SIZES = [12, 13, 14, 16, 18, 20, 24];
+
+/** 字号下拉 — 取代 antd Dropdown，渲染在 toolbar 内（containerRef 内，不触发编辑器关闭）。 */
+function FontSizeMenu({ onSelect, onClose }: { onSelect: (px: number | null) => void; onClose: () => void }) {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as Node | null;
+      if (!target || !document.contains(target)) return;
+      if (ref.current && !ref.current.contains(target)) onClose();
+    };
+    const t = setTimeout(() => document.addEventListener('click', handleClick), 150);
+    return () => { clearTimeout(t); document.removeEventListener('click', handleClick); };
+  }, [onClose]);
+
+  const item: React.CSSProperties = {
+    display: 'block', width: '100%', textAlign: 'left', border: 'none',
+    background: 'transparent', cursor: 'pointer', padding: '5px 12px',
+    fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
+    color: '#44403C', outline: 'none', borderRadius: 4, lineHeight: 1.3,
+  };
+  const hov = (e: React.MouseEvent<HTMLButtonElement>, on: boolean) => {
+    e.currentTarget.style.background = on ? '#F5F5F4' : 'transparent';
+  };
+  return (
+    <div ref={ref} role="menu" style={{
+      position: 'absolute', top: '100%', left: 0, marginTop: 4, zIndex: 10001,
+      background: '#FFFFFF', border: '1px solid #E7E5E4', borderRadius: 8,
+      boxShadow: '0 8px 24px rgba(0,0,0,0.12)', padding: 4, minWidth: 76,
+      maxHeight: 240, overflowY: 'auto',
+    }}>
+      <button role="menuitem" style={{ ...item, color: '#78716C', fontSize: 13 }}
+        onMouseDown={e => { e.preventDefault(); onSelect(null); onClose(); }}
+        onMouseEnter={e => hov(e, true)} onMouseLeave={e => hov(e, false)}
+      >默认</button>
+      {FONT_SIZES.map(s => (
+        <button key={s} role="menuitem" style={{ ...item, fontSize: s }}
+          onMouseDown={e => { e.preventDefault(); onSelect(s); onClose(); }}
+          onMouseEnter={e => hov(e, true)} onMouseLeave={e => hov(e, false)}
+        >{s}px</button>
+      ))}
+    </div>
+  );
 }
 
 interface ColorPickerProps {
@@ -129,6 +173,7 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
   const containerRef = useRef<HTMLDivElement>(null);
   const longField = isLongField(editingField.field);
   const [colorPickerOpen, setColorPickerOpen] = useState<'text' | 'bg' | null>(null);
+  const [fontSizeOpen, setFontSizeOpen] = useState(false);
   const [linkPopupOpen, setLinkPopupOpen] = useState(false);
   const [linkInputValue, setLinkInputValue] = useState('');
   const linkInputRef = useRef<HTMLInputElement>(null);
@@ -193,11 +238,8 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as Node | null;
       if (!target || !document.contains(target)) return;  // stale / detached target
-      // Skip clicks inside Antd Dropdown/Tooltip/Popover portals (they're rendered
-      // at document.body root, not inside containerRef).
-      if (target instanceof Element) {
-        if (target.closest('.ant-dropdown, .ant-tooltip, .ant-popover, .ant-select-dropdown, .ant-message')) return;
-      }
+      // 所有弹出层（字号菜单 / 颜色选择器 / 链接输入）都渲染在 containerRef 内，
+      // 因此无需再为 antd 门户做 .ant-* 白名单豁免。
       if (containerRef.current && !containerRef.current.contains(target)) handleConfirm();
     };
     const timer = setTimeout(() => document.addEventListener('click', handleClickOutside, true), 150);
@@ -280,21 +322,21 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
 
   const compactToolbar = (
     <>
-      <Dropdown menu={{
-        items: [
-          { key: 'unset', label: <span style={{ fontFamily: 'inherit', color: '#78716C', fontSize: 13 }}>默认</span>,
-            onClick: () => editor?.chain().focus().unsetFontSize().run() },
-          ...[12, 13, 14, 16, 18, 20, 24].map(s => ({
-            key: String(s),
-            label: <span style={{ fontFamily: "'Plus Jakarta Sans', -apple-system, sans-serif", fontSize: s, lineHeight: 1.3 }}>{s}px</span>,
-            onClick: () => editor?.chain().focus().setFontSize(`${s}px`).run(),
-          })),
-        ],
-      }} trigger={['click']} overlayStyle={{ zIndex: 10000 }}>
-        <button style={toolBtnStyle(false)} title="字体大小"
-          onMouseEnter={e => hoverIn(e, false)} onMouseLeave={e => hoverOut(e, false)}
+      <div style={{ position: 'relative' }}>
+        <button style={toolBtnStyle(fontSizeOpen)} title="字体大小"
+          onMouseDown={e => { e.preventDefault(); setFontSizeOpen(o => !o); }}
+          onMouseEnter={e => hoverIn(e, fontSizeOpen)} onMouseLeave={e => hoverOut(e, fontSizeOpen)}
         ><FontSizeOutlined /></button>
-      </Dropdown>
+        {fontSizeOpen && (
+          <FontSizeMenu
+            onSelect={px => {
+              if (px === null) editor?.chain().focus().unsetFontSize().run();
+              else editor?.chain().focus().setFontSize(`${px}px`).run();
+            }}
+            onClose={() => setFontSizeOpen(false)}
+          />
+        )}
+      </div>
       {sep}
       <button style={toolBtnStyle(editor?.isActive('bold') ?? false)}
         onMouseDown={e => { e.preventDefault(); editor?.chain().focus().toggleBold().run(); }} title="加粗 (Ctrl+B)"

@@ -777,3 +777,32 @@ test('Bug 10: preview fields are keyboard-focusable and open editor on Enter', a
   const floatingEditor = page.locator('div[style*="position: fixed"][style*="border-radius: 14px"]');
   await expect(floatingEditor.first()).toBeVisible({ timeout: 3000 });
 });
+
+// ─── Bug 11: custom font-size menu (replaces antd Dropdown) ──────────────────
+// The font-size menu must open, apply a size, and NOT close the FloatingEditor
+// (it renders inside the editor container, so the click-outside guard ignores it).
+
+test('Bug 11: font-size menu opens and keeps the editor open', async ({ page }) => {
+  await page.goto(EDITOR_URL);
+  await waitForIframe(page);
+
+  // Open the FloatingEditor via keyboard (deterministic)
+  const frame = page.frameLocator('iframe[title="preview"]');
+  await frame.locator('[data-field]').first().focus();
+  await page.keyboard.press('Enter');
+
+  const floatingEditor = page.locator('div[style*="position: fixed"][style*="border-radius: 14px"]');
+  await expect(floatingEditor.first()).toBeVisible({ timeout: 3000 });
+
+  // Open the custom font-size menu
+  await page.locator('button[title="字体大小"]').first().click();
+  const menu = page.locator('div[role="menu"]');
+  await expect(menu).toBeVisible({ timeout: 2000 });
+  // No antd dropdown in the DOM
+  expect(await page.locator('.ant-dropdown').count()).toBe(0);
+
+  // Pick 16px — menu closes, editor stays open
+  await menu.locator('button', { hasText: '16px' }).click();
+  await expect(menu).toBeHidden({ timeout: 2000 });
+  await expect(floatingEditor.first()).toBeVisible();
+});

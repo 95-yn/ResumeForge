@@ -1,6 +1,4 @@
 import './globals.css';
-import { ConfigProvider } from 'antd';
-import zhCN from 'antd/locale/zh_CN';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -21,9 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body>
-        <ConfigProvider locale={zhCN}>{children}</ConfigProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

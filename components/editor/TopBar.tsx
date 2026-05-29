@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { Tooltip } from 'antd';
 import { ArrowLeftOutlined, PrinterOutlined, UndoOutlined, RedoOutlined, RollbackOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
 import { compileTemplate } from '@/lib/mini-template';
 import { useEditorStore } from '@/lib/editor-store';
 import { confirmDialog } from './ConfirmDialog';
+import { Tooltip } from './Tooltip';
 
 type UndoRedoBtnProps = {
   disabled: boolean;
