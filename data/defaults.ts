@@ -2,50 +2,79 @@ import type { ResumeData } from './types';
 
 export const DEFAULT_SECTION_ORDER = ['basics', 'experience', 'education', 'skills', 'projects'];
 
+// 通用默认内容：一份完整、真实的范例简历（职能中性的运营/项目方向，适配所有「通用」模板）。
+// 之前这里是空泛占位（你的姓名/公司名称），导致通用模板打开时像「空模板」——
+// 现在填入完整范例，与模板缩略图观感一致，用户直接在范例上改即可。
 export const DEFAULT_RESUME_DATA = {
   basics: {
-    name: '你的姓名',
-    title: '目标职位',
-    email: 'email@example.com',
+    name: '李然',
+    title: '运营经理',
+    email: 'liran@example.com',
     phone: '138-0000-0000',
-    location: '所在城市',
-    summary: '在此简要介绍你的职业背景、核心优势和求职意向。建议 2-3 句话，突出你最亮眼的成就和差异化竞争力。',
+    location: '上海',
+    summary: '6 年互联网运营与项目管理经验，擅长用户增长、数据分析与跨团队协作。主导过多个百万级用户产品的运营策略，累计带来 30%+ 的留存提升。',
   },
   experience: [
     {
-      company: '公司名称',
-      position: '职位名称',
-      startDate: '2022-01',
+      company: '某头部互联网公司',
+      position: '高级运营经理',
+      startDate: '2021-05',
       endDate: '至今',
       highlights: [
-        '用一句话描述你的核心工作成果，尽量用数据量化（如提升 XX%、管理 XX 人）',
-        '描述你主导或参与的重要项目及其影响',
+        '主导用户增长项目，6 个月内 DAU 从 50 万增至 120 万，提升 140%',
+        '搭建数据驱动的运营体系，核心指标周报覆盖 8 条业务线',
+        '带领 6 人运营团队，统筹内容、活动与用户生命周期管理',
+      ],
+    },
+    {
+      company: '某电商平台',
+      position: '运营专员 → 运营主管',
+      startDate: '2018-07',
+      endDate: '2021-04',
+      highlights: [
+        '负责大促活动策划，单次活动 GMV 突破 2000 万',
+        '优化用户分层运营策略，复购率提升 18%',
       ],
     },
   ],
   education: [
     {
-      institution: '学校名称',
-      area: '专业',
+      institution: '复旦大学',
+      area: '工商管理',
       studyType: '本科',
-      startDate: '2018-09',
-      endDate: '2022-06',
+      startDate: '2014-09',
+      endDate: '2018-06',
     },
   ],
   skills: [
-    { name: '核心技能 1', level: '精通' },
-    { name: '核心技能 2', level: '掌握' },
-    { name: '核心技能 3', level: '熟悉' },
+    { name: '用户增长', level: '精通' },
+    { name: '数据分析', level: '精通' },
+    { name: '项目管理', level: '掌握' },
+    { name: '内容运营', level: '掌握' },
+    { name: 'Excel / SQL', level: '掌握' },
+    { name: '跨团队协作', level: '精通' },
   ],
   projects: [
     {
-      name: '项目名称',
-      role: '你的角色',
-      startDate: '2023-01',
-      endDate: '2024-01',
-      description: '简要描述项目背景和你的职责。',
+      name: '会员体系升级项目',
+      role: '项目负责人',
+      startDate: '2022-03',
+      endDate: '2022-12',
+      description: '重构会员等级与权益体系，打通线上线下数据。',
       highlights: [
-        '项目成果或亮点，用数据说话',
+        '付费会员转化提升 35%',
+        '会员月活占比从 20% 升至 42%',
+      ],
+    },
+    {
+      name: '私域流量运营',
+      role: '运营负责人',
+      startDate: '2021-06',
+      endDate: '2022-02',
+      description: '从 0 搭建企业微信私域运营体系。',
+      highlights: [
+        '沉淀用户 20 万+',
+        '私域复购贡献营收 25%',
       ],
     },
   ],

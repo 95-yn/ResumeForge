@@ -130,6 +130,44 @@ export function TopBar() {
     }
   }, [saveStatus, clearSaveError]);
 
+  // 文件名（用于 PDF 默认名 / HTML 下载名）：连字符拼接，避免「· 」中点在文件名里观感怪。
+  // 例：李然-运营经理-简历 / 李然-简历 / 简历
+  const buildFilename = () => {
+    const n = (resume?.basics?.name as string | undefined)?.trim();
+    const t = (resume?.basics?.title as string | undefined)?.trim();
+    return n ? (t ? `${n}-${t}-简历` : `${n}-简历`) : '简历';
+  };
+
+  // 导出为独立 HTML 文件（模板 CSS 内联 + 正文），可离线打开/二次编辑。
+  const handleExportHtml = () => {
+    if (!templateHtml || !templateCss || !resume) return;
+    try {
+      const compiled = compileTemplate(templateHtml);
+      const body = compiled(resume);
+      const userBg = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor;
+      const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${buildFilename()}</title>
+<style>
+${templateCss}
+${userBg ? `html, body, .resume { background: ${userBg} !important; background-color: ${userBg} !important; }` : ''}
+body { margin: 0; }
+@page { size: A4; margin: 0; }
+</style></head><body>${body}</body></html>`;
+      const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${buildFilename()}.html`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      pushToast('已导出 HTML 文件', 'success');
+    } catch (err) {
+      console.error('export html failed:', err);
+      pushToast('导出 HTML 失败，请重试', 'error');
+    }
+  };
+
   const handlePrint = () => {
     if (!templateHtml || !templateCss || !resume) return;
     const compiled = compileTemplate(templateHtml);
@@ -139,13 +177,13 @@ export function TopBar() {
 
     // A4 with sensible default margins. Most templates control their own internal
     // padding, so we use minimal page margins and let the resume container breathe.
-    // Browser uses <title> as default PDF filename. Compose 姓名 · 职位 for professional output.
+    // Browser uses <title> as default PDF filename — 用连字符的干净文件名。
     const rawName = (resume.basics?.name as string | undefined)?.trim();
     const rawTitle = (resume.basics?.title as string | undefined)?.trim();
-    const pdfTitle = [rawName, rawTitle].filter(Boolean).join(' · ') || '简历';
+    const pdfTitle = buildFilename();
 
-    // Footer text: 姓名 · 职位 (same as title, CSS-escaped for content: "...")
-    const footerName = pdfTitle.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+    // Footer text: 姓名 · 职位（中点仅用于页脚展示，不进文件名）
+    const footerName = ([rawName, rawTitle].filter(Boolean).join(' · ') || '简历').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
 
     const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>${pdfTitle}</title>
 <style>
@@ -379,6 +417,30 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
         >
           保存
         </button>
+
+        <Tooltip title="导出为独立 HTML 文件（可离线打开）">
+          <button
+            onClick={handleExportHtml}
+            style={{
+              display: 'inline-flex', alignItems: 'center',
+              padding: '0 14px', height: 32, borderRadius: 6,
+              border: '1px solid #E7E5E4',
+              background: 'transparent', color: '#78716C',
+              fontSize: 12, fontWeight: 500,
+              cursor: 'pointer',
+              transition: 'background 0.12s, color 0.12s',
+              fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
+              outline: 'none',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F0EAE0'; e.currentTarget.style.color = '#1C1917'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; }}
+            onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
+            onBlur={e => { e.currentTarget.style.outline = 'none'; }}
+            aria-label="导出为 HTML"
+          >
+            导出 HTML
+          </button>
+        </Tooltip>
 
         <Tooltip title="打印或另存为 PDF（建议关闭页眉页脚 + 勾选背景图形）">
           <button
