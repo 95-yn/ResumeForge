@@ -257,9 +257,13 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
     cd.close();
     // Some browsers fire load synchronously after document.close, others async.
     const doPrint = () => {
+      // 多数浏览器在打印 iframe 时，PDF 默认文件名取的是「顶层页面」的 document.title，
+      // 而不是 iframe 里的 <title>。所以临时把主页面标题改成简历文件名，打印后还原。
+      const prevTitle = document.title;
+      document.title = pdfTitle;
       try { cw.focus(); cw.print(); } catch (err) { console.error('print failed:', err); pushToast('打印失败，请重试或检查浏览器设置', 'error'); }
       // Cleanup after a short delay — print() is sync in Chrome but async in Safari.
-      setTimeout(() => iframe.remove(), 1500);
+      setTimeout(() => { document.title = prevTitle; iframe.remove(); }, 1500);
     };
     if (cd.readyState === 'complete') doPrint();
     else iframe.onload = doPrint;
