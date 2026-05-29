@@ -685,15 +685,21 @@ test('Bug 7: delete uses custom ConfirmDialog and removes the item', async ({ pa
   await openFirstExperience(page);
   await page.waitForFunction(() => !!(window as unknown as { __editorStore?: unknown }).__editorStore, null, { timeout: 5000 });
 
-  const before = await page.evaluate(() => {
-    const s = (window as unknown as { __editorStore: { getState: () => { resume: { experience?: unknown[] } } } }).__editorStore.getState();
-    return (s.resume.experience ?? []).length;
+  // 从 store 读出第一条经历的 summary（公司 · 职位），据此精确定位删除按钮，
+  // 不依赖默认示例内容的具体文案（默认内容变化时测试仍稳）。
+  const info = await page.evaluate(() => {
+    const s = (window as unknown as { __editorStore: { getState: () => { resume: { experience?: Array<{ company?: string; position?: string }> } } } }).__editorStore.getState();
+    const arr = s.resume.experience ?? [];
+    const e = arr[0];
+    const summary = e ? [e.company, e.position].filter(Boolean).join(' · ') : '';
+    return { len: arr.length, summary };
   });
-  if (before < 1) { test.skip(true, 'No experience items to delete'); return; }
+  if (info.len < 1) { test.skip(true, 'No experience items to delete'); return; }
+  const before = info.len;
 
-  // Click the first experience ITEM delete (aria-label "删除 <company> · <position>" — note the
-  // space; basics field-removes are "删除职位头衔" with no space and bypass the dialog).
-  await page.locator('button[aria-label^="删除 公司"]').first().click({ force: true });
+  // 删除第一条经历的按钮 aria-label = "删除 <company · position>"（带空格；
+  // basics 字段删除是无空格的「删除职位头衔」，不走对话框）。
+  await page.locator(`button[aria-label="删除 ${info.summary}"]`).first().click({ force: true });
 
   // The unified ConfirmDialog appears (role=dialog) — NOT antd's modal
   const dialog = page.locator('div[role="dialog"]');

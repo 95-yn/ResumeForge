@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "deploy": "bash deploy.sh",
+    "thumbnails": "node scripts/gen-thumbnails.mjs"
   },
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
