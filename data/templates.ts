@@ -11367,7 +11367,7 @@ li p, li div { margin: 0; padding: 0; display: inline; }
 .vs-sep { color: #569CD6; }
 .vs-pos { color: #C586C0; }
 .vs-date { color: #6A9955; margin-left: auto; font-size: 8.5pt; }
-.vs-body { font-size: 9pt; color: #9CDCFE; margin-top: 4px; }
+.vs-body { font-size: 9pt; color: #9CDCFE; margin-top: 4px; padding-left: 16px; }
 .vs-list { padding-left: 16px; margin-top: 4px; }
 .vs-list li { font-size: 8.5pt; color: #D4D4D4; margin-bottom: 2px; }
 .vs-tags { display: flex; flex-wrap: wrap; gap: 5px; padding-left: 14px; margin-bottom: 4px; }
