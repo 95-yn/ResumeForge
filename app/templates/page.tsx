@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback, useMemo, useDeferredValue } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/Logo';
 import { TEMPLATE_LIST as TEMPLATES } from '@/data/template-list';
@@ -172,7 +173,31 @@ const CATEGORY_DISPLAY: Record<string, string> = {
   campus:     'CAMPUS',
 };
 
-const FEATURED_ORDER = ['classic', 'professional', 'elegant', 'modern', 'fresh', 'clean', 'swiss', 'minimal', 'tech', 'developer'];
+// 按类别轮转交错出固定顺序：相邻卡片类别不同、首屏多样，且每次刷新顺序一致（确定性，无随机）。
+// 类别先后用一个固定偏好序，类别内保留 TEMPLATE_LIST 原顺序（classic 等仍排在 business 最前）。
+const CATEGORY_ORDER = ['business', 'creative', 'tech', 'minimal', 'profession', 'campus'];
+function interleaveByCategory<T extends { category: string }>(items: T[]): T[] {
+  const byCat = new Map<string, T[]>();
+  for (const it of items) {
+    if (!byCat.has(it.category)) byCat.set(it.category, []);
+    byCat.get(it.category)!.push(it);
+  }
+  // 先按偏好序，再追加偏好序里没列出的类别（按首次出现顺序），保证全部覆盖
+  const cats = [
+    ...CATEGORY_ORDER.filter(c => byCat.has(c)),
+    ...[...byCat.keys()].filter(c => !CATEGORY_ORDER.includes(c)),
+  ];
+  const out: T[] = [];
+  for (let i = 0; ; i++) {
+    let added = false;
+    for (const c of cats) {
+      const arr = byCat.get(c)!;
+      if (i < arr.length) { out.push(arr[i]); added = true; }
+    }
+    if (!added) break;
+  }
+  return out;
+}
 
 /* ─── Irregular margin rhythm (larger jumps) ─────────────── */
 const MARGIN_RHYTHM = [40, 96, 56, 32, 72, 48];
@@ -187,10 +212,21 @@ interface MasonryCardProps {
   onCardClick: (slug: string) => void;
 }
 
+// /editor 路由的 JS chunk 与 ?template 参数无关，全站共用，预取一次即可（浏览器 HTTP 缓存跨标签共享）。
+let editorPrefetched = false;
+
 function MasonryCard({ t, idx, onCardClick }: MasonryCardProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const router = useRouter();
   const [visible, setVisible] = useState(false);
   const [imgError, setImgError] = useState(false);
+
+  // hover / focus 卡片时预热编辑器路由，点进去（新标签）更快可交互
+  const prefetchEditor = useCallback(() => {
+    if (editorPrefetched) return;
+    editorPrefetched = true;
+    try { router.prefetch('/editor'); } catch { /* ignore */ }
+  }, [router]);
 
   useEffect(() => {
     const el = ref.current;
@@ -222,6 +258,8 @@ function MasonryCard({ t, idx, onCardClick }: MasonryCardProps) {
       className={`${styles.card}${visible ? ` ${styles.cardVisible}` : ''}`}
       style={{ marginBottom: cardMarginBottom(idx) }}
       onClick={() => onCardClick(t.slug)}
+      onMouseEnter={prefetchEditor}
+      onFocus={prefetchEditor}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => e.key === 'Enter' && onCardClick(t.slug)}
@@ -244,6 +282,7 @@ function MasonryCard({ t, idx, onCardClick }: MasonryCardProps) {
             src={`/thumbnails/${t.slug}.png`}
             alt={t.name}
             loading="lazy"
+            decoding="async"
             className={styles.cardImg}
             onError={() => setImgError(true)}
           />
@@ -270,6 +309,9 @@ export default function TemplatesPage() {
   const [query, setQuery]                       = useState<string>('');
   const deferredQuery                           = useDeferredValue(query);
 
+  // 返回顶部按钮：滚动超过一屏后浮现
+  const [showTop, setShowTop] = useState(false);
+
   // Hero title stagger — mount-triggered
   const [titlePhase, setTitlePhase] = useState(0);
   useEffect(() => {
@@ -286,7 +328,8 @@ export default function TemplatesPage() {
     return () => { document.title = 'ResumeForge'; };
   }, []);
 
-  const templates = TEMPLATES;
+  // 固定的、按类别交错的顺序（确定性；首屏类别分散）
+  const templates = useMemo(() => interleaveByCategory(TEMPLATES), []);
   const total = templates.length;
 
   const filtered = useMemo(() => {
@@ -305,15 +348,8 @@ export default function TemplatesPage() {
           (meta?.desc?.toLowerCase().includes(q) ?? false) ||
           (meta?.profession?.toLowerCase().includes(q) ?? false)
         );
-      })
-      .sort((a, b) => {
-        const ai = FEATURED_ORDER.indexOf(a.slug);
-        const bi = FEATURED_ORDER.indexOf(b.slug);
-        if (ai !== -1 && bi !== -1) return ai - bi;
-        if (ai !== -1) return -1;
-        if (bi !== -1) return 1;
-        return 0;
       });
+    // 顺序直接沿用 templates（已类别交错、确定性），过滤保留相对顺序，不再额外排序。
   }, [templates, styleFilter, professionFilter, deferredQuery]);
 
   const isStale = query !== deferredQuery;
@@ -342,6 +378,18 @@ export default function TemplatesPage() {
     return () => window.removeEventListener('keydown', handler);
   }, []);
 
+  // 滚动监听：超过约一屏高度显示返回顶部
+  useEffect(() => {
+    const onScroll = () => setShowTop(window.scrollY > 640);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
   // titlePhase class helper
   const titlePhaseClass = titlePhase >= 1 ? (titlePhase >= 2 ? styles.phase2 : styles.phase1) : '';
 
@@ -355,8 +403,11 @@ export default function TemplatesPage() {
           onClick={() => router.push('/landing')}
           aria-label="返回 ResumeForge 首页"
         />
-        <span className={styles.meta}>
-          {total} Templates · 11 Professions · Updated 2026.05
+        <span className={styles.headerRight}>
+          <span className={styles.meta}>
+            {total} Templates · 11 Professions · Updated 2026.05
+          </span>
+          <Link href="/faq" className={styles.headerLink}>Q&amp;A</Link>
         </span>
       </header>
 
@@ -405,6 +456,25 @@ export default function TemplatesPage() {
           </div>
         )}
       </div>
+
+      {/* ── 5. Footer ── */}
+      <footer className={styles.footer}>
+        <span className={styles.footerColophon}>
+          ResumeForge · {total} Specimens · Set in Fraunces &amp; JetBrains Mono · 2026
+        </span>
+      </footer>
+
+      {/* ── 返回顶部（滚动后浮现）── */}
+      <button
+        type="button"
+        className={`${styles.backToTop}${showTop ? ` ${styles.backToTopShow}` : ''}`}
+        onClick={scrollToTop}
+        aria-label="返回顶部"
+        tabIndex={showTop ? 0 : -1}
+      >
+        <span className={styles.backToTopArrow} aria-hidden="true">↑</span>
+        <span className={styles.backToTopLabel}>TOP</span>
+      </button>
     </div>
   );
 }

@@ -388,10 +388,15 @@
   overflow: hidden;
   position: relative;
   background: #EEE9E0;
+  /* 预留固定高度（按比例），图片懒加载前后盒子高度不变 → 多列瀑布流不再重排 → 消除闪烁。
+     object-fit:cover + object-position:top 展示简历顶部，各卡片图框高度一致、布局稳定。 */
+  aspect-ratio: 3 / 4;
+  width: 100%;
 }
 
 .cardImg {
   width: 100%;
+  height: 100%;
   display: block;
   object-fit: cover;
   object-position: top;
@@ -504,12 +509,98 @@
 
 .emptyClear:hover { opacity: 0.7; }
 
+/* ── Footer + 联系入口 ── */
+.footer {
+  margin-top: 80px;
+  padding: 28px 56px;
+  border-top: 1px solid var(--arch-dust);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.footerColophon {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--arch-ink-dim);
+}
+
+/* ── 返回顶部浮动按钮 ── */
+.backToTop {
+  position: fixed;
+  right: 28px;
+  bottom: 28px;
+  z-index: 70;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  background: var(--arch-card-white);
+  border: 1px solid var(--arch-chestnut);
+  border-radius: 4px;
+  color: var(--arch-chestnut);
+  cursor: pointer;
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.2s ease-out, border-color 0.2s ease-out,
+              box-shadow 0.2s ease-out;
+}
+
+.backToTopShow {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.backToTop:hover {
+  color: var(--arch-brick);
+  border-color: var(--arch-brick);
+  box-shadow: 0 8px 25px rgba(45, 24, 16, 0.10);
+}
+
+.backToTop:focus-visible {
+  outline: 2px solid var(--arch-brick);
+  outline-offset: 2px;
+}
+
+.backToTopArrow {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.backToTopLabel {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+}
+
+@media (max-width: 640px) {
+  .footer { padding: 24px; }
+  .backToTop { right: 18px; bottom: 18px; width: 46px; height: 46px; }
+}
+
 /* ── Reduced motion ── */
 @media (prefers-reduced-motion: reduce) {
   .titleDisplay,
   .filterBarFade,
-  .card {
+  .card,
+  .backToTop {
     transition: none !important;
+    animation: none !important;
+  }
+  .titleDisplay,
+  .filterBarFade,
+  .card {
     opacity: 1 !important;
     transform: none !important;
   }
