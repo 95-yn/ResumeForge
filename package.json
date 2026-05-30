@@ -10,6 +10,7 @@
     "deploy": "bash deploy.sh",
     "docker": "bash docker-deploy.sh",
     "thumbnails": "node scripts/gen-thumbnails.mjs",
+    "images:opt": "node scripts/optimize-images.mjs",
     "fonts:local": "node scripts/fetch-fonts.mjs"
   },
   "dependencies": {

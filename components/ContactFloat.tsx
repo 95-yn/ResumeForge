@@ -6,12 +6,21 @@ import styles from './ContactFloat.module.css';
 
 /* 联系方式：换邮箱或二维码改这两行即可 */
 const CONTACT_EMAIL = '95.yyyyn@gmail.com';
-const WECHAT_QR = '/contact-wechat-qr.jpg';
+const WECHAT_QR = '/contact-wechat-qr'; // 同名 .webp / .jpg 两份
 
 export function ContactFloat() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement>(null);
+  const qrPreloaded = useRef(false);
+
+  // 悬停/聚焦「联系我」时就预取二维码，等真正打开面板时已在缓存里，不再白等
+  const preloadQR = () => {
+    if (qrPreloaded.current) return;
+    qrPreloaded.current = true;
+    const img = new Image();
+    img.src = `${WECHAT_QR}.webp`;
+  };
 
   // 点击外部 / Esc 关闭
   useEffect(() => {
@@ -36,12 +45,16 @@ export function ContactFloat() {
       {open && (
         <div className={styles.panel} role="dialog" aria-label="联系方式">
           <span className={styles.label}>微信 · WeChat</span>
-          <img
-            src={WECHAT_QR}
-            alt="微信二维码，扫码添加好友"
-            className={styles.qr}
-            onError={(e) => { e.currentTarget.style.display = 'none'; }}
-          />
+          <picture>
+            <source srcSet={`${WECHAT_QR}.webp`} type="image/webp" />
+            <img
+              src={`${WECHAT_QR}.jpg`}
+              alt="微信二维码，扫码添加好友"
+              className={styles.qr}
+              decoding="async"
+              onError={(e) => { e.currentTarget.style.display = 'none'; }}
+            />
+          </picture>
           <div className={styles.divider} />
           <span className={styles.label}>邮箱 · Email</span>
           <a href={`mailto:${CONTACT_EMAIL}`} className={styles.email}>{CONTACT_EMAIL}</a>
@@ -52,6 +65,8 @@ export function ContactFloat() {
         type="button"
         className={`${styles.tab}${open ? ` ${styles.tabOpen}` : ''}`}
         onClick={() => setOpen((v) => !v)}
+        onMouseEnter={preloadQR}
+        onFocus={preloadQR}
         aria-expanded={open}
         aria-haspopup="dialog"
         aria-label="联系我"

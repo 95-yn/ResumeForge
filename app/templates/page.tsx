@@ -278,14 +278,17 @@ function MasonryCard({ t, idx, onCardClick }: MasonryCardProps) {
             <span className={styles.placeholderLabel}>preview pending</span>
           </div>
         ) : (
-          <img
-            src={`/thumbnails/${t.slug}.png`}
-            alt={t.name}
-            loading="lazy"
-            decoding="async"
-            className={styles.cardImg}
-            onError={() => setImgError(true)}
-          />
+          <picture>
+            <source srcSet={`/thumbnails/${t.slug}.webp`} type="image/webp" />
+            <img
+              src={`/thumbnails/${t.slug}.png`}
+              alt={t.name}
+              loading="lazy"
+              decoding="async"
+              className={styles.cardImg}
+              onError={() => setImgError(true)}
+            />
+          </picture>
         )}
       </div>
 
