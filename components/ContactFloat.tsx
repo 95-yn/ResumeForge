@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import styles from './ContactFloat.module.css';
+import { asset } from '@/lib/base-path';
 
 /* 联系方式：换邮箱或二维码改这两行即可 */
 const CONTACT_EMAIL = '95.yyyyn@gmail.com';
@@ -19,7 +20,7 @@ export function ContactFloat() {
     if (qrPreloaded.current) return;
     qrPreloaded.current = true;
     const img = new Image();
-    img.src = `${WECHAT_QR}.webp`;
+    img.src = asset(`${WECHAT_QR}.webp`);
   };
 
   // 点击外部 / Esc 关闭
@@ -46,9 +47,9 @@ export function ContactFloat() {
         <div className={styles.panel} role="dialog" aria-label="联系方式">
           <span className={styles.label}>微信 · WeChat</span>
           <picture>
-            <source srcSet={`${WECHAT_QR}.webp`} type="image/webp" />
+            <source srcSet={asset(`${WECHAT_QR}.webp`)} type="image/webp" />
             <img
-              src={`${WECHAT_QR}.jpg`}
+              src={asset(`${WECHAT_QR}.jpg`)}
               alt="微信二维码，扫码添加好友"
               className={styles.qr}
               decoding="async"

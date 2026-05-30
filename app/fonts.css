@@ -1,7 +1,11 @@
-/* 字体引入。默认从 Google Fonts CDN 加载。
-   运行 `npm run fonts:local`（需联网，一次）会把字体下载到 public/fonts/ 并把本文件
-   改写成本地 @font-face —— 之后浏览器不再请求 fonts.googleapis.com（解决拉不到的问题）。 */
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap');
+/* 字体：不做任何远程加载（已移除全部 Google Fonts 外链，浏览器不再请求 fonts.googleapis.com）。
+ *
+ * 当前回退到系统字体——各处 font-family 已写好回退栈：
+ *   衬线/标题  Fraunces / Old Standard TT  →  'Songti SC'（宋体）/ Georgia
+ *   正文无衬线  Plus Jakarta Sans          →  -apple-system / 'PingFang SC'（苹方）
+ *   等宽       JetBrains Mono             →  'SF Mono' / Menlo
+ *
+ * 想用自托管的品牌字体（仍然零远程加载）：在能联网（或挂代理）的机器上跑一次
+ *   BASE_PATH=/resume npm run fonts:local
+ * 它会把 woff2 下载到 public/fonts/ 并把本文件改写成本地 @font-face；提交后重建镜像即可。
+ */

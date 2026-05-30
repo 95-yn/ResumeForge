@@ -22,6 +22,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED=1
+# 子路径部署前缀（如 /resume）。整站路由与 _next 资源在构建时即烘焙到该前缀下。
+ARG BASE_PATH=""
+ENV BASE_PATH=$BASE_PATH
 RUN npm run build
 
 # ---- 3) 运行层（只拷贝 standalone 产物，镜像小）----

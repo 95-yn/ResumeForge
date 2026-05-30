@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { Logo } from '@/components/Logo';
+import { asset } from '@/lib/base-path';
 import styles from './faq.module.css';
 
 /* ─── Feature pillars（核心卖点） ───────────────────────── */
@@ -134,7 +135,7 @@ export default function FaqPage() {
               {p.shots.map((slug, si) => (
                 <img
                   key={slug}
-                  src={`/thumbnails/${slug}.png`}
+                  src={asset(`/thumbnails/${slug}.png`)}
                   alt=""
                   className={styles.shot}
                   style={{ ['--si' as string]: si }}

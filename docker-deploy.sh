@@ -9,6 +9,9 @@ set -euo pipefail
 IMAGE="resumeforge"
 CONTAINER="resumeforge"
 PORT="${PORT:-3000}"
+# 子路径部署前缀。线上挂在 https://www.yyyyn.cn/resume，故默认 /resume。
+# 根路径部署：BASE_PATH= ./docker-deploy.sh
+BASE_PATH="${BASE_PATH-/resume}"
 
 cd "$(dirname "$0")"
 
@@ -22,8 +25,8 @@ if ! docker info >/dev/null 2>&1; then
   exit 1
 fi
 
-echo "▸ [1/4] 构建镜像 $IMAGE ..."
-docker build -t "$IMAGE" .
+echo "▸ [1/4] 构建镜像 $IMAGE （basePath='${BASE_PATH:-/}'）..."
+docker build --build-arg BASE_PATH="$BASE_PATH" -t "$IMAGE" .
 
 echo "▸ [2/4] 停止并删除旧容器（若有）..."
 docker rm -f "$CONTAINER" >/dev/null 2>&1 || true
@@ -38,9 +41,9 @@ docker run -d \
 
 echo "▸ [4/4] 等待服务就绪 ..."
 for i in $(seq 1 30); do
-  if curl -fsS "http://localhost:${PORT}/" >/dev/null 2>&1; then
+  if curl -fsS "http://localhost:${PORT}${BASE_PATH}/" >/dev/null 2>&1; then
     echo ""
-    echo "✓ 部署成功！访问： http://localhost:${PORT}"
+    echo "✓ 部署成功！访问： http://localhost:${PORT}${BASE_PATH}"
     echo "  查看日志： docker logs -f $CONTAINER"
     echo "  停止服务： docker rm -f $CONTAINER"
     [ "${1:-}" = "--logs" ] && docker logs -f "$CONTAINER"

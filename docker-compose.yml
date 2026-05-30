@@ -1,8 +1,12 @@
 # ResumeForge —— 一条命令起服务：docker compose up -d --build
 # 改端口：HOST_PORT=8080 docker compose up -d --build
+# 子路径前缀默认 /resume；根路径部署：BASE_PATH= docker compose up -d --build
 services:
   web:
-    build: .
+    build:
+      context: .
+      args:
+        BASE_PATH: ${BASE_PATH-/resume}
     image: resumeforge
     container_name: resumeforge
     restart: unless-stopped
@@ -12,7 +16,7 @@ services:
       - NODE_ENV=production
       - PORT=3000
     healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:3000/"]
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000${BASE_PATH-/resume}/"]
       interval: 30s
       timeout: 5s
       retries: 3

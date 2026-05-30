@@ -18,6 +18,9 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const outDir = path.join(root, 'public/fonts');
 const cssOut = path.join(root, 'app/fonts.css');
+// 子路径部署：本地字体的 @font-face url 也要带 basePath 前缀（CSS 里的 url() 不会被 Next 自动加前缀）。
+// 与构建时保持一致：BASE_PATH=/resume npm run fonts:local
+const BASE = process.env.BASE_PATH || '';
 
 // 与 app/fonts.css 里一致的字体（&family 拆成单独请求，避免重复）
 const FONT_CSS_URLS = [
@@ -54,7 +57,7 @@ for (const url of FONT_CSS_URLS) {
       downloaded.set(wurl, local);
       process.stdout.write(`  ↓ ${local} (${(buf.length / 1024).toFixed(0)}KB)\n`);
     }
-    block = block.split(wurl).join(`/fonts/${local}`);
+    block = block.split(wurl).join(`${BASE}/fonts/${local}`);
   }
   css += block.trim() + '\n\n';
 }

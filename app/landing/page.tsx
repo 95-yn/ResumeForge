@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import { Logo } from '@/components/Logo';
+import { asset } from '@/lib/base-path';
 import styles from './landing.module.css';
 
 const SPECIMENS = [
@@ -208,7 +209,7 @@ export default function LandingPage() {
               <Link href="/" className={styles.specimenCard} data-specimen-card key={item.slug} aria-label={`查看 ${item.label} 模板`}>
                 <span className={`${styles.specimenNum} ${styles.display}`}>{item.num}</span>
                 <img
-                  src={`/thumbnails/${item.slug}.png`}
+                  src={asset(`/thumbnails/${item.slug}.png`)}
                   alt={`${item.label} resume template preview`}
                   className={styles.specimenThumb}
                   onError={(e) => {
@@ -216,7 +217,7 @@ export default function LandingPage() {
                     // Try elegant as fallback
                     if (!img.dataset.fallback) {
                       img.dataset.fallback = '1';
-                      img.src = '/thumbnails/elegant.png';
+                      img.src = asset('/thumbnails/elegant.png');
                       return;
                     }
                     // Both failed: show placeholder

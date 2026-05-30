@@ -2,6 +2,7 @@ import './fonts.css';
 import './globals.css';
 import type { Metadata } from 'next';
 import { ContactFloat } from '@/components/ContactFloat';
+import { asset } from '@/lib/base-path';
 
 export const metadata: Metadata = {
   title: 'ResumeForge — 72套专业简历模板，免费在线编辑',
@@ -18,9 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="zh-CN">
       <head>
-        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="icon" href={asset('/favicon.svg')} type="image/svg+xml" />
       </head>
       <body>
         {children}

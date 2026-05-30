@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo, useDeferredValue } from 'react';
 import Link from 'next/link';
+import { asset } from '@/lib/base-path';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/Logo';
 import { TEMPLATE_LIST as TEMPLATES } from '@/data/template-list';
@@ -279,9 +280,9 @@ function MasonryCard({ t, idx, onCardClick }: MasonryCardProps) {
           </div>
         ) : (
           <picture>
-            <source srcSet={`/thumbnails/${t.slug}.webp`} type="image/webp" />
+            <source srcSet={asset(`/thumbnails/${t.slug}.webp`)} type="image/webp" />
             <img
-              src={`/thumbnails/${t.slug}.png`}
+              src={asset(`/thumbnails/${t.slug}.png`)}
               alt={t.name}
               loading="lazy"
               decoding="async"
@@ -359,7 +360,7 @@ export default function TemplatesPage() {
 
   const handleCardClick = useCallback((slug: string) => {
     const meta = TEMPLATE_META[slug];
-    window.open(`/editor?template=${slug}&profession=${encodeURIComponent(meta?.profession || '通用')}`, '_blank', 'noopener,noreferrer');
+    window.open(asset(`/editor?template=${slug}&profession=${encodeURIComponent(meta?.profession || '通用')}`), '_blank', 'noopener,noreferrer');
   }, []);
 
   const handleClearFilters = () => {
