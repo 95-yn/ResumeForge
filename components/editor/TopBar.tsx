@@ -178,12 +178,7 @@ body { margin: 0; }
     // A4 with sensible default margins. Most templates control their own internal
     // padding, so we use minimal page margins and let the resume container breathe.
     // Browser uses <title> as default PDF filename — 用连字符的干净文件名。
-    const rawName = (resume.basics?.name as string | undefined)?.trim();
-    const rawTitle = (resume.basics?.title as string | undefined)?.trim();
     const pdfTitle = buildFilename();
-
-    // Footer text: 姓名 · 职位（中点仅用于页脚展示，不进文件名）
-    const footerName = ([rawName, rawTitle].filter(Boolean).join(' · ') || '简历').replace(/\\/g, '\\\\').replace(/"/g, '\\"');
 
     const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><title>${pdfTitle}</title>
 <style>
@@ -212,28 +207,10 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
 /* Page margins live ONLY in @page — body must be 0 0 or padding stacks.
    8mm / 10mm 是现代简历常用紧凑边距（约 0.31" / 0.39"），比 Word narrow
    (0.5") 紧、比印刷 editorial (6mm) 松，平衡阅读舒适和单页容纳。
-   多页时底部加 14mm 留给页脚（9pt × 行高 + 间距）。 */
+   不渲染任何页脚/页码，避免第二页底部出现多余信息。 */
 @page {
   size: A4;
-  margin: 8mm 10mm 14mm 10mm;
-  @bottom-center {
-    content: "${footerName}";
-    font-family: 'JetBrains Mono', 'SF Mono', 'Courier New', monospace;
-    font-size: 8pt;
-    color: #A8A29E;
-  }
-  @bottom-right {
-    content: "第 " counter(page) " 页 / 共 " counter(pages) " 页";
-    font-family: 'JetBrains Mono', 'SF Mono', 'Courier New', monospace;
-    font-size: 8pt;
-    color: #A8A29E;
-  }
-}
-/* 首页不显示页脚（单页简历不需要页码干扰视觉） */
-@page :first {
-  margin-bottom: 8mm;
-  @bottom-center { content: none; }
-  @bottom-right { content: none; }
+  margin: 8mm 10mm;
 }
 @media print {
   html, body {
