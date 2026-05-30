@@ -1,5 +1,7 @@
+import './fonts.css';
 import './globals.css';
 import type { Metadata } from 'next';
+import { ContactFloat } from '@/components/ContactFloat';
 
 export const metadata: Metadata = {
   title: 'ResumeForge — 72套专业简历模板，免费在线编辑',
@@ -20,7 +22,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <ContactFloat />
+      </body>
     </html>
   );
 }
