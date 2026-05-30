@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "deploy": "bash deploy.sh",
+    "docker": "bash docker-deploy.sh",
     "thumbnails": "node scripts/gen-thumbnails.mjs",
     "fonts:local": "node scripts/fetch-fonts.mjs"
   },
