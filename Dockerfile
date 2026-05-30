@@ -10,9 +10,11 @@ WORKDIR /app
 # 境外构建可覆盖：docker build --build-arg NPM_REGISTRY=https://registry.npmjs.org .
 ARG NPM_REGISTRY=https://registry.npmmirror.com
 COPY package.json package-lock.json* ./
+# 用 npm install 而非 npm ci：lockfile 在 macOS 生成，缺 Linux 平台可选依赖（@emnapi 等），
+# npm ci 严格模式会因此报 EUSAGE。install 以 lockfile 为基础补齐缺失项，构建更稳。
 RUN npm config set registry "$NPM_REGISTRY" \
  && sed -i "s#https://registry.npmjs.org#${NPM_REGISTRY}#g" package-lock.json \
- && npm ci
+ && npm install --no-audit --no-fund
 
 # ---- 2) 构建层 ----
 FROM node:20-alpine AS builder
