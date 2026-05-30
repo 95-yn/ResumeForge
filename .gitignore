@@ -9,3 +9,6 @@ dist/
 coverage/
 .turbo/
 *.tsbuildinfo
+
+# 小红书配图等本地素材，不入库
+doc/
