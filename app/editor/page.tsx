@@ -1,9 +1,23 @@
 'use client';
 
-import { useEffect, Suspense } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { EditorLayout } from '@/components/editor/EditorLayout';
+import { MobileGate } from '@/components/editor/MobileGate';
 import { useEditorStore } from '@/lib/editor-store';
+
+/** 窄屏（手机/小平板竖屏）检测：编辑器仅支持电脑端。null = 尚未判定（SSR/首帧）。 */
+function useIsNarrow() {
+  const [narrow, setNarrow] = useState<boolean | null>(null);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 820px)');
+    const update = () => setNarrow(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+  return narrow;
+}
 
 /** 编辑器骨架屏：镜像真实布局（顶栏 / 左侧模块 / A4 纸），加载完成切换无明显跳动。 */
 function EditorSkeleton() {
@@ -115,12 +129,18 @@ function EditorContent() {
   const templateSlug = searchParams.get('template');
   const profession = searchParams.get('profession');
   const { loadTemplate, resume, templateNotFound } = useEditorStore();
+  const isNarrow = useIsNarrow();
 
   useEffect(() => {
     if (templateSlug) {
       loadTemplate(templateSlug, profession || undefined);
     }
   }, [templateSlug, profession, loadTemplate]);
+
+  // 窄屏（手机）不进编辑器，给友好提示引导用电脑打开。
+  if (isNarrow) {
+    return <MobileGate />;
+  }
 
   if (templateNotFound) {
     return <TemplateNotFound slug={templateSlug} />;
