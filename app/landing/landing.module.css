@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap');
+/* 字体由 app/fonts.css 统一引入（含 Old Standard TT / JetBrains Mono），可本地化 */
 
 .root {
   background: var(--paper);
@@ -55,6 +55,32 @@
   outline-offset: 2px;
 }
 
+.navRight {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.navLink {
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink-faint);
+  padding-bottom: 2px;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.navLink:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+.navLink:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
 .navCta {
   display: inline-flex;
   align-items: center;
@@ -87,7 +113,6 @@
   grid-template-columns: 1fr;
   position: relative;
   overflow: hidden;
-  cursor: crosshair;
 }
 
 .heroInner {
@@ -194,41 +219,99 @@
 .heroLetterRow:nth-child(5) .letterTag { animation-delay: 700ms; }
 .heroLetterRow:nth-child(6) .letterTag { animation-delay: 800ms; }
 
+/* Redundant per-row specimen label: the hero pitch panel now owns the right
+   column, so this collided with it. Removed at every width. */
 .letterRuleNum {
-  margin-left: auto;
-  font-family: 'JetBrains Mono', 'SF Mono', monospace;
-  font-size: 10px;
-  letter-spacing: 0.08em;
-  color: var(--ink-faint);
-  text-transform: uppercase;
-  align-self: flex-end;
-  padding-bottom: 6px;
+  display: none;
 }
 
-.heroTagline {
+/* Hero value panel — anchors the right column, carries the pitch + primary CTA */
+.heroPitch {
   position: absolute;
   right: 40px;
-  bottom: 80px;
-  text-align: right;
-  max-width: 280px;
+  top: 50%;
+  transform: translateY(-50%);
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.heroTaglineText {
+.heroPitchLead {
   font-family: 'Old Standard TT', Georgia, serif;
-  font-size: 13px;
+  font-size: clamp(24px, 2.4vw, 34px);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+
+.heroPitchText {
+  font-family: 'Old Standard TT', Georgia, serif;
+  font-size: 15px;
   line-height: 1.7;
   color: var(--ink-mid);
-  font-style: italic;
+  margin: 0 0 22px;
 }
 
-.heroTaglineNum {
+.heroPitchPoints {
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.heroPitchPoints li {
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  padding-left: 16px;
+  position: relative;
+}
+
+.heroPitchPoints li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+}
+
+.heroPitchCta {
+  display: inline-flex;
+  align-items: center;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  padding: 12px 22px;
+  text-decoration: none;
+  transition: background 0.25s var(--ease-expo), transform 0.25s var(--ease-expo);
+}
+
+.heroPitchCta:hover {
+  background: var(--accent);
+  transform: translateX(4px);
+}
+
+.heroPitchCta:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.heroPitchMeta {
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px;
   letter-spacing: 0.10em;
   text-transform: uppercase;
   color: var(--ink-faint);
-  margin-top: 12px;
-  display: block;
+  margin-top: 24px;
 }
 
 .scrollHint {
@@ -326,6 +409,34 @@
 
 .briefPara:last-child { margin-bottom: 0; }
 
+.briefPara strong {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.briefCta {
+  align-self: flex-start;
+  margin-top: 36px;
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  text-decoration: none;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--ink-faint);
+  transition: color 0.2s var(--ease-expo), border-color 0.2s var(--ease-expo);
+}
+
+.briefCta:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.briefCta:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
 /* ─── SPECIMEN GRID ───────────────────────────────── */
 .specimen {
   padding: 100px 40px;
@@ -384,7 +495,18 @@
   flex-direction: column;
   gap: 24px;
   transition: background 0.25s ease;
-  cursor: default;
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+}
+
+.specimenCard:hover .specimenNum {
+  color: var(--accent);
+}
+
+.specimenCard:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: -1px;
 }
 
 .specimenCard:nth-child(2) { transform: translateY(32px); }
@@ -402,6 +524,7 @@
   letter-spacing: -0.04em;
   line-height: 0.9;
   color: var(--ink);
+  transition: color 0.25s ease;
 }
 
 .specimenThumb {
@@ -468,6 +591,35 @@
 .specimenMetaTag {
   color: var(--accent);
   font-weight: 500;
+}
+
+.specimenFooter {
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--ink-faint);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.specimenAll {
+  font-family: 'Old Standard TT', 'Cormorant Garamond', Georgia, serif;
+  font-size: clamp(20px, 2.4vw, 30px);
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  padding-bottom: 4px;
+  transition: color 0.25s var(--ease-expo), border-color 0.25s var(--ease-expo), font-style 0.25s var(--ease-expo);
+}
+
+.specimenAll:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  font-style: italic;
+}
+
+.specimenAll:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* ─── MANIFESTO ───────────────────────────────────── */
@@ -659,8 +811,16 @@
 @media (max-width: 900px) {
   .nav { padding: 16px 24px; }
   .heroInner { padding: 40px 24px 60px; }
-  .heroTagline { right: 24px; bottom: 60px; }
   .scrollHint { left: 24px; }
+
+  /* Pitch panel flows below the letters instead of floating */
+  .heroPitch {
+    position: static;
+    transform: none;
+    max-width: none;
+    margin-top: 48px;
+  }
+  .heroPitchPoints { flex-direction: column; }
 
   .brief { grid-template-columns: 1fr; }
   .briefMargin { display: none; }
