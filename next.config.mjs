@@ -8,4 +8,22 @@ export default {
   experimental: {
     optimizePackageImports: ['@ant-design/icons'],
   },
+  // 静态资源缓存头：缩略图/二维码 30 天，字体 1 年（不变内容用 immutable）。
+  // 这些响应经 nginx 反代会原样透传，回访几乎零流量。（_next/static 已由 Next 默认 immutable）
+  async headers() {
+    return [
+      {
+        source: '/thumbnails/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=2592000' }],
+      },
+      {
+        source: '/fonts/:path*',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }],
+      },
+      {
+        source: '/contact-wechat-qr.:ext(webp|jpg)',
+        headers: [{ key: 'Cache-Control', value: 'public, max-age=2592000' }],
+      },
+    ];
+  },
 };
