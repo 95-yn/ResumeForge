@@ -1,0 +1,329 @@
+/* 字体由 app/fonts.css 统一引入（含 Old Standard TT / JetBrains Mono），可本地化 */
+
+.root {
+  background: var(--paper);
+  color: var(--ink);
+  min-height: 100vh;
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  -webkit-font-smoothing: antialiased;
+}
+
+.display { font-family: 'Old Standard TT', 'Cormorant Garamond', Georgia, serif; }
+.mono    { font-family: 'JetBrains Mono', 'SF Mono', monospace; }
+
+.kicker {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ── NAV ─────────────────────────────────────────────── */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px clamp(20px, 5vw, 64px);
+  background: color-mix(in srgb, var(--paper) 86%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--ink-faint);
+}
+.navCta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 7px 16px;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  transition: background 0.2s var(--ease-expo), color 0.2s var(--ease-expo);
+}
+.navCta:hover { background: var(--ink); color: var(--paper); }
+
+/* ── HERO ────────────────────────────────────────────── */
+.hero {
+  padding: clamp(56px, 11vw, 130px) clamp(20px, 5vw, 64px) clamp(40px, 7vw, 80px);
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.heroTitle {
+  font-size: clamp(40px, 8vw, 96px);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  margin: 18px 0 0;
+}
+.heroLede {
+  margin: clamp(24px, 4vw, 40px) 0 0;
+  max-width: 56ch;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: clamp(13px, 1.4vw, 15px);
+  line-height: 1.85;
+  color: var(--ink-mid);
+}
+
+.heroStats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  margin-top: clamp(40px, 6vw, 64px);
+  border: 1px solid var(--ink-faint);
+  background: var(--ink-faint);
+}
+.stat {
+  background: var(--paper);
+  padding: 22px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.statNum {
+  font-size: clamp(30px, 4vw, 48px);
+  font-weight: 700;
+  line-height: 1;
+}
+.statLabel {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+}
+
+/* ── PILLARS ─────────────────────────────────────────── */
+.pillars {
+  border-top: 1px solid var(--ink-faint);
+}
+.pillar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(28px, 6vw, 80px);
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: clamp(48px, 8vw, 100px) clamp(20px, 5vw, 64px);
+  border-bottom: 1px solid var(--ink-faint);
+}
+.pillarReverse .pillarText { order: 2; }
+.pillarReverse .pillarShots { order: 1; }
+
+.pillarNum {
+  display: block;
+  font-size: clamp(32px, 4vw, 52px);
+  font-weight: 700;
+  color: var(--ink-faint);
+  line-height: 1;
+}
+.pillarKicker {
+  display: block;
+  margin-top: 10px;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+}
+.pillarTitle {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 700;
+  margin: 12px 0 0;
+  line-height: 1.1;
+}
+.pillarBody {
+  margin: 18px 0 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--ink-mid);
+}
+
+/* Specimen-style stacked screenshots */
+.pillarShots {
+  position: relative;
+  height: clamp(260px, 34vw, 380px);
+}
+.shot {
+  position: absolute;
+  width: 56%;
+  border: 1px solid var(--ink-faint);
+  box-shadow: 0 18px 40px rgba(61, 42, 26, 0.14);
+  background: #fff;
+  border-radius: 2px;
+  transition: transform 0.5s var(--ease-expo), box-shadow 0.5s var(--ease-expo);
+}
+.shot:nth-child(1) { left: 0;    top: 6%;  z-index: 3; transform: rotate(-4deg); }
+.shot:nth-child(2) { left: 28%;  top: 0;   z-index: 2; transform: rotate(2deg); }
+.shot:nth-child(3) { left: 52%;  top: 10%; z-index: 1; transform: rotate(6deg); }
+.pillar:hover .shot:nth-child(1) { transform: rotate(-6deg) translateY(-6px); }
+.pillar:hover .shot:nth-child(2) { transform: rotate(0deg) translateY(-10px); z-index: 4; }
+.pillar:hover .shot:nth-child(3) { transform: rotate(8deg) translateY(-4px); }
+
+/* ── PRIVACY PROMISE ─────────────────────────────────── */
+.promise {
+  background: var(--ink);
+  color: var(--paper);
+  padding: clamp(60px, 10vw, 120px) clamp(20px, 5vw, 64px);
+}
+.promise .kicker { color: color-mix(in srgb, var(--accent) 70%, white); }
+.promiseLine {
+  max-width: 1100px;
+  margin: 22px auto 0;
+  font-size: clamp(28px, 5vw, 60px);
+  font-weight: 700;
+  line-height: 1.15;
+}
+.promiseMark {
+  background: var(--accent);
+  color: var(--paper);
+  padding: 0 0.2em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+.promiseGrid {
+  max-width: 1100px;
+  margin: clamp(40px, 6vw, 64px) auto 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(20px, 3vw, 40px);
+}
+.promiseItem {
+  padding-top: 18px;
+  border-top: 1px solid rgba(245, 241, 232, 0.18);
+}
+.promiseTag {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: color-mix(in srgb, var(--accent) 70%, white);
+  margin-bottom: 12px;
+}
+.promiseItem p {
+  margin: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.85;
+  color: rgba(245, 241, 232, 0.72);
+}
+
+/* ── FAQ ─────────────────────────────────────────────── */
+.faq {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: clamp(60px, 10vw, 120px) clamp(20px, 5vw, 64px);
+}
+.faqHead { margin-bottom: clamp(28px, 4vw, 48px); }
+.faqTitle {
+  font-size: clamp(32px, 5vw, 56px);
+  font-weight: 700;
+  margin: 12px 0 0;
+}
+.faqList { border-top: 1px solid var(--ink-faint); }
+.faqItem { border-bottom: 1px solid var(--ink-faint); }
+.faqQ {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--ink);
+  transition: color 0.18s var(--ease-expo);
+}
+.faqQ:hover { color: var(--accent); }
+.faqQNum {
+  font-size: 12px;
+  color: var(--ink-faint);
+  flex-shrink: 0;
+}
+.faqOpen .faqQNum { color: var(--accent); }
+.faqQText {
+  flex: 1;
+  font-family: 'Old Standard TT', Georgia, serif;
+  font-size: clamp(16px, 2vw, 21px);
+  font-weight: 700;
+  line-height: 1.35;
+}
+.faqToggle {
+  flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--ink-mid);
+  line-height: 1;
+}
+.faqA {
+  padding: 0 4px 26px 44px;
+  animation: faqReveal 0.4s var(--ease-expo);
+}
+.faqA p {
+  margin: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  line-height: 1.95;
+  color: var(--ink-mid);
+  max-width: 60ch;
+}
+@keyframes faqReveal {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── CTA ─────────────────────────────────────────────── */
+.cta {
+  text-align: center;
+  padding: clamp(60px, 10vw, 130px) clamp(20px, 5vw, 64px);
+  border-top: 1px solid var(--ink-faint);
+}
+.ctaLink {
+  display: inline-block;
+  margin: 18px 0 0;
+  font-size: clamp(30px, 5vw, 60px);
+  font-weight: 700;
+  color: var(--ink);
+  text-decoration: none;
+  line-height: 1.1;
+  transition: color 0.2s var(--ease-expo);
+}
+.ctaLink:hover { color: var(--accent); }
+.ctaSub {
+  margin: clamp(24px, 4vw, 36px) 0 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: var(--ink-mid);
+}
+
+/* ── FOOTER ──────────────────────────────────────────── */
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 28px clamp(20px, 5vw, 64px);
+  border-top: 1px solid var(--ink-faint);
+}
+.footerMeta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  letter-spacing: 0.06em;
+  color: var(--ink-mid);
+}
+.footerLink { color: var(--ink-mid); text-decoration: none; }
+.footerLink:hover { color: var(--accent); }
+
+/* ── Responsive ──────────────────────────────────────── */
+@media (max-width: 760px) {
+  .heroStats { grid-template-columns: repeat(2, 1fr); }
+  .pillar { grid-template-columns: 1fr; }
+  .pillarReverse .pillarText { order: 0; }
+  .pillarReverse .pillarShots { order: 0; }
+  .pillarShots { height: 240px; }
+  .promiseGrid { grid-template-columns: 1fr; }
+  .faqA { padding-left: 4px; }
+}

@@ -1,0 +1,151 @@
+/* 全局右侧浮动联系入口。自带配色，适配 cream / stone / ash 各页底色。 */
+.wrap {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 80;
+  display: flex;
+  align-items: center;
+}
+
+/* ── 右侧贴边竖向 tab ── */
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 9px;
+  background: #2D1810;        /* ink-chestnut */
+  color: #F5F1E8;             /* paper-cream */
+  border: none;
+  border-radius: 8px 0 0 8px;
+  cursor: pointer;
+  box-shadow: -2px 0 12px rgba(45, 24, 16, 0.16);
+  transition: background 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              padding-right 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tab:hover {
+  background: #1E5A6B;        /* cyan-marine */
+  padding-right: 13px;
+}
+
+.tabOpen {
+  background: #1E5A6B;
+}
+
+.tab:focus-visible {
+  outline: 2px solid #1E5A6B;
+  outline-offset: 2px;
+}
+
+.tabIcon {
+  display: block;
+  flex-shrink: 0;
+}
+
+.tabText {
+  writing-mode: vertical-rl;
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  line-height: 1;
+}
+
+/* ── 弹层（开在 tab 左侧） ── */
+.panel {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  width: 224px;
+  background: #FEFEFE;
+  border: 1px solid #E9E5DD;
+  border-radius: 10px;
+  box-shadow: 0 12px 34px rgba(45, 24, 16, 0.14), 0 3px 8px rgba(45, 24, 16, 0.06);
+  padding: 18px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: contactReveal 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.panel::after {
+  /* 指向 tab 的小三角 */
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  background: #FEFEFE;
+  border-top: 1px solid #E9E5DD;
+  border-right: 1px solid #E9E5DD;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+@keyframes contactReveal {
+  from { opacity: 0; transform: translate(8px, -50%); }
+  to   { opacity: 1; transform: translate(0, -50%); }
+}
+
+.label {
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #78716C;
+}
+
+.qr {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  border: 1px solid #E9E5DD;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  background: #E9E5DD;
+  margin: 4px 0;
+}
+
+.email {
+  font-family: 'JetBrains Mono', 'SF Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  color: #2D1810;
+  text-decoration: none;
+  border-bottom: 1px solid #E9E5DD;
+  padding-bottom: 2px;
+  word-break: break-all;
+  text-align: center;
+  transition: color 0.2s ease-out, border-color 0.2s ease-out;
+}
+
+.email:hover {
+  color: #B0463A;            /* brick-red */
+  border-bottom-color: #B0463A;
+}
+
+.email:focus-visible {
+  outline: 2px solid #1E5A6B;
+  outline-offset: 2px;
+}
+
+/* 小屏：缩窄 tab，弹层不超出视口 */
+@media (max-width: 640px) {
+  .tab { padding: 14px 7px; }
+  .tabText { font-size: 11px; letter-spacing: 0.18em; }
+  .panel { width: 200px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tab, .panel { transition: none !important; animation: none !important; }
+}
