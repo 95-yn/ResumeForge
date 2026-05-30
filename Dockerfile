@@ -6,8 +6,13 @@
 # ---- 1) 依赖层（仅装依赖，利用缓存）----
 FROM node:20-alpine AS deps
 WORKDIR /app
+# npm 源：国内服务器默认走 npmmirror 加速，避免连不上官方源导致 npm ci 失败。
+# 境外构建可覆盖：docker build --build-arg NPM_REGISTRY=https://registry.npmjs.org .
+ARG NPM_REGISTRY=https://registry.npmmirror.com
 COPY package.json package-lock.json* ./
-RUN npm ci
+RUN npm config set registry "$NPM_REGISTRY" \
+ && sed -i "s#https://registry.npmjs.org#${NPM_REGISTRY}#g" package-lock.json \
+ && npm ci
 
 # ---- 2) 构建层 ----
 FROM node:20-alpine AS builder
