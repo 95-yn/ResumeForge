@@ -4,7 +4,11 @@ import Link from 'next/link';
 import { useEffect, useRef } from 'react';
 import { Logo } from '@/components/Logo';
 import { asset } from '@/lib/base-path';
+import { TEMPLATE_LIST } from '@/data/template-list';
 import styles from './landing.module.css';
+
+// 模板总数动态读取，避免新增模板后文案过期
+const TPL_COUNT = TEMPLATE_LIST.length;
 
 const SPECIMENS = [
   { num: '01', slug: 'classic',    label: 'CLASSIC',    tag: '商务通用' },
@@ -141,7 +145,7 @@ export default function LandingPage() {
           <div className={styles.heroPitch}>
             <p className={styles.heroPitchLead}>不用从空白页开始。</p>
             <p className={styles.heroPitchText}>
-              72 套印刷级简历模板。挑一套，填上内容，导出 PDF。
+              {TPL_COUNT} 套印刷级简历模板。挑一套，填上内容，导出 PDF。
             </p>
             <ul className={`${styles.heroPitchPoints} ${styles.mono}`}>
               <li>永久免费 · 无水印</li>
@@ -170,7 +174,7 @@ export default function LandingPage() {
 
         <div className={styles.briefBody}>
           <div className={`${styles.briefSectionLabel} ${styles.mono}`}>
-            The Brief &mdash; 01 &nbsp;/&nbsp; 为什么是 72 套
+            The Brief &mdash; 01 &nbsp;/&nbsp; 为什么是 {TPL_COUNT} 套
           </div>
 
           <div className={styles.briefDropcapWrap}>
@@ -182,8 +186,8 @@ export default function LandingPage() {
             </p>
 
             <p className={styles.briefPara}>
-              所以我们做了 72 套，每一套都按字体样本的标准推敲层级、字距与留白，
-              覆盖商务、技术、设计、金融、校招等 11 个职能方向。
+              所以我们做了 {TPL_COUNT} 套，每一套都按字体样本的标准推敲层级、字距与留白，
+              覆盖商务、技术、设计、金融、校招等 21 个职能方向。
               全部<strong>永久免费</strong>，数据只存在你的浏览器本地，<strong>无需注册</strong>。
             </p>
 
@@ -198,7 +202,7 @@ export default function LandingPage() {
       <section className={styles.specimen}>
         <div className={styles.specimenHeader}>
           <h2 className={`${styles.specimenTitle} ${styles.display}`}>Selected Specimens</h2>
-          <span className={`${styles.specimenSubtitle} ${styles.mono}`}>72 typefaces — 6 shown / all available</span>
+          <span className={`${styles.specimenSubtitle} ${styles.mono}`}>{TPL_COUNT} typefaces — 6 shown / all available</span>
         </div>
 
         <div className={styles.specimenGrid} ref={specimenGridRef}>
@@ -246,7 +250,7 @@ export default function LandingPage() {
         </div>
 
         <div className={styles.specimenFooter}>
-          <Link href="/" className={styles.specimenAll}>查看全部 72 套模板 →</Link>
+          <Link href="/" className={styles.specimenAll}>查看全部 {TPL_COUNT} 套模板 →</Link>
         </div>
       </section>
 
@@ -287,7 +291,7 @@ export default function LandingPage() {
             select your template
           </Link>
           <p className={styles.ctaSub}>
-            72 specimens, zero friction.<br />
+            {TPL_COUNT} specimens, zero friction.<br />
             Choose, fill, export. The page remembers your choices.
           </p>
         </div>

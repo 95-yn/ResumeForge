@@ -4,7 +4,11 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { Logo } from '@/components/Logo';
 import { asset } from '@/lib/base-path';
+import { TEMPLATE_LIST } from '@/data/template-list';
 import styles from './faq.module.css';
+
+// 模板总数动态读取，避免新增模板后文案过期
+const TPL_COUNT = TEMPLATE_LIST.length;
 
 /* ─── Feature pillars（核心卖点） ───────────────────────── */
 const PILLARS = [
@@ -13,7 +17,7 @@ const PILLARS = [
     kicker: 'FOREVER FREE',
     title: '永久免费',
     body:
-      '72 套模板，全部 0 元。导出无水印、无次数限制、无会员墙、无「高级模板」二次收费。我们不会把本该免费的东西卖给你——简历是你找工作的工具，不是我们的生意。',
+      `${TPL_COUNT} 套模板，全部 0 元。导出无水印、无次数限制、无会员墙、无「高级模板」二次收费。我们不会把本该免费的东西卖给你——简历是你找工作的工具，不是我们的生意。`,
     shots: ['classic', 'executive', 'consulting'],
   },
   {
@@ -46,7 +50,7 @@ const PILLARS = [
 const FAQS = [
   {
     q: '真的永久免费吗？会不会有隐藏收费？',
-    a: '是，真的免费。全部 72 套模板都免费，导出无水印、无次数限制，没有会员墙，也没有「这套是高级模板请付费」的套路。不需要绑卡、不需要订阅。',
+    a: `是，真的免费。全部 ${TPL_COUNT} 套模板都免费，导出无水印、无次数限制，没有会员墙，也没有「这套是高级模板请付费」的套路。不需要绑卡、不需要订阅。`,
   },
   {
     q: '我的简历数据会被上传吗？安全吗？',
@@ -99,7 +103,7 @@ export default function FaqPage() {
         </p>
         <div className={styles.heroStats}>
           <div className={styles.stat}>
-            <span className={`${styles.statNum} ${styles.display}`}>72</span>
+            <span className={`${styles.statNum} ${styles.display}`}>{TPL_COUNT}</span>
             <span className={`${styles.statLabel} ${styles.mono}`}>专业模板</span>
           </div>
           <div className={styles.stat}>
@@ -213,7 +217,7 @@ export default function FaqPage() {
           挑一套模板，开始写 ⟶
         </Link>
         <p className={styles.ctaSub}>
-          72 套样本，0 元，0 上传，0 门槛。<br />
+          {TPL_COUNT} 套样本，0 元，0 上传，0 门槛。<br />
           选好，填上，导出。页面会替你记住一切。
         </p>
       </section>
