@@ -171,6 +171,7 @@ function ColorPicker({ colors, onSelect, onReset, onClose }: ColorPickerProps) {
 
 export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }: FloatingEditorProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const handleConfirmRef = useRef<() => void>(() => {});
   const longField = isLongField(editingField.field);
   const [colorPickerOpen, setColorPickerOpen] = useState<'text' | 'bg' | null>(null);
   const [fontSizeOpen, setFontSizeOpen] = useState(false);
@@ -205,11 +206,18 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') { e.preventDefault(); onCancel(); }
+      if (e.key === 'Escape') { e.preventDefault(); onCancel(); return; }
+      // 短字段（姓名/职位/公司/日期等）按 Enter 直接提交；长字段（简介/描述/亮点）Enter 仍换行。
+      // 用捕获阶段抢在 TipTap 之前拦截，并排除输入法组合态（中文选词的 Enter 不应误提交）。
+      if (e.key === 'Enter' && !e.shiftKey && !longField && !e.isComposing && e.keyCode !== 229) {
+        e.preventDefault();
+        e.stopPropagation();
+        handleConfirmRef.current();
+      }
     };
-    document.addEventListener('keydown', handleKey);
-    return () => document.removeEventListener('keydown', handleKey);
-  }, [onCancel]);
+    document.addEventListener('keydown', handleKey, true);
+    return () => document.removeEventListener('keydown', handleKey, true);
+  }, [onCancel, longField]);
 
   const handleConfirm = useCallback(() => {
     if (!editor) return;
@@ -225,6 +233,7 @@ export function FloatingEditor({ editingField, iframeRect, onConfirm, onCancel }
     }
     onConfirm(editingField.field, html);
   }, [editor, editingField.field, onConfirm]);
+  handleConfirmRef.current = handleConfirm;
 
   // Click outside → implicit save (industry standard for inline editors). ESC → cancel.
   // Use mouseup (not mousedown) + document.contains guard:

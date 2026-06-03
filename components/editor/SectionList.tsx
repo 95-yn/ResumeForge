@@ -308,13 +308,29 @@ export function SectionList() {
                 tabIndex={0}
                 role="button"
                 aria-expanded={isOpen}
+                aria-keyshortcuts={isDraggable ? 'Alt+ArrowUp Alt+ArrowDown' : undefined}
                 onDragStart={e => onDragStart(e, key)}
                 onDragEnd={onDragEnd}
                 onDragOver={e => onDragOver(e, key)}
                 onDragLeave={() => setDropTarget(null)}
                 onDrop={e => onDrop(e, key)}
                 onClick={() => { toggle(key); setActiveSection(key); }}
-                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(key); setActiveSection(key); } }}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(key); setActiveSection(key); return; }
+                  // 键盘重排：Alt/Ctrl/Cmd + ↑/↓ 移动模块（不与不可拖拽项如「基本信息」交换）
+                  if (isDraggable && (e.altKey || e.ctrlKey || e.metaKey) && (e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+                    e.preventDefault();
+                    const order = [...sectionOrder];
+                    const i = order.indexOf(key);
+                    const j = e.key === 'ArrowUp' ? i - 1 : i + 1;
+                    if (i === -1 || j < 0 || j >= order.length) return;
+                    if (!(DRAGGABLE.has(order[j]) || !SECTION_META[order[j]])) return; // 目标位不可被交换
+                    [order[i], order[j]] = [order[j], order[i]];
+                    reorderSections(order);
+                    const el = e.currentTarget as HTMLElement;
+                    requestAnimationFrame(() => el.focus());
+                  }
+                }}
                 style={{
                   display: 'flex', alignItems: 'center', gap: 8,
                   padding: '8px 12px', margin: '0 8px', borderRadius: 8,
