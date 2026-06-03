@@ -34,9 +34,9 @@ const template: TemplateData = {
     </div>
   </header>
 
-  {{#if basics.summary}}<section class="sec-summary"><h2>个人简介</h2><div class="summary-box" data-field="basics.summary">{{{basics.summary}}}</div></section>{{/if}}
+  {{#if basics.summary}}<section class="sec-summary"><h2><span class="h2-tag">PROFILE</span>个人简介</h2><div class="summary-box" data-field="basics.summary">{{{basics.summary}}}</div></section>{{/if}}
 
-  {{#if education.length}}<section class="sec-edu" data-section="education"><h2>教育背景</h2>
+  {{#if education.length}}<section class="sec-edu" data-section="education"><h2><span class="h2-tag">EDU</span>教育背景</h2>
     {{#each education}}<div class="edu-item" data-entry="education" data-entry-index="{{@index}}">
       <div class="edu-line">
         <h3 data-field="education.{{@index}}.institution">{{{institution}}}</h3>
@@ -46,7 +46,7 @@ const template: TemplateData = {
     </div>{{/each}}
   </section>{{/if}}
 
-  {{#if experience.length}}<section class="sec-exp" data-section="experience"><h2>临床/实习经历</h2>
+  {{#if experience.length}}<section class="sec-exp" data-section="experience"><h2><span class="h2-tag">CLIN</span>临床/实习经历</h2>
     {{#each experience}}<div class="exp-item" data-entry="experience" data-entry-index="{{@index}}">
       <div class="exp-head">
         <h3><span class="exp-company" data-field="experience.{{@index}}.company">{{{company}}}</span><span class="exp-pos" data-field="experience.{{@index}}.position">{{{position}}}</span></h3>
@@ -56,9 +56,9 @@ const template: TemplateData = {
     </div>{{/each}}
   </section>{{/if}}
 
-  {{#if skills.length}}<section class="sec-skills" data-section="skills"><h2>专业技能</h2><div class="skills">{{#each skills}}<span class="skill-chip" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}} · <span class="skill-lv" data-field="skills.{{@index}}.level">{{{level}}}</span>{{/if}}</span>{{/each}}</div></section>{{/if}}
+  {{#if skills.length}}<section class="sec-skills" data-section="skills"><h2><span class="h2-tag">SKILL</span>专业技能</h2><div class="skills">{{#each skills}}<span class="skill-chip" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}} · <span class="skill-lv" data-field="skills.{{@index}}.level">{{{level}}}</span>{{/if}}</span>{{/each}}</div></section>{{/if}}
 
-  {{#if projects.length}}<section class="sec-proj" data-section="projects"><h2>科研项目</h2>
+  {{#if projects.length}}<section class="sec-proj" data-section="projects"><h2><span class="h2-tag">RES</span>科研项目</h2>
     {{#each projects}}<div class="proj-item" data-entry="projects" data-entry-index="{{@index}}">
       <h3><span class="proj-name" data-field="projects.{{@index}}.name">{{{name}}}</span>{{#if role}} · <span class="proj-role" data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}</h3>
       {{#if description}}<div class="proj-desc" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
@@ -70,10 +70,10 @@ const template: TemplateData = {
 .resume.campus-medical * { word-wrap:break-word; overflow-wrap:break-word; }
 
 .resume.campus-medical {
-  --med-blue:#0b6cb5;
-  --med-blue-dk:#08507f;
-  --med-blue-lt:#e8f3fb;
-  --med-line:#d4e6f4;
+  --med-blue:#0e639c;
+  --med-blue-dk:#0a4d78;
+  --med-blue-lt:#eaf3f9;
+  --med-line:#d4e3ee;
   --ink:#1c2b3a;
   --ink-soft:#48586a;
   --paper:#ffffff;
@@ -88,12 +88,10 @@ const template: TemplateData = {
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
 }
 
-/* ---------- Header ---------- */
 .resume.campus-medical header { margin-bottom:9mm; }
 .resume.campus-medical .hdr-bar {
-  height:5px;
-  background:linear-gradient(90deg,var(--med-blue) 0%,var(--med-blue) 70%,#5fb0e0 100%);
-  border-radius:3px;
+  height:4px;
+  background:var(--med-blue);
   margin-bottom:6mm;
 }
 .resume.campus-medical .hdr-main {
@@ -160,51 +158,46 @@ const template: TemplateData = {
   transform:translateY(-50%);
 }
 
-/* ---------- Sections ---------- */
 .resume.campus-medical section { margin-bottom:6.5mm; }
 .resume.campus-medical h2 {
+  display:flex;
+  align-items:center;
+  gap:3mm;
   font-size:11.5pt;
   font-weight:700;
   color:var(--med-blue-dk);
   letter-spacing:.5px;
   padding-bottom:2.5mm;
   margin-bottom:3.5mm;
-  border-bottom:2px solid var(--med-line);
-  position:relative;
-  padding-left:6mm;
+  border-bottom:1.5px solid var(--med-line);
 }
-.resume.campus-medical h2::before {
-  content:''; position:absolute; left:0; top:1px;
-  width:3.2mm; height:3.2mm;
+.resume.campus-medical .h2-tag {
+  flex:0 0 auto;
+  font-size:7pt;
+  font-weight:700;
+  letter-spacing:1px;
+  color:#fff;
   background:var(--med-blue);
-  border-radius:1px;
-  transform:rotate(45deg);
-}
-.resume.campus-medical h2::after {
-  content:''; position:absolute; left:0; bottom:-2px;
-  width:22mm; height:2px;
-  background:var(--med-blue);
+  padding:1.2mm 2.2mm;
+  border-radius:2px;
+  font-family:'Consolas','PingFang SC',monospace;
 }
 
-/* ---------- Summary ---------- */
 .resume.campus-medical .summary-box {
   background:var(--med-blue-lt);
-  border-left:3px solid var(--med-blue);
-  border-radius:0 4px 4px 0;
+  border-radius:4px;
   padding:3mm 4mm;
   color:var(--ink-soft);
   font-size:9.8pt;
 }
 
-/* ---------- Education (priority) ---------- */
 .resume.campus-medical .edu-item {
-  padding:2.5mm 0 2.5mm 4mm;
-  border-left:2px solid var(--med-line);
+  padding:2.5mm 0 2.5mm 5mm;
   margin-bottom:2mm;
   position:relative;
 }
 .resume.campus-medical .edu-item::before {
-  content:''; position:absolute; left:-4.5px; top:4mm;
+  content:''; position:absolute; left:0; top:4.4mm;
   width:7px; height:7px; border-radius:50%;
   background:var(--paper);
   border:2px solid var(--med-blue);
@@ -229,20 +222,24 @@ const template: TemplateData = {
   font-weight:500;
 }
 
-/* ---------- Dates ---------- */
 .resume.campus-medical .date {
   font-size:8.8pt;
-  color:#fff;
-  background:var(--med-blue);
+  color:var(--med-blue-dk);
+  background:var(--med-blue-lt);
   padding:1px 7px;
   border-radius:10px;
   white-space:nowrap;
-  font-weight:500;
+  font-weight:600;
   letter-spacing:.3px;
 }
 
-/* ---------- Experience ---------- */
-.resume.campus-medical .exp-item { margin-bottom:4mm; }
+.resume.campus-medical .exp-item { margin-bottom:4mm; padding-left:5mm; position:relative; }
+.resume.campus-medical .exp-item::before {
+  content:''; position:absolute; left:0; top:2.2mm;
+  width:3mm; height:3mm; border-radius:1px;
+  background:var(--med-blue);
+  transform:rotate(45deg);
+}
 .resume.campus-medical .exp-item:last-child { margin-bottom:0; }
 .resume.campus-medical .exp-head {
   display:flex;
@@ -284,7 +281,6 @@ const template: TemplateData = {
   border-radius:50%;
 }
 
-/* ---------- Skills ---------- */
 .resume.campus-medical .skills {
   display:flex;
   flex-wrap:wrap;
@@ -302,11 +298,16 @@ const template: TemplateData = {
 }
 .resume.campus-medical .skill-chip .skill-lv { color:var(--med-blue); font-weight:400; }
 
-/* ---------- Projects ---------- */
 .resume.campus-medical .proj-item {
   margin-bottom:3.5mm;
-  padding-left:4mm;
-  border-left:2px solid var(--med-line);
+  padding-left:5mm;
+  position:relative;
+}
+.resume.campus-medical .proj-item::before {
+  content:''; position:absolute; left:0; top:2.2mm;
+  width:3mm; height:3mm; border-radius:1px;
+  background:var(--med-blue);
+  transform:rotate(45deg);
 }
 .resume.campus-medical .proj-item:last-child { margin-bottom:0; }
 .resume.campus-medical .proj-item h3 {
@@ -322,7 +323,6 @@ const template: TemplateData = {
   margin:1mm 0;
 }
 
-/* ---------- inline fixes ---------- */
 .resume.campus-medical li p, .resume.campus-medical li div { margin:0; padding:0; display:inline; }
 .resume.campus-medical .skills span, .resume.campus-medical [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 

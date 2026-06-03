@@ -53,8 +53,8 @@ const template: TemplateData = {
 .resume.campus-business {
   --navy:#0f2a4a;
   --navy-deep:#0a1f38;
-  --gold:#c4a04a;
-  --gold-soft:#d9bd74;
+  --gold:#b58f3c;
+  --gold-soft:#caa75c;
   --ink:#22303f;
   --muted:#6a7785;
   --line:#dfe4ea;
@@ -67,16 +67,16 @@ const template: TemplateData = {
   font-size:10pt;
   line-height:1.5;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
+  counter-reset:cb-sec;
 }
 
-/* ===== Header ===== */
 .resume.campus-business header {
   display:flex;
   justify-content:space-between;
   align-items:flex-end;
   gap:14px;
   padding:18px 22px;
-  background:linear-gradient(135deg,var(--navy) 0%,var(--navy-deep) 100%);
+  background:var(--navy);
   border-radius:3px;
   border-bottom:3px solid var(--gold);
   margin-bottom:22px;
@@ -120,27 +120,28 @@ const template: TemplateData = {
   border-radius:50%;
 }
 
-/* ===== Section headings ===== */
-.resume.campus-business section { margin-bottom:18px; }
+.resume.campus-business section { margin-bottom:18px; counter-increment:cb-sec; }
 .resume.campus-business h2 {
   position:relative;
+  display:flex;
+  align-items:baseline;
+  gap:9px;
   font-size:12pt;
   font-weight:700;
   color:var(--navy);
   letter-spacing:1.5px;
-  padding:0 0 6px 14px;
+  padding:0 0 6px 0;
   margin-bottom:12px;
   border-bottom:1.5px solid var(--line);
 }
 .resume.campus-business h2::before {
-  content:'';
-  position:absolute;
-  left:0;
-  top:1px;
-  width:5px;
-  height:14px;
-  background:var(--gold);
-  border-radius:1px;
+  content:counter(cb-sec, decimal-leading-zero);
+  font-size:9.5pt;
+  font-weight:700;
+  color:var(--gold);
+  font-variant-numeric:tabular-nums;
+  letter-spacing:1px;
+  align-self:center;
 }
 .resume.campus-business h2::after {
   content:'';
@@ -152,14 +153,12 @@ const template: TemplateData = {
   background:var(--navy);
 }
 
-/* ===== Summary ===== */
 .resume.campus-business .summary-body {
   color:var(--ink);
   font-size:10pt;
   padding:2px 0 0 2px;
 }
 
-/* ===== Entries ===== */
 .resume.campus-business .entry {
   position:relative;
   padding:0 0 12px 16px;
@@ -169,10 +168,12 @@ const template: TemplateData = {
   content:'';
   position:absolute;
   left:0;
-  top:5px;
-  bottom:8px;
-  width:2px;
-  background:linear-gradient(var(--navy),var(--line));
+  top:6px;
+  width:7px;
+  height:7px;
+  background:#fff;
+  border:1.5px solid var(--navy);
+  transform:rotate(45deg);
 }
 .resume.campus-business .entry:last-child { padding-bottom:0; margin-bottom:0; }
 .resume.campus-business .entry-head {
@@ -216,10 +217,9 @@ const template: TemplateData = {
   letter-spacing:.3px;
 }
 
-/* ===== Highlight project section accent ===== */
 .resume.campus-business .sec-exp .entry::before {
-  background:linear-gradient(var(--gold),var(--gold-soft));
-  width:2.5px;
+  background:var(--gold);
+  border-color:var(--gold);
 }
 .resume.campus-business .proj-desc {
   font-size:9.5pt;
@@ -227,7 +227,6 @@ const template: TemplateData = {
   margin-bottom:4px;
 }
 
-/* ===== Lists ===== */
 .resume.campus-business ul { list-style:none; margin-top:3px; }
 .resume.campus-business li {
   position:relative;
@@ -249,14 +248,12 @@ const template: TemplateData = {
   border-radius:50%;
 }
 
-/* ===== Education ===== */
 .resume.campus-business .sec-edu .entry h3 { color:var(--navy); }
 .resume.campus-business .edu-meta {
   font-size:9.5pt;
   color:var(--muted);
 }
 
-/* ===== Skills ===== */
 .resume.campus-business .skills {
   display:flex;
   flex-wrap:wrap;
@@ -269,10 +266,9 @@ const template: TemplateData = {
   color:var(--navy);
   background:#f4f6f9;
   border:1px solid var(--line);
-  border-left:3px solid var(--gold);
   border-radius:3px;
 }
-.resume.campus-business .skill-lvl { color:var(--muted); }
+.resume.campus-business .skill-lvl { color:var(--gold); }
 
 .resume.campus-business li p, .resume.campus-business li div { margin:0; padding:0; display:inline; }
 .resume.campus-business .skills span, .resume.campus-business [class*='skill'] span { white-space:nowrap; word-break:keep-all; }

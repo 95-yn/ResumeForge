@@ -69,12 +69,13 @@ const template: TemplateData = {
 .resume.it-python {
   --py-blue:#2b5b84;
   --py-blue-deep:#1e3a5f;
-  --py-yellow:#ffd343;
-  --py-yellow-deep:#d4a017;
+  --py-yellow:#d4a017;
+  --py-yellow-deep:#a8801a;
   --cream:#faf8f2;
   --ink:#2a2a28;
   --muted:#6b6a64;
   --line:#e6e2d6;
+  --mono:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
   max-width:210mm;
   min-height:297mm;
   margin:0 auto;
@@ -114,7 +115,7 @@ const template: TemplateData = {
 .resume.it-python h1::before {
   content:">>> ";
   color:var(--py-yellow-deep);
-  font-family:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;
+  font-family:var(--mono);
   font-weight:600;
   font-size:15pt;
 }
@@ -140,11 +141,11 @@ const template: TemplateData = {
   content:"#";
   position:absolute; left:0;
   color:var(--py-blue);
-  font-family:'SFMono-Regular',Consolas,Menlo,monospace;
+  font-family:var(--mono);
   font-weight:600;
 }
 
-/* ---------- Section ---------- */
+/* ---------- Section — def __name__ ---------- */
 .resume.it-python .block { margin-top:18px; }
 .resume.it-python h2 {
   font-size:11.5pt;
@@ -155,23 +156,23 @@ const template: TemplateData = {
   margin-bottom:10px;
   border-bottom:1px solid var(--line);
   display:flex;
-  align-items:center;
+  align-items:baseline;
 }
 .resume.it-python h2::before {
-  content:"";
-  display:inline-block;
-  width:8px; height:8px;
-  margin-right:9px;
-  background:var(--py-yellow);
-  border:2px solid var(--py-blue);
-  transform:rotate(45deg);
+  content:"def ";
+  font-family:var(--mono);
+  font-size:9.5pt;
+  font-weight:600;
+  color:var(--py-yellow-deep);
+  margin-right:7px;
+  letter-spacing:0;
 }
 
 /* indentation hierarchy — the signature look */
 .resume.it-python .indent {
-  padding-left:20px;
+  padding-left:21px;
   margin-left:3px;
-  border-left:2px solid var(--line);
+  border-left:1px solid var(--line);
 }
 
 /* ---------- Entries ---------- */
@@ -180,7 +181,7 @@ const template: TemplateData = {
 .resume.it-python .entry::before {
   content:"";
   position:absolute;
-  left:-21px; top:5px;
+  left:-22px; top:5px;
   width:7px; height:7px;
   border-radius:50%;
   background:var(--cream);
@@ -214,7 +215,7 @@ const template: TemplateData = {
 .resume.it-python .date {
   font-size:8.5pt;
   color:var(--muted);
-  font-family:'SFMono-Regular',Consolas,Menlo,monospace;
+  font-family:var(--mono);
   white-space:nowrap;
   background:rgba(43,91,132,.07);
   padding:1px 7px;
@@ -251,7 +252,7 @@ const template: TemplateData = {
   position:absolute;
   left:2px; top:0;
   color:var(--py-yellow-deep);
-  font-family:'SFMono-Regular',Consolas,Menlo,monospace;
+  font-family:var(--mono);
   font-weight:700;
 }
 
@@ -262,7 +263,7 @@ const template: TemplateData = {
   margin-top:2px;
 }
 
-/* ---------- Skills ---------- */
+/* ---------- Skills — keyword tokens, no side stripe ---------- */
 .resume.it-python .skills {
   display:flex;
   flex-wrap:wrap;
@@ -273,9 +274,16 @@ const template: TemplateData = {
   padding:3px 11px;
   background:#fff;
   border:1px solid var(--line);
-  border-left:3px solid var(--py-blue);
   border-radius:3px;
   color:var(--ink);
+  position:relative;
+}
+.resume.it-python .skill::before {
+  content:"@";
+  font-family:var(--mono);
+  color:var(--py-blue);
+  font-weight:700;
+  margin-right:5px;
 }
 .resume.it-python .skill .lv { color:var(--py-blue); font-weight:600; }
 

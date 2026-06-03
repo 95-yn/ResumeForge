@@ -88,33 +88,40 @@ const template: TemplateData = {
   max-width:210mm;
   min-height:297mm;
   margin:0 auto;
-  padding:16mm;
-  background:#fff7f2;
+  padding:18mm;
+  background:#fbf7f4;
   font-size:10pt;
-  line-height:1.5;
-  color:#2d2438;
+  line-height:1.7;
+  color:#473f52;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
+  --coral:#e8613c;
+  --coral-deep:#c44a28;
+  --ink:#2c2630;
+  --body:#473f52;
+  --sub:#6a6273;
+  --soft:#fbeee8;
+  --line:#f0ddd3;
 }
 
 /* ===== HERO ===== */
-.resume.pm-consumer header { margin-bottom:14px; }
+.resume.pm-consumer header { margin-bottom:20px; }
 .resume.pm-consumer .hero-card {
   display:flex;
   align-items:center;
-  gap:18px;
-  padding:22px 26px;
-  border-radius:26px;
-  background:linear-gradient(135deg,#ff7a59 0%,#ff5fa2 55%,#a259ff 100%);
+  gap:20px;
+  padding:26px 30px;
+  border-radius:22px;
+  background:var(--coral);
   color:#fff;
-  box-shadow:0 8px 22px rgba(255,95,162,0.28);
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
 }
 .resume.pm-consumer .avatar-ring {
   flex:0 0 auto;
   width:62px;
   height:62px;
   border-radius:50%;
-  background:rgba(255,255,255,0.22);
-  border:3px solid rgba(255,255,255,0.6);
+  background:rgba(255,255,255,0.18);
+  border:3px solid rgba(255,255,255,0.7);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -129,231 +136,235 @@ const template: TemplateData = {
   font-size:24pt;
   font-weight:800;
   letter-spacing:1px;
-  line-height:1.1;
+  line-height:1.15;
+  color:#fff;
 }
 .resume.pm-consumer .role-pill {
   display:inline-block;
-  margin-top:7px;
-  padding:3px 14px;
+  margin-top:9px;
+  padding:4px 15px;
   font-size:9.5pt;
   font-weight:600;
   border-radius:20px;
-  background:rgba(255,255,255,0.25);
-  backdrop-filter:blur(2px);
+  background:rgba(255,255,255,0.22);
 }
 .resume.pm-consumer .contact {
-  margin-top:10px;
+  margin-top:13px;
   display:flex;
   flex-wrap:wrap;
-  gap:7px;
+  gap:8px;
 }
 .resume.pm-consumer .chip {
   display:inline-block;
-  padding:3px 12px;
+  padding:4px 13px;
   font-size:8.5pt;
   border-radius:14px;
-  background:rgba(255,255,255,0.92);
-  color:#d6336c;
+  background:#fff;
+  color:var(--coral-deep);
   font-weight:600;
 }
 
 /* ===== CARDS ===== */
 .resume.pm-consumer .card {
   background:#fff;
-  border-radius:22px;
-  padding:16px 20px 18px;
-  margin-bottom:13px;
-  box-shadow:0 4px 14px rgba(162,89,255,0.08);
-  border:1px solid #ffe3d6;
+  border-radius:18px;
+  padding:22px 26px 24px;
+  margin-bottom:18px;
+  border:1px solid var(--line);
 }
 .resume.pm-consumer h2 {
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:9px;
   font-size:12.5pt;
   font-weight:800;
-  color:#d6336c;
-  margin-bottom:11px;
+  color:var(--coral-deep);
+  margin-bottom:15px;
 }
 .resume.pm-consumer .dot {
   width:11px;
   height:11px;
   border-radius:50%;
-  background:linear-gradient(135deg,#ff7a59,#a259ff);
+  background:var(--coral);
   flex:0 0 auto;
 }
 
 .resume.pm-consumer .summary-card .card-body {
-  color:#4a4159;
-  font-size:9.8pt;
-  line-height:1.65;
+  color:var(--body);
+  font-size:10pt;
+  line-height:1.75;
 }
 
 /* ===== TIMELINE / JOURNEY ===== */
 .resume.pm-consumer .timeline {
   position:relative;
-  padding-left:22px;
+  padding-left:24px;
 }
 .resume.pm-consumer .timeline::before {
   content:'';
   position:absolute;
   left:5px;
-  top:6px;
-  bottom:6px;
+  top:8px;
+  bottom:8px;
   width:3px;
   border-radius:3px;
-  background:linear-gradient(180deg,#ff7a59,#ff5fa2,#a259ff);
+  background:var(--coral);
 }
-.resume.pm-consumer .entry { position:relative; margin-bottom:12px; }
+.resume.pm-consumer .entry { position:relative; margin-bottom:16px; }
 .resume.pm-consumer .entry:last-child { margin-bottom:0; }
 .resume.pm-consumer .node {
   position:absolute;
-  left:-22px;
-  top:8px;
+  left:-24px;
+  top:10px;
   width:13px;
   height:13px;
   border-radius:50%;
   background:#fff;
-  border:3px solid #ff5fa2;
-  box-shadow:0 0 0 3px rgba(255,95,162,0.15);
+  border:3px solid var(--coral);
+  box-shadow:0 0 0 3px var(--soft);
 }
 .resume.pm-consumer .entry-card {
-  background:#fff8fb;
-  border-radius:16px;
-  padding:10px 14px;
-  border:1px solid #ffd9e6;
+  background:#fffaf8;
+  border-radius:14px;
+  padding:14px 18px;
+  border:1px solid var(--line);
 }
 .resume.pm-consumer .entry-head {
   display:flex;
   justify-content:space-between;
   align-items:baseline;
   flex-wrap:wrap;
-  gap:4px 10px;
-  margin-bottom:5px;
+  gap:5px 12px;
+  margin-bottom:8px;
 }
 .resume.pm-consumer .entry-head h3 {
   font-size:11pt;
   font-weight:700;
-  color:#2d2438;
+  color:var(--ink);
+  line-height:1.4;
 }
 .resume.pm-consumer .company { font-weight:800; }
 .resume.pm-consumer .position {
   margin-left:8px;
-  color:#a259ff;
+  color:var(--coral-deep);
   font-weight:600;
   font-size:10pt;
 }
 .resume.pm-consumer .date {
   font-size:8.5pt;
-  color:#ff7a59;
+  color:var(--coral-deep);
   font-weight:700;
-  background:#fff0e8;
-  padding:2px 10px;
+  background:var(--soft);
+  padding:3px 11px;
   border-radius:12px;
   white-space:nowrap;
 }
 
 .resume.pm-consumer ul {
   list-style:none;
-  margin-top:4px;
+  margin-top:7px;
 }
 .resume.pm-consumer li {
   position:relative;
-  padding-left:16px;
-  margin-bottom:3px;
-  font-size:9.5pt;
-  color:#4a4159;
-  line-height:1.55;
+  padding-left:17px;
+  margin-bottom:6px;
+  font-size:9.6pt;
+  color:var(--body);
+  line-height:1.65;
 }
+.resume.pm-consumer li:last-child { margin-bottom:0; }
 .resume.pm-consumer li::before {
   content:'';
   position:absolute;
   left:2px;
-  top:7px;
+  top:8px;
   width:6px;
   height:6px;
   border-radius:50%;
-  background:linear-gradient(135deg,#ff7a59,#ff5fa2);
+  background:var(--coral);
 }
 
 /* ===== PROJECTS ===== */
 .resume.pm-consumer .project-grid {
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:11px;
+  gap:16px;
 }
 .resume.pm-consumer .project-item {
-  background:#f6f0ff;
-  border-radius:16px;
-  padding:11px 14px;
-  border:1px solid #e6d9ff;
+  background:#fffaf8;
+  border-radius:14px;
+  padding:15px 18px;
+  border:1px solid var(--line);
 }
 .resume.pm-consumer .project-item h3 {
   font-size:10.5pt;
   font-weight:700;
-  color:#7c3aed;
-  margin-bottom:4px;
+  color:var(--coral-deep);
+  margin-bottom:7px;
+  line-height:1.4;
 }
 .resume.pm-consumer .proj-role {
   font-size:8.5pt;
   font-weight:600;
-  color:#a259ff;
-  background:#ece1ff;
-  padding:1px 9px;
+  color:var(--coral-deep);
+  background:var(--soft);
+  padding:2px 10px;
   border-radius:11px;
 }
 .resume.pm-consumer .proj-desc {
-  font-size:9.2pt;
-  color:#544a66;
-  margin-bottom:4px;
+  font-size:9.4pt;
+  color:var(--body);
+  margin-bottom:7px;
+  line-height:1.65;
 }
 
 /* ===== SKILLS ===== */
 .resume.pm-consumer .skills {
   display:flex;
   flex-wrap:wrap;
-  gap:8px;
+  gap:10px;
 }
 .resume.pm-consumer .skill-tag {
   display:inline-flex;
   align-items:center;
-  gap:5px;
-  padding:5px 14px;
-  border-radius:18px;
-  background:linear-gradient(135deg,#fff0e8,#ffe6f1);
-  color:#d6336c;
+  gap:6px;
+  padding:6px 15px;
+  border-radius:16px;
+  background:var(--soft);
+  color:var(--coral-deep);
   font-size:9.2pt;
   font-weight:700;
-  border:1px solid #ffd0e2;
+  border:1px solid var(--line);
 }
 .resume.pm-consumer .skill-tag .lvl {
   font-size:8pt;
   font-weight:600;
   color:#fff;
-  background:linear-gradient(135deg,#ff7a59,#ff5fa2);
+  background:var(--coral);
   padding:1px 8px;
   border-radius:10px;
 }
 
 /* ===== EDUCATION ===== */
-.resume.pm-consumer .edu-item { margin-bottom:8px; }
+.resume.pm-consumer .edu-item { margin-bottom:12px; }
 .resume.pm-consumer .edu-item:last-child { margin-bottom:0; }
 .resume.pm-consumer .edu-head {
   display:flex;
   justify-content:space-between;
   align-items:baseline;
   flex-wrap:wrap;
-  gap:4px 10px;
+  gap:5px 12px;
 }
 .resume.pm-consumer .edu-item h3 {
   font-size:10.5pt;
   font-weight:700;
-  color:#2d2438;
+  color:var(--ink);
+  line-height:1.4;
 }
 .resume.pm-consumer .edu-item p {
-  font-size:9.2pt;
-  color:#6b6280;
-  margin-top:2px;
+  font-size:9.4pt;
+  color:var(--sub);
+  margin-top:4px;
 }
 
 /* ===== CONTRACT REQUIRED ===== */

@@ -69,21 +69,21 @@ const template: TemplateData = {
   font-size: 10pt;
   line-height: 1.55;
   color: #44403C;
-  background: #FFFBF7;
+  background: #FFFFFF;
 }
 
 .resume.edu-trainer .resume-header {
-  text-align: center;
+  text-align: left;
   padding-bottom: 12px;
-  margin-bottom: 14px;
-  border-bottom: 2px solid #D6D3D1;
+  margin-bottom: 16px;
+  border-bottom: 2px solid #B45309;
 }
 
 .resume.edu-trainer .resume-header h1 {
-  font-size: 22pt;
+  font-size: 23pt;
   font-weight: 700;
   color: #44403C;
-  letter-spacing: 1.5px;
+  letter-spacing: 1px;
   line-height: 1.2;
 }
 
@@ -100,25 +100,38 @@ const template: TemplateData = {
   color: #78716C;
 }
 
-.resume.edu-trainer .contact-item { margin: 0 6px; }
+.resume.edu-trainer .contact-item { margin: 0 8px 0 0; }
 .resume.edu-trainer .contact-item + .contact-item::before {
   content: "|";
-  margin-right: 6px;
+  margin-right: 8px;
   color: #D6D3D1;
 }
 
-.resume.edu-trainer .section { margin-bottom: 12px; }
+.resume.edu-trainer .section { margin-bottom: 13px; }
 
+/* Signature: amber filled "tab" label as section heading */
 .resume.edu-trainer .section-title {
+  display: inline-block;
   font-size: 9pt;
   font-weight: 700;
-  color: #44403C;
+  color: #FFFFFF;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  padding-bottom: 4px;
-  border-bottom: 1px solid #D6D3D1;
-  margin-bottom: 8px;
+  letter-spacing: 1.5px;
+  padding: 3px 12px;
+  background: #B45309;
+  border-radius: 2px 2px 0 0;
+  margin-bottom: 0;
+  border-bottom: none;
 }
+.resume.edu-trainer .section > .section-title {
+  margin-bottom: 9px;
+  box-shadow: 0 1px 0 0 #B45309;
+}
+.resume.edu-trainer .section {
+  border-bottom: 1px solid #EAE4DD;
+  padding-bottom: 4px;
+}
+.resume.edu-trainer .section:last-child { border-bottom: none; }
 
 .resume.edu-trainer .entry { margin-bottom: 8px; }
 .resume.edu-trainer .entry:last-child { margin-bottom: 0; }
@@ -197,188 +210,178 @@ li p, li div { margin: 0; padding: 0; display: inline; }
 }
 `,
     schema: {
-          "templateId": "edu-trainer",
-          "version": "1.0.0",
-          "name": "培训讲师",
-          "sections": [
-                {
-                      "key": "basics",
-                      "label": "基本信息",
-                      "fields": [
-                            {
-                                  "key": "name",
-                                  "label": "姓名",
-                                  "type": "text",
-                                  "required": true
-                            },
-                            {
-                                  "key": "title",
-                                  "label": "职位",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "email",
-                                  "label": "邮箱",
-                                  "type": "email",
-                                  "required": true
-                            },
-                            {
-                                  "key": "phone",
-                                  "label": "电话",
-                                  "type": "tel"
-                            },
-                            {
-                                  "key": "location",
-                                  "label": "所在城市",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "avatar",
-                                  "label": "头像",
-                                  "type": "image"
-                            },
-                            {
-                                  "key": "summary",
-                                  "label": "个人简介",
-                                  "type": "richtext"
-                            }
-                      ]
-                },
-                {
-                      "key": "experience",
-                      "label": "工作经历",
-                      "type": "array",
-                      "fields": [
-                            {
-                                  "key": "company",
-                                  "label": "公司",
-                                  "type": "text",
-                                  "required": true
-                            },
-                            {
-                                  "key": "position",
-                                  "label": "职位",
-                                  "type": "text",
-                                  "required": true
-                            },
-                            {
-                                  "key": "startDate",
-                                  "label": "开始日期",
-                                  "type": "date"
-                            },
-                            {
-                                  "key": "endDate",
-                                  "label": "结束日期",
-                                  "type": "date"
-                            },
-                            {
-                                  "key": "highlights",
-                                  "label": "工作亮点",
-                                  "type": "array:text"
-                            }
-                      ]
-                },
-                {
-                      "key": "education",
-                      "label": "教育经历",
-                      "type": "array",
-                      "fields": [
-                            {
-                                  "key": "institution",
-                                  "label": "学校",
-                                  "type": "text",
-                                  "required": true
-                            },
-                            {
-                                  "key": "area",
-                                  "label": "专业",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "studyType",
-                                  "label": "学历",
-                                  "type": "select",
-                                  "options": [
-                                        "高中",
-                                        "大专",
-                                        "本科",
-                                        "硕士",
-                                        "博士"
-                                  ]
-                            },
-                            {
-                                  "key": "startDate",
-                                  "label": "开始日期",
-                                  "type": "date"
-                            },
-                            {
-                                  "key": "endDate",
-                                  "label": "结束日期",
-                                  "type": "date"
-                            }
-                      ]
-                },
-                {
-                      "key": "skills",
-                      "label": "技能",
-                      "type": "array",
-                      "fields": [
-                            {
-                                  "key": "name",
-                                  "label": "技能名称",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "level",
-                                  "label": "熟练度",
-                                  "type": "select",
-                                  "options": [
-                                        "了解",
-                                        "熟悉",
-                                        "掌握",
-                                        "精通"
-                                  ]
-                            }
-                      ]
-                },
-                {
-                      "key": "projects",
-                      "label": "项目经历",
-                      "type": "array",
-                      "fields": [
-                            {
-                                  "key": "name",
-                                  "label": "项目名称",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "role",
-                                  "label": "担任角色",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "description",
-                                  "label": "项目描述",
-                                  "type": "richtext"
-                            },
-                            {
-                                  "key": "startDate",
-                                  "label": "开始日期",
-                                  "type": "date"
-                            },
-                            {
-                                  "key": "endDate",
-                                  "label": "结束日期",
-                                  "type": "date"
-                            },
-                            {
-                                  "key": "highlights",
-                                  "label": "项目亮点",
-                                  "type": "array:text"
-                            }
-                      ]
-                }
+      "templateId": "edu-trainer",
+      "version": "1.0.0",
+      "name": "培训讲师",
+      "sections": [
+        {
+          "key": "basics",
+          "label": "基本信息",
+          "fields": [
+            {
+              "key": "name",
+              "label": "姓名",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "title",
+              "label": "职位",
+              "type": "text"
+            },
+            {
+              "key": "email",
+              "label": "邮箱",
+              "type": "email",
+              "required": true
+            },
+            {
+              "key": "phone",
+              "label": "电话",
+              "type": "tel"
+            },
+            {
+              "key": "location",
+              "label": "所在城市",
+              "type": "text"
+            },
+            {
+              "key": "avatar",
+              "label": "头像",
+              "type": "image"
+            },
+            {
+              "key": "summary",
+              "label": "个人简介",
+              "type": "richtext"
+            }
           ]
+        },
+        {
+          "key": "experience",
+          "label": "工作经历",
+          "type": "array",
+          "fields": [
+            {
+              "key": "company",
+              "label": "公司",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "position",
+              "label": "职位",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "startDate",
+              "label": "开始日期",
+              "type": "date"
+            },
+            {
+              "key": "endDate",
+              "label": "结束日期",
+              "type": "date"
+            },
+            {
+              "key": "highlights",
+              "label": "工作亮点",
+              "type": "array:text"
+            }
+          ]
+        },
+        {
+          "key": "education",
+          "label": "教育经历",
+          "type": "array",
+          "fields": [
+            {
+              "key": "institution",
+              "label": "学校",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "area",
+              "label": "专业",
+              "type": "text"
+            },
+            {
+              "key": "studyType",
+              "label": "学历",
+              "type": "select",
+              "options": [
+                "高中",
+                "大专",
+                "本科",
+                "硕士",
+                "博士"
+              ]
+            },
+            {
+              "key": "startDate",
+              "label": "开始日期",
+              "type": "date"
+            },
+            {
+              "key": "endDate",
+              "label": "结束日期",
+              "type": "date"
+            }
+          ]
+        },
+        {
+          "key": "skills",
+          "label": "技能",
+          "type": "array",
+          "fields": [
+            {
+              "key": "name",
+              "label": "技能名称",
+              "type": "text"
+            },
+            {
+              "key": "level",
+              "label": "熟练度",
+              "type": "select",
+              "options": [
+                "了解",
+                "熟悉",
+                "掌握",
+                "精通"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "projects",
+          "label": "项目经历",
+          "type": "array",
+          "fields": [
+            {
+              "key": "name",
+              "label": "项目名称",
+              "type": "text"
+            },
+            {
+              "key": "role",
+              "label": "担任角色",
+              "type": "text"
+            },
+            {
+              "key": "description",
+              "label": "项目描述",
+              "type": "richtext"
+            },
+            {
+              "key": "highlights",
+              "label": "项目亮点",
+              "type": "array:text"
+            }
+          ]
+        }
+      ]
     },
   };
 

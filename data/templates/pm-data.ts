@@ -74,11 +74,11 @@ const template: TemplateData = {
 .resume.pm-data {
   --ink:#0b2536;
   --sub:#4a6577;
-  --cyan:#06b6d4;
+  --cyan:#0e8aa3;
   --blue:#1d6fe0;
   --deep:#0a2f4a;
   --grid:#dbe9f0;
-  --chip:#eef7fb;
+  --chip:#eef6f9;
   --line:#e1ecf2;
   max-width:210mm;
   min-height:297mm;
@@ -104,6 +104,7 @@ const template: TemplateData = {
   margin-bottom:7mm;
   overflow:hidden;
   box-shadow:0 6px 20px -10px rgba(10,47,74,.6);
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
 }
 .resume.pm-data header::before {
   content:"";
@@ -120,12 +121,12 @@ const template: TemplateData = {
   background:
     linear-gradient(to top,var(--cyan) 0%,var(--cyan) 100%) left 0mm bottom 0 / 5mm 12mm no-repeat,
     linear-gradient(to top,var(--cyan),var(--cyan)) left 7mm bottom 0 / 5mm 20mm no-repeat,
-    linear-gradient(to top,#38d6ec,#38d6ec) left 14mm bottom 0 / 5mm 15mm no-repeat,
+    linear-gradient(to top,#2aa3bb,#2aa3bb) left 14mm bottom 0 / 5mm 15mm no-repeat,
     linear-gradient(to top,var(--blue),var(--blue)) left 21mm bottom 0 / 5mm 27mm no-repeat,
-    linear-gradient(to top,#5ee0f2,#5ee0f2) left 28mm bottom 0 / 5mm 18mm no-repeat,
+    linear-gradient(to top,#3fb4ca,#3fb4ca) left 28mm bottom 0 / 5mm 18mm no-repeat,
     linear-gradient(to top,var(--cyan),var(--cyan)) left 35mm bottom 0 / 5mm 24mm no-repeat,
     linear-gradient(to top,var(--blue),var(--blue)) left 42mm bottom 0 / 5mm 14mm no-repeat;
-  opacity:.55;
+  opacity:.5;
 }
 .resume.pm-data .hdr-grid {
   position:relative;
@@ -163,17 +164,17 @@ const template: TemplateData = {
   background:
     linear-gradient(to top,var(--cyan),var(--cyan)) left 0mm bottom 0 / 3mm 30% no-repeat,
     linear-gradient(to top,var(--cyan),var(--cyan)) left 4mm bottom 0 / 3mm 55% no-repeat,
-    linear-gradient(to top,#5ee0f2,#5ee0f2) left 8mm bottom 0 / 3mm 40% no-repeat,
-    linear-gradient(to top,#5ee0f2,#5ee0f2) left 12mm bottom 0 / 3mm 80% no-repeat,
+    linear-gradient(to top,#3fb4ca,#3fb4ca) left 8mm bottom 0 / 3mm 40% no-repeat,
+    linear-gradient(to top,#3fb4ca,#3fb4ca) left 12mm bottom 0 / 3mm 80% no-repeat,
     linear-gradient(to top,var(--cyan),var(--cyan)) left 16mm bottom 0 / 3mm 60% no-repeat,
-    linear-gradient(to top,#5ee0f2,#5ee0f2) left 20mm bottom 0 / 3mm 100% no-repeat;
-  border-bottom:1.5px solid rgba(94,224,242,.5);
+    linear-gradient(to top,#3fb4ca,#3fb4ca) left 20mm bottom 0 / 3mm 100% no-repeat;
+  border-bottom:1.5px solid rgba(63,180,202,.5);
 }
 .resume.pm-data .hm-label {
   font-size:7.5pt;
   font-weight:700;
   letter-spacing:3px;
-  color:#7fcfe5;
+  color:#8fd2e6;
 }
 .resume.pm-data .contact {
   position:relative;
@@ -196,7 +197,6 @@ const template: TemplateData = {
   margin-right:2mm;
   border-radius:50%;
   background:var(--cyan);
-  box-shadow:0 0 0 1.5px rgba(6,182,212,.3);
 }
 
 /* ===== Sections ===== */
@@ -237,20 +237,27 @@ const template: TemplateData = {
   letter-spacing:.5px;
 }
 
-/* ===== Panel / Summary ===== */
+/* ===== Panel / Summary — full frame + top accent (no side stripe) ===== */
 .resume.pm-data .panel {
+  position:relative;
   background:#fff;
   border:1px solid var(--line);
-  border-left:3px solid var(--cyan);
   border-radius:7px;
   padding:4mm 5mm;
   font-size:10pt;
   color:var(--sub);
   line-height:1.65;
   box-shadow:0 2px 8px -6px rgba(10,47,74,.25);
+  overflow:hidden;
+}
+.resume.pm-data .panel::before {
+  content:"";
+  position:absolute;
+  left:0; right:0; top:0; height:2.5px;
+  background:linear-gradient(90deg,var(--cyan),var(--blue));
 }
 
-/* ===== Entries ===== */
+/* ===== Entries — framed card, leading index chip, no colored side bar ===== */
 .resume.pm-data .entry {
   background:#fff;
   border:1px solid var(--line);
@@ -259,14 +266,6 @@ const template: TemplateData = {
   margin-bottom:3.5mm;
   box-shadow:0 2px 8px -7px rgba(10,47,74,.25);
   position:relative;
-}
-.resume.pm-data .entry::before {
-  content:"";
-  position:absolute;
-  left:0; top:5mm; bottom:5mm;
-  width:3px;
-  border-radius:3px;
-  background:linear-gradient(var(--cyan),var(--blue));
 }
 .resume.pm-data .entry:last-child { margin-bottom:0; }
 .resume.pm-data .entry-top {

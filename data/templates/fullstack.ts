@@ -20,6 +20,7 @@ const template: TemplateData = {
     html: `<div class="resume fullstack">
   <header class="fs-header">
     <div class="fs-header-inner">
+      <div class="fs-rule"></div>
       <h1 data-field="basics.name">{{{basics.name}}}</h1>
       {{#if basics.title}}<p class="fs-title" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
       <div class="fs-contacts">
@@ -32,13 +33,13 @@ const template: TemplateData = {
   <div class="fs-body">
     {{#if basics.summary}}
     <section class="fs-section">
-      <h2 class="fs-section-title">Summary</h2>
+      <h2 class="fs-section-title"><span class="fs-num">00</span>Summary</h2>
       <div class="fs-text" data-field="basics.summary">{{{basics.summary}}}</div>
     </section>
     {{/if}}
     {{#if experience.length}}
     <section class="fs-section" data-section="experience">
-      <h2 class="fs-section-title">Experience</h2>
+      <h2 class="fs-section-title"><span class="fs-num">01</span>Experience</h2>
       {{#each experience}}
       <div class="fs-entry" data-entry="experience" data-entry-index="{{@index}}">
         <div class="fs-entry-head">
@@ -55,7 +56,7 @@ const template: TemplateData = {
     {{/if}}
     {{#if projects.length}}
     <section class="fs-section" data-section="projects">
-      <h2 class="fs-section-title">Projects</h2>
+      <h2 class="fs-section-title"><span class="fs-num">02</span>Projects</h2>
       {{#each projects}}
       <div class="fs-entry" data-entry="projects" data-entry-index="{{@index}}">
         <div class="fs-entry-head">
@@ -73,7 +74,7 @@ const template: TemplateData = {
     <div class="fs-bottom">
       {{#if education.length}}
       <section class="fs-section" data-section="education">
-        <h2 class="fs-section-title">Education</h2>
+        <h2 class="fs-section-title"><span class="fs-num">03</span>Education</h2>
         {{#each education}}
         <div class="fs-entry" data-entry="education" data-entry-index="{{@index}}">
           <div class="fs-entry-head">
@@ -87,7 +88,7 @@ const template: TemplateData = {
       {{/if}}
       {{#if skills.length}}
       <section class="fs-section" data-section="skills">
-        <h2 class="fs-section-title">Skills</h2>
+        <h2 class="fs-section-title"><span class="fs-num">04</span>Skills</h2>
         <div class="fs-skills">
           {{#each skills}}<span class="fs-skill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}}<span class="fs-lv" data-field="skills.{{@index}}.level"> · {{{level}}}</span>{{/if}}</span>{{/each}}
         </div>
@@ -101,13 +102,16 @@ const template: TemplateData = {
 * { margin: 0; padding: 0; box-sizing: border-box; }
 .resume.fullstack { max-width: 210mm; min-height: 297mm; margin: 0 auto; font-family: "Plus Jakarta Sans", "Helvetica Neue", "Arial", "PingFang SC", sans-serif; font-size: 10pt; line-height: 1.6; color: #1E293B; background: #fff; }
 .fs-header { background: #1E293B; color: #fff; padding: 16mm 22mm 14mm; }
+.fs-header-inner { position: relative; }
+.fs-rule { width: 34px; height: 3px; background: #38BDF8; margin-bottom: 12px; }
 .fs-header-inner h1 { font-size: 22pt; font-weight: 800; color: #F1F5F9; letter-spacing: -0.5px; }
-.fs-title { font-size: 10.5pt; color: #64748B; margin-top: 4px; }
+.fs-title { font-size: 10.5pt; color: #94A3B8; margin-top: 4px; }
 .fs-contacts { margin-top: 10px; display: flex; gap: 16px; flex-wrap: wrap; }
 .fs-contacts span { font-size: 9pt; color: #94A3B8; }
 .fs-body { padding: 0 22mm; }
 .fs-section { margin-top: 16px; }
-.fs-section-title { font-size: 8.5pt; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #334155; border-bottom: 1px solid #E2E8F0; padding-bottom: 4px; margin-bottom: 10px; }
+.fs-section-title { display: flex; align-items: baseline; gap: 10px; font-size: 8.5pt; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #334155; border-bottom: 1px solid #E2E8F0; padding-bottom: 4px; margin-bottom: 10px; }
+.fs-num { font-size: 8pt; font-weight: 800; letter-spacing: 1px; color: #0EA5E9; font-variant-numeric: tabular-nums; }
 .fs-entry { margin-bottom: 12px; }
 .fs-entry-head { display: flex; justify-content: space-between; align-items: flex-start; }
 .fs-entry-main { display: flex; flex-direction: column; }
@@ -130,178 +134,178 @@ li p, li div { margin: 0; padding: 0; display: inline; }
   word-break: keep-all; }
 `,
     schema: {
-          "templateId": "fullstack",
-          "version": "1.0.0",
-          "name": "全栈工程师",
-          "sections": [
-                {
-                      "key": "basics",
-                      "label": "基本信息",
-                      "fields": [
-                            {
-                                  "key": "name",
-                                  "label": "姓名",
-                                  "type": "text",
-                                  "required": true
-                            },
-                            {
-                                  "key": "title",
-                                  "label": "职位",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "email",
-                                  "label": "邮箱",
-                                  "type": "email",
-                                  "required": true
-                            },
-                            {
-                                  "key": "phone",
-                                  "label": "电话",
-                                  "type": "tel"
-                            },
-                            {
-                                  "key": "location",
-                                  "label": "所在城市",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "avatar",
-                                  "label": "头像",
-                                  "type": "image"
-                            },
-                            {
-                                  "key": "summary",
-                                  "label": "个人简介",
-                                  "type": "richtext"
-                            }
-                      ]
-                },
-                {
-                      "key": "experience",
-                      "label": "工作经历",
-                      "type": "array",
-                      "fields": [
-                            {
-                                  "key": "company",
-                                  "label": "公司",
-                                  "type": "text",
-                                  "required": true
-                            },
-                            {
-                                  "key": "position",
-                                  "label": "职位",
-                                  "type": "text",
-                                  "required": true
-                            },
-                            {
-                                  "key": "startDate",
-                                  "label": "开始日期",
-                                  "type": "date"
-                            },
-                            {
-                                  "key": "endDate",
-                                  "label": "结束日期",
-                                  "type": "date"
-                            },
-                            {
-                                  "key": "highlights",
-                                  "label": "工作亮点",
-                                  "type": "array:text"
-                            }
-                      ]
-                },
-                {
-                      "key": "education",
-                      "label": "教育经历",
-                      "type": "array",
-                      "fields": [
-                            {
-                                  "key": "institution",
-                                  "label": "学校",
-                                  "type": "text",
-                                  "required": true
-                            },
-                            {
-                                  "key": "area",
-                                  "label": "专业",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "studyType",
-                                  "label": "学历",
-                                  "type": "select",
-                                  "options": [
-                                        "高中",
-                                        "大专",
-                                        "本科",
-                                        "硕士",
-                                        "博士"
-                                  ]
-                            },
-                            {
-                                  "key": "startDate",
-                                  "label": "开始日期",
-                                  "type": "date"
-                            },
-                            {
-                                  "key": "endDate",
-                                  "label": "结束日期",
-                                  "type": "date"
-                            }
-                      ]
-                },
-                {
-                      "key": "skills",
-                      "label": "技能",
-                      "type": "array",
-                      "fields": [
-                            {
-                                  "key": "name",
-                                  "label": "技能名称",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "level",
-                                  "label": "熟练度",
-                                  "type": "select",
-                                  "options": [
-                                        "了解",
-                                        "熟悉",
-                                        "掌握",
-                                        "精通"
-                                  ]
-                            }
-                      ]
-                },
-                {
-                      "key": "projects",
-                      "label": "项目经历",
-                      "type": "array",
-                      "fields": [
-                            {
-                                  "key": "name",
-                                  "label": "项目名称",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "role",
-                                  "label": "担任角色",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "description",
-                                  "label": "项目描述",
-                                  "type": "richtext"
-                            },
-                            {
-                                  "key": "highlights",
-                                  "label": "项目亮点",
-                                  "type": "array:text"
-                            }
-                      ]
-                }
+      "templateId": "fullstack",
+      "version": "1.0.0",
+      "name": "全栈工程师",
+      "sections": [
+        {
+          "key": "basics",
+          "label": "基本信息",
+          "fields": [
+            {
+              "key": "name",
+              "label": "姓名",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "title",
+              "label": "职位",
+              "type": "text"
+            },
+            {
+              "key": "email",
+              "label": "邮箱",
+              "type": "email",
+              "required": true
+            },
+            {
+              "key": "phone",
+              "label": "电话",
+              "type": "tel"
+            },
+            {
+              "key": "location",
+              "label": "所在城市",
+              "type": "text"
+            },
+            {
+              "key": "avatar",
+              "label": "头像",
+              "type": "image"
+            },
+            {
+              "key": "summary",
+              "label": "个人简介",
+              "type": "richtext"
+            }
           ]
+        },
+        {
+          "key": "experience",
+          "label": "工作经历",
+          "type": "array",
+          "fields": [
+            {
+              "key": "company",
+              "label": "公司",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "position",
+              "label": "职位",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "startDate",
+              "label": "开始日期",
+              "type": "date"
+            },
+            {
+              "key": "endDate",
+              "label": "结束日期",
+              "type": "date"
+            },
+            {
+              "key": "highlights",
+              "label": "工作亮点",
+              "type": "array:text"
+            }
+          ]
+        },
+        {
+          "key": "education",
+          "label": "教育经历",
+          "type": "array",
+          "fields": [
+            {
+              "key": "institution",
+              "label": "学校",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "area",
+              "label": "专业",
+              "type": "text"
+            },
+            {
+              "key": "studyType",
+              "label": "学历",
+              "type": "select",
+              "options": [
+                "高中",
+                "大专",
+                "本科",
+                "硕士",
+                "博士"
+              ]
+            },
+            {
+              "key": "startDate",
+              "label": "开始日期",
+              "type": "date"
+            },
+            {
+              "key": "endDate",
+              "label": "结束日期",
+              "type": "date"
+            }
+          ]
+        },
+        {
+          "key": "skills",
+          "label": "技能",
+          "type": "array",
+          "fields": [
+            {
+              "key": "name",
+              "label": "技能名称",
+              "type": "text"
+            },
+            {
+              "key": "level",
+              "label": "熟练度",
+              "type": "select",
+              "options": [
+                "了解",
+                "熟悉",
+                "掌握",
+                "精通"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "projects",
+          "label": "项目经历",
+          "type": "array",
+          "fields": [
+            {
+              "key": "name",
+              "label": "项目名称",
+              "type": "text"
+            },
+            {
+              "key": "role",
+              "label": "担任角色",
+              "type": "text"
+            },
+            {
+              "key": "description",
+              "label": "项目描述",
+              "type": "richtext"
+            },
+            {
+              "key": "highlights",
+              "label": "项目亮点",
+              "type": "array:text"
+            }
+          ]
+        }
+      ]
     },
   };
 

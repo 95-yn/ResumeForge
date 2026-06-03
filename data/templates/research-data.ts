@@ -19,7 +19,6 @@ const template: TemplateData = {
     category: 'tech',
     html: `<div class="resume research-data">
   <header>
-    <div class="hd-glow"></div>
     <div class="hd-main">
       <div class="hd-prompt">
         <span class="hd-sym">&gt;_</span>
@@ -86,79 +85,65 @@ const template: TemplateData = {
   min-height:297mm;
   margin:0 auto;
   padding:18mm;
-  background:#0f1620;
-  color:#cdd6e2;
+  background:#f4f6f9;
+  color:#1f2733;
   font-size:10pt;
-  line-height:1.55;
+  line-height:1.6;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
   position:relative;
+  --rd-blue:#0e7490;
+  --rd-blue-deep:#0b5c73;
+  --rd-ink:#1f2733;
+  --rd-sub:#475569;
+  --rd-line:#d8e0ea;
+  --rd-panel:#ffffff;
 }
 
-.resume.research-data::before {
-  content:"";
-  position:absolute;
-  inset:0;
-  background-image:linear-gradient(rgba(45,212,191,0.05) 1px, transparent 1px),linear-gradient(90deg, rgba(45,212,191,0.05) 1px, transparent 1px);
-  background-size:22px 22px;
-  pointer-events:none;
-}
-
-/* ===== Header ===== */
+/* ===== Header — dark banner accent only ===== */
 .resume.research-data header {
   position:relative;
   margin-bottom:9mm;
-  padding:7mm 7mm 6mm;
+  padding:8mm 8mm 7mm;
   background:linear-gradient(135deg,#152030 0%,#101a26 100%);
-  border:1px solid #233143;
-  border-left:3px solid #22d3ee;
   border-radius:6px;
   overflow:hidden;
-}
-.resume.research-data .hd-glow {
-  position:absolute;
-  top:-40%;
-  right:-10%;
-  width:55%;
-  height:180%;
-  background:radial-gradient(ellipse at center, rgba(34,211,238,0.22) 0%, rgba(34,211,238,0) 70%);
-  pointer-events:none;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
 }
 .resume.research-data .hd-main { position:relative; }
 .resume.research-data .hd-prompt {
   display:flex;
   align-items:center;
-  gap:8px;
+  gap:9px;
 }
 .resume.research-data .hd-sym {
   font-family:'SF Mono','Consolas',monospace;
-  color:#22d3ee;
+  color:#5fd6e8;
   font-size:15pt;
   font-weight:700;
-  text-shadow:0 0 8px rgba(34,211,238,0.6);
 }
 .resume.research-data h1 {
   font-size:23pt;
   font-weight:700;
   letter-spacing:1px;
   color:#f0f6fc;
-  line-height:1.1;
+  line-height:1.15;
 }
 .resume.research-data .hd-title {
-  margin-top:5px;
+  margin-top:6px;
   font-size:10.5pt;
   letter-spacing:0.5px;
-  color:#22d3ee;
+  color:#7fdbe8;
   font-family:'SF Mono','Consolas',monospace;
 }
 .resume.research-data .contact {
-  margin-top:11px;
+  margin-top:12px;
   display:flex;
   flex-wrap:wrap;
-  gap:7px 0;
+  gap:8px 0;
 }
 .resume.research-data .contact span {
   font-size:8.5pt;
-  color:#9fb0c3;
+  color:#c4d0de;
   font-family:'SF Mono','Consolas',monospace;
   padding:2px 11px;
   position:relative;
@@ -171,7 +156,7 @@ const template: TemplateData = {
   transform:translateY(-50%);
   width:4px;
   height:4px;
-  background:#22d3ee;
+  background:#5fd6e8;
   border-radius:1px;
 }
 .resume.research-data .contact span:first-child { padding-left:11px; }
@@ -179,26 +164,26 @@ const template: TemplateData = {
 /* ===== Section / Heading ===== */
 .resume.research-data section {
   position:relative;
-  margin-bottom:7mm;
+  margin-bottom:8mm;
 }
 .resume.research-data h2 {
   display:flex;
   align-items:baseline;
-  gap:9px;
+  gap:10px;
   margin-bottom:5mm;
   padding-bottom:3mm;
-  border-bottom:1px solid #233143;
+  border-bottom:1px solid var(--rd-line);
 }
 .resume.research-data .h2-no {
   font-family:'SF Mono','Consolas',monospace;
   font-size:8.5pt;
-  color:#4a6178;
+  color:var(--rd-blue);
   letter-spacing:0.5px;
 }
 .resume.research-data .h2-tx {
   font-size:12.5pt;
   font-weight:700;
-  color:#e6edf5;
+  color:var(--rd-ink);
   letter-spacing:1px;
 }
 .resume.research-data .h2-tx::after {
@@ -208,27 +193,25 @@ const template: TemplateData = {
   height:13px;
   margin-left:7px;
   vertical-align:-1px;
-  background:#22d3ee;
-  box-shadow:0 0 7px rgba(34,211,238,0.55);
-  animation:none;
+  background:var(--rd-blue);
 }
 
 /* ===== Summary ===== */
 .resume.research-data .summary-box {
   position:relative;
-  padding:11px 14px;
-  background:#13202d;
-  border:1px solid #233143;
+  padding:13px 16px;
+  background:var(--rd-panel);
+  border:1px solid var(--rd-line);
   border-radius:5px;
   font-size:9.5pt;
-  color:#bcc9d8;
-  line-height:1.7;
+  color:#2a3441;
+  line-height:1.75;
 }
 
 /* ===== Timeline / Experience ===== */
 .resume.research-data .timeline {
   position:relative;
-  padding-left:18px;
+  padding-left:20px;
 }
 .resume.research-data .timeline::before {
   content:"";
@@ -237,161 +220,164 @@ const template: TemplateData = {
   top:6px;
   bottom:6px;
   width:1px;
-  background:linear-gradient(#22d3ee, #2a3b4f);
+  background:linear-gradient(var(--rd-blue), #a9bccd);
 }
 .resume.research-data .entry {
   position:relative;
-  margin-bottom:6mm;
+  margin-bottom:7mm;
 }
 .resume.research-data .entry:last-child { margin-bottom:0; }
 .resume.research-data .node {
   position:absolute;
-  left:-18px;
+  left:-20px;
   top:4px;
   width:9px;
   height:9px;
-  background:#0f1620;
-  border:2px solid #22d3ee;
+  background:#f4f6f9;
+  border:2px solid var(--rd-blue);
   border-radius:50%;
-  box-shadow:0 0 6px rgba(34,211,238,0.6);
 }
 .resume.research-data .entry-head {
   display:flex;
   justify-content:space-between;
   align-items:baseline;
   flex-wrap:wrap;
-  gap:4px 10px;
+  gap:5px 12px;
 }
 .resume.research-data .entry h3 {
   font-size:11pt;
   font-weight:700;
-  color:#f0f6fc;
+  color:var(--rd-ink);
+  line-height:1.4;
 }
-.resume.research-data .company { color:#f0f6fc; }
+.resume.research-data .company { color:var(--rd-ink); }
 .resume.research-data .position {
-  color:#22d3ee;
-  font-weight:500;
+  color:var(--rd-blue);
+  font-weight:600;
   font-size:10pt;
   margin-left:9px;
   padding-left:9px;
-  border-left:1px solid #2f4254;
+  border-left:1px solid var(--rd-line);
 }
 .resume.research-data .date {
   font-family:'SF Mono','Consolas',monospace;
   font-size:8pt;
-  color:#7e93a8;
+  color:var(--rd-sub);
   white-space:nowrap;
-  background:#13202d;
-  border:1px solid #233143;
-  padding:1px 8px;
+  background:#eef2f7;
+  border:1px solid var(--rd-line);
+  padding:2px 9px;
   border-radius:3px;
 }
 
 /* ===== Lists ===== */
 .resume.research-data ul {
   list-style:none;
-  margin-top:6px;
+  margin-top:8px;
 }
 .resume.research-data li {
   position:relative;
-  padding-left:16px;
-  margin-bottom:4px;
+  padding-left:17px;
+  margin-bottom:6px;
   font-size:9.3pt;
-  color:#b7c4d3;
-  line-height:1.6;
+  color:#2a3441;
+  line-height:1.65;
 }
+.resume.research-data li:last-child { margin-bottom:0; }
 .resume.research-data li::before {
   content:"▸";
   position:absolute;
   left:0;
   top:0;
-  color:#22d3ee;
+  color:var(--rd-blue);
   font-size:8.5pt;
 }
 
 /* ===== Projects ===== */
 .resume.research-data .proj-entry {
   margin-bottom:5mm;
-  padding:11px 13px;
-  background:#13202d;
-  border:1px solid #233143;
+  padding:13px 15px;
+  background:var(--rd-panel);
+  border:1px solid var(--rd-line);
   border-radius:5px;
-  border-top:2px solid #2a3b4f;
-  transition:none;
 }
 .resume.research-data .proj-entry:last-child { margin-bottom:0; }
 .resume.research-data .proj-entry h3 {
   font-size:10.5pt;
   font-weight:700;
-  color:#f0f6fc;
-  margin-bottom:5px;
+  color:var(--rd-ink);
+  margin-bottom:7px;
+  line-height:1.4;
 }
-.resume.research-data .proj-name { color:#f0f6fc; }
+.resume.research-data .proj-name { color:var(--rd-ink); }
 .resume.research-data .proj-role {
   font-family:'SF Mono','Consolas',monospace;
   font-size:8pt;
-  font-weight:400;
-  color:#0f1620;
-  background:#22d3ee;
-  padding:1px 7px;
+  font-weight:600;
+  color:#ffffff;
+  background:var(--rd-blue);
+  padding:1px 8px;
   border-radius:3px;
   margin-left:7px;
   vertical-align:1px;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
 }
 .resume.research-data .proj-desc {
   font-size:9.2pt;
-  color:#a7b6c7;
-  line-height:1.6;
-  margin-bottom:3px;
+  color:#3a4654;
+  line-height:1.65;
+  margin-bottom:5px;
 }
 
 /* ===== Skills ===== */
 .resume.research-data .skills {
   display:flex;
   flex-wrap:wrap;
-  gap:8px;
+  gap:9px;
 }
 .resume.research-data .skill-chip {
   display:inline-flex;
   align-items:center;
-  background:#13202d;
-  border:1px solid #2a3b4f;
+  background:var(--rd-panel);
+  border:1px solid var(--rd-line);
   border-radius:4px;
   overflow:hidden;
   font-family:'SF Mono','Consolas',monospace;
 }
 .resume.research-data .sk-name {
-  padding:3px 10px;
+  padding:3px 11px;
   font-size:8.8pt;
-  color:#dbe5f0;
-  font-weight:500;
+  color:#27313d;
+  font-weight:600;
 }
 .resume.research-data .sk-lv {
-  padding:3px 9px;
+  padding:3px 10px;
   font-size:8pt;
-  color:#0f1620;
-  background:#22d3ee;
+  color:#ffffff;
+  background:var(--rd-blue);
   font-weight:600;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
 }
 
 /* ===== Education ===== */
 .resume.research-data .edu-entry {
   margin-bottom:4mm;
-  padding-left:13px;
-  border-left:2px solid #2a3b4f;
+  padding-left:14px;
+  border-left:1px solid var(--rd-line);
 }
 .resume.research-data .edu-entry:last-child { margin-bottom:0; }
 .resume.research-data .edu-entry h3 {
   font-size:10.5pt;
   font-weight:700;
-  color:#f0f6fc;
+  color:var(--rd-ink);
+  line-height:1.4;
 }
 .resume.research-data .edu-meta {
-  margin-top:3px;
+  margin-top:4px;
   font-size:9pt;
-  color:#9fb0c3;
+  color:var(--rd-sub);
 }
-.resume.research-data .edu-dot { color:#22d3ee; }
+.resume.research-data .edu-dot { color:var(--rd-blue); }
 
 /* ===== Inline-list normalize ===== */
 .resume.research-data li p, .resume.research-data li div { margin:0; padding:0; display:inline; }

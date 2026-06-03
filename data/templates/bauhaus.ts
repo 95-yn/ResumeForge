@@ -39,7 +39,7 @@ const template: TemplateData = {
 
   {{#if experience.length}}<section data-section="experience"><h2><span class="bh-tag bh-tag-red">02</span>工作经历</h2>
     {{#each experience}}<div class="bh-entry" data-entry="experience" data-entry-index="{{@index}}">
-      <span class="bh-bar bh-bar-red" aria-hidden="true"></span>
+      <span class="bh-mark bh-mark-red" aria-hidden="true"></span>
       <div class="bh-entry-main">
         <h3><span class="bh-co" data-field="experience.{{@index}}.company">{{{company}}}</span><span class="bh-pos" data-field="experience.{{@index}}.position">{{{position}}}</span></h3>
         <span class="date"><span data-field="experience.{{@index}}.startDate">{{{startDate}}}</span> — <span data-field="experience.{{@index}}.endDate">{{{endDate}}}</span></span>
@@ -50,7 +50,7 @@ const template: TemplateData = {
 
   {{#if education.length}}<section data-section="education"><h2><span class="bh-tag bh-tag-blue">03</span>教育背景</h2>
     {{#each education}}<div class="bh-entry" data-entry="education" data-entry-index="{{@index}}">
-      <span class="bh-bar bh-bar-blue" aria-hidden="true"></span>
+      <span class="bh-mark bh-mark-blue" aria-hidden="true"></span>
       <div class="bh-entry-main">
         <h3 data-field="education.{{@index}}.institution">{{{institution}}}</h3>
         <span class="date"><span data-field="education.{{@index}}.startDate">{{{startDate}}}</span> — <span data-field="education.{{@index}}.endDate">{{{endDate}}}</span></span>
@@ -63,7 +63,7 @@ const template: TemplateData = {
 
   {{#if projects.length}}<section data-section="projects"><h2><span class="bh-tag bh-tag-red">05</span>项目经历</h2>
     {{#each projects}}<div class="bh-entry" data-entry="projects" data-entry-index="{{@index}}">
-      <span class="bh-bar bh-bar-mix" aria-hidden="true"></span>
+      <span class="bh-mark bh-mark-mix" aria-hidden="true"></span>
       <div class="bh-entry-main">
         <h3><span class="bh-pj" data-field="projects.{{@index}}.name">{{{name}}}</span>{{#if role}} <span class="bh-pj-role" data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}</h3>
         {{#if description}}<div class="bh-pj-desc" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
@@ -76,11 +76,11 @@ const template: TemplateData = {
 .resume.bauhaus * { word-wrap:break-word; overflow-wrap:break-word; }
 
 .resume.bauhaus {
-  --bh-red:#e63329;
-  --bh-yellow:#f5c518;
-  --bh-blue:#1f4fd8;
-  --bh-ink:#15151a;
-  --bh-line:#15151a;
+  --bh-red:#cf3a30;
+  --bh-yellow:#e8b923;
+  --bh-blue:#2a4fb5;
+  --bh-ink:#1a1a20;
+  --bh-line:#1a1a20;
   max-width:210mm;
   min-height:297mm;
   margin:0 auto;
@@ -105,7 +105,7 @@ const template: TemplateData = {
 .resume.bauhaus .bh-blocks {
   flex:0 0 34mm;
   position:relative;
-  border-right:3px solid var(--bh-line);
+  box-shadow:inset -3px 0 0 0 var(--bh-line);
   background:#fff;
   display:block;
 }
@@ -116,7 +116,7 @@ const template: TemplateData = {
   width:55%; height:50%;
   background:var(--bh-red);
   border-bottom:3px solid var(--bh-line);
-  border-right:3px solid var(--bh-line);
+  box-shadow:inset -3px 0 0 0 var(--bh-line);
 }
 .resume.bauhaus .bh-yellow {
   top:0; right:0;
@@ -209,27 +209,45 @@ const template: TemplateData = {
 .resume.bauhaus .bh-tag-yellow { background:var(--bh-yellow); color:var(--bh-ink); }
 
 /* ---------- Summary ---------- */
+/* yellow side-stripe removed -> integral framed block with corner accent */
 .resume.bauhaus .bh-summary .bh-body {
-  border-left:4mm solid var(--bh-yellow);
-  padding-left:4mm;
+  position:relative;
+  border:2px solid var(--bh-line);
+  padding:4mm 4mm 4mm 5mm;
   font-size:10pt;
+  background:#fffdf5;
+}
+.resume.bauhaus .bh-summary .bh-body::before {
+  content:"";
+  position:absolute;
+  left:0; top:0; bottom:0;
+  width:2.4mm;
+  background:var(--bh-yellow);
 }
 
 /* ---------- Entries ---------- */
+/* colored side-bars removed -> leading geometric square marker */
 .resume.bauhaus .bh-entry {
   display:flex;
   gap:4mm;
   margin-bottom:5mm;
 }
 .resume.bauhaus .bh-entry:last-child { margin-bottom:0; }
-.resume.bauhaus .bh-bar {
-  flex:0 0 3mm;
+.resume.bauhaus .bh-mark {
+  flex:0 0 3.4mm;
+  width:3.4mm;
+  height:3.4mm;
+  margin-top:1mm;
   background:var(--bh-ink);
 }
-.resume.bauhaus .bh-bar-red { background:var(--bh-red); }
-.resume.bauhaus .bh-bar-blue { background:var(--bh-blue); }
-.resume.bauhaus .bh-bar-mix {
-  background:linear-gradient(180deg,var(--bh-red) 0 33%,var(--bh-yellow) 33% 66%,var(--bh-blue) 66% 100%);
+.resume.bauhaus .bh-mark-red { background:var(--bh-red); }
+.resume.bauhaus .bh-mark-blue {
+  background:var(--bh-blue);
+  border-radius:50%;
+}
+.resume.bauhaus .bh-mark-mix {
+  background:var(--bh-yellow);
+  transform:rotate(45deg);
 }
 .resume.bauhaus .bh-entry-main { flex:1 1 auto; min-width:0; }
 

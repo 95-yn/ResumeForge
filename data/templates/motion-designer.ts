@@ -77,17 +77,22 @@ const template: TemplateData = {
   background: #fff;
   font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
   font-size: 10pt;
-  line-height: 1.5;
-  color: #1a1a22;
+  line-height: 1.6;
+  color: #232330;
+  --md-cyan: #1f8fa8;
+  --md-violet: #7c3aed;
+  --md-magenta: #b1318f;
+  --md-ink: #232330;
+  --md-line: #e7e4ee;
 }
 
-/* ===== Header: dark + neon gradient ===== */
+/* ===== Header: dark, desaturated accents ===== */
 .resume.motion-designer .md-header {
   position: relative;
   background:
-    radial-gradient(120% 140% at 8% -10%, rgba(45,212,255,0.28) 0%, rgba(45,212,255,0) 42%),
-    radial-gradient(120% 140% at 95% 0%, rgba(217,70,239,0.30) 0%, rgba(217,70,239,0) 45%),
-    linear-gradient(125deg, #0a0a12 0%, #14101f 55%, #0d0a16 100%);
+    radial-gradient(120% 140% at 8% -10%, rgba(31,143,168,0.20) 0%, rgba(31,143,168,0) 44%),
+    radial-gradient(120% 140% at 95% 0%, rgba(124,58,237,0.22) 0%, rgba(124,58,237,0) 46%),
+    linear-gradient(125deg, #14121d 0%, #1b1727 55%, #15121f 100%);
   padding: 18mm 18mm 0;
   overflow: hidden;
   -webkit-print-color-adjust: exact;
@@ -98,11 +103,11 @@ const template: TemplateData = {
   position: absolute;
   top: -40px;
   right: -30px;
-  width: 240px;
-  height: 240px;
-  background: conic-gradient(from 120deg, #22d3ee, #a855f7, #ec4899, #22d3ee);
-  filter: blur(60px);
-  opacity: 0.35;
+  width: 220px;
+  height: 220px;
+  background: conic-gradient(from 120deg, #1f8fa8, #7c3aed, #b1318f, #1f8fa8);
+  filter: blur(64px);
+  opacity: 0.24;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
@@ -113,40 +118,33 @@ const template: TemplateData = {
   font-size: 26pt;
   font-weight: 800;
   letter-spacing: 2px;
-  line-height: 1.1;
+  line-height: 1.15;
   color: #fff;
-  text-shadow: 0 0 22px rgba(168,85,247,0.45);
 }
 
 .resume.motion-designer .md-title {
-  margin-top: 6px;
+  margin-top: 7px;
   font-size: 10.5pt;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
-  background: linear-gradient(90deg, #22d3ee, #ec4899);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: #ec4899;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
+  color: #d8b6f0;
 }
 
 .resume.motion-designer .md-contact {
-  margin-top: 12px;
+  margin-top: 13px;
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 8px;
+  gap: 7px 8px;
 }
 
 .resume.motion-designer .md-chip {
   font-size: 8.5pt;
-  color: rgba(255,255,255,0.82);
+  color: rgba(255,255,255,0.85);
   padding: 3px 11px;
   border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.18);
-  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.05);
 }
 
 /* ===== Keyframe track strip under header ===== */
@@ -164,7 +162,7 @@ const template: TemplateData = {
   position: absolute;
   left: 0; right: 0;
   height: 2px;
-  background: linear-gradient(90deg, #22d3ee 0%, #a855f7 50%, #ec4899 100%);
+  background: linear-gradient(90deg, #1f8fa8 0%, #7c3aed 50%, #b1318f 100%);
   border-radius: 2px;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
@@ -174,28 +172,28 @@ const template: TemplateData = {
   width: 9px;
   height: 9px;
   transform: rotate(45deg);
-  background: #0a0a12;
-  border: 1.5px solid #22d3ee;
+  background: #14121d;
+  border: 1.5px solid #1f8fa8;
   margin-right: auto;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
-.resume.motion-designer .md-kf:nth-child(2) { border-color: #6ee7f9; }
-.resume.motion-designer .md-kf:nth-child(3) { border-color: #a855f7; }
-.resume.motion-designer .md-kf:nth-child(4) { border-color: #d946ef; }
+.resume.motion-designer .md-kf:nth-child(2) { border-color: #2ba0b8; }
+.resume.motion-designer .md-kf:nth-child(3) { border-color: #7c3aed; }
+.resume.motion-designer .md-kf:nth-child(4) { border-color: #9a3fc4; }
 .resume.motion-designer .md-kf:nth-child(5) {
-  border-color: #ec4899;
-  background: #ec4899;
+  border-color: #b1318f;
+  background: #b1318f;
   margin-right: 0;
 }
 
-/* ===== Body ===== */
+/* ===== Body — white panel, high-contrast near-black text ===== */
 .resume.motion-designer .md-body {
-  padding: 16px 18mm 18mm;
+  padding: 20px 18mm 18mm;
   background: #fff;
 }
 
-.resume.motion-designer .md-section { margin-bottom: 16px; }
+.resume.motion-designer .md-section { margin-bottom: 22px; }
 .resume.motion-designer .md-section:last-child { margin-bottom: 0; }
 
 .resume.motion-designer .md-h2 {
@@ -206,27 +204,35 @@ const template: TemplateData = {
   font-weight: 800;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #0d0a16;
-  margin-bottom: 11px;
+  color: var(--md-ink);
+  margin-bottom: 14px;
 }
 .resume.motion-designer .md-h2-mark {
   width: 10px;
   height: 10px;
   flex-shrink: 0;
   transform: rotate(45deg);
-  background: linear-gradient(135deg, #22d3ee, #ec4899);
-  box-shadow: 0 0 0 3px rgba(168,85,247,0.14);
+  background: linear-gradient(135deg, #1f8fa8, #b1318f);
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
 
 .resume.motion-designer .md-summary {
+  position: relative;
   font-size: 9.5pt;
-  color: #33333d;
-  line-height: 1.65;
-  padding-left: 19px;
-  border-left: 2px solid;
-  border-image: linear-gradient(180deg, #22d3ee, #ec4899) 1;
+  color: #232330;
+  line-height: 1.7;
+  padding-left: 16px;
+}
+.resume.motion-designer .md-summary::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5px;
+  width: 8px;
+  height: 8px;
+  transform: rotate(45deg);
+  background: linear-gradient(135deg, var(--md-cyan), var(--md-violet));
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
@@ -236,7 +242,7 @@ const template: TemplateData = {
 .resume.motion-designer .md-track .md-entry {
   position: relative;
   padding-left: 19px;
-  margin-bottom: 11px;
+  margin-bottom: 16px;
 }
 .resume.motion-designer .md-track .md-entry:last-child { margin-bottom: 0; }
 .resume.motion-designer .md-track .md-entry::before {
@@ -244,9 +250,9 @@ const template: TemplateData = {
   position: absolute;
   left: 4px;
   top: 7px;
-  bottom: -11px;
+  bottom: -16px;
   width: 1.5px;
-  background: linear-gradient(180deg, #a855f7, rgba(168,85,247,0.15));
+  background: linear-gradient(180deg, #7c3aed, rgba(124,58,237,0.15));
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
@@ -260,8 +266,8 @@ const template: TemplateData = {
   height: 9px;
   transform: rotate(45deg);
   background: #fff;
-  border: 1.5px solid #a855f7;
-  box-shadow: 0 0 0 2px rgba(34,211,238,0.18);
+  border: 1.5px solid #7c3aed;
+  box-shadow: 0 0 0 2px rgba(31,143,168,0.16);
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
@@ -275,14 +281,14 @@ const template: TemplateData = {
 .resume.motion-designer .md-entry-head h3 {
   font-size: 10.5pt;
   font-weight: 700;
-  color: #0d0a16;
+  color: var(--md-ink);
   flex: 1;
-  line-height: 1.35;
+  line-height: 1.4;
 }
-.resume.motion-designer .md-co { color: #0d0a16; }
-.resume.motion-designer .md-sep { color: #a855f7; margin: 0 5px; font-weight: 600; }
+.resume.motion-designer .md-co { color: var(--md-ink); }
+.resume.motion-designer .md-sep { color: #7c3aed; margin: 0 5px; font-weight: 600; }
 .resume.motion-designer .md-pos {
-  color: #c026d3;
+  color: var(--md-magenta);
   font-weight: 600;
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
@@ -291,8 +297,8 @@ const template: TemplateData = {
 .resume.motion-designer .md-date {
   font-size: 8.5pt;
   font-weight: 600;
-  color: #0a0a12;
-  background: linear-gradient(90deg, rgba(34,211,238,0.14), rgba(236,72,153,0.14));
+  color: #46414f;
+  background: #f4f1f9;
   padding: 2px 9px;
   border-radius: 14px;
   white-space: nowrap;
@@ -300,28 +306,29 @@ const template: TemplateData = {
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
-.resume.motion-designer .md-arrow { color: #c026d3; }
+.resume.motion-designer .md-arrow { color: var(--md-magenta); }
 
 .resume.motion-designer .md-desc {
   font-size: 9pt;
-  color: #4a4a55;
-  margin-top: 4px;
-  line-height: 1.55;
+  color: #2c2c38;
+  margin-top: 6px;
+  line-height: 1.65;
 }
 
 .resume.motion-designer .md-list {
-  margin-top: 5px;
+  margin-top: 8px;
   list-style: none;
   padding: 0;
 }
 .resume.motion-designer .md-list li {
   position: relative;
   font-size: 9.5pt;
-  color: #33333d;
-  line-height: 1.55;
-  margin-bottom: 3px;
+  color: #232330;
+  line-height: 1.65;
+  margin-bottom: 6px;
   padding-left: 14px;
 }
+.resume.motion-designer .md-list li:last-child { margin-bottom: 0; }
 .resume.motion-designer .md-list li::before {
   content: "";
   position: absolute;
@@ -330,36 +337,32 @@ const template: TemplateData = {
   width: 5px;
   height: 5px;
   transform: rotate(45deg);
-  background: linear-gradient(135deg, #22d3ee, #ec4899);
+  background: linear-gradient(135deg, #1f8fa8, #b1318f);
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
 
 .resume.motion-designer .md-edu-sub {
   font-size: 9pt;
-  color: #4a4a55;
-  margin-top: 3px;
+  color: #3a3a47;
+  margin-top: 5px;
 }
 
 /* ===== Skills ===== */
 .resume.motion-designer .md-skills {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px 7px;
+  gap: 7px 8px;
 }
 .resume.motion-designer .md-tag {
   font-size: 9pt;
-  color: #0d0a16;
-  padding: 3px 11px;
+  color: var(--md-ink);
+  padding: 4px 12px;
   border-radius: 16px;
-  border: 1px solid transparent;
-  background:
-    linear-gradient(#fff, #fff) padding-box,
-    linear-gradient(120deg, #22d3ee, #a855f7, #ec4899) border-box;
-  -webkit-print-color-adjust: exact;
-  print-color-adjust: exact;
+  border: 1px solid var(--md-line);
+  background: #faf9fc;
 }
-.resume.motion-designer .md-lvl { color: #c026d3; font-weight: 600; }
+.resume.motion-designer .md-lvl { color: var(--md-magenta); font-weight: 600; }
 
 /* ===== Required tail rules ===== */
 .resume.motion-designer li p, .resume.motion-designer li div { margin: 0; padding: 0; display: inline; }

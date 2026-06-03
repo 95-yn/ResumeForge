@@ -86,16 +86,17 @@ const template: TemplateData = {
   max-width:210mm; min-height:297mm; margin:0 auto; padding:0 0 18mm;
   background:#fff; font-size:10pt; line-height:1.5; color:#1a1730;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
-  --ink:#1a1730; --blue:#4338ca; --purple:#7c3aed; --violet:#6d28d9;
-  --soft:#6b6892; --line:#e7e4f5; --bg:#f6f4ff;
+  --ink:#1a1730; --blue:#4338ca; --purple:#6d28d9; --violet:#5b21b6;
+  --soft:#6b6892; --line:#e7e4f5; --bg:#f7f6ff;
 }
 
 /* ===== header ===== */
 .resume.pm-ai-product header {
   position:relative; overflow:hidden;
   padding:16mm 18mm 0;
-  background:linear-gradient(135deg,#312e81 0%,#4f3fb8 42%,#7c3aed 100%);
+  background:linear-gradient(135deg,#312e81 0%,#4c3ba6 48%,#6d28d9 100%);
   color:#fff;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
 }
 .resume.pm-ai-product .hdr-grid {
   position:absolute; inset:0;
@@ -115,17 +116,17 @@ const template: TemplateData = {
 }
 .resume.pm-ai-product .node-dot {
   width:6px; height:6px; border-radius:50%;
-  background:#a78bfa; box-shadow:0 0 0 3px rgba(167,139,250,.35);
+  background:#c4b5fd; box-shadow:0 0 0 3px rgba(196,181,253,.35);
 }
 .resume.pm-ai-product header h1 {
   font-size:27pt; font-weight:800; letter-spacing:.01em; line-height:1.05;
 }
 .resume.pm-ai-product .role {
-  margin-top:6px; font-size:11pt; font-weight:500; color:#d9d4ff;
+  margin-top:6px; font-size:11pt; font-weight:500; color:#ddd8ff;
 }
 .resume.pm-ai-product .contact {
   margin-top:12px; display:flex; flex-wrap:wrap; gap:8px 0;
-  font-size:8.7pt; color:#e6e2ff;
+  font-size:8.7pt; color:#eae6ff;
 }
 .resume.pm-ai-product .contact span { position:relative; padding:0 13px; }
 .resume.pm-ai-product .contact span:first-child { padding-left:0; }
@@ -144,11 +145,11 @@ const template: TemplateData = {
 }
 .resume.pm-ai-product .loop-step {
   padding:2px 9px; border-radius:14px; font-weight:600;
-  background:rgba(255,255,255,.12); color:#efecff;
+  background:rgba(255,255,255,.12); color:#f0edff;
   border:1px solid rgba(255,255,255,.2);
 }
-.resume.pm-ai-product .loop-arrow { color:#b7a8ff; font-weight:700; }
-.resume.pm-ai-product .loop-back { color:#a78bfa; }
+.resume.pm-ai-product .loop-arrow { color:#c4b5fd; font-weight:700; }
+.resume.pm-ai-product .loop-back { color:#c4b5fd; }
 
 /* ===== body ===== */
 .resume.pm-ai-product .block { padding:0 18mm; margin-top:15px; }
@@ -166,15 +167,19 @@ const template: TemplateData = {
   font-size:8pt; font-weight:700; letter-spacing:.04em;
   color:#fff; border-radius:6px;
   background:linear-gradient(135deg,var(--blue),var(--purple));
-  box-shadow:0 2px 6px rgba(109,40,217,.28);
 }
 
-/* summary card */
+/* summary card — full frame, top accent rule (no side stripe) */
 .resume.pm-ai-product .card-glow {
-  position:relative; padding:11px 14px;
-  background:linear-gradient(135deg,#f7f5ff,#f3effe);
-  border:1px solid var(--line); border-left:3px solid var(--purple);
+  position:relative; padding:12px 14px;
+  background:var(--bg);
+  border:1px solid var(--line);
   border-radius:9px; color:#403c63;
+  overflow:hidden;
+}
+.resume.pm-ai-product .card-glow::before {
+  content:''; position:absolute; left:0; right:0; top:0; height:3px;
+  background:linear-gradient(90deg,var(--blue),var(--purple));
 }
 
 /* experience timeline */
@@ -189,7 +194,7 @@ const template: TemplateData = {
   position:absolute; left:-17px; top:4px;
   width:9px; height:9px; border-radius:50%;
   background:#fff; border:2.5px solid var(--purple);
-  box-shadow:0 0 0 3px rgba(124,58,237,.12);
+  box-shadow:0 0 0 3px rgba(109,40,217,.12);
 }
 .resume.pm-ai-product .exp-head {
   display:flex; justify-content:space-between; align-items:baseline; gap:12px;
@@ -217,7 +222,7 @@ const template: TemplateData = {
   background:linear-gradient(135deg,var(--blue),var(--purple));
 }
 
-/* projects */
+/* projects — full-bordered card, leading index dot, no side stripe */
 .resume.pm-ai-product .proj-item {
   margin-bottom:11px; padding:10px 13px;
   background:var(--bg); border:1px solid var(--line);
@@ -227,24 +232,23 @@ const template: TemplateData = {
 .resume.pm-ai-product .proj-item h3 { font-size:10.3pt; font-weight:700; color:var(--ink); }
 .resume.pm-ai-product .proj-role {
   margin-left:8px; font-size:8pt; font-weight:600; color:var(--purple);
-  padding:1px 8px; border-radius:12px; background:rgba(124,58,237,.1);
+  padding:1px 8px; border-radius:12px; background:rgba(109,40,217,.1);
 }
 .resume.pm-ai-product .proj-desc { margin-top:4px; color:#4e4a70; font-size:9.5pt; }
 .resume.pm-ai-product .proj-item ul { margin-top:5px; }
 
-/* skills */
+/* skills — reduced badge emphasis: outline chips, plain level text */
 .resume.pm-ai-product .skills { display:flex; flex-wrap:wrap; gap:7px; }
 .resume.pm-ai-product .skill-chip {
   display:inline-flex; align-items:center; gap:6px;
   padding:4px 11px; font-size:9pt; font-weight:500;
   border-radius:7px; color:#312a5e;
-  background:linear-gradient(135deg,#f4f1ff,#efeafe);
+  background:#faf9ff;
   border:1px solid var(--line);
 }
 .resume.pm-ai-product .skill-chip .lvl {
-  font-size:7.6pt; font-weight:700; color:#fff;
-  padding:1px 7px; border-radius:10px;
-  background:linear-gradient(135deg,var(--blue),var(--purple));
+  font-size:7.8pt; font-weight:700; color:var(--purple);
+  padding-left:6px; border-left:1px solid var(--line);
 }
 
 /* education */

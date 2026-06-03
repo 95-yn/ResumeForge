@@ -70,28 +70,31 @@ const template: TemplateData = {
   line-height: 1.55;
   color: #1A1A1A;
   background: #FFFFFF;
+  counter-reset: dg-sec;
 }
 
 .resume.design-graphic .resume-header {
-  text-align: center;
-  padding-bottom: 12px;
-  margin-bottom: 14px;
-  border-bottom: 2px solid #111111;
+  text-align: left;
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+  border-bottom: 3px solid #111111;
 }
 
 .resume.design-graphic .resume-header h1 {
-  font-size: 22pt;
-  font-weight: 700;
+  font-size: 30pt;
+  font-weight: 800;
   color: #111111;
-  letter-spacing: 1.5px;
-  line-height: 1.2;
+  letter-spacing: -0.5px;
+  line-height: 1.05;
 }
 
 .resume.design-graphic .resume-header .title {
-  font-size: 10pt;
-  color: #78716C;
-  margin-top: 4px;
-  font-weight: 400;
+  font-size: 9pt;
+  color: #57534E;
+  margin-top: 6px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 3px;
 }
 
 .resume.design-graphic .contact {
@@ -100,24 +103,40 @@ const template: TemplateData = {
   color: #78716C;
 }
 
-.resume.design-graphic .contact-item { margin: 0 6px; }
+.resume.design-graphic .contact-item { margin: 0 8px 0 0; }
 .resume.design-graphic .contact-item + .contact-item::before {
-  content: "|";
-  margin-right: 6px;
+  content: "/";
+  margin-right: 8px;
   color: #D6D3D1;
 }
 
-.resume.design-graphic .section { margin-bottom: 12px; }
+.resume.design-graphic .section { margin-bottom: 14px; }
 
+/* Signature: oversized section index numerals (01/02/03 …) */
 .resume.design-graphic .section-title {
+  position: relative;
   font-size: 9pt;
-  font-weight: 700;
+  font-weight: 800;
   color: #111111;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  padding-bottom: 4px;
+  letter-spacing: 2px;
+  padding-bottom: 5px;
+  padding-left: 30px;
   border-bottom: 1px solid #111111;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  line-height: 1.6;
+}
+.resume.design-graphic .section-title::before {
+  counter-increment: dg-sec;
+  content: counter(dg-sec, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  bottom: 4px;
+  font-size: 15pt;
+  font-weight: 800;
+  letter-spacing: 0;
+  color: #111111;
+  line-height: 1;
 }
 
 .resume.design-graphic .entry { margin-bottom: 8px; }
@@ -180,9 +199,10 @@ const template: TemplateData = {
   background: transparent;
   border: 1px solid #111111;
   padding: 2px 9px;
-  border-radius: 2px;
+  border-radius: 0;
   font-size: 9pt;
   color: #111111;
+  font-weight: 500;
 }
 
 li p, li div { margin: 0; padding: 0; display: inline; }
@@ -197,188 +217,178 @@ li p, li div { margin: 0; padding: 0; display: inline; }
 }
 `,
     schema: {
-          "templateId": "design-graphic",
-          "version": "1.0.0",
-          "name": "平面设计",
-          "sections": [
-                {
-                      "key": "basics",
-                      "label": "基本信息",
-                      "fields": [
-                            {
-                                  "key": "name",
-                                  "label": "姓名",
-                                  "type": "text",
-                                  "required": true
-                            },
-                            {
-                                  "key": "title",
-                                  "label": "职位",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "email",
-                                  "label": "邮箱",
-                                  "type": "email",
-                                  "required": true
-                            },
-                            {
-                                  "key": "phone",
-                                  "label": "电话",
-                                  "type": "tel"
-                            },
-                            {
-                                  "key": "location",
-                                  "label": "所在城市",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "avatar",
-                                  "label": "头像",
-                                  "type": "image"
-                            },
-                            {
-                                  "key": "summary",
-                                  "label": "个人简介",
-                                  "type": "richtext"
-                            }
-                      ]
-                },
-                {
-                      "key": "experience",
-                      "label": "工作经历",
-                      "type": "array",
-                      "fields": [
-                            {
-                                  "key": "company",
-                                  "label": "公司",
-                                  "type": "text",
-                                  "required": true
-                            },
-                            {
-                                  "key": "position",
-                                  "label": "职位",
-                                  "type": "text",
-                                  "required": true
-                            },
-                            {
-                                  "key": "startDate",
-                                  "label": "开始日期",
-                                  "type": "date"
-                            },
-                            {
-                                  "key": "endDate",
-                                  "label": "结束日期",
-                                  "type": "date"
-                            },
-                            {
-                                  "key": "highlights",
-                                  "label": "工作亮点",
-                                  "type": "array:text"
-                            }
-                      ]
-                },
-                {
-                      "key": "education",
-                      "label": "教育经历",
-                      "type": "array",
-                      "fields": [
-                            {
-                                  "key": "institution",
-                                  "label": "学校",
-                                  "type": "text",
-                                  "required": true
-                            },
-                            {
-                                  "key": "area",
-                                  "label": "专业",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "studyType",
-                                  "label": "学历",
-                                  "type": "select",
-                                  "options": [
-                                        "高中",
-                                        "大专",
-                                        "本科",
-                                        "硕士",
-                                        "博士"
-                                  ]
-                            },
-                            {
-                                  "key": "startDate",
-                                  "label": "开始日期",
-                                  "type": "date"
-                            },
-                            {
-                                  "key": "endDate",
-                                  "label": "结束日期",
-                                  "type": "date"
-                            }
-                      ]
-                },
-                {
-                      "key": "skills",
-                      "label": "技能",
-                      "type": "array",
-                      "fields": [
-                            {
-                                  "key": "name",
-                                  "label": "技能名称",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "level",
-                                  "label": "熟练度",
-                                  "type": "select",
-                                  "options": [
-                                        "了解",
-                                        "熟悉",
-                                        "掌握",
-                                        "精通"
-                                  ]
-                            }
-                      ]
-                },
-                {
-                      "key": "projects",
-                      "label": "项目经历",
-                      "type": "array",
-                      "fields": [
-                            {
-                                  "key": "name",
-                                  "label": "项目名称",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "role",
-                                  "label": "担任角色",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "description",
-                                  "label": "项目描述",
-                                  "type": "richtext"
-                            },
-                            {
-                                  "key": "startDate",
-                                  "label": "开始日期",
-                                  "type": "date"
-                            },
-                            {
-                                  "key": "endDate",
-                                  "label": "结束日期",
-                                  "type": "date"
-                            },
-                            {
-                                  "key": "highlights",
-                                  "label": "项目亮点",
-                                  "type": "array:text"
-                            }
-                      ]
-                }
+      "templateId": "design-graphic",
+      "version": "1.0.0",
+      "name": "平面设计",
+      "sections": [
+        {
+          "key": "basics",
+          "label": "基本信息",
+          "fields": [
+            {
+              "key": "name",
+              "label": "姓名",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "title",
+              "label": "职位",
+              "type": "text"
+            },
+            {
+              "key": "email",
+              "label": "邮箱",
+              "type": "email",
+              "required": true
+            },
+            {
+              "key": "phone",
+              "label": "电话",
+              "type": "tel"
+            },
+            {
+              "key": "location",
+              "label": "所在城市",
+              "type": "text"
+            },
+            {
+              "key": "avatar",
+              "label": "头像",
+              "type": "image"
+            },
+            {
+              "key": "summary",
+              "label": "个人简介",
+              "type": "richtext"
+            }
           ]
+        },
+        {
+          "key": "experience",
+          "label": "工作经历",
+          "type": "array",
+          "fields": [
+            {
+              "key": "company",
+              "label": "公司",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "position",
+              "label": "职位",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "startDate",
+              "label": "开始日期",
+              "type": "date"
+            },
+            {
+              "key": "endDate",
+              "label": "结束日期",
+              "type": "date"
+            },
+            {
+              "key": "highlights",
+              "label": "工作亮点",
+              "type": "array:text"
+            }
+          ]
+        },
+        {
+          "key": "education",
+          "label": "教育经历",
+          "type": "array",
+          "fields": [
+            {
+              "key": "institution",
+              "label": "学校",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "area",
+              "label": "专业",
+              "type": "text"
+            },
+            {
+              "key": "studyType",
+              "label": "学历",
+              "type": "select",
+              "options": [
+                "高中",
+                "大专",
+                "本科",
+                "硕士",
+                "博士"
+              ]
+            },
+            {
+              "key": "startDate",
+              "label": "开始日期",
+              "type": "date"
+            },
+            {
+              "key": "endDate",
+              "label": "结束日期",
+              "type": "date"
+            }
+          ]
+        },
+        {
+          "key": "skills",
+          "label": "技能",
+          "type": "array",
+          "fields": [
+            {
+              "key": "name",
+              "label": "技能名称",
+              "type": "text"
+            },
+            {
+              "key": "level",
+              "label": "熟练度",
+              "type": "select",
+              "options": [
+                "了解",
+                "熟悉",
+                "掌握",
+                "精通"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "projects",
+          "label": "项目经历",
+          "type": "array",
+          "fields": [
+            {
+              "key": "name",
+              "label": "项目名称",
+              "type": "text"
+            },
+            {
+              "key": "role",
+              "label": "担任角色",
+              "type": "text"
+            },
+            {
+              "key": "description",
+              "label": "项目描述",
+              "type": "richtext"
+            },
+            {
+              "key": "highlights",
+              "label": "项目亮点",
+              "type": "array:text"
+            }
+          ]
+        }
+      ]
     },
   };
 

@@ -33,6 +33,7 @@ const template: TemplateData = {
     </div>
   </header>
 
+  <div class="body">
   {{#if basics.summary}}<section class="summary">
     <h2><span class="blk">#</span>个人简介</h2>
     <div class="sum-body" data-field="basics.summary">{{{basics.summary}}}</div>
@@ -84,83 +85,86 @@ const template: TemplateData = {
       </div>{{/each}}
     </div>
   </section>{{/if}}
+  </div>
 </div>`,
     css: `.resume.it-blockchain * { margin:0; padding:0; box-sizing:border-box; }
 .resume.it-blockchain * { word-wrap:break-word; overflow-wrap:break-word; }
 
 .resume.it-blockchain {
-  max-width:210mm; min-height:297mm; margin:0 auto; padding:18mm;
-  background:#0d0d0f;
-  background-image:
-    radial-gradient(circle at 88% 6%, rgba(212,175,55,0.10), transparent 42%),
-    linear-gradient(rgba(212,175,55,0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(212,175,55,0.035) 1px, transparent 1px);
-  background-size:auto, 26px 26px, 26px 26px;
-  color:#e8e6e0; font-size:10pt; line-height:1.5;
+  max-width:210mm; min-height:297mm; margin:0 auto; padding:0 0 18mm;
+  background:#fff;
+  color:#1f2733; font-size:10pt; line-height:1.5;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
+  --ink:#1f2733; --sub:#566173; --gold:#9a7b1f; --goldsoft:#b5912a;
+  --line:#e6e3da; --paper:#faf8f2;
 }
 
-/* ===== Header ===== */
+/* ===== Header (dark, brand zone) ===== */
 .resume.it-blockchain header {
   position:relative;
-  border:1px solid rgba(212,175,55,0.35);
-  border-radius:6px;
-  padding:14px 18px;
-  margin-bottom:22px;
-  background:linear-gradient(135deg, rgba(212,175,55,0.07), rgba(0,0,0,0.2));
+  padding:15mm 18mm 13mm;
+  margin-bottom:9mm;
+  background:#101319;
+  background-image:
+    radial-gradient(circle at 90% 12%, rgba(181,145,42,0.18), transparent 46%),
+    linear-gradient(rgba(181,145,42,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(181,145,42,0.05) 1px, transparent 1px);
+  background-size:auto, 24px 24px, 24px 24px;
   overflow:hidden;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
 }
-.resume.it-blockchain header::before {
-  content:''; position:absolute; left:0; top:0; bottom:0; width:4px;
-  background:linear-gradient(180deg,#d4af37,#9a7b1f);
+.resume.it-blockchain header::after {
+  content:''; position:absolute; left:0; right:0; bottom:0; height:3px;
+  background:linear-gradient(90deg,#9a7b1f,#d4af37,#9a7b1f);
 }
 .resume.it-blockchain .hdr-node {
   display:flex; align-items:flex-start; justify-content:space-between; gap:14px;
 }
 .resume.it-blockchain h1 {
-  font-size:23pt; font-weight:800; letter-spacing:1px; color:#f3efe4;
-  line-height:1.15;
+  font-size:24pt; font-weight:800; letter-spacing:1px; color:#f6f3ea;
+  line-height:1.12;
 }
 .resume.it-blockchain .title {
-  margin-top:5px; font-size:10.5pt; color:#d4af37;
-  letter-spacing:1.5px; font-weight:600; text-transform:uppercase;
+  margin-top:6px; font-size:10pt; color:#dcc06a;
+  letter-spacing:2px; font-weight:600; text-transform:uppercase;
 }
 .resume.it-blockchain .hdr-hash {
   font-family:'Courier New',monospace; font-weight:800;
-  font-size:18pt; color:rgba(212,175,55,0.35);
-  border:1.5px solid rgba(212,175,55,0.3); border-radius:5px;
+  font-size:17pt; color:#dcc06a;
+  border:1.5px solid rgba(220,192,106,0.5); border-radius:5px;
   padding:3px 9px; letter-spacing:1px; flex-shrink:0;
 }
 .resume.it-blockchain .contact {
-  margin-top:12px; padding-top:11px;
-  border-top:1px dashed rgba(212,175,55,0.28);
-  display:flex; flex-wrap:wrap; gap:8px 14px;
-  font-size:9pt; color:#b8b6b0; font-family:'Courier New',monospace;
+  margin-top:13px; padding-top:11px;
+  border-top:1px solid rgba(220,192,106,0.22);
+  display:flex; flex-wrap:wrap; gap:8px 16px;
+  font-size:9pt; color:#cfd3da; font-family:'Courier New',monospace;
 }
 .resume.it-blockchain .contact span { position:relative; padding-left:14px; }
 .resume.it-blockchain .contact span::before {
   content:''; position:absolute; left:0; top:50%; transform:translateY(-50%);
   width:6px; height:6px; background:#d4af37; border-radius:1px;
-  box-shadow:0 0 0 2px rgba(212,175,55,0.18);
 }
 
-/* ===== Sections ===== */
-.resume.it-blockchain section { margin-bottom:20px; }
+/* ===== Body (light paper) ===== */
+.resume.it-blockchain .body { padding:0 18mm; }
+.resume.it-blockchain section { margin-bottom:7mm; }
 .resume.it-blockchain h2 {
-  font-size:11.5pt; font-weight:800; color:#f3efe4;
-  letter-spacing:1.5px; margin-bottom:12px;
+  font-size:11.5pt; font-weight:800; color:var(--ink);
+  letter-spacing:1px; margin-bottom:11px;
   display:flex; align-items:center; gap:8px;
   padding-bottom:7px;
-  border-bottom:1px solid rgba(212,175,55,0.22);
+  border-bottom:1px solid var(--line);
 }
 .resume.it-blockchain h2 .blk {
-  font-family:'Courier New',monospace; color:#d4af37; font-size:13pt; font-weight:800;
+  font-family:'Courier New',monospace; color:var(--gold); font-size:13pt; font-weight:800;
 }
 
 /* summary */
 .resume.it-blockchain .sum-body {
-  color:#c9c7c1; font-size:9.5pt; line-height:1.7;
-  padding-left:14px; border-left:2px solid rgba(212,175,55,0.4);
+  color:#3d4椒; color:#3d4757; font-size:9.7pt; line-height:1.7;
+  background:var(--paper); border:1px solid var(--line); border-radius:6px;
+  padding:10px 14px;
 }
 
 /* ===== Chain / Blocks ===== */
@@ -169,58 +173,58 @@ const template: TemplateData = {
 }
 .resume.it-blockchain .chain::before {
   content:''; position:absolute; left:5px; top:6px; bottom:6px; width:1.5px;
-  background:linear-gradient(180deg, rgba(212,175,55,0.55), rgba(212,175,55,0.12));
+  background:linear-gradient(180deg, var(--goldsoft), rgba(181,145,42,0.25));
 }
 .resume.it-blockchain .block {
-  position:relative; margin-bottom:14px;
-  border:1px solid rgba(212,175,55,0.2);
-  border-radius:5px;
+  position:relative; margin-bottom:13px;
+  border:1px solid var(--line);
+  border-radius:6px;
   padding:11px 14px;
-  background:linear-gradient(180deg, rgba(255,255,255,0.025), rgba(212,175,55,0.025));
+  background:var(--paper);
 }
 .resume.it-blockchain .block:last-child { margin-bottom:0; }
 .resume.it-blockchain .node-dot {
-  position:absolute; left:-21px; top:14px;
+  position:absolute; left:-21px; top:15px;
   width:11px; height:11px; transform:rotate(45deg);
-  background:#0d0d0f; border:2px solid #d4af37; border-radius:2px;
-  box-shadow:0 0 0 3px rgba(13,13,15,1), 0 0 6px rgba(212,175,55,0.5);
+  background:#fff; border:2px solid var(--gold); border-radius:2px;
+  box-shadow:0 0 0 3px #fff;
 }
 .resume.it-blockchain .block-head {
   display:flex; justify-content:space-between; align-items:baseline;
   flex-wrap:wrap; gap:2px 10px;
 }
 .resume.it-blockchain h3 {
-  font-size:11pt; font-weight:700; color:#f0ede4; line-height:1.35;
+  font-size:11pt; font-weight:700; color:var(--ink); line-height:1.35;
 }
-.resume.it-blockchain .company { color:#f3efe4; }
+.resume.it-blockchain .company { color:var(--ink); font-weight:800; }
 .resume.it-blockchain .position,
 .resume.it-blockchain .role {
-  color:#d4af37; font-weight:600; margin-left:8px; font-size:10pt;
+  color:var(--gold); font-weight:600; margin-left:8px; font-size:10pt;
 }
 .resume.it-blockchain .position::before,
 .resume.it-blockchain .role::before {
-  content:'/ '; color:rgba(212,175,55,0.55); font-weight:400;
+  content:'/ '; color:var(--goldsoft); font-weight:400;
 }
-.resume.it-blockchain .pname { color:#f3efe4; }
+.resume.it-blockchain .pname { color:var(--ink); font-weight:800; }
 .resume.it-blockchain .date {
   font-family:'Courier New',monospace; font-size:8.5pt;
-  color:#9a8a55; white-space:nowrap; flex-shrink:0;
+  color:var(--sub); white-space:nowrap; flex-shrink:0;
 }
 
 .resume.it-blockchain .proj-desc {
-  margin-top:6px; color:#c9c7c1; font-size:9.5pt; line-height:1.6;
+  margin-top:6px; color:#3d4757; font-size:9.5pt; line-height:1.6;
 }
 .resume.it-blockchain ul { margin-top:8px; list-style:none; }
 .resume.it-blockchain li {
   position:relative; padding-left:16px; margin-bottom:5px;
-  color:#cdcbc5; font-size:9.5pt; line-height:1.6;
+  color:#3d4757; font-size:9.5pt; line-height:1.6;
 }
 .resume.it-blockchain li::before {
   content:'▸'; position:absolute; left:0; top:0;
-  color:#d4af37; font-size:9pt;
+  color:var(--gold); font-size:9pt;
 }
 .resume.it-blockchain .edu-meta {
-  margin-top:5px; color:#b8b6b0; font-size:9.5pt;
+  margin-top:5px; color:var(--sub); font-size:9.5pt;
 }
 
 /* ===== Skills ===== */
@@ -230,16 +234,16 @@ const template: TemplateData = {
 .resume.it-blockchain .skill-chip {
   display:inline-flex; align-items:center; gap:6px;
   padding:5px 12px;
-  border:1px solid rgba(212,175,55,0.35); border-radius:3px;
-  background:linear-gradient(135deg, rgba(212,175,55,0.10), rgba(0,0,0,0.1));
-  font-size:9pt; color:#e8e6e0;
+  border:1px solid var(--line); border-radius:3px;
+  background:var(--paper);
+  font-size:9pt; color:var(--ink);
   font-family:'Courier New',monospace;
 }
 .resume.it-blockchain .sk-tick {
   width:6px; height:6px; transform:rotate(45deg);
-  background:#d4af37; flex-shrink:0;
+  background:var(--gold); flex-shrink:0;
 }
-.resume.it-blockchain .lvl { color:#d4af37; }
+.resume.it-blockchain .lvl { color:var(--gold); }
 
 /* ===== contract clauses ===== */
 .resume.it-blockchain li p, .resume.it-blockchain li div { margin:0; padding:0; display:inline; }

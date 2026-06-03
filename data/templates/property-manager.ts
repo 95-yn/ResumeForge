@@ -161,15 +161,34 @@ const template: TemplateData = {
   background:rgba(255,255,255,.3);
 }
 
-/* ===== Sections ===== */
+/* ===== Sections：编号体系记忆点（门牌号 01/02…） ===== */
 .resume.property-manager .pm-section {
   margin-top:8mm;
+  counter-increment:pm-sec;
+}
+.resume.property-manager {
+  counter-reset:pm-sec;
 }
 .resume.property-manager h2 {
   position:relative;
   margin-bottom:5mm;
   padding-bottom:6px;
   border-bottom:1px solid var(--pm-line);
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.resume.property-manager h2::before {
+  content:counter(pm-sec,decimal-leading-zero);
+  flex:0 0 auto;
+  font-size:9pt;
+  font-weight:700;
+  letter-spacing:.5px;
+  color:#fff;
+  background:var(--pm-navy);
+  padding:2px 7px;
+  border-radius:3px;
+  font-family:Georgia,serif;
 }
 .resume.property-manager .pm-h2-tag {
   display:inline-block;
@@ -177,16 +196,14 @@ const template: TemplateData = {
   font-weight:700;
   letter-spacing:2px;
   color:var(--pm-navy);
-  background:var(--pm-beige);
-  padding:4px 14px 4px 12px;
-  border-left:4px solid var(--pm-blue);
 }
 
-/* ===== Summary ===== */
+/* ===== Summary：去彩色侧条，整框米底 ===== */
 .resume.property-manager .pm-summary-body {
   background:var(--pm-beige);
-  border-left:3px solid var(--pm-steel);
-  padding:9px 14px;
+  border:1px solid var(--pm-beige-deep);
+  padding:10px 15px;
+  border-radius:3px;
   font-size:10pt;
   line-height:1.7;
   color:#3a454d;
@@ -196,17 +213,15 @@ const template: TemplateData = {
 .resume.property-manager .pm-entry {
   margin-bottom:5mm;
   padding-left:13px;
-  border-left:2px solid var(--pm-line);
   position:relative;
 }
 .resume.property-manager .pm-entry::before {
   content:"";
   position:absolute;
-  left:-5px; top:5px;
-  width:8px; height:8px;
+  left:0; top:5px;
+  width:7px; height:7px;
   background:var(--pm-blue);
-  border:2px solid #fff;
-  border-radius:50%;
+  transform:rotate(45deg);
 }
 .resume.property-manager .pm-entry:last-child { margin-bottom:0; }
 .resume.property-manager .pm-entry-head {
@@ -271,7 +286,7 @@ const template: TemplateData = {
   color:var(--pm-muted);
 }
 
-/* ===== Skills ===== */
+/* ===== Skills：去3px侧条，改整框+钢蓝菱角点 ===== */
 .resume.property-manager .skills {
   display:flex;
   flex-wrap:wrap;
@@ -280,13 +295,21 @@ const template: TemplateData = {
 .resume.property-manager .pm-skill {
   display:inline-flex;
   align-items:center;
+  gap:7px;
   font-size:9.3pt;
   background:var(--pm-beige);
   border:1px solid var(--pm-beige-deep);
-  border-left:3px solid var(--pm-blue);
   padding:4px 11px;
   border-radius:2px;
   color:var(--pm-navy);
+}
+.resume.property-manager .pm-skill::before {
+  content:"";
+  flex:0 0 auto;
+  width:5px;
+  height:5px;
+  background:var(--pm-blue);
+  transform:rotate(45deg);
 }
 .resume.property-manager .pm-skill-name { font-weight:600; }
 .resume.property-manager .pm-skill-level {

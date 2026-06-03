@@ -81,8 +81,8 @@ const template: TemplateData = {
 .resume.public-affairs {
   --navy:#16243f;
   --navy2:#22325a;
-  --gold:#b48a3c;
-  --gold-soft:#caa760;
+  --gold:#a8843a;
+  --gold-soft:#bd9a52;
   --ink:#2a2f3a;
   --muted:#6a7180;
   --line:#d9dde6;
@@ -116,7 +116,7 @@ const template: TemplateData = {
   display:flex;
   align-items:center;
   justify-content:center;
-  box-shadow:0 0 0 3px rgba(180,138,60,.18);
+  box-shadow:0 0 0 3px rgba(168,132,58,.16);
 }
 .resume.public-affairs .crest-mark {
   width:20px;
@@ -145,7 +145,7 @@ const template: TemplateData = {
 .resume.public-affairs .title {
   margin-top:4px;
   font-size:10.5pt;
-  letter-spacing:.18em;
+  letter-spacing:.2em;
   text-transform:uppercase;
   color:var(--gold);
   font-weight:600;
@@ -215,21 +215,22 @@ const template: TemplateData = {
 
 .resume.public-affairs .summary .body { color:var(--ink); }
 
-/* ---------- Entries ---------- */
+/* ---------- Entries：金菱形前导锚点 ---------- */
 .resume.public-affairs .entry {
   position:relative;
-  padding-left:14px;
+  padding-left:16px;
   margin-bottom:13px;
 }
 .resume.public-affairs .entry:last-child { margin-bottom:0; }
 .resume.public-affairs .entry::before {
   content:'';
   position:absolute;
-  left:0;
+  left:1px;
   top:5px;
-  bottom:3px;
-  width:2px;
-  background:linear-gradient(var(--gold),rgba(180,138,60,.15));
+  width:6px;
+  height:6px;
+  background:var(--gold);
+  transform:rotate(45deg);
 }
 .resume.public-affairs .entry-head {
   display:flex;
@@ -284,13 +285,13 @@ const template: TemplateData = {
   position:absolute;
   left:2px;
   top:7px;
-  width:5px;
-  height:5px;
+  width:4px;
+  height:4px;
   background:var(--gold);
   transform:rotate(45deg);
 }
 
-/* ---------- Skills ---------- */
+/* ---------- Skills（去金色侧条，改整框+金角点） ---------- */
 .resume.public-affairs .skills {
   display:flex;
   flex-wrap:wrap;
@@ -299,13 +300,21 @@ const template: TemplateData = {
 .resume.public-affairs .skill {
   display:inline-flex;
   align-items:center;
+  gap:7px;
   padding:4px 11px;
   font-size:9pt;
   color:var(--navy);
   background:#f4f6fa;
   border:1px solid var(--line);
-  border-left:3px solid var(--gold);
   border-radius:2px;
+}
+.resume.public-affairs .skill::before {
+  content:'';
+  flex:0 0 auto;
+  width:5px;
+  height:5px;
+  background:var(--gold);
+  transform:rotate(45deg);
 }
 .resume.public-affairs .skill .lv { color:var(--gold); font-weight:600; }
 

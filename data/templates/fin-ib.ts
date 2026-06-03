@@ -19,6 +19,7 @@ const template: TemplateData = {
     category: 'profession',
     html: `<div class="resume fin-ib">
   <header class="ib-header">
+    <div class="ib-mono" aria-hidden="true"></div>
     <div class="ib-headline">
       <h1 data-field="basics.name">{{{basics.name}}}</h1>
       {{#if basics.title}}<p class="ib-title" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
@@ -32,12 +33,12 @@ const template: TemplateData = {
   </header>
 
   {{#if basics.summary}}<section class="ib-block ib-summary">
-    <h2><span class="ib-num">01</span>个人简介</h2>
+    <h2><span class="ib-num">01</span><span class="ib-h2-text">个人简介</span></h2>
     <div class="ib-body" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>{{/if}}
 
   {{#if experience.length}}<section class="ib-block" data-section="experience">
-    <h2><span class="ib-num">02</span>工作经历</h2>
+    <h2><span class="ib-num">02</span><span class="ib-h2-text">工作经历</span></h2>
     {{#each experience}}<div class="ib-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="ib-entry-head">
         <h3><span class="ib-company" data-field="experience.{{@index}}.company">{{{company}}}</span><span class="ib-position" data-field="experience.{{@index}}.position">{{{position}}}</span></h3>
@@ -48,7 +49,7 @@ const template: TemplateData = {
   </section>{{/if}}
 
   {{#if education.length}}<section class="ib-block" data-section="education">
-    <h2><span class="ib-num">03</span>教育背景</h2>
+    <h2><span class="ib-num">03</span><span class="ib-h2-text">教育背景</span></h2>
     {{#each education}}<div class="ib-entry ib-edu" data-entry="education" data-entry-index="{{@index}}">
       <div class="ib-entry-head">
         <h3 data-field="education.{{@index}}.institution">{{{institution}}}</h3>
@@ -59,12 +60,12 @@ const template: TemplateData = {
   </section>{{/if}}
 
   {{#if skills.length}}<section class="ib-block" data-section="skills">
-    <h2><span class="ib-num">04</span>专业技能</h2>
+    <h2><span class="ib-num">04</span><span class="ib-h2-text">专业技能</span></h2>
     <div class="skills">{{#each skills}}<span class="ib-skill" data-entry="skills" data-entry-index="{{@index}}"><span class="ib-skill-name" data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}} <span class="ib-skill-lv" data-field="skills.{{@index}}.level">{{{level}}}</span>{{/if}}</span>{{/each}}</div>
   </section>{{/if}}
 
   {{#if projects.length}}<section class="ib-block" data-section="projects">
-    <h2><span class="ib-num">05</span>项目经历</h2>
+    <h2><span class="ib-num">05</span><span class="ib-h2-text">项目经历</span></h2>
     {{#each projects}}<div class="ib-entry" data-entry="projects" data-entry-index="{{@index}}">
       <div class="ib-entry-head">
         <h3><span class="ib-company" data-field="projects.{{@index}}.name">{{{name}}}</span>{{#if role}}<span class="ib-position" data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}</h3>
@@ -78,11 +79,10 @@ const template: TemplateData = {
 .resume.fin-ib * { word-wrap:break-word; overflow-wrap:break-word; }
 
 .resume.fin-ib {
-  --navy:#0f2543;
+  --navy:#13294b;
   --navy-2:#1c3a63;
-  --gold:#b08d33;
-  --gold-soft:#c9a85a;
-  --ink:#222b38;
+  --gold:#9a7d2e;
+  --ink:#212a36;
   --muted:#5d6877;
   --line:#d8dee7;
   max-width:210mm;
@@ -96,43 +96,56 @@ const template: TemplateData = {
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
 }
 
-/* ===== Header ===== */
 .resume.fin-ib .ib-header {
-  border-top:3px solid var(--navy);
-  padding-top:10px;
+  position:relative;
+  border-top:2.5px solid var(--navy);
+  padding-top:11px;
   margin-bottom:18px;
+}
+.resume.fin-ib .ib-mono {
+  position:absolute;
+  top:11px; right:0;
+  width:13px; height:13px;
+  border:1px solid var(--gold);
+}
+.resume.fin-ib .ib-mono::after {
+  content:'';
+  position:absolute;
+  left:3px; top:3px; right:3px; bottom:3px;
+  background:var(--navy);
 }
 .resume.fin-ib .ib-headline {
   display:flex;
   align-items:baseline;
   flex-wrap:wrap;
   gap:6px 16px;
+  padding-right:22px;
 }
 .resume.fin-ib h1 {
-  font-size:24pt;
+  font-size:25pt;
   font-weight:700;
-  letter-spacing:1px;
+  letter-spacing:1.5px;
   color:var(--navy);
-  line-height:1.1;
+  line-height:1.05;
 }
 .resume.fin-ib .ib-title {
-  font-size:10.5pt;
+  font-size:10pt;
   font-weight:600;
-  letter-spacing:2px;
+  letter-spacing:3px;
   text-transform:uppercase;
   color:var(--gold);
 }
 .resume.fin-ib .ib-rule {
   height:1px;
   background:var(--line);
-  margin:10px 0 8px;
+  margin:11px 0 8px;
   position:relative;
 }
 .resume.fin-ib .ib-rule::before {
   content:"";
   position:absolute;
   left:0; top:0;
-  width:60px; height:1px;
+  width:64px; height:1px;
   background:var(--gold);
 }
 .resume.fin-ib .contact {
@@ -159,11 +172,10 @@ const template: TemplateData = {
 }
 .resume.fin-ib .contact span:first-child::before { display:none; }
 
-/* ===== Section blocks ===== */
 .resume.fin-ib .ib-block { margin-bottom:16px; }
 .resume.fin-ib h2 {
   display:flex;
-  align-items:center;
+  align-items:baseline;
   gap:10px;
   font-size:11pt;
   font-weight:700;
@@ -174,26 +186,29 @@ const template: TemplateData = {
   border-bottom:1.5px solid var(--navy);
 }
 .resume.fin-ib .ib-num {
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-width:22px; height:18px;
-  font-size:8pt;
+  font-size:9pt;
   font-weight:700;
-  letter-spacing:1px;
-  color:#fff;
-  background:var(--navy);
-  border-bottom:2px solid var(--gold);
+  letter-spacing:.5px;
+  color:var(--gold);
+  font-variant-numeric:tabular-nums;
 }
+.resume.fin-ib .ib-h2-text { display:inline-block; }
 
 .resume.fin-ib .ib-body { color:var(--ink); }
 .resume.fin-ib .ib-summary .ib-body {
-  border-left:2px solid var(--gold);
   padding-left:12px;
+  position:relative;
   color:var(--muted);
+  text-align:justify;
+}
+.resume.fin-ib .ib-summary .ib-body::before {
+  content:'';
+  position:absolute;
+  left:0; top:2px; bottom:2px;
+  width:1px;
+  background:var(--gold);
 }
 
-/* ===== Entries (table-row aesthetic) ===== */
 .resume.fin-ib .ib-entry {
   padding:8px 0 9px;
   border-bottom:1px solid var(--line);
@@ -220,13 +235,12 @@ const template: TemplateData = {
   font-size:9.5pt;
   color:var(--gold);
   position:relative;
-  padding-left:10px;
+  padding-left:11px;
 }
 .resume.fin-ib .ib-position::before {
   content:"";
   position:absolute;
   left:0; top:50%;
-  transform:translateY(-50%);
   width:4px; height:4px;
   background:var(--gold);
   transform:translateY(-50%) rotate(45deg);
@@ -261,7 +275,6 @@ const template: TemplateData = {
   background:var(--gold);
 }
 
-/* ===== Education ===== */
 .resume.fin-ib .ib-edu-meta {
   margin-top:3px;
   font-size:9.5pt;
@@ -269,14 +282,12 @@ const template: TemplateData = {
 }
 .resume.fin-ib .ib-edu-meta span { color:var(--ink); }
 
-/* ===== Projects ===== */
 .resume.fin-ib .ib-proj-desc {
   margin-top:4px;
   color:var(--muted);
   font-size:9.5pt;
 }
 
-/* ===== Skills ===== */
 .resume.fin-ib .skills {
   display:flex;
   flex-wrap:wrap;
@@ -290,7 +301,6 @@ const template: TemplateData = {
   font-size:9pt;
   background:#f4f6f9;
   border:1px solid var(--line);
-  border-left:2px solid var(--navy);
 }
 .resume.fin-ib .ib-skill-name {
   font-weight:600;
@@ -302,7 +312,6 @@ const template: TemplateData = {
   letter-spacing:.5px;
 }
 
-/* ===== contract-required tail ===== */
 .resume.fin-ib li p, .resume.fin-ib li div { margin:0; padding:0; display:inline; }
 .resume.fin-ib .skills span, .resume.fin-ib [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 

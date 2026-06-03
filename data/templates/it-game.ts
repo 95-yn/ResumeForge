@@ -103,18 +103,22 @@ const template: TemplateData = {
 .resume.it-game * { word-wrap: break-word; overflow-wrap: break-word; }
 
 .resume.it-game {
+  --ind:#3b3f6b;
+  --ind-deep:#23264a;
+  --ind-soft:#6b6f9c;
+  --slate:#2f3447;
+  --amber:#b0792a;
+  --tint:#f2f2f7;
+  --line:#d6d8e6;
   max-width: 210mm;
   min-height: 297mm;
   margin: 0 auto;
   padding: 16mm 18mm;
-  background:
-    radial-gradient(circle at 12% 0%, rgba(168, 85, 247, 0.06), transparent 40%),
-    radial-gradient(circle at 90% 100%, rgba(34, 211, 238, 0.05), transparent 40%),
-    #ffffff;
+  background: #ffffff;
   font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
   font-size: 10pt;
   line-height: 1.5;
-  color: #3b2f4a;
+  color: #2c2e3e;
 }
 
 /* ===== HUD header ===== */
@@ -122,11 +126,9 @@ const template: TemplateData = {
   position: relative;
   background:
     repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0 6px, transparent 6px 12px),
-    linear-gradient(135deg, #2e1065 0%, #4c1d95 55%, #6d28d9 100%);
-  border: 3px solid #1e0a4a;
-  box-shadow:
-    0 0 0 3px #22d3ee,
-    6px 6px 0 0 #1e0a4a;
+    linear-gradient(135deg, var(--ind-deep) 0%, var(--ind) 100%);
+  border: 3px solid var(--ind-deep);
+  box-shadow: 5px 5px 0 0 var(--line);
   padding: 16px 20px 14px;
   margin-bottom: 18px;
 }
@@ -140,11 +142,11 @@ const template: TemplateData = {
   margin-bottom: 8px;
 }
 .resume.it-game .hud-label {
-  color: #fde047;
+  color: #e8c87a;
   font-weight: 700;
 }
-.resume.it-game .pixel-heart { color: #f472b6; letter-spacing: 3px; font-size: 8pt; }
-.resume.it-game .pixel-coin { color: #fbbf24; letter-spacing: 3px; font-size: 8pt; }
+.resume.it-game .pixel-heart { color: #c98fae; letter-spacing: 3px; font-size: 8pt; }
+.resume.it-game .pixel-coin { color: #d0a85a; letter-spacing: 3px; font-size: 8pt; }
 
 .resume.it-game .hud h1 {
   font-size: 23pt;
@@ -152,9 +154,7 @@ const template: TemplateData = {
   color: #ffffff;
   letter-spacing: 3px;
   line-height: 1.15;
-  text-shadow:
-    2px 2px 0 #db2777,
-    4px 4px 0 #1e0a4a;
+  text-shadow: 2px 2px 0 var(--ind-deep);
 }
 
 .resume.it-game .class-tag {
@@ -163,16 +163,16 @@ const template: TemplateData = {
   font-size: 8.5pt;
   font-weight: 700;
   letter-spacing: 2px;
-  color: #2e1065;
-  background: #22d3ee;
+  color: var(--ind-deep);
+  background: #d8dae8;
   padding: 2px 10px;
-  box-shadow: 3px 3px 0 0 #1e0a4a;
+  box-shadow: 3px 3px 0 0 rgba(35,38,74,0.4);
 }
 
 .resume.it-game .contact {
   margin-top: 12px;
   font-size: 8.5pt;
-  color: #ddd6fe;
+  color: #d6d8ec;
   display: flex;
   flex-wrap: wrap;
   gap: 4px 14px;
@@ -186,8 +186,8 @@ const template: TemplateData = {
   width: 5px;
   height: 5px;
   margin-top: -2.5px;
-  background: #4ade80;
-  box-shadow: 0 0 0 1px #1e0a4a;
+  background: #9fa3c8;
+  box-shadow: 0 0 0 1px var(--ind-deep);
 }
 
 /* ===== sections ===== */
@@ -196,19 +196,18 @@ const template: TemplateData = {
 .resume.it-game .section-title {
   font-size: 11pt;
   font-weight: 800;
-  color: #4c1d95;
+  color: var(--ind-deep);
   letter-spacing: 2px;
   padding-bottom: 5px;
   margin-bottom: 9px;
-  border-bottom: 3px dashed #c4b5fd;
+  border-bottom: 2px solid var(--line);
   display: flex;
   align-items: center;
   gap: 8px;
 }
 .resume.it-game .section-title .bit {
-  color: #db2777;
+  color: var(--ind);
   font-size: 8pt;
-  text-shadow: 2px 0 0 #22d3ee;
 }
 
 .resume.it-game .entry { margin-bottom: 10px; }
@@ -225,7 +224,7 @@ const template: TemplateData = {
 .resume.it-game .entry-header h3 {
   font-size: 10.5pt;
   font-weight: 700;
-  color: #2e1065;
+  color: var(--ind-deep);
   flex: 1;
   min-width: 0;
 }
@@ -235,47 +234,55 @@ const template: TemplateData = {
   font-size: 7.5pt;
   font-weight: 800;
   color: #fff;
-  background: #db2777;
+  background: var(--ind);
   padding: 1px 6px;
   margin-right: 6px;
-  box-shadow: 2px 2px 0 0 #1e0a4a;
+  box-shadow: 2px 2px 0 0 rgba(35,38,74,0.45);
   vertical-align: middle;
 }
-.resume.it-game .quest-star { color: #fbbf24; margin-right: 6px; }
-.resume.it-game .company { color: #4c1d95; }
-.resume.it-game .arrow { color: #22d3ee; margin: 0 6px; font-size: 8pt; }
-.resume.it-game .position { color: #7c3aed; font-weight: 600; }
+.resume.it-game .quest-star { color: var(--amber); margin-right: 6px; }
+.resume.it-game .company { color: var(--ind); }
+.resume.it-game .arrow { color: var(--ind-soft); margin: 0 6px; font-size: 8pt; }
+.resume.it-game .position { color: var(--slate); font-weight: 600; }
 
 .resume.it-game .date {
   font-size: 8.5pt;
   font-weight: 700;
-  color: #7c3aed;
+  color: var(--slate);
   white-space: nowrap;
   flex-shrink: 0;
-  background: #f3e8ff;
+  background: var(--tint);
   padding: 1px 7px;
-  border: 1px solid #c4b5fd;
+  border: 1px solid var(--line);
 }
 
 .resume.it-game .quest {
-  border-left: 4px solid #22d3ee;
-  padding-left: 10px;
+  position: relative;
+  padding-left: 14px;
+}
+.resume.it-game .quest::before {
+  content: "\\25C6";
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  font-size: 7pt;
+  color: var(--ind-soft);
 }
 
 .resume.it-game .sub {
   font-size: 9pt;
-  color: #6b5b7a;
+  color: #5d5f72;
   margin-top: 3px;
 }
 
 .resume.it-game .summary {
   font-size: 9.5pt;
-  color: #3b2f4a;
+  color: #2c2e3e;
   line-height: 1.65;
-  background: #faf5ff;
-  border: 2px solid #e9d5ff;
-  border-left: 5px solid #a855f7;
-  padding: 8px 12px;
+  background: var(--tint);
+  border: 1px solid var(--line);
+  padding: 9px 13px;
+  border-radius: 3px;
 }
 
 .resume.it-game .highlights {
@@ -286,7 +293,7 @@ const template: TemplateData = {
 .resume.it-game .highlights li {
   position: relative;
   font-size: 9.5pt;
-  color: #3b2f4a;
+  color: #2c2e3e;
   margin-bottom: 3px;
   line-height: 1.55;
   padding-left: 16px;
@@ -295,13 +302,10 @@ const template: TemplateData = {
   content: "";
   position: absolute;
   left: 0;
-  top: 0.55em;
+  top: 0.5em;
   width: 6px;
   height: 6px;
-  background: #a855f7;
-  box-shadow:
-    3px 0 0 #22d3ee,
-    0 3px 0 #22d3ee;
+  background: var(--ind);
 }
 
 /* ===== skill tree tags ===== */
@@ -314,13 +318,13 @@ const template: TemplateData = {
   display: inline-block;
   font-size: 8.5pt;
   font-weight: 600;
-  color: #2e1065;
-  background: #f5f3ff;
-  border: 2px solid #4c1d95;
+  color: var(--ind-deep);
+  background: var(--tint);
+  border: 2px solid var(--ind);
   padding: 2px 10px;
-  box-shadow: 3px 3px 0 0 #c4b5fd;
+  box-shadow: 3px 3px 0 0 var(--line);
 }
-.resume.it-game .tag-lv { color: #db2777; font-weight: 700; }
+.resume.it-game .tag-lv { color: var(--slate); font-weight: 700; }
 
 .resume.it-game li p, .resume.it-game li div { margin: 0; padding: 0; display: inline; }
 .resume.it-game .skills span, .resume.it-game [class*='skill'] span { white-space: nowrap; word-break: keep-all; }

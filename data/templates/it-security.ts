@@ -81,19 +81,22 @@ const template: TemplateData = {
 .resume.it-security * { word-wrap:break-word; overflow-wrap:break-word; }
 
 .resume.it-security {
+  --term:#1f7a4d;
+  --term-deep:#155c39;
+  --ink:#1d2722;
+  --muted:#5a6a61;
+  --line:#dbe5df;
+  --tint:#f1f6f2;
+  --mono:'SF Mono','Cascadia Code','Consolas',monospace;
   max-width:210mm;
   min-height:297mm;
   margin:0 auto;
   padding:18mm 16mm;
-  background:#0a0e0c;
-  color:#c8e6d4;
+  background:#fff;
+  color:var(--ink);
   font-size:10pt;
-  line-height:1.55;
+  line-height:1.6;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
-  background-image:
-    linear-gradient(rgba(0,255,140,0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0,255,140,0.035) 1px, transparent 1px);
-  background-size:22px 22px;
   position:relative;
 }
 
@@ -101,18 +104,17 @@ const template: TemplateData = {
   content:"";
   position:absolute;
   top:0; left:0; right:0;
-  height:4px;
-  background:linear-gradient(90deg,#00ff8c,#00e0a0 40%,transparent);
+  height:3px;
+  background:var(--term);
 }
 
 /* ===== HEADER ===== */
 .resume.it-security header {
-  border:1px solid rgba(0,255,140,0.28);
+  border:1px solid var(--line);
   border-radius:8px;
-  background:linear-gradient(160deg,#0d1411,#0a0e0c);
+  background:var(--tint);
   padding:0 0 14px;
   margin-bottom:18px;
-  box-shadow:0 0 0 1px rgba(0,255,140,0.05), 0 6px 28px rgba(0,0,0,0.5);
   overflow:hidden;
 }
 
@@ -121,18 +123,18 @@ const template: TemplateData = {
   align-items:center;
   gap:7px;
   padding:8px 14px;
-  background:rgba(0,255,140,0.06);
-  border-bottom:1px solid rgba(0,255,140,0.18);
+  background:#e7efe9;
+  border-bottom:1px solid var(--line);
 }
 .resume.it-security .dot { width:9px; height:9px; border-radius:50%; display:inline-block; }
-.resume.it-security .d1 { background:#ff5f56; }
-.resume.it-security .d2 { background:#ffbd2e; }
-.resume.it-security .d3 { background:#00ff8c; box-shadow:0 0 6px #00ff8c; }
+.resume.it-security .d1 { background:#e0685f; }
+.resume.it-security .d2 { background:#d9a33a; }
+.resume.it-security .d3 { background:var(--term); }
 .resume.it-security .term-path {
   margin-left:8px;
-  font-family:'SF Mono','Cascadia Code','Consolas',monospace;
+  font-family:var(--mono);
   font-size:8.5pt;
-  color:#5a8a72;
+  color:var(--muted);
   letter-spacing:0.3px;
 }
 
@@ -140,49 +142,46 @@ const template: TemplateData = {
   display:flex;
   align-items:center;
   gap:16px;
-  padding:16px 18px 4px;
+  padding:16px 18px 6px;
 }
 .resume.it-security .shield {
   flex:0 0 auto;
-  width:54px; height:54px;
+  width:52px; height:52px;
   display:flex;
   align-items:center;
   justify-content:center;
-  border:1px solid rgba(0,255,140,0.4);
+  border:1.5px solid var(--term);
   border-radius:10px;
-  background:rgba(0,255,140,0.07);
-  box-shadow:0 0 14px rgba(0,255,140,0.18) inset;
+  background:#fff;
 }
 .resume.it-security .shield svg { width:30px; height:34px; }
-.resume.it-security .shield svg path { fill:none; stroke:#00ff8c; stroke-width:1.6; stroke-linejoin:round; }
-.resume.it-security .shield svg path:first-child { fill:rgba(0,255,140,0.08); }
-.resume.it-security .shield .check { stroke-width:2.2; stroke-linecap:round; filter:drop-shadow(0 0 3px #00ff8c); }
+.resume.it-security .shield svg path { fill:none; stroke:var(--term); stroke-width:1.6; stroke-linejoin:round; }
+.resume.it-security .shield svg path:first-child { fill:rgba(31,122,77,0.08); }
+.resume.it-security .shield .check { stroke-width:2.2; stroke-linecap:round; }
 
 .resume.it-security .id-text { flex:1 1 auto; min-width:0; }
 .resume.it-security h1 {
   font-size:23pt;
   font-weight:800;
-  color:#eafff2;
+  color:#16201b;
   letter-spacing:1px;
   line-height:1.1;
-  text-shadow:0 0 14px rgba(0,255,140,0.35);
 }
 .resume.it-security .role {
-  margin-top:5px;
-  font-family:'SF Mono','Cascadia Code','Consolas',monospace;
+  margin-top:6px;
+  font-family:var(--mono);
   font-size:10pt;
-  color:#00ff8c;
+  color:var(--term-deep);
   letter-spacing:0.4px;
   display:flex;
   align-items:center;
 }
-.resume.it-security .role .prompt { color:#00ff8c; margin-right:6px; font-weight:700; }
+.resume.it-security .role .prompt { color:var(--term); margin-right:6px; font-weight:700; }
 .resume.it-security .caret {
   display:inline-block;
-  width:8px; height:1.05em;
+  width:7px; height:1.05em;
   margin-left:5px;
-  background:#00ff8c;
-  box-shadow:0 0 7px #00ff8c;
+  background:var(--term);
   vertical-align:-2px;
 }
 
@@ -193,62 +192,72 @@ const template: TemplateData = {
   padding:12px 18px 0;
 }
 .resume.it-security .ctk {
-  font-family:'SF Mono','Cascadia Code','Consolas',monospace;
+  font-family:var(--mono);
   font-size:8.5pt;
-  color:#9fd4b8;
+  color:var(--ink);
   padding:3px 10px;
-  border:1px solid rgba(0,255,140,0.22);
+  border:1px solid var(--line);
   border-radius:4px;
-  background:rgba(0,255,140,0.04);
+  background:#fff;
   position:relative;
 }
-.resume.it-security .ctk::before { content:"["; color:#00ff8c; margin-right:3px; }
-.resume.it-security .ctk::after { content:"]"; color:#00ff8c; margin-left:3px; }
+.resume.it-security .ctk::before { content:"["; color:var(--term); margin-right:3px; }
+.resume.it-security .ctk::after { content:"]"; color:var(--term); margin-left:3px; }
 
 /* ===== SECTIONS ===== */
 .resume.it-security .sec { margin-bottom:18px; }
 .resume.it-security h2 {
   font-size:12pt;
   font-weight:700;
-  color:#eafff2;
+  color:#16201b;
   letter-spacing:1px;
   padding-bottom:7px;
-  margin-bottom:11px;
-  border-bottom:1px solid rgba(0,255,140,0.22);
+  margin-bottom:12px;
+  border-bottom:1px solid var(--line);
   position:relative;
 }
 .resume.it-security h2 .h-mark {
-  font-family:'SF Mono','Cascadia Code','Consolas',monospace;
-  color:#00ff8c;
+  font-family:var(--mono);
+  color:var(--term);
   margin-right:8px;
   font-size:11pt;
-  text-shadow:0 0 8px rgba(0,255,140,0.4);
+  font-weight:700;
 }
 .resume.it-security h2::after {
   content:"";
   position:absolute;
   left:0; bottom:-1px;
   width:60px; height:2px;
-  background:#00ff8c;
-  box-shadow:0 0 8px #00ff8c;
+  background:var(--term);
 }
 
 .resume.it-security .summary {
-  border-left:2px solid rgba(0,255,140,0.45);
-  padding:8px 0 8px 14px;
-  color:#bfe0cf;
-  font-size:9.5pt;
+  position:relative;
+  border:1px solid var(--line);
+  border-radius:6px;
+  background:rgba(31,122,77,0.05);
+  padding:9px 12px 9px 22px;
+  color:#37433c;
+  font-size:9.7pt;
+}
+.resume.it-security .summary::before {
+  content:"\\203A";
+  position:absolute;
+  left:9px; top:7px;
+  color:var(--term);
+  font-weight:800;
+  font-size:11pt;
+  font-family:var(--mono);
 }
 
 /* ===== ENTRIES ===== */
 .resume.it-security .entry {
   position:relative;
-  padding:11px 13px 11px 15px;
-  margin-bottom:10px;
-  border:1px solid rgba(0,255,140,0.14);
-  border-left:3px solid #00ff8c;
-  border-radius:5px;
-  background:rgba(0,255,140,0.022);
+  padding:11px 14px;
+  margin-bottom:11px;
+  border:1px solid var(--line);
+  border-radius:6px;
+  background:#fff;
 }
 .resume.it-security .entry-head {
   display:flex;
@@ -260,46 +269,45 @@ const template: TemplateData = {
 .resume.it-security h3 {
   font-size:10.5pt;
   font-weight:700;
-  color:#eafff2;
+  color:#16201b;
 }
-.resume.it-security .company { color:#eafff2; }
-.resume.it-security .position { color:#00ff8c; }
-.resume.it-security .sep { color:#4a6a5a; margin:0 7px; font-weight:400; }
+.resume.it-security .company { color:#16201b; }
+.resume.it-security .position { color:var(--term-deep); }
+.resume.it-security .sep { color:#aab8b0; margin:0 7px; font-weight:400; }
 .resume.it-security .date {
-  font-family:'SF Mono','Cascadia Code','Consolas',monospace;
+  font-family:var(--mono);
   font-size:8pt;
-  color:#6fb392;
+  color:var(--muted);
   white-space:nowrap;
   padding:2px 8px;
-  border:1px solid rgba(0,255,140,0.2);
+  border:1px solid var(--line);
   border-radius:3px;
-  background:rgba(0,0,0,0.25);
+  background:var(--tint);
 }
 
 .resume.it-security .entry ul { list-style:none; margin-top:8px; }
 .resume.it-security .entry li {
   position:relative;
   padding-left:18px;
-  margin-bottom:4px;
-  font-size:9.5pt;
-  color:#bfe0cf;
+  margin-bottom:5px;
+  font-size:9.7pt;
+  color:#37433c;
 }
 .resume.it-security .entry li::before {
   content:"›";
   position:absolute;
   left:2px;
   top:-1px;
-  color:#00ff8c;
+  color:var(--term);
   font-weight:800;
   font-size:11pt;
-  text-shadow:0 0 6px rgba(0,255,140,0.5);
 }
 
 .resume.it-security .edu-meta {
-  margin-top:5px;
+  margin-top:6px;
   font-size:9pt;
-  color:#9fd4b8;
-  font-family:'SF Mono','Cascadia Code','Consolas',monospace;
+  color:var(--muted);
+  font-family:var(--mono);
 }
 
 /* ===== SKILLS ===== */
@@ -311,33 +319,32 @@ const template: TemplateData = {
 .resume.it-security .skill-chip {
   display:inline-flex;
   align-items:stretch;
-  border:1px solid rgba(0,255,140,0.3);
+  border:1px solid var(--line);
   border-radius:4px;
   overflow:hidden;
-  font-family:'SF Mono','Cascadia Code','Consolas',monospace;
+  font-family:var(--mono);
   font-size:8.5pt;
-  background:rgba(0,255,140,0.05);
+  background:#fff;
 }
 .resume.it-security .chip-key {
   padding:3px 9px;
-  color:#eafff2;
+  color:#16201b;
   font-weight:600;
 }
 .resume.it-security .chip-lv {
   padding:3px 9px;
-  color:#0a0e0c;
-  background:#00ff8c;
+  color:#fff;
+  background:var(--term);
   font-weight:700;
-  box-shadow:0 0 8px rgba(0,255,140,0.4);
 }
 
 /* ===== PROJECTS ===== */
-.resume.it-security .proj-name { color:#eafff2; }
-.resume.it-security .proj-role { color:#00ff8c; }
+.resume.it-security .proj-name { color:#16201b; }
+.resume.it-security .proj-role { color:var(--term-deep); }
 .resume.it-security .proj-desc {
   margin-top:6px;
-  font-size:9.5pt;
-  color:#bfe0cf;
+  font-size:9.7pt;
+  color:#37433c;
 }
 
 /* ===== REQUIRED TAIL ===== */

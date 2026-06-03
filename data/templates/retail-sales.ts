@@ -29,8 +29,8 @@ const template: TemplateData = {
       {{#if basics.location}}<span data-field="basics.location">{{{basics.location}}}</span>{{/if}}
     </div>
   </header>
-  {{#if basics.summary}}<section class="rs-summary"><h2>个人简介</h2><div class="rs-card" data-field="basics.summary">{{{basics.summary}}}</div></section>{{/if}}
-  {{#if experience.length}}<section data-section="experience" class="rs-block"><h2>工作经历</h2>
+  {{#if basics.summary}}<section class="rs-summary"><h2><span class="rs-no">01</span>个人简介</h2><div class="rs-card" data-field="basics.summary">{{{basics.summary}}}</div></section>{{/if}}
+  {{#if experience.length}}<section data-section="experience" class="rs-block"><h2><span class="rs-no">02</span>工作经历</h2>
     {{#each experience}}<div class="rs-card rs-item" data-entry="experience" data-entry-index="{{@index}}">
       <div class="rs-item-head">
         <h3><span class="rs-company" data-field="experience.{{@index}}.company">{{{company}}}</span><span class="rs-pos" data-field="experience.{{@index}}.position">{{{position}}}</span></h3>
@@ -39,11 +39,11 @@ const template: TemplateData = {
       {{#if highlights.length}}<ul>{{#each highlights}}<li data-field="experience.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}
     </div>{{/each}}
   </section>{{/if}}
-  {{#if education.length}}<section data-section="education" class="rs-block"><h2>教育背景</h2>
+  {{#if education.length}}<section data-section="education" class="rs-block"><h2><span class="rs-no">03</span>教育背景</h2>
     {{#each education}}<div class="rs-card rs-item" data-entry="education" data-entry-index="{{@index}}"><div class="rs-item-head"><h3 data-field="education.{{@index}}.institution">{{{institution}}}</h3><span class="date"><span data-field="education.{{@index}}.startDate">{{{startDate}}}</span> - <span data-field="education.{{@index}}.endDate">{{{endDate}}}</span></span></div><p class="rs-edu-meta"><span data-field="education.{{@index}}.area">{{{area}}}</span> · <span data-field="education.{{@index}}.studyType">{{{studyType}}}</span></p></div>{{/each}}
   </section>{{/if}}
-  {{#if skills.length}}<section data-section="skills" class="rs-block"><h2>专业技能</h2><div class="skills">{{#each skills}}<span class="rs-skill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}} · <span class="rs-skill-lv" data-field="skills.{{@index}}.level">{{{level}}}</span>{{/if}}</span>{{/each}}</div></section>{{/if}}
-  {{#if projects.length}}<section data-section="projects" class="rs-block"><h2>项目经历</h2>
+  {{#if skills.length}}<section data-section="skills" class="rs-block"><h2><span class="rs-no">04</span>专业技能</h2><div class="skills">{{#each skills}}<span class="rs-skill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}} · <span class="rs-skill-lv" data-field="skills.{{@index}}.level">{{{level}}}</span>{{/if}}</span>{{/each}}</div></section>{{/if}}
+  {{#if projects.length}}<section data-section="projects" class="rs-block"><h2><span class="rs-no">05</span>项目经历</h2>
     {{#each projects}}<div class="rs-card rs-item" data-entry="projects" data-entry-index="{{@index}}"><h3><span class="rs-proj-name" data-field="projects.{{@index}}.name">{{{name}}}</span>{{#if role}} · <span class="rs-proj-role" data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}</h3>{{#if description}}<div class="rs-proj-desc" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}{{#if highlights.length}}<ul>{{#each highlights}}<li data-field="projects.{{@../index}}.highlights.{{@index}}">{{{this}}}</li>{{/each}}</ul>{{/if}}</div>{{/each}}
   </section>{{/if}}
 </div>`,
@@ -60,29 +60,27 @@ const template: TemplateData = {
   line-height:1.55;
   color:#3a2f28;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
-  --rs-orange:#f57828;
-  --rs-orange-soft:#ff9a4d;
-  --rs-cream:#fff3e6;
-  --rs-line:#ffe0c2;
+  --rs-orange:#c2562a;
+  --rs-orange-soft:#d77a44;
+  --rs-cream:#fbeede;
+  --rs-line:#ecd9c2;
 }
 
 /* ===== Header ===== */
 .resume.retail-sales header {
   position:relative;
-  background:linear-gradient(120deg,#f57828 0%,#ff9a4d 100%);
-  border-radius:16px;
+  background:var(--rs-orange);
+  border-radius:10px;
   padding:22px 26px;
   color:#fff;
-  box-shadow:0 6px 18px rgba(245,120,40,.22);
   overflow:hidden;
 }
 .resume.retail-sales header::after {
   content:"";
   position:absolute;
-  top:-40px; right:-40px;
-  width:160px; height:160px;
-  background:rgba(255,255,255,.14);
-  border-radius:50%;
+  left:0; top:0; bottom:0;
+  width:6px;
+  background:#8f3d1c;
 }
 .resume.retail-sales .rs-head-main { position:relative; z-index:1; }
 .resume.retail-sales header h1 {
@@ -95,7 +93,8 @@ const template: TemplateData = {
   margin-top:6px;
   font-size:11.5pt;
   font-weight:500;
-  color:#fff5ec;
+  color:#fbe6d6;
+  letter-spacing:1px;
 }
 .resume.retail-sales .contact {
   position:relative;
@@ -107,43 +106,47 @@ const template: TemplateData = {
 }
 .resume.retail-sales .contact span {
   display:inline-block;
-  background:rgba(255,255,255,.2);
-  border:1px solid rgba(255,255,255,.35);
+  background:rgba(255,255,255,.16);
+  border:1px solid rgba(255,255,255,.32);
   padding:3px 12px;
-  border-radius:999px;
+  border-radius:6px;
   font-size:9pt;
   font-weight:500;
   white-space:nowrap;
 }
 
-/* ===== Section titles ===== */
+/* ===== Section titles — numbered ===== */
 .resume.retail-sales section { margin-top:20px; }
 .resume.retail-sales h2 {
-  position:relative;
+  display:flex;
+  align-items:center;
+  gap:10px;
   font-size:13pt;
   font-weight:800;
   color:var(--rs-orange);
-  padding-left:14px;
   margin-bottom:12px;
   letter-spacing:.5px;
 }
-.resume.retail-sales h2::before {
-  content:"";
-  position:absolute;
-  left:0; top:50%;
-  transform:translateY(-50%);
-  width:6px; height:18px;
-  border-radius:4px;
-  background:linear-gradient(180deg,#f57828,#ff9a4d);
+.resume.retail-sales .rs-no {
+  flex:0 0 auto;
+  width:22px; height:22px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:8.5pt;
+  font-weight:800;
+  color:#fff;
+  background:var(--rs-orange);
+  border-radius:5px;
+  letter-spacing:0;
 }
 
 /* ===== Cards ===== */
 .resume.retail-sales .rs-card {
   background:#fff;
   border:1px solid var(--rs-line);
-  border-radius:12px;
+  border-radius:8px;
   padding:13px 16px;
-  box-shadow:0 2px 8px rgba(245,120,40,.06);
 }
 .resume.retail-sales .rs-item + .rs-item { margin-top:10px; }
 
@@ -234,7 +237,7 @@ const template: TemplateData = {
   border:1px solid var(--rs-line);
   color:#5a4a3d;
   padding:5px 14px;
-  border-radius:999px;
+  border-radius:6px;
   font-size:9.5pt;
   font-weight:600;
 }

@@ -87,10 +87,10 @@ const template: TemplateData = {
   line-height:1.55;
   color:#2a3a4d;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
-  --cs-blue:#2e9be6;
-  --cs-blue-dk:#1c7fc4;
-  --cs-sky:#e7f4fd;
-  --cs-sky-2:#f3f9fe;
+  --cs-blue:#2e8fd6;
+  --cs-blue-dk:#1c6fb0;
+  --cs-sky:#e8f3fb;
+  --cs-sky-2:#f4f9fd;
   --cs-ink:#2a3a4d;
   --cs-muted:#6b8095;
 }
@@ -100,8 +100,8 @@ const template: TemplateData = {
   display:flex;
   align-items:center;
   gap:16px;
-  background:linear-gradient(135deg,#3aa6ef 0%,#1c7fc4 100%);
-  border-radius:22px;
+  background:linear-gradient(135deg,#2e8fd6 0%,#1c6fb0 100%);
+  border-radius:18px;
   padding:20px 24px;
   color:#fff;
   position:relative;
@@ -114,7 +114,7 @@ const template: TemplateData = {
   top:-30px;
   width:120px;
   height:120px;
-  background:rgba(255,255,255,.12);
+  background:rgba(255,255,255,.1);
   border-radius:50% 50% 50% 4px;
 }
 .resume.customer-support .cs-avatar {
@@ -123,7 +123,7 @@ const template: TemplateData = {
   height:58px;
   border-radius:50% 50% 50% 8px;
   background:rgba(255,255,255,.92);
-  color:var(--cs-blue);
+  color:var(--cs-blue-dk);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -151,8 +151,8 @@ const template: TemplateData = {
 }
 .resume.customer-support .cs-chip {
   display:inline-block;
-  background:rgba(255,255,255,.2);
-  border:1px solid rgba(255,255,255,.32);
+  background:rgba(255,255,255,.18);
+  border:1px solid rgba(255,255,255,.3);
   padding:3px 12px;
   border-radius:20px;
   font-size:8.6pt;
@@ -160,7 +160,7 @@ const template: TemplateData = {
   white-space:nowrap;
 }
 
-/* ===== Section headings ===== */
+/* ===== Section headings：对话气泡记忆点 ===== */
 .resume.customer-support section { margin-top:18px; }
 .resume.customer-support h2 {
   font-size:12pt;
@@ -173,8 +173,8 @@ const template: TemplateData = {
 }
 .resume.customer-support h2::before {
   content:"";
-  width:13px;
-  height:13px;
+  width:14px;
+  height:14px;
   background:var(--cs-blue);
   border-radius:50% 50% 50% 2px;
   flex:0 0 auto;
@@ -190,20 +190,30 @@ const template: TemplateData = {
 /* ===== Summary bubble ===== */
 .resume.customer-support .cs-bubble {
   background:var(--cs-sky);
-  border-radius:16px 16px 16px 4px;
+  border-radius:14px 14px 14px 4px;
   padding:13px 17px;
   color:var(--cs-ink);
   position:relative;
 }
 
-/* ===== Entries ===== */
+/* ===== Entries：整框气泡卡片 + 蓝色对话点锚（去3px侧条） ===== */
 .resume.customer-support .cs-entry {
   position:relative;
   padding:11px 15px 11px 17px;
   margin-bottom:9px;
   background:var(--cs-sky-2);
-  border-radius:14px;
-  border-left:3px solid var(--cs-blue);
+  border:1px solid #d6e8f6;
+  border-radius:4px 14px 14px 14px;
+}
+.resume.customer-support .cs-entry::before {
+  content:"";
+  position:absolute;
+  left:-1px;
+  top:13px;
+  width:8px;
+  height:8px;
+  background:var(--cs-blue);
+  border-radius:50% 50% 50% 1px;
 }
 .resume.customer-support .cs-entry:last-child { margin-bottom:0; }
 .resume.customer-support .cs-entry-head {
@@ -230,7 +240,7 @@ const template: TemplateData = {
   color:#fff;
   background:var(--cs-blue);
   padding:2px 11px;
-  border-radius:16px;
+  border-radius:14px;
   white-space:nowrap;
   flex:0 0 auto;
 }
@@ -273,9 +283,9 @@ const template: TemplateData = {
 .resume.customer-support .cs-skill {
   background:var(--cs-sky);
   color:var(--cs-blue-dk);
-  border:1px solid #c7e6fb;
+  border:1px solid #c7e0f5;
   padding:5px 14px;
-  border-radius:20px 20px 20px 4px;
+  border-radius:18px 18px 18px 4px;
   font-size:9.2pt;
   font-weight:500;
 }

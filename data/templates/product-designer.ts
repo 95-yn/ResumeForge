@@ -274,12 +274,35 @@ const template: TemplateData = {
   color: var(--ink);
 }
 
+/* spec-grid leading index: structural memory anchor, ≤1px guide line */
 .resume.product-designer .entry {
-  padding-left: 12px;
-  border-left: 1px solid var(--line);
-  margin-bottom: 11px;
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 12px;
 }
 .resume.product-designer .entry:last-child { margin-bottom: 0; }
+.resume.product-designer .entry::before {
+  counter-increment: pd-entry;
+  content: counter(pd-entry, decimal-leading-zero);
+  position: absolute;
+  left: 0;
+  top: 1px;
+  font-family: 'SF Mono', 'Roboto Mono', Menlo, Consolas, monospace;
+  font-size: 7.5pt;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--accent);
+}
+.resume.product-designer .entry::after {
+  content: '';
+  position: absolute;
+  left: 9px;
+  top: 16px;
+  bottom: 2px;
+  width: 1px;
+  background: var(--line);
+}
+.resume.product-designer .block { counter-reset: pd-entry; }
 
 .resume.product-designer .entry-top {
   display: flex;

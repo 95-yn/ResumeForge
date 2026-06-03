@@ -110,10 +110,9 @@ const template: TemplateData = {
   line-height:1.55;
 }
 
-/* ===== Masthead ===== */
 .resume.fin-audit header { margin-bottom:9mm; }
 .resume.fin-audit .masthead {
-  border-top:2.5pt solid #000;
+  border-top:3pt double #000;
   border-bottom:1pt solid #000;
   padding:5mm 0 4mm;
 }
@@ -125,20 +124,19 @@ const template: TemplateData = {
   gap:4mm;
 }
 .resume.fin-audit h1 {
-  font-size:26pt;
+  font-size:27pt;
   font-weight:700;
-  letter-spacing:0.04em;
+  letter-spacing:0.06em;
   line-height:1.1;
 }
 .resume.fin-audit .title {
-  font-size:10.5pt;
+  font-size:10pt;
   font-style:italic;
-  letter-spacing:0.18em;
+  letter-spacing:0.2em;
   text-transform:uppercase;
   color:#000;
 }
 
-/* ===== Contact table ===== */
 .resume.fin-audit .contact-table {
   width:100%;
   border-collapse:collapse;
@@ -165,7 +163,6 @@ const template: TemplateData = {
   font-style:normal;
 }
 
-/* ===== Section blocks ===== */
 .resume.fin-audit .block { margin-bottom:7.5mm; page-break-inside:auto; }
 .resume.fin-audit h2 {
   display:flex;
@@ -173,30 +170,37 @@ const template: TemplateData = {
   gap:3mm;
   font-size:11pt;
   font-weight:700;
-  letter-spacing:0.12em;
+  letter-spacing:0.14em;
   border-bottom:1.5pt solid #000;
   padding-bottom:1.5mm;
   margin-bottom:4mm;
 }
 .resume.fin-audit .h2-no {
-  font-size:8pt;
-  font-weight:400;
-  font-style:italic;
-  letter-spacing:0.05em;
-  border:0.75pt solid #000;
-  padding:0.4mm 1.6mm;
+  font-size:13pt;
+  font-weight:700;
+  font-style:normal;
+  letter-spacing:0;
+  font-family:'Georgia','Times New Roman',serif;
   flex:0 0 auto;
+  position:relative;
+  padding-right:3mm;
+}
+.resume.fin-audit .h2-no::after {
+  content:'';
+  position:absolute;
+  right:0; top:10%; bottom:10%;
+  width:0.75pt;
+  background:#000;
 }
 .resume.fin-audit .h2-text { text-transform:uppercase; }
 
-/* ===== Summary ===== */
 .resume.fin-audit .summary {
   text-align:justify;
-  border-left:2pt solid #000;
+  border-left:1pt solid #000;
   padding-left:4mm;
+  font-style:italic;
 }
 
-/* ===== Ledger (experience / projects) ===== */
 .resume.fin-audit .ledger { }
 .resume.fin-audit .entry {
   padding:3mm 0;
@@ -255,7 +259,6 @@ const template: TemplateData = {
   font-weight:400;
 }
 
-/* ===== Data table (education) ===== */
 .resume.fin-audit .data-table {
   width:100%;
   border-collapse:collapse;
@@ -286,7 +289,6 @@ const template: TemplateData = {
 }
 .resume.fin-audit .dt-date .dash { margin:0 1mm; }
 
-/* ===== Skills ===== */
 .resume.fin-audit .skills {
   display:flex;
   flex-wrap:wrap;
@@ -311,14 +313,12 @@ const template: TemplateData = {
 }
 .resume.fin-audit .skill-item .sk-level::before { content:'· '; }
 
-/* ===== Projects extras ===== */
 .resume.fin-audit .proj-desc {
   margin-top:1.5mm;
   text-align:justify;
 }
 .resume.fin-audit .proj-name { font-weight:700; }
 
-/* ===== Contract-required tails ===== */
 .resume.fin-audit li p, .resume.fin-audit li div { margin:0; padding:0; display:inline; }
 .resume.fin-audit .skills span, .resume.fin-audit [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 

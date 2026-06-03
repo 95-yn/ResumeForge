@@ -31,13 +31,13 @@ const template: TemplateData = {
     </header>
     {{#if basics.summary}}
     <section class="fresh-section">
-      <h2 class="fresh-section-title"><span class="fresh-dot"></span>个人简介</h2>
+      <h2 class="fresh-section-title"><span class="fresh-dot">01</span>个人简介</h2>
       <div class="fresh-text" data-field="basics.summary">{{{basics.summary}}}</div>
     </section>
     {{/if}}
     {{#if experience.length}}
     <section class="fresh-section" data-section="experience">
-      <h2 class="fresh-section-title"><span class="fresh-dot"></span>工作经历</h2>
+      <h2 class="fresh-section-title"><span class="fresh-dot">02</span>工作经历</h2>
       {{#each experience}}
       <div class="fresh-entry" data-entry="experience" data-entry-index="{{@index}}">
         <div class="fresh-entry-top">
@@ -55,7 +55,7 @@ const template: TemplateData = {
     {{/if}}
     {{#if education.length}}
     <section class="fresh-section" data-section="education">
-      <h2 class="fresh-section-title"><span class="fresh-dot"></span>教育背景</h2>
+      <h2 class="fresh-section-title"><span class="fresh-dot">03</span>教育背景</h2>
       {{#each education}}
       <div class="fresh-entry" data-entry="education" data-entry-index="{{@index}}">
         <div class="fresh-entry-top">
@@ -74,7 +74,7 @@ const template: TemplateData = {
     {{/if}}
     {{#if skills.length}}
     <section class="fresh-section" data-section="skills">
-      <h2 class="fresh-section-title"><span class="fresh-dot"></span>专业技能</h2>
+      <h2 class="fresh-section-title"><span class="fresh-dot">04</span>专业技能</h2>
       <div class="fresh-skills">
         {{#each skills}}<span class="fresh-skill-badge" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}} <span class="fresh-skill-level" data-field="skills.{{@index}}.level">{{{level}}}</span>{{/if}}</span>{{/each}}
       </div>
@@ -82,7 +82,7 @@ const template: TemplateData = {
     {{/if}}
     {{#if projects.length}}
     <section class="fresh-section" data-section="projects">
-      <h2 class="fresh-section-title"><span class="fresh-dot"></span>项目经历</h2>
+      <h2 class="fresh-section-title"><span class="fresh-dot">05</span>项目经历</h2>
       {{#each projects}}
       <div class="fresh-entry" data-entry="projects" data-entry-index="{{@index}}">
         <div class="fresh-entry-top">
@@ -111,7 +111,7 @@ const template: TemplateData = {
   display: flex;
   font-family: 'PingFang SC', 'Noto Sans SC', 'Microsoft YaHei', -apple-system, sans-serif;
   font-size: 10pt;
-  line-height: 1.55;
+  line-height: 1.6;
   color: #1C1917;
   background: #fff;
 }
@@ -127,19 +127,19 @@ const template: TemplateData = {
 /* ── Main Content ── */
 .fresh-content {
   flex: 1;
-  padding: 18mm 20px 20px 22px;
+  padding: 18mm 24px 24px 26px;
   min-width: 0;
 }
 
 /* ── Header ── */
 .fresh-header {
-  margin-bottom: 12px;
-  padding-bottom: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
   border-bottom: 1px solid #E7F3FA;
 }
 
 .fresh-header h1 {
-  font-size: 20pt;
+  font-size: 21pt;
   font-weight: 700;
   color: #1C1917;
   letter-spacing: 0.3px;
@@ -150,11 +150,11 @@ const template: TemplateData = {
   font-size: 10pt;
   color: #0369A1;
   font-weight: 500;
-  margin-top: 3px;
+  margin-top: 4px;
 }
 
 .fresh-contacts {
-  margin-top: 7px;
+  margin-top: 8px;
   display: flex;
   flex-wrap: wrap;
   gap: 3px 14px;
@@ -166,33 +166,40 @@ const template: TemplateData = {
 }
 
 /* ── Section ── */
-.fresh-section { margin-bottom: 11px; }
+.fresh-section { margin-bottom: 14px; }
 
 .fresh-section-title {
-  font-size: 9.5pt;
+  font-size: 10.5pt;
   font-weight: 700;
-  color: #0369A1;
-  margin-bottom: 7px;
+  color: #0C4A6E;
+  margin-bottom: 9px;
   display: flex;
   align-items: center;
-  gap: 6px;
-  text-transform: uppercase;
+  gap: 9px;
   letter-spacing: 0.5px;
 }
 
+/* numbered square label — the memory anchor */
 .fresh-dot {
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 19px;
+  height: 19px;
+  border-radius: 4px;
   background: #0369A1;
+  color: #fff;
+  font-size: 8.5pt;
+  font-weight: 700;
+  letter-spacing: 0;
   flex-shrink: 0;
+  font-feature-settings: "tnum";
 }
 
 /* ── Entry ── */
 .fresh-entry {
-  margin-bottom: 8px;
-  padding-left: 8px;
+  margin-bottom: 9px;
+  padding-left: 9px;
   border-left: 1px solid #E0F2FE;
 }
 
@@ -234,7 +241,7 @@ const template: TemplateData = {
 .fresh-text {
   font-size: 9.5pt;
   color: #57534E;
-  line-height: 1.6;
+  line-height: 1.65;
 }
 
 .fresh-list {
@@ -245,8 +252,8 @@ const template: TemplateData = {
 .fresh-list li {
   font-size: 9.5pt;
   color: #44403C;
-  margin-bottom: 2px;
-  line-height: 1.5;
+  margin-bottom: 3px;
+  line-height: 1.55;
 }
 
 /* ── Skills ── */
@@ -259,15 +266,15 @@ const template: TemplateData = {
 .fresh-skill-badge {
   background: #E0F2FE;
   border: none;
-  color: #0369A1;
-  padding: 3px 10px;
+  color: #0C4A6E;
+  padding: 3px 11px;
   border-radius: 4px;
   font-size: 9pt;
   font-weight: 500;
 }
 
 .fresh-skill-level {
-  color: #0284C7;
+  color: #0369A1;
   font-weight: 400;
   margin-left: 3px;
 }
@@ -288,178 +295,178 @@ li p, li div { margin: 0; padding: 0; display: inline; }
 }
 `,
     schema: {
-          "templateId": "fresh",
-          "version": "1.0.0",
-          "name": "清新活力",
-          "sections": [
-                {
-                      "key": "basics",
-                      "label": "基本信息",
-                      "fields": [
-                            {
-                                  "key": "name",
-                                  "label": "姓名",
-                                  "type": "text",
-                                  "required": true
-                            },
-                            {
-                                  "key": "title",
-                                  "label": "职位",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "email",
-                                  "label": "邮箱",
-                                  "type": "email",
-                                  "required": true
-                            },
-                            {
-                                  "key": "phone",
-                                  "label": "电话",
-                                  "type": "tel"
-                            },
-                            {
-                                  "key": "location",
-                                  "label": "所在城市",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "avatar",
-                                  "label": "头像",
-                                  "type": "image"
-                            },
-                            {
-                                  "key": "summary",
-                                  "label": "个人简介",
-                                  "type": "richtext"
-                            }
-                      ]
-                },
-                {
-                      "key": "experience",
-                      "label": "工作经历",
-                      "type": "array",
-                      "fields": [
-                            {
-                                  "key": "company",
-                                  "label": "公司",
-                                  "type": "text",
-                                  "required": true
-                            },
-                            {
-                                  "key": "position",
-                                  "label": "职位",
-                                  "type": "text",
-                                  "required": true
-                            },
-                            {
-                                  "key": "startDate",
-                                  "label": "开始日期",
-                                  "type": "date"
-                            },
-                            {
-                                  "key": "endDate",
-                                  "label": "结束日期",
-                                  "type": "date"
-                            },
-                            {
-                                  "key": "highlights",
-                                  "label": "工作亮点",
-                                  "type": "array:text"
-                            }
-                      ]
-                },
-                {
-                      "key": "education",
-                      "label": "教育经历",
-                      "type": "array",
-                      "fields": [
-                            {
-                                  "key": "institution",
-                                  "label": "学校",
-                                  "type": "text",
-                                  "required": true
-                            },
-                            {
-                                  "key": "area",
-                                  "label": "专业",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "studyType",
-                                  "label": "学历",
-                                  "type": "select",
-                                  "options": [
-                                        "高中",
-                                        "大专",
-                                        "本科",
-                                        "硕士",
-                                        "博士"
-                                  ]
-                            },
-                            {
-                                  "key": "startDate",
-                                  "label": "开始日期",
-                                  "type": "date"
-                            },
-                            {
-                                  "key": "endDate",
-                                  "label": "结束日期",
-                                  "type": "date"
-                            }
-                      ]
-                },
-                {
-                      "key": "skills",
-                      "label": "技能",
-                      "type": "array",
-                      "fields": [
-                            {
-                                  "key": "name",
-                                  "label": "技能名称",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "level",
-                                  "label": "熟练度",
-                                  "type": "select",
-                                  "options": [
-                                        "了解",
-                                        "熟悉",
-                                        "掌握",
-                                        "精通"
-                                  ]
-                            }
-                      ]
-                },
-                {
-                      "key": "projects",
-                      "label": "项目经历",
-                      "type": "array",
-                      "fields": [
-                            {
-                                  "key": "name",
-                                  "label": "项目名称",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "role",
-                                  "label": "担任角色",
-                                  "type": "text"
-                            },
-                            {
-                                  "key": "description",
-                                  "label": "项目描述",
-                                  "type": "richtext"
-                            },
-                            {
-                                  "key": "highlights",
-                                  "label": "项目亮点",
-                                  "type": "array:text"
-                            }
-                      ]
-                }
+      "templateId": "fresh",
+      "version": "1.0.0",
+      "name": "清新活力",
+      "sections": [
+        {
+          "key": "basics",
+          "label": "基本信息",
+          "fields": [
+            {
+              "key": "name",
+              "label": "姓名",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "title",
+              "label": "职位",
+              "type": "text"
+            },
+            {
+              "key": "email",
+              "label": "邮箱",
+              "type": "email",
+              "required": true
+            },
+            {
+              "key": "phone",
+              "label": "电话",
+              "type": "tel"
+            },
+            {
+              "key": "location",
+              "label": "所在城市",
+              "type": "text"
+            },
+            {
+              "key": "avatar",
+              "label": "头像",
+              "type": "image"
+            },
+            {
+              "key": "summary",
+              "label": "个人简介",
+              "type": "richtext"
+            }
           ]
+        },
+        {
+          "key": "experience",
+          "label": "工作经历",
+          "type": "array",
+          "fields": [
+            {
+              "key": "company",
+              "label": "公司",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "position",
+              "label": "职位",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "startDate",
+              "label": "开始日期",
+              "type": "date"
+            },
+            {
+              "key": "endDate",
+              "label": "结束日期",
+              "type": "date"
+            },
+            {
+              "key": "highlights",
+              "label": "工作亮点",
+              "type": "array:text"
+            }
+          ]
+        },
+        {
+          "key": "education",
+          "label": "教育经历",
+          "type": "array",
+          "fields": [
+            {
+              "key": "institution",
+              "label": "学校",
+              "type": "text",
+              "required": true
+            },
+            {
+              "key": "area",
+              "label": "专业",
+              "type": "text"
+            },
+            {
+              "key": "studyType",
+              "label": "学历",
+              "type": "select",
+              "options": [
+                "高中",
+                "大专",
+                "本科",
+                "硕士",
+                "博士"
+              ]
+            },
+            {
+              "key": "startDate",
+              "label": "开始日期",
+              "type": "date"
+            },
+            {
+              "key": "endDate",
+              "label": "结束日期",
+              "type": "date"
+            }
+          ]
+        },
+        {
+          "key": "skills",
+          "label": "技能",
+          "type": "array",
+          "fields": [
+            {
+              "key": "name",
+              "label": "技能名称",
+              "type": "text"
+            },
+            {
+              "key": "level",
+              "label": "熟练度",
+              "type": "select",
+              "options": [
+                "了解",
+                "熟悉",
+                "掌握",
+                "精通"
+              ]
+            }
+          ]
+        },
+        {
+          "key": "projects",
+          "label": "项目经历",
+          "type": "array",
+          "fields": [
+            {
+              "key": "name",
+              "label": "项目名称",
+              "type": "text"
+            },
+            {
+              "key": "role",
+              "label": "担任角色",
+              "type": "text"
+            },
+            {
+              "key": "description",
+              "label": "项目描述",
+              "type": "richtext"
+            },
+            {
+              "key": "highlights",
+              "label": "项目亮点",
+              "type": "array:text"
+            }
+          ]
+        }
+      ]
     },
   };
 

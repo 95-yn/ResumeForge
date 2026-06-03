@@ -79,10 +79,10 @@ const template: TemplateData = {
 .resume.call-center * { word-wrap: break-word; overflow-wrap: break-word; }
 
 .resume.call-center {
-  --teal: #0e9488;
-  --teal-dark: #0b6f66;
-  --teal-soft: #e6f4f2;
-  --teal-line: #b9e0db;
+  --teal: #0e8a80;
+  --teal-dark: #0a655d;
+  --teal-soft: #e8f4f2;
+  --teal-line: #b9ddd8;
   --ink: #233037;
   --muted: #66767d;
   --gray-bg: #f4f6f6;
@@ -125,18 +125,19 @@ const template: TemplateData = {
 .resume.call-center .cc-headset { width: 30px; height: 30px; }
 .resume.call-center .cc-headtext { flex: 1 1 auto; min-width: 0; }
 .resume.call-center .cc-headtext h1 {
-  font-size: 23pt;
-  font-weight: 700;
+  font-size: 24pt;
+  font-weight: 800;
   letter-spacing: 1px;
   color: var(--ink);
   line-height: 1.1;
 }
 .resume.call-center .cc-title {
   margin-top: 3px;
-  font-size: 10.5pt;
-  font-weight: 600;
+  font-size: 10pt;
+  font-weight: 500;
   color: var(--teal-dark);
-  letter-spacing: 0.5px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
 }
 
 /* Sound wave detail */
@@ -195,12 +196,12 @@ const template: TemplateData = {
 .resume.call-center section { margin-bottom: 16px; }
 .resume.call-center h2 {
   position: relative;
-  font-size: 11.5pt;
-  font-weight: 700;
+  font-size: 12pt;
+  font-weight: 800;
   color: var(--ink);
   padding-left: 16px;
   margin-bottom: 11px;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
 }
 .resume.call-center h2::before {
   content: '';
@@ -209,7 +210,7 @@ const template: TemplateData = {
   top: 50%;
   transform: translateY(-50%);
   width: 5px;
-  height: 14px;
+  height: 15px;
   border-radius: 3px;
   background: var(--teal);
 }
@@ -223,12 +224,12 @@ const template: TemplateData = {
   background: var(--gray-line);
 }
 
-/* ===== Summary ===== */
+/* ===== Summary：去彩色侧条，整体浅青卡片 ===== */
 .resume.call-center .cc-summary > div {
   background: var(--teal-soft);
-  border-left: 3px solid var(--teal);
-  padding: 9px 13px;
-  border-radius: 0 6px 6px 0;
+  border: 1px solid var(--teal-line);
+  padding: 10px 14px;
+  border-radius: 8px;
   color: var(--ink);
   font-size: 9.8pt;
 }
@@ -247,7 +248,7 @@ const template: TemplateData = {
   font-weight: 600;
   color: var(--ink);
 }
-.resume.call-center .cc-company { font-weight: 700; }
+.resume.call-center .cc-company { font-weight: 800; }
 .resume.call-center .cc-position {
   margin-left: 8px;
   font-weight: 500;

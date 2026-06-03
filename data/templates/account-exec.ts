@@ -30,9 +30,9 @@ const template: TemplateData = {
     </div>
   </header>
 
-  {{#if basics.summary}}<section class="block summary"><h2><span class="h2-tag">核心定位</span></h2><div class="summary-body" data-field="basics.summary">{{{basics.summary}}}</div></section>{{/if}}
+  {{#if basics.summary}}<section class="block summary"><h2><span class="h2-no">00</span><span class="h2-tag">核心定位</span></h2><div class="summary-body" data-field="basics.summary">{{{basics.summary}}}</div></section>{{/if}}
 
-  {{#if experience.length}}<section class="block" data-section="experience"><h2><span class="h2-tag">工作经历</span></h2>
+  {{#if experience.length}}<section class="block" data-section="experience"><h2><span class="h2-no">01</span><span class="h2-tag">工作经历</span></h2>
     {{#each experience}}<div class="entry exp-entry" data-entry="experience" data-entry-index="{{@index}}">
       <div class="entry-head">
         <h3><span class="company" data-field="experience.{{@index}}.company">{{{company}}}</span><span class="position" data-field="experience.{{@index}}.position">{{{position}}}</span></h3>
@@ -42,7 +42,7 @@ const template: TemplateData = {
     </div>{{/each}}
   </section>{{/if}}
 
-  {{#if projects.length}}<section class="block" data-section="projects"><h2><span class="h2-tag">项目经历</span></h2>
+  {{#if projects.length}}<section class="block" data-section="projects"><h2><span class="h2-no">02</span><span class="h2-tag">项目经历</span></h2>
     {{#each projects}}<div class="entry proj-entry" data-entry="projects" data-entry-index="{{@index}}">
       <h3><span class="proj-name" data-field="projects.{{@index}}.name">{{{name}}}</span>{{#if role}} <span class="proj-role" data-field="projects.{{@index}}.role">{{{role}}}</span>{{/if}}</h3>
       {{#if description}}<div class="proj-desc" data-field="projects.{{@index}}.description">{{{description}}}</div>{{/if}}
@@ -50,9 +50,9 @@ const template: TemplateData = {
     </div>{{/each}}
   </section>{{/if}}
 
-  {{#if skills.length}}<section class="block" data-section="skills"><h2><span class="h2-tag">专业技能</span></h2><div class="skills">{{#each skills}}<span class="skill-chip" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}}<span class="lvl-dot"></span><span class="lvl" data-field="skills.{{@index}}.level">{{{level}}}</span>{{/if}}</span>{{/each}}</div></section>{{/if}}
+  {{#if skills.length}}<section class="block" data-section="skills"><h2><span class="h2-no">03</span><span class="h2-tag">专业技能</span></h2><div class="skills">{{#each skills}}<span class="skill-chip" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}}<span class="lvl-dot"></span><span class="lvl" data-field="skills.{{@index}}.level">{{{level}}}</span>{{/if}}</span>{{/each}}</div></section>{{/if}}
 
-  {{#if education.length}}<section class="block" data-section="education"><h2><span class="h2-tag">教育背景</span></h2>
+  {{#if education.length}}<section class="block" data-section="education"><h2><span class="h2-no">04</span><span class="h2-tag">教育背景</span></h2>
     {{#each education}}<div class="entry edu-entry" data-entry="education" data-entry-index="{{@index}}">
       <div class="entry-head">
         <h3 data-field="education.{{@index}}.institution">{{{institution}}}</h3>
@@ -93,16 +93,7 @@ const template: TemplateData = {
   color:#fff;
   margin:-18mm -18mm 9mm;
   padding:13mm 18mm 9mm;
-  border-bottom:3px solid var(--gold);
-}
-.resume.account-exec header::before {
-  content:"";
-  position:absolute;
-  top:0; right:0;
-  width:42mm; height:100%;
-  background:
-    repeating-linear-gradient(135deg, rgba(200,162,75,.14) 0 2px, transparent 2px 9px);
-  pointer-events:none;
+  border-bottom:2px solid var(--gold);
 }
 .resume.account-exec .hd-main { position:relative; z-index:1; }
 .resume.account-exec h1 {
@@ -112,16 +103,17 @@ const template: TemplateData = {
   line-height:1.1;
 }
 .resume.account-exec .hd-title {
-  margin-top:5px;
+  margin-top:6px;
   font-size:11pt;
   font-weight:500;
   color:var(--gold);
-  letter-spacing:2px;
+  letter-spacing:4px;
+  text-transform:uppercase;
 }
 .resume.account-exec .contact {
   position:relative;
   z-index:1;
-  margin-top:9px;
+  margin-top:10px;
   display:flex;
   flex-wrap:wrap;
   gap:6px 0;
@@ -137,40 +129,43 @@ const template: TemplateData = {
 }
 .resume.account-exec .contact span:first-child { padding-left:0; border-left:none; }
 
-/* ===== Section ===== */
+/* ===== Section — numbered system ===== */
 .resume.account-exec .block { margin-bottom:7mm; }
 .resume.account-exec h2 {
-  position:relative;
-  margin-bottom:4mm;
-  padding-left:14px;
+  display:flex;
+  align-items:baseline;
+  gap:11px;
+  margin-bottom:4.5mm;
   font-size:12pt;
   font-weight:700;
   color:var(--navy);
   letter-spacing:1px;
+  border-bottom:1px solid var(--line);
+  padding-bottom:3.5mm;
 }
-.resume.account-exec h2::before {
-  content:"";
-  position:absolute;
-  left:0; top:50%;
-  transform:translateY(-50%);
-  width:5px; height:16px;
-  background:var(--gold);
-  border-radius:1px;
+.resume.account-exec .h2-no {
+  font-size:9pt;
+  font-weight:700;
+  letter-spacing:1px;
+  color:var(--gold-deep);
+  font-feature-settings:'tnum';
+  border:1px solid var(--gold);
+  border-radius:2px;
+  padding:1px 5px;
+  line-height:1.3;
 }
 .resume.account-exec .h2-tag {
   display:inline-block;
-  padding-bottom:3px;
-  border-bottom:2px solid var(--navy);
 }
 
 /* ===== Summary ===== */
 .resume.account-exec .summary-body {
   background:var(--bg-soft);
-  border-left:3px solid var(--gold);
-  padding:8px 14px;
+  padding:9px 14px;
   color:var(--ink);
   font-size:10pt;
   line-height:1.7;
+  border-radius:2px;
 }
 
 /* ===== Entry ===== */
@@ -227,7 +222,6 @@ const template: TemplateData = {
   background:var(--gold);
   transform:rotate(45deg);
 }
-/* highlight numbers/metrics in bold gold-navy */
 .resume.account-exec .entry li b,
 .resume.account-exec .entry li strong {
   color:var(--gold-deep);
@@ -264,7 +258,6 @@ const template: TemplateData = {
   padding:4px 12px;
   background:var(--bg-soft);
   border:1px solid var(--line);
-  border-top:2px solid var(--gold);
   border-radius:3px;
   font-size:9.3pt;
   color:var(--navy);

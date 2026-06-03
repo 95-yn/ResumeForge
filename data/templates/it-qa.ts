@@ -126,7 +126,6 @@ const template: TemplateData = {
 }
 .resume.it-qa .id-main {
   padding:14px 18px;
-  border-left:5px solid var(--green);
 }
 .resume.it-qa header h1 {
   font-size:25pt;
@@ -206,7 +205,6 @@ const template: TemplateData = {
 /* ===== Summary ===== */
 .resume.it-qa .summary-body {
   background:var(--line-soft);
-  border-left:3px solid var(--green);
   padding:10px 14px;
   border-radius:2px;
   color:#2b333f;
@@ -226,7 +224,7 @@ const template: TemplateData = {
   align-items:center;
   gap:10px;
   padding:7px 12px;
-  background:var(--line-soft);
+  background:var(--green-soft);
   border-bottom:1px solid var(--line);
 }
 .resume.it-qa .case-tag {
@@ -234,7 +232,7 @@ const template: TemplateData = {
   font-size:7.6pt;
   font-weight:700;
   color:#fff;
-  background:var(--ink);
+  background:var(--green);
   padding:2px 7px;
   border-radius:2px;
   letter-spacing:.5px;
@@ -308,7 +306,7 @@ const template: TemplateData = {
 }
 .resume.it-qa .prj .steps { padding-top:9px; }
 
-/* ===== Skills ===== */
+/* ===== Skills — leading check badge, no side stripe ===== */
 .resume.it-qa .skills {
   display:flex;
   flex-wrap:wrap;
@@ -318,17 +316,23 @@ const template: TemplateData = {
   display:inline-flex;
   align-items:center;
   gap:5px;
-  padding:4px 11px;
+  padding:4px 11px 4px 8px;
   background:#fff;
   border:1px solid var(--line);
-  border-left:3px solid var(--green);
-  border-radius:2px;
+  border-radius:3px;
   font-size:9.3pt;
 }
 .resume.it-qa .skill-chip .chk {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:15px; height:15px;
+  background:var(--green-soft);
   color:var(--green);
+  border-radius:3px;
   font-weight:800;
-  font-size:9pt;
+  font-size:8.5pt;
+  line-height:1;
 }
 .resume.it-qa .skill-chip .lv { color:var(--muted); }
 

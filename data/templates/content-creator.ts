@@ -76,25 +76,23 @@ const template: TemplateData = {
   font-size:10pt;
   line-height:1.55;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
-  color:#1f1a2e;
-  --g1:#ff5e8a;
-  --g2:#ff8a5b;
-  --g3:#7c5cff;
-  --g4:#3ec6ff;
-  --ink:#1f1a2e;
+  color:#241f33;
+  --brand:#6d4ac4;
+  --brand-dk:#553a9c;
+  --ink:#241f33;
   --muted:#6b6480;
-  --line:#efe9f7;
-  --soft:#faf7ff;
+  --line:#e7e2f0;
+  --soft:#f6f3fb;
 }
 
-/* ===== Header ===== */
+/* ===== Header：收敛为单一深紫主色（去多色渐变） ===== */
 .resume.content-creator header {
   display:flex;
   align-items:center;
   gap:14px;
   padding:16px 18px;
-  border-radius:22px;
-  background:linear-gradient(120deg,var(--g3) 0%,var(--g1) 55%,var(--g2) 100%);
+  border-radius:16px;
+  background:var(--brand);
   color:#fff;
   position:relative;
   overflow:hidden;
@@ -104,17 +102,17 @@ const template: TemplateData = {
   position:absolute;
   right:-40px;
   top:-40px;
-  width:160px;
-  height:160px;
+  width:150px;
+  height:150px;
   border-radius:50%;
-  background:radial-gradient(circle at 30% 30%,rgba(255,255,255,.35),transparent 60%);
+  background:rgba(255,255,255,.08);
 }
 .resume.content-creator .cc-avatar {
   flex:0 0 auto;
   width:60px;
   height:60px;
   border-radius:50%;
-  background:rgba(255,255,255,.22);
+  background:rgba(255,255,255,.18);
   border:2px solid rgba(255,255,255,.55);
   display:flex;
   align-items:center;
@@ -148,10 +146,9 @@ const template: TemplateData = {
 .resume.content-creator .contact span {
   font-size:8.4pt;
   font-weight:600;
-  background:rgba(255,255,255,.2);
+  background:rgba(255,255,255,.18);
   padding:2px 9px;
   border-radius:999px;
-  backdrop-filter:blur(2px);
 }
 .resume.content-creator .cc-badge {
   z-index:1;
@@ -159,13 +156,13 @@ const template: TemplateData = {
   font-size:8pt;
   font-weight:800;
   letter-spacing:.5px;
-  background:rgba(255,255,255,.85);
-  color:var(--g3);
+  background:#fff;
+  color:var(--brand-dk);
   padding:3px 10px;
   border-radius:999px;
 }
 
-/* ===== Section headings ===== */
+/* ===== Section headings：纯色锚条 ===== */
 .resume.content-creator section { margin-top:16px; }
 .resume.content-creator h2 {
   font-size:12.5pt;
@@ -182,41 +179,44 @@ const template: TemplateData = {
   left:0;
   top:50%;
   transform:translateY(-50%);
-  width:6px;
+  width:5px;
   height:18px;
-  border-radius:4px;
-  background:linear-gradient(180deg,var(--g3),var(--g1));
+  border-radius:3px;
+  background:var(--brand);
 }
 
 /* ===== Bio ===== */
 .resume.content-creator .cc-bio div {
   background:var(--soft);
   border:1px solid var(--line);
-  border-radius:16px;
+  border-radius:14px;
   padding:12px 15px;
   font-size:9.6pt;
-  color:#3a3450;
+  color:#39334d;
   line-height:1.7;
 }
 
-/* ===== Experience feed ===== */
+/* ===== Experience feed：整框卡 + 紫圆点序号锚（去渐变侧条） ===== */
+.resume.content-creator .cc-feed { counter-reset:cc-post; }
 .resume.content-creator .cc-post {
   background:#fff;
   border:1px solid var(--line);
-  border-radius:16px;
-  padding:13px 16px;
+  border-radius:14px;
+  padding:13px 16px 13px 18px;
   margin-bottom:10px;
   position:relative;
-  overflow:hidden;
+  counter-increment:cc-post;
 }
 .resume.content-creator .cc-post::before {
-  content:"";
+  content:counter(cc-post,decimal-leading-zero);
   position:absolute;
-  left:0;
-  top:0;
-  bottom:0;
-  width:4px;
-  background:linear-gradient(180deg,var(--g1),var(--g2));
+  left:14px;
+  top:14px;
+  font-size:8pt;
+  font-weight:800;
+  color:var(--brand);
+  font-family:Georgia,serif;
+  display:none;
 }
 .resume.content-creator .cc-post-head {
   display:flex;
@@ -238,8 +238,9 @@ const template: TemplateData = {
 .resume.content-creator .cc-role {
   font-size:9pt;
   font-weight:700;
-  color:var(--g1);
-  background:linear-gradient(120deg,rgba(255,94,138,.12),rgba(124,92,255,.12));
+  color:var(--brand-dk);
+  background:var(--soft);
+  border:1px solid var(--line);
   padding:1px 9px;
   border-radius:999px;
 }
@@ -255,7 +256,7 @@ const template: TemplateData = {
   padding-left:16px;
   margin-bottom:3px;
   font-size:9.4pt;
-  color:#403a55;
+  color:#3d3753;
   line-height:1.6;
 }
 .resume.content-creator .cc-post li::before {
@@ -266,7 +267,7 @@ const template: TemplateData = {
   width:6px;
   height:6px;
   border-radius:50%;
-  background:linear-gradient(135deg,var(--g3),var(--g4));
+  background:var(--brand);
 }
 
 /* ===== Projects grid ===== */
@@ -276,9 +277,9 @@ const template: TemplateData = {
   gap:10px;
 }
 .resume.content-creator .cc-card {
-  background:linear-gradient(160deg,var(--soft),#fff);
+  background:var(--soft);
   border:1px solid var(--line);
-  border-radius:16px;
+  border-radius:14px;
   padding:12px 14px;
 }
 .resume.content-creator .cc-card h3 {
@@ -290,18 +291,18 @@ const template: TemplateData = {
   flex-wrap:wrap;
   gap:7px;
 }
-.resume.content-creator .cc-pname { color:var(--g3); }
+.resume.content-creator .cc-pname { color:var(--brand-dk); }
 .resume.content-creator .cc-prole {
   font-size:8.2pt;
   font-weight:700;
   color:#fff;
-  background:linear-gradient(120deg,var(--g4),var(--g3));
+  background:var(--brand);
   padding:1px 8px;
   border-radius:999px;
 }
 .resume.content-creator .cc-pdesc {
   font-size:9pt;
-  color:#4a4460;
+  color:#46405c;
   margin-bottom:5px;
   line-height:1.6;
 }
@@ -311,7 +312,7 @@ const template: TemplateData = {
   padding-left:14px;
   margin-bottom:2px;
   font-size:8.9pt;
-  color:#403a55;
+  color:#3d3753;
   line-height:1.55;
 }
 .resume.content-creator .cc-card li::before {
@@ -322,15 +323,14 @@ const template: TemplateData = {
   width:5px;
   height:5px;
   border-radius:50%;
-  background:linear-gradient(135deg,var(--g1),var(--g2));
+  background:var(--brand);
 }
 
-/* ===== Education ===== */
+/* ===== Education：去4px彩色侧条，整框卡 ===== */
 .resume.content-creator .cc-erow {
   background:#fff;
   border:1px solid var(--line);
-  border-left:4px solid var(--g4);
-  border-radius:14px;
+  border-radius:12px;
   padding:10px 15px;
   margin-bottom:8px;
   display:grid;
@@ -364,10 +364,9 @@ const template: TemplateData = {
   border:1.5px solid var(--line);
   padding:5px 13px;
   border-radius:999px;
-  transition:all .2s;
 }
 .resume.content-creator .cc-tag .cc-lv {
-  color:var(--g1);
+  color:var(--brand-dk);
   font-weight:700;
 }
 

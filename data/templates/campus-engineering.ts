@@ -85,9 +85,9 @@ const template: TemplateData = {
   font-size: 10pt;
   line-height: 1.55;
   font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  counter-reset: ce-sec;
 }
 
-/* ===== Header：蓝灰网格 ===== */
 .resume.campus-engineering header {
   position: relative;
   margin-bottom: 9mm;
@@ -143,37 +143,39 @@ const template: TemplateData = {
   background: #8fc0e8;
 }
 
-/* ===== Section 标题 ===== */
-.resume.campus-engineering section { margin-bottom: 7mm; }
+.resume.campus-engineering section { margin-bottom: 7mm; counter-increment: ce-sec; }
 .resume.campus-engineering h2 {
   position: relative;
+  display: flex;
+  align-items: baseline;
+  gap: 3mm;
   font-size: 12pt;
   font-weight: 700;
   color: var(--ce-blue);
   letter-spacing: 1px;
-  padding: 0 0 2mm 7mm;
+  padding: 0 0 2mm 0;
   margin-bottom: 4mm;
   border-bottom: 1.5px solid var(--ce-line);
 }
 .resume.campus-engineering h2::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0.5mm;
-  width: 3.5mm;
-  height: 3.5mm;
+  content: counter(ce-sec, decimal-leading-zero);
+  font-family: 'Consolas', 'PingFang SC', monospace;
+  font-size: 9pt;
+  font-weight: 700;
+  color: #fff;
   background: var(--ce-accent);
-  box-shadow: 4.5mm 0 0 -0.7mm var(--ce-line);
+  padding: 0.6mm 1.8mm;
+  border-radius: 2px;
+  letter-spacing: 0.5px;
+  align-self: center;
 }
 
-/* ===== 个人简介 ===== */
 .resume.campus-engineering .summary-body {
   color: var(--ce-slate);
   font-size: 10pt;
   text-align: justify;
 }
 
-/* ===== Entry 通用 ===== */
 .resume.campus-engineering .entry { margin-bottom: 4.5mm; }
 .resume.campus-engineering .entry:last-child { margin-bottom: 0; }
 .resume.campus-engineering .entry-head {
@@ -196,14 +198,23 @@ const template: TemplateData = {
   white-space: nowrap;
 }
 
-/* ===== 项目（优先，左侧蓝条强调） ===== */
 .resume.campus-engineering .proj-entry {
   position: relative;
-  padding: 3mm 4mm 3mm 5mm;
+  padding: 3mm 4mm 3mm 8mm;
   margin-bottom: 3.5mm;
   background: var(--ce-bg-soft);
-  border-left: 2.5px solid var(--ce-accent);
-  border-radius: 0 2px 2px 0;
+  border: 1px solid var(--ce-line);
+  border-radius: 2px;
+}
+.resume.campus-engineering .proj-entry::before {
+  content: '';
+  position: absolute;
+  left: 3mm;
+  top: 4.2mm;
+  width: 2.4mm;
+  height: 2.4mm;
+  background: var(--ce-accent);
+  transform: rotate(45deg);
 }
 .resume.campus-engineering .proj-entry h3 { margin-bottom: 1.5mm; }
 .resume.campus-engineering .proj-name { color: var(--ce-blue); }
@@ -225,7 +236,6 @@ const template: TemplateData = {
   margin-bottom: 1.5mm;
 }
 
-/* ===== 工作经历 ===== */
 .resume.campus-engineering .exp-company { color: var(--ce-blue); }
 .resume.campus-engineering .exp-position {
   margin-left: 2.5mm;
@@ -239,7 +249,6 @@ const template: TemplateData = {
   font-weight: 400;
 }
 
-/* ===== 列表 ===== */
 .resume.campus-engineering ul {
   list-style: none;
   margin-top: 1.5mm;
@@ -262,14 +271,12 @@ const template: TemplateData = {
   background: transparent;
 }
 
-/* ===== 教育 ===== */
 .resume.campus-engineering .edu-meta {
   margin-top: 0.8mm;
   font-size: 9.5pt;
   color: var(--ce-slate);
 }
 
-/* ===== 技能 ===== */
 .resume.campus-engineering .skills {
   display: flex;
   flex-wrap: wrap;
@@ -290,7 +297,6 @@ const template: TemplateData = {
   font-weight: 600;
 }
 
-/* ===== 契约收尾 ===== */
 .resume.campus-engineering li p,
 .resume.campus-engineering li div { margin: 0; padding: 0; display: inline; }
 .resume.campus-engineering .skills span,

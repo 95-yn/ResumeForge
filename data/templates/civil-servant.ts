@@ -78,27 +78,30 @@ const template: TemplateData = {
   margin-bottom:9mm;
 }
 .resume.civil-servant .emblem-line {
-  width:38mm;
-  height:3px;
-  background:#c01722;
+  width:30mm;
+  height:0;
+  border-top:2px solid #b21621;
+  border-bottom:2px solid #b21621;
+  height:5px;
   margin:0 auto 5mm;
 }
 .resume.civil-servant header h1 {
   font-size:25pt;
   font-weight:700;
-  letter-spacing:8px;
+  letter-spacing:10px;
   color:#1a1a1a;
   font-family:'PingFang SC','Microsoft YaHei','Heiti SC',sans-serif;
   margin-bottom:3mm;
-  text-indent:8px;
+  text-indent:10px;
 }
 .resume.civil-servant header .title {
-  font-size:11pt;
-  color:#c01722;
-  letter-spacing:4px;
+  font-size:10.5pt;
+  color:#b21621;
+  letter-spacing:5px;
   font-weight:600;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
   margin-bottom:4mm;
+  text-indent:5px;
 }
 .resume.civil-servant header .contact {
   display:flex;
@@ -136,20 +139,20 @@ const template: TemplateData = {
   height:0;
   flex:1;
   max-width:74mm;
-  border-top:1.6px solid #c01722;
-  border-bottom:1.6px solid #c01722;
+  border-top:1.4px solid #b21621;
+  border-bottom:1.4px solid #b21621;
   height:4px;
 }
 .resume.civil-servant .rule-dot {
   width:9px;
   height:9px;
-  background:#c01722;
+  background:#b21621;
   transform:rotate(45deg);
   margin:0 5mm;
   flex:none;
 }
 
-/* ===== Section 标题，正黑居中标记 ===== */
+/* ===== Section 标题，红牌+衬线编号细节 ===== */
 .resume.civil-servant section {
   margin-bottom:7mm;
 }
@@ -164,7 +167,7 @@ const template: TemplateData = {
 }
 .resume.civil-servant section h2 .h2-text {
   display:inline-block;
-  background:#c01722;
+  background:#b21621;
   padding:1.4mm 6mm 1.4mm 5mm;
   position:relative;
 }
@@ -175,7 +178,7 @@ const template: TemplateData = {
   top:0;
   bottom:0;
   width:3.5mm;
-  background:#8c0f17;
+  background:#8a0f17;
   clip-path:polygon(0 0,100% 50%,0 100%);
 }
 .resume.civil-servant section h2::after {
@@ -191,16 +194,26 @@ const template: TemplateData = {
 /* ===== Summary ===== */
 .resume.civil-servant .summary {
   text-align:justify;
-  line-height:1.75;
+  line-height:1.78;
   color:#2a2a2a;
   padding:0 1mm;
 }
 
-/* ===== Entry 通用 ===== */
+/* ===== Entry 通用：菱形前导锚点取代彩色侧条 ===== */
 .resume.civil-servant .entry {
   margin-bottom:4.5mm;
-  padding-left:4mm;
-  border-left:2px solid #e3c6c8;
+  padding-left:6mm;
+  position:relative;
+}
+.resume.civil-servant .entry::before {
+  content:'';
+  position:absolute;
+  left:0;
+  top:1.9mm;
+  width:6px;
+  height:6px;
+  background:#b21621;
+  transform:rotate(45deg);
 }
 .resume.civil-servant .entry:last-child { margin-bottom:0; }
 .resume.civil-servant .entry-head {
@@ -218,7 +231,7 @@ const template: TemplateData = {
   font-family:'PingFang SC','Microsoft YaHei','Heiti SC',sans-serif;
 }
 .resume.civil-servant .entry h3 .company {
-  color:#c01722;
+  color:#b21621;
 }
 .resume.civil-servant .entry h3 .position {
   color:#333;
@@ -230,7 +243,7 @@ const template: TemplateData = {
   font-weight:400;
   margin:0 2px;
 }
-.resume.civil-servant .entry h3 .proj-name { color:#c01722; }
+.resume.civil-servant .entry h3 .proj-name { color:#b21621; }
 .resume.civil-servant .entry h3 .role { color:#444; font-weight:600; }
 
 .resume.civil-servant .date {
@@ -266,9 +279,9 @@ const template: TemplateData = {
   position:absolute;
   left:0;
   top:2.6mm;
-  width:5px;
-  height:5px;
-  background:#c01722;
+  width:4px;
+  height:4px;
+  background:#b21621;
   transform:rotate(45deg);
 }
 
@@ -287,15 +300,15 @@ const template: TemplateData = {
 }
 .resume.civil-servant .skills .skill-item {
   display:inline-block;
-  border:1px solid #c01722;
-  color:#c01722;
+  border:1px solid #b21621;
+  color:#b21621;
   padding:1mm 4mm;
   font-size:9.5pt;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
   background:#fdf6f6;
 }
 .resume.civil-servant .skills .skill-item .level {
-  color:#8c0f17;
+  color:#8a0f17;
 }
 
 /* ===== 收尾必需规则 ===== */

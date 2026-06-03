@@ -79,47 +79,36 @@ const template: TemplateData = {
   min-height:297mm;
   margin:0 auto;
   padding:18mm 20mm;
-  background:#fdf8f1;
+  background:#fff;
   font-size:10pt;
   line-height:1.5;
-  color:#4a3f35;
+  color:#3d342b;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
-  --orange:#e8743b;
-  --orange-soft:#f6a96b;
-  --cream:#fbeede;
-  --cream-deep:#f5e2cb;
-  --ink:#4a3f35;
-  --muted:#9b8a78;
+  --terra:#b4602f;
+  --terra-dk:#8f4a22;
+  --cream:#f6efe4;
+  --cream-deep:#e8dcc8;
+  --ink:#3d342b;
+  --muted:#8a7a67;
 }
 
-/* ===== Header ===== */
+/* ===== Header：收敛为低饱和暖陶色窄带，白字对比足够 ===== */
 .resume.social-worker header {
-  background:linear-gradient(135deg,#f9aa5e 0%,#e8743b 100%);
-  border-radius:22px;
-  padding:22px 28px;
-  margin-bottom:22px;
-  box-shadow:0 6px 18px rgba(232,116,59,0.18);
+  background:var(--terra);
+  border-radius:14px;
+  padding:16px 22px;
+  margin-bottom:20px;
   position:relative;
   overflow:hidden;
 }
 .resume.social-worker header::after {
   content:"";
   position:absolute;
-  right:-30px;
-  top:-30px;
-  width:130px;
-  height:130px;
-  background:rgba(255,255,255,0.14);
-  border-radius:50%;
-}
-.resume.social-worker header::before {
-  content:"";
-  position:absolute;
-  right:40px;
-  bottom:-40px;
-  width:90px;
-  height:90px;
-  background:rgba(255,255,255,0.10);
+  right:-28px;
+  top:-28px;
+  width:110px;
+  height:110px;
+  background:rgba(255,255,255,0.08);
   border-radius:50%;
 }
 .resume.social-worker .head-inner { position:relative; z-index:1; }
@@ -128,27 +117,27 @@ const template: TemplateData = {
   font-weight:700;
   color:#fff;
   letter-spacing:1px;
-  margin-bottom:4px;
+  margin-bottom:5px;
 }
 .resume.social-worker .role {
-  font-size:11pt;
+  font-size:10.5pt;
   color:#fff;
   font-weight:500;
-  background:rgba(255,255,255,0.22);
+  background:rgba(255,255,255,0.18);
   display:inline-block;
-  padding:2px 14px;
+  padding:2px 13px;
   border-radius:20px;
-  margin-bottom:12px;
+  margin-bottom:11px;
 }
 .resume.social-worker .contact {
   display:flex;
   flex-wrap:wrap;
   gap:8px 18px;
-  margin-top:4px;
+  margin-top:3px;
 }
 .resume.social-worker .contact span {
   font-size:9pt;
-  color:#fff;
+  color:#fbf3e9;
   position:relative;
   padding-left:14px;
 }
@@ -158,8 +147,8 @@ const template: TemplateData = {
   left:0;
   top:50%;
   transform:translateY(-50%);
-  width:6px;
-  height:6px;
+  width:5px;
+  height:5px;
   border-radius:50%;
   background:rgba(255,255,255,0.85);
 }
@@ -169,45 +158,55 @@ const template: TemplateData = {
 .resume.social-worker h2 {
   font-size:12.5pt;
   font-weight:700;
-  color:var(--orange);
+  color:var(--terra-dk);
   display:flex;
   align-items:center;
   gap:9px;
-  padding-bottom:8px;
+  padding-bottom:7px;
   margin-bottom:13px;
-  border-bottom:2px dashed var(--cream-deep);
+  border-bottom:1px solid var(--cream-deep);
 }
 .resume.social-worker h2 .ico {
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  width:24px;
-  height:24px;
+  width:23px;
+  height:23px;
   background:var(--cream);
-  color:var(--orange);
+  color:var(--terra);
   border-radius:50%;
   font-size:9pt;
 }
 
-/* ===== Summary ===== */
+/* ===== Summary：去彩色侧条，改整体米底卡片 ===== */
 .resume.social-worker .summary .card {
   background:var(--cream);
-  border-radius:16px;
-  padding:14px 18px;
+  border:1px solid var(--cream-deep);
+  border-radius:12px;
+  padding:13px 17px;
   font-size:10pt;
   line-height:1.7;
   color:var(--ink);
-  border-left:4px solid var(--orange-soft);
 }
 
-/* ===== Entry ===== */
+/* ===== Entry：整框卡片 + 陶色菱形前导锚点 ===== */
 .resume.social-worker .entry {
   background:#fff;
-  border-radius:16px;
-  padding:13px 18px;
-  margin-bottom:11px;
-  box-shadow:0 2px 8px rgba(166,140,110,0.08);
-  border:1px solid #f3e8d9;
+  border-radius:12px;
+  padding:12px 17px 12px 21px;
+  margin-bottom:10px;
+  border:1px solid var(--cream-deep);
+  position:relative;
+}
+.resume.social-worker .entry::before {
+  content:"";
+  position:absolute;
+  left:9px;
+  top:16px;
+  width:6px;
+  height:6px;
+  background:var(--terra);
+  transform:rotate(45deg);
 }
 .resume.social-worker .entry:last-child { margin-bottom:0; }
 .resume.social-worker .entry-top {
@@ -230,14 +229,14 @@ const template: TemplateData = {
 .resume.social-worker .position {
   font-size:9.5pt;
   font-weight:600;
-  color:var(--orange);
+  color:var(--terra);
 }
 .resume.social-worker .date {
   font-size:8.5pt;
   color:#fff;
-  background:var(--orange-soft);
+  background:var(--terra-dk);
   padding:2px 11px;
-  border-radius:14px;
+  border-radius:13px;
   white-space:nowrap;
   font-weight:500;
   flex-shrink:0;
@@ -248,11 +247,11 @@ const template: TemplateData = {
 }
 .resume.social-worker .entry li {
   position:relative;
-  padding-left:18px;
+  padding-left:16px;
   margin-bottom:5px;
   font-size:9.5pt;
   line-height:1.6;
-  color:#5a4e42;
+  color:#4d4338;
 }
 .resume.social-worker .entry li:last-child { margin-bottom:0; }
 .resume.social-worker .entry li::before {
@@ -260,11 +259,10 @@ const template: TemplateData = {
   position:absolute;
   left:2px;
   top:7px;
-  width:7px;
-  height:7px;
+  width:6px;
+  height:6px;
   border-radius:50%;
-  background:var(--orange);
-  box-shadow:0 0 0 3px var(--cream);
+  background:var(--terra);
 }
 
 /* ===== Education ===== */
@@ -283,14 +281,14 @@ const template: TemplateData = {
 .resume.social-worker .chip {
   background:var(--cream);
   border:1px solid var(--cream-deep);
-  border-radius:18px;
+  border-radius:16px;
   padding:5px 15px;
   font-size:9.5pt;
   color:var(--ink);
   font-weight:600;
 }
 .resume.social-worker .chip .lvl {
-  color:var(--orange);
+  color:var(--terra);
   font-weight:500;
 }
 
@@ -298,11 +296,11 @@ const template: TemplateData = {
 .resume.social-worker .proj-role {
   font-size:9.5pt;
   font-weight:600;
-  color:var(--orange);
+  color:var(--terra);
 }
 .resume.social-worker .proj-desc {
   font-size:9.5pt;
-  color:#5a4e42;
+  color:#4d4338;
   line-height:1.6;
   margin-top:7px;
 }
@@ -313,8 +311,6 @@ const template: TemplateData = {
 .resume.social-worker .skills span, .resume.social-worker [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
 @media print { .resume.social-worker { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  .resume.social-worker header { box-shadow:none; }
-  .resume.social-worker .entry { box-shadow:none; }
   @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "social-worker",

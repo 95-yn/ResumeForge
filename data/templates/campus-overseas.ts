@@ -20,6 +20,7 @@ const template: TemplateData = {
     html: `<div class="resume campus-overseas">
   <header>
     <div class="name-block">
+      <span class="monogram" aria-hidden="true" data-field="basics.name">{{{basics.name}}}</span>
       <h1 data-field="basics.name">{{{basics.name}}}</h1>
       {{#if basics.title}}<p class="title" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
     </div>
@@ -31,12 +32,12 @@ const template: TemplateData = {
   </header>
 
   {{#if basics.summary}}<section class="summary">
-    <h2><span class="zh">个人简介</span><span class="en">Profile</span></h2>
+    <h2><span class="num" aria-hidden="true">I</span><span class="label"><span class="zh">个人简介</span><span class="en">Profile</span></span></h2>
     <div class="sec-body" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>{{/if}}
 
   {{#if education.length}}<section class="education" data-section="education">
-    <h2><span class="zh">教育背景</span><span class="en">Education</span></h2>
+    <h2><span class="num" aria-hidden="true">II</span><span class="label"><span class="zh">教育背景</span><span class="en">Education</span></span></h2>
     <div class="sec-body">
       {{#each education}}<div class="entry" data-entry="education" data-entry-index="{{@index}}">
         <div class="entry-head">
@@ -49,7 +50,7 @@ const template: TemplateData = {
   </section>{{/if}}
 
   {{#if experience.length}}<section class="experience" data-section="experience">
-    <h2><span class="zh">工作经历</span><span class="en">Experience</span></h2>
+    <h2><span class="num" aria-hidden="true">III</span><span class="label"><span class="zh">工作经历</span><span class="en">Experience</span></span></h2>
     <div class="sec-body">
       {{#each experience}}<div class="entry" data-entry="experience" data-entry-index="{{@index}}">
         <div class="entry-head">
@@ -62,7 +63,7 @@ const template: TemplateData = {
   </section>{{/if}}
 
   {{#if projects.length}}<section class="projects" data-section="projects">
-    <h2><span class="zh">项目经历</span><span class="en">Projects</span></h2>
+    <h2><span class="num" aria-hidden="true">IV</span><span class="label"><span class="zh">项目经历</span><span class="en">Projects</span></span></h2>
     <div class="sec-body">
       {{#each projects}}<div class="entry" data-entry="projects" data-entry-index="{{@index}}">
         <div class="entry-head">
@@ -75,7 +76,7 @@ const template: TemplateData = {
   </section>{{/if}}
 
   {{#if skills.length}}<section class="skills-sec" data-section="skills">
-    <h2><span class="zh">专业技能</span><span class="en">Skills</span></h2>
+    <h2><span class="num" aria-hidden="true">V</span><span class="label"><span class="zh">专业技能</span><span class="en">Skills</span></span></h2>
     <div class="sec-body">
       <div class="skills">{{#each skills}}<span class="skill" data-entry="skills" data-entry-index="{{@index}}"><span class="sk-name" data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}} <span class="sk-level" data-field="skills.{{@index}}.level">{{{level}}}</span>{{/if}}</span>{{/each}}</div>
     </div>
@@ -99,35 +100,69 @@ const template: TemplateData = {
 /* ===== Header ===== */
 .resume.campus-overseas header {
   text-align: center;
-  padding-bottom: 14px;
-  margin-bottom: 22px;
-  border-bottom: 2px solid #1c2a3a;
+  padding-bottom: 16px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #1c2a3a;
   position: relative;
+}
+.resume.campus-overseas header::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 100%;
+  height: 1px;
+  background: #1c2a3a;
+  transform: scaleX(0);
 }
 .resume.campus-overseas header::after {
   content: '';
   position: absolute;
   left: 50%;
-  bottom: -5px;
+  bottom: -6px;
   transform: translateX(-50%);
-  width: 60px;
+  width: 46px;
   height: 1px;
   background: #b08d57;
 }
-.resume.campus-overseas .name-block { margin-bottom: 8px; }
-.resume.campus-overseas h1 {
-  font-size: 25pt;
+.resume.campus-overseas .name-block {
+  margin-bottom: 8px;
+  position: relative;
+}
+/* monogram: faint initial behind the name */
+.resume.campus-overseas .monogram {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -54%);
+  font-size: 52pt;
   font-weight: 400;
-  letter-spacing: 0.06em;
+  letter-spacing: 0;
   color: #1c2a3a;
-  line-height: 1.2;
+  opacity: 0.05;
+  overflow: hidden;
+  white-space: nowrap;
+  max-width: 1.1em;
+  pointer-events: none;
+  z-index: 0;
+}
+.resume.campus-overseas h1 {
+  position: relative;
+  z-index: 1;
+  font-size: 26pt;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: #1c2a3a;
+  line-height: 1.18;
 }
 .resume.campus-overseas .title {
+  position: relative;
+  z-index: 1;
   font-size: 10.5pt;
   font-style: italic;
   color: #b08d57;
-  letter-spacing: 0.04em;
-  margin-top: 4px;
+  letter-spacing: 0.06em;
+  margin-top: 5px;
 }
 .resume.campus-overseas .contact {
   display: flex;
@@ -137,7 +172,7 @@ const template: TemplateData = {
   font-size: 9pt;
   color: #5a5550;
   letter-spacing: 0.02em;
-  margin-top: 6px;
+  margin-top: 8px;
 }
 .resume.campus-overseas .contact span {
   position: relative;
@@ -157,27 +192,49 @@ const template: TemplateData = {
 .resume.campus-overseas section { margin-bottom: 18px; }
 .resume.campus-overseas h2 {
   display: flex;
-  align-items: baseline;
-  gap: 10px;
-  font-size: 13pt;
+  align-items: center;
+  gap: 11px;
   font-weight: 400;
-  color: #1c2a3a;
-  letter-spacing: 0.08em;
   padding-bottom: 5px;
   margin-bottom: 11px;
   border-bottom: 1px solid #d8d2c6;
 }
-.resume.campus-overseas h2 .zh { white-space: nowrap; }
+/* numbered system: roman numeral anchor */
+.resume.campus-overseas h2 .num {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  font-size: 11pt;
+  font-style: italic;
+  letter-spacing: 0.02em;
+  color: #b08d57;
+  border-bottom: 1px solid #b08d57;
+  padding-bottom: 1px;
+  line-height: 1;
+}
+.resume.campus-overseas h2 .label {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.resume.campus-overseas h2 .zh {
+  white-space: nowrap;
+  font-size: 13pt;
+  letter-spacing: 0.1em;
+  color: #1c2a3a;
+}
 .resume.campus-overseas h2 .en {
   font-size: 8.5pt;
   font-style: italic;
   font-weight: 400;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #b08d57;
+  color: #a89b80;
 }
 
-.resume.campus-overseas .sec-body { padding-left: 2px; }
+.resume.campus-overseas .sec-body { padding-left: 33px; }
 
 /* ===== Summary ===== */
 .resume.campus-overseas .summary .sec-body {

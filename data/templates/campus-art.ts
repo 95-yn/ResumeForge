@@ -50,25 +50,28 @@ const template: TemplateData = {
 .resume.campus-art * { word-wrap:break-word; overflow-wrap:break-word; }
 
 .resume.campus-art {
+  --c-red:#d83a2c;
+  --c-blue:#1f54c4;
+  --c-yellow:#e8ab17;
+  --ink:#1a1a1a;
   max-width:210mm;
   min-height:297mm;
   margin:0 auto;
   padding:18mm 16mm;
   background:#fff;
   font-size:10pt;
-  line-height:1.55;
+  line-height:1.6;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
-  color:#1a1a1a;
+  color:var(--ink);
   position:relative;
 }
 
-/* signature corner block */
 .resume.campus-art::before {
   content:"";
   position:absolute;
   top:0; right:0;
-  width:34mm; height:34mm;
-  background:#FF3D2E;
+  width:22mm; height:22mm;
+  background:var(--c-red);
   clip-path:polygon(100% 0, 0 0, 100% 100%);
   z-index:0;
 }
@@ -76,39 +79,38 @@ const template: TemplateData = {
   content:"";
   position:absolute;
   top:0; right:0;
-  width:18mm; height:18mm;
-  background:#1457FF;
+  width:11mm; height:11mm;
+  background:var(--c-blue);
   clip-path:polygon(100% 0, 0 0, 100% 100%);
   z-index:0;
 }
 
-/* ===== HEADER ===== */
 .resume.campus-art header {
   position:relative;
   z-index:1;
-  margin-bottom:11mm;
+  margin-bottom:12mm;
   padding-bottom:7mm;
-  border-bottom:3px solid #1a1a1a;
+  border-bottom:2.5px solid var(--ink);
 }
 .resume.campus-art .art-mark {
   display:flex;
-  gap:4px;
-  margin-bottom:6mm;
+  gap:5px;
+  margin-bottom:7mm;
 }
 .resume.campus-art .art-mark span {
   display:block;
-  width:14px; height:14px;
+  width:13px; height:13px;
 }
-.resume.campus-art .art-mark span:nth-child(1){ background:#FF3D2E; }
-.resume.campus-art .art-mark span:nth-child(2){ background:#FFC400; border-radius:50%; }
-.resume.campus-art .art-mark span:nth-child(3){ background:#1457FF; transform:rotate(45deg); }
+.resume.campus-art .art-mark span:nth-child(1){ background:var(--c-red); }
+.resume.campus-art .art-mark span:nth-child(2){ background:var(--c-yellow); border-radius:50%; }
+.resume.campus-art .art-mark span:nth-child(3){ background:var(--c-blue); transform:rotate(45deg); }
 
 .resume.campus-art header h1 {
-  font-size:34pt;
+  font-size:33pt;
   font-weight:800;
   letter-spacing:-0.5px;
   line-height:1.05;
-  color:#1a1a1a;
+  color:var(--ink);
 }
 .resume.campus-art header .role {
   display:inline-block;
@@ -116,7 +118,7 @@ const template: TemplateData = {
   font-size:11pt;
   font-weight:700;
   color:#fff;
-  background:#1457FF;
+  background:var(--c-blue);
   padding:2px 12px;
   letter-spacing:0.5px;
 }
@@ -138,21 +140,20 @@ const template: TemplateData = {
   left:0; top:50%;
   transform:translateY(-50%);
   width:6px; height:6px;
-  background:#FF3D2E;
+  background:var(--c-red);
 }
-.resume.campus-art .contact span:nth-child(2)::before{ background:#FFC400; border-radius:50%; }
-.resume.campus-art .contact span:nth-child(3)::before{ background:#1457FF; }
+.resume.campus-art .contact span:nth-child(2)::before{ background:var(--c-yellow); border-radius:50%; }
+.resume.campus-art .contact span:nth-child(3)::before{ background:var(--c-blue); }
 
-/* ===== SECTIONS ===== */
 .resume.campus-art section {
   position:relative;
   z-index:1;
-  margin-bottom:9mm;
+  margin-bottom:10mm;
 }
 .resume.campus-art section h2 {
   font-size:13pt;
   font-weight:800;
-  color:#1a1a1a;
+  color:var(--ink);
   margin-bottom:5mm;
   display:flex;
   align-items:center;
@@ -161,24 +162,30 @@ const template: TemplateData = {
 }
 .resume.campus-art section h2 i {
   display:inline-block;
-  width:22px; height:10px;
-  background:#FF3D2E;
+  width:20px; height:9px;
+  background:var(--c-red);
 }
-.resume.campus-art section:nth-of-type(2n) h2 i { background:#1457FF; }
-.resume.campus-art section:nth-of-type(3n) h2 i { background:#FFC400; }
+.resume.campus-art section:nth-of-type(2n) h2 i { background:var(--c-blue); }
+.resume.campus-art section:nth-of-type(3n) h2 i { background:var(--c-yellow); }
 
 .resume.campus-art .intro div {
   font-size:10pt;
   color:#333;
-  line-height:1.7;
-  padding-left:31px;
-  border-left:3px solid #FFC400;
+  line-height:1.75;
+  padding-left:29px;
+  position:relative;
+}
+.resume.campus-art .intro div::before {
+  content:"";
+  position:absolute;
+  left:0; top:3px; bottom:3px;
+  width:3px;
+  background:var(--c-yellow);
 }
 
-/* ===== CARDS ===== */
 .resume.campus-art .card {
-  margin-bottom:5mm;
-  padding-left:31px;
+  margin-bottom:6mm;
+  padding-left:29px;
   position:relative;
 }
 .resume.campus-art .card::before {
@@ -186,7 +193,7 @@ const template: TemplateData = {
   position:absolute;
   left:0; top:3px;
   width:9px; height:9px;
-  background:#1a1a1a;
+  background:var(--ink);
   transform:rotate(45deg);
 }
 .resume.campus-art .card-head {
@@ -199,7 +206,7 @@ const template: TemplateData = {
 .resume.campus-art .card h3 {
   font-size:11pt;
   font-weight:700;
-  color:#1a1a1a;
+  color:var(--ink);
 }
 .resume.campus-art .card h3 .company,
 .resume.campus-art .card h3 .pname {
@@ -207,7 +214,7 @@ const template: TemplateData = {
 }
 .resume.campus-art .card h3 .position {
   font-weight:600;
-  color:#1457FF;
+  color:var(--c-blue);
 }
 .resume.campus-art .card h3 .position::before {
   content:"／";
@@ -217,7 +224,7 @@ const template: TemplateData = {
 }
 .resume.campus-art .card h3 .prole {
   font-weight:600;
-  color:#FF3D2E;
+  color:var(--c-red);
   font-size:10pt;
 }
 .resume.campus-art .date {
@@ -236,7 +243,7 @@ const template: TemplateData = {
   font-size:9.5pt;
   color:#444;
   margin-top:1.5mm;
-  line-height:1.65;
+  line-height:1.7;
 }
 .resume.campus-art .card ul {
   list-style:none;
@@ -245,20 +252,19 @@ const template: TemplateData = {
 .resume.campus-art .card li {
   position:relative;
   padding-left:15px;
-  margin-bottom:1.5mm;
+  margin-bottom:1.8mm;
   font-size:9.5pt;
   color:#333;
-  line-height:1.6;
+  line-height:1.65;
 }
 .resume.campus-art .card li::before {
   content:"";
   position:absolute;
   left:0; top:7px;
   width:6px; height:6px;
-  background:#FFC400;
+  background:var(--c-yellow);
 }
 
-/* ===== SKILLS ===== */
 .resume.campus-art .skills {
   display:flex;
   flex-wrap:wrap;
@@ -268,20 +274,19 @@ const template: TemplateData = {
   display:inline-block;
   font-size:9pt;
   font-weight:600;
-  color:#1a1a1a;
-  background:#f4f4f0;
-  border:2px solid #1a1a1a;
+  color:var(--ink);
+  background:#f5f5f1;
+  border:1.5px solid var(--ink);
   padding:3px 11px;
 }
-.resume.campus-art .skill-chip:nth-child(3n+1){ border-color:#FF3D2E; }
-.resume.campus-art .skill-chip:nth-child(3n+2){ border-color:#1457FF; }
-.resume.campus-art .skill-chip:nth-child(3n+3){ border-color:#FFC400; }
+.resume.campus-art .skill-chip:nth-child(3n+1){ border-color:var(--c-red); }
+.resume.campus-art .skill-chip:nth-child(3n+2){ border-color:var(--c-blue); }
+.resume.campus-art .skill-chip:nth-child(3n+3){ border-color:var(--c-yellow); }
 .resume.campus-art .skill-chip .lvl {
   color:#888;
   font-weight:500;
 }
 
-/* ===== required tail ===== */
 .resume.campus-art li p, .resume.campus-art li div { margin:0; padding:0; display:inline; }
 .resume.campus-art .skills span, .resume.campus-art [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 

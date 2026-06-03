@@ -79,11 +79,9 @@ const template: TemplateData = {
   --gray:#3a4048;
   --muted:#6b7280;
   --line:#d6dae0;
-  --bg-soft:#f4f5f7;
-  --red:#c81e1e;
-  --red-dk:#9b1414;
-  --amber:#e0a106;
-  --green:#3f8f4a;
+  --bg-soft:#f5f6f8;
+  --red:#a8332b;
+  --red-dk:#82221c;
   max-width:210mm;
   min-height:297mm;
   margin:0 auto;
@@ -95,12 +93,11 @@ const template: TemplateData = {
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
 }
 
-/* ===== Header ===== */
 .resume.fin-risk header {
-  border:1.5px solid var(--gray);
-  border-top:5px solid var(--red);
+  border:1px solid var(--line);
+  border-top:4px solid var(--red);
   padding:14px 18px 12px;
-  background:linear-gradient(180deg,#fafbfc 0%,#fff 100%);
+  background:#fff;
 }
 .resume.fin-risk .hdr-bar {
   display:flex;
@@ -133,7 +130,6 @@ const template: TemplateData = {
   margin-right:7px;
 }
 
-/* Risk matrix 3x3 motif */
 .resume.fin-risk .hdr-matrix {
   display:grid;
   grid-template-columns:repeat(3,12px);
@@ -145,15 +141,15 @@ const template: TemplateData = {
   background:#fff;
 }
 .resume.fin-risk .hdr-matrix .cell { width:12px; height:12px; border-radius:1px; }
-.resume.fin-risk .hdr-matrix .c-l { background:#cfe3d2; }
-.resume.fin-risk .hdr-matrix .c-m { background:#f3dca0; }
-.resume.fin-risk .hdr-matrix .c-h { background:#e8a08a; }
+.resume.fin-risk .hdr-matrix .c-l { background:#d2ddd4; }
+.resume.fin-risk .hdr-matrix .c-m { background:#e4d3a8; }
+.resume.fin-risk .hdr-matrix .c-h { background:#d6a89a; }
 .resume.fin-risk .hdr-matrix .c-x { background:var(--red); }
 
 .resume.fin-risk .contact {
   margin-top:11px;
   padding-top:9px;
-  border-top:1px dashed var(--line);
+  border-top:1px solid var(--line);
   display:flex;
   flex-wrap:wrap;
   gap:8px 0;
@@ -176,7 +172,6 @@ const template: TemplateData = {
   background:var(--line);
 }
 
-/* ===== Section headings ===== */
 .resume.fin-risk h2 {
   font-size:11pt;
   font-weight:800;
@@ -199,27 +194,24 @@ const template: TemplateData = {
 
 .resume.fin-risk section:first-of-type h2 { margin-top:16px; }
 
-/* ===== Summary ===== */
 .resume.fin-risk .summary-body {
   background:var(--bg-soft);
-  border-left:3px solid var(--red);
+  border:1px solid var(--line);
   padding:9px 13px;
   font-size:9.5pt;
   color:var(--gray);
   text-align:justify;
 }
 
-/* ===== Entries ===== */
 .resume.fin-risk .entry {
-  padding:9px 0 9px 13px;
-  border-left:1.5px solid var(--line);
+  padding:9px 0 9px 16px;
   position:relative;
   margin-bottom:3px;
 }
 .resume.fin-risk .entry::before {
   content:'';
   position:absolute;
-  left:-4px;
+  left:1px;
   top:13px;
   width:7px;
   height:7px;
@@ -227,6 +219,7 @@ const template: TemplateData = {
   border:1.5px solid var(--red);
   transform:rotate(45deg);
 }
+.resume.fin-risk .entry:not(:last-child) { border-bottom:1px solid var(--line); }
 .resume.fin-risk .entry:last-child { margin-bottom:0; }
 
 .resume.fin-risk .entry-head {
@@ -288,14 +281,12 @@ const template: TemplateData = {
   transform:rotate(45deg);
 }
 
-/* ===== Education ===== */
 .resume.fin-risk .edu-meta {
   margin-top:3px;
   font-size:9.5pt;
   color:var(--gray);
 }
 
-/* ===== Skills ===== */
 .resume.fin-risk .skills {
   display:flex;
   flex-wrap:wrap;
@@ -305,9 +296,8 @@ const template: TemplateData = {
   display:inline-flex;
   align-items:center;
   padding:3.5px 11px;
-  background:#fff;
+  background:var(--bg-soft);
   border:1px solid var(--line);
-  border-left:3px solid var(--gray);
   font-size:9pt;
   font-weight:600;
   color:var(--ink);
@@ -317,7 +307,6 @@ const template: TemplateData = {
   font-weight:700;
 }
 
-/* ===== Projects ===== */
 .resume.fin-risk .proj-name { font-weight:800; }
 .resume.fin-risk .proj-role {
   font-weight:600;
@@ -330,7 +319,6 @@ const template: TemplateData = {
   text-align:justify;
 }
 
-/* ===== Required tail rules ===== */
 .resume.fin-risk li p, .resume.fin-risk li div { margin:0; padding:0; display:inline; }
 .resume.fin-risk .skills span, .resume.fin-risk [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 

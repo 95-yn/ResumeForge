@@ -21,7 +21,7 @@ const template: TemplateData = {
   <header>
     <div class="leaf-mark" aria-hidden="true">
       <svg viewBox="0 0 40 40" width="40" height="40">
-        <path d="M20 4 C8 10 6 26 12 36 C14 28 18 20 30 12 C22 18 18 26 16 34 C26 32 36 20 20 4 Z" fill="#4a7c3f"/>
+        <path d="M20 4 C8 10 6 26 12 36 C14 28 18 20 30 12 C22 18 18 26 16 34 C26 32 36 20 20 4 Z" fill="#3f6b35"/>
         <path d="M20 6 C18 14 17 24 14 34" stroke="#dfe8d6" stroke-width="0.8" fill="none"/>
       </svg>
     </div>
@@ -37,12 +37,12 @@ const template: TemplateData = {
   </header>
 
   {{#if basics.summary}}<section class="block summary">
-    <h2><span class="vein"></span>个人简介</h2>
+    <h2><span class="vein"></span><span class="h-no">01</span>个人简介</h2>
     <div class="body" data-field="basics.summary">{{{basics.summary}}}</div>
   </section>{{/if}}
 
   {{#if experience.length}}<section class="block" data-section="experience">
-    <h2><span class="vein"></span>工作经历</h2>
+    <h2><span class="vein"></span><span class="h-no">02</span>工作经历</h2>
     {{#each experience}}<div class="entry" data-entry="experience" data-entry-index="{{@index}}">
       <h3>
         <span class="company" data-field="experience.{{@index}}.company">{{{company}}}</span>
@@ -59,7 +59,7 @@ const template: TemplateData = {
   </section>{{/if}}
 
   {{#if education.length}}<section class="block" data-section="education">
-    <h2><span class="vein"></span>教育背景</h2>
+    <h2><span class="vein"></span><span class="h-no">03</span>教育背景</h2>
     {{#each education}}<div class="entry" data-entry="education" data-entry-index="{{@index}}">
       <h3 data-field="education.{{@index}}.institution">{{{institution}}}</h3>
       <span class="date">
@@ -76,12 +76,12 @@ const template: TemplateData = {
   </section>{{/if}}
 
   {{#if skills.length}}<section class="block" data-section="skills">
-    <h2><span class="vein"></span>专业技能</h2>
+    <h2><span class="vein"></span><span class="h-no">04</span>专业技能</h2>
     <div class="skills">{{#each skills}}<span class="skill-pill" data-entry="skills" data-entry-index="{{@index}}"><span data-field="skills.{{@index}}.name">{{{name}}}</span>{{#if level}} <span class="lvl">·</span> <span data-field="skills.{{@index}}.level">{{{level}}}</span>{{/if}}</span>{{/each}}</div>
   </section>{{/if}}
 
   {{#if projects.length}}<section class="block" data-section="projects">
-    <h2><span class="vein"></span>项目经历</h2>
+    <h2><span class="vein"></span><span class="h-no">05</span>项目经历</h2>
     {{#each projects}}<div class="entry" data-entry="projects" data-entry-index="{{@index}}">
       <h3>
         <span class="proj-name" data-field="projects.{{@index}}.name">{{{name}}}</span>
@@ -96,19 +96,19 @@ const template: TemplateData = {
 .resume.sustainability * { word-wrap:break-word; overflow-wrap:break-word; }
 
 .resume.sustainability {
-  --leaf:#4a7c3f;
-  --leaf-deep:#2f5226;
-  --leaf-soft:#8aa97c;
+  --leaf:#3f6b35;
+  --leaf-deep:#2a4a22;
+  --leaf-soft:#7a9a6c;
   --paper:#f4f1e6;
-  --paper-line:#e3ddca;
-  --ink:#33372d;
-  --ink-soft:#6a6e5e;
+  --paper-line:#d8d2bd;
+  --ink:#2f332a;
+  --ink-soft:#62665a;
   max-width:210mm;
   min-height:297mm;
   margin:0 auto;
   padding:18mm;
   background:
-    repeating-linear-gradient(0deg, transparent 0, transparent 5mm, rgba(74,124,63,0.035) 5mm, rgba(74,124,63,0.035) calc(5mm + 0.6px)),
+    repeating-linear-gradient(0deg, transparent 0, transparent 5mm, rgba(63,107,53,0.03) 5mm, rgba(63,107,53,0.03) calc(5mm + 0.6px)),
     #f8f6ee;
   color:var(--ink);
   font-size:10pt;
@@ -122,17 +122,9 @@ const template: TemplateData = {
   align-items:flex-start;
   gap:14px;
   padding:0 0 14px;
-  border-bottom:1.5px solid var(--leaf);
+  border-bottom:2px solid var(--leaf);
   position:relative;
   margin-bottom:18px;
-}
-.resume.sustainability header::after {
-  content:"";
-  position:absolute;
-  left:0; right:0; bottom:-4px;
-  height:1px;
-  background:var(--leaf-soft);
-  opacity:0.5;
 }
 .resume.sustainability .leaf-mark {
   flex:0 0 auto;
@@ -140,7 +132,7 @@ const template: TemplateData = {
   display:flex; align-items:center; justify-content:center;
   border:1.5px solid var(--leaf);
   border-radius:50% 50% 50% 0;
-  background:rgba(74,124,63,0.06);
+  background:rgba(63,107,53,0.06);
 }
 .resume.sustainability .leaf-mark svg { display:block; }
 .resume.sustainability .head-text { flex:1 1 auto; }
@@ -156,7 +148,7 @@ const template: TemplateData = {
   font-size:10.5pt;
   color:var(--leaf);
   font-weight:600;
-  letter-spacing:0.5px;
+  letter-spacing:2px;
 }
 .resume.sustainability .contact {
   margin-top:8px;
@@ -180,7 +172,7 @@ const template: TemplateData = {
   background:var(--leaf-soft);
 }
 
-/* ---------- sections ---------- */
+/* ---------- sections — numbered + leaf vein ---------- */
 .resume.sustainability .block { margin-bottom:16px; }
 .resume.sustainability h2 {
   display:flex;
@@ -192,7 +184,7 @@ const template: TemplateData = {
   letter-spacing:2px;
   padding-bottom:5px;
   margin-bottom:9px;
-  border-bottom:1px dashed var(--leaf-soft);
+  border-bottom:1px solid var(--paper-line);
 }
 .resume.sustainability h2 .vein {
   flex:0 0 auto;
@@ -206,13 +198,30 @@ const template: TemplateData = {
   border:1px solid var(--leaf);
   transform:rotate(-45deg);
 }
+.resume.sustainability h2 .h-no {
+  font-size:8.5pt;
+  font-weight:700;
+  letter-spacing:0;
+  color:var(--leaf);
+  font-feature-settings:'tnum';
+  margin-right:1px;
+}
 
 .resume.sustainability .summary .body {
+  position:relative;
   font-size:9.7pt;
   color:var(--ink);
   text-align:justify;
-  padding-left:14px;
-  border-left:2px solid var(--leaf-soft);
+  padding-left:16px;
+}
+.resume.sustainability .summary .body::before {
+  content:"";
+  position:absolute;
+  left:0; top:4px;
+  width:8px; height:8px;
+  background:var(--leaf-soft);
+  border-radius:60% 0 60% 0;
+  transform:rotate(10deg);
 }
 
 /* ---------- entries ---------- */
@@ -305,9 +314,9 @@ const template: TemplateData = {
   padding:3px 11px;
   font-size:9pt;
   color:var(--leaf-deep);
-  background:rgba(74,124,63,0.07);
+  background:rgba(63,107,53,0.07);
   border:1px solid var(--leaf-soft);
-  border-radius:11px 11px 11px 2px;
+  border-radius:4px;
 }
 .resume.sustainability .skill-pill .lvl { color:var(--leaf-soft); margin:0 3px; }
 

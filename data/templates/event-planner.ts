@@ -20,6 +20,7 @@ const template: TemplateData = {
     html: `<div class="resume event-planner">
   <header>
     <div class="hd-inner">
+      <div class="hd-crest" aria-hidden="true"><span class="hd-crest-i"></span></div>
       <h1 data-field="basics.name">{{{basics.name}}}</h1>
       {{#if basics.title}}<p class="hd-title" data-field="basics.title">{{{basics.title}}}</p>{{/if}}
       <div class="contact">
@@ -83,7 +84,7 @@ const template: TemplateData = {
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
 }
 
-/* Header */
+/* Header：香槟金菱形纹章记忆点 */
 .resume.event-planner header {
   text-align:center;
   padding-bottom:9mm;
@@ -103,6 +104,22 @@ const template: TemplateData = {
 .resume.event-planner .hd-inner {
   display:inline-block;
   padding:0 6mm;
+}
+.resume.event-planner .hd-crest {
+  width:9mm;
+  height:9mm;
+  margin:0 auto 4mm;
+  border:1px solid var(--gold);
+  transform:rotate(45deg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.resume.event-planner .hd-crest-i {
+  width:3.4mm;
+  height:3.4mm;
+  background:var(--gold-pale);
+  border:1px solid var(--gold-soft);
 }
 .resume.event-planner h1 {
   font-size:25pt;

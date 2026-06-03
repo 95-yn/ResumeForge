@@ -79,13 +79,13 @@ const template: TemplateData = {
 
 .resume.robotics-engineer {
   --ink:#1b2230;
-  --space:#10141d;
-  --space-2:#1c2433;
-  --blue:#1e9bff;
-  --blue-glow:#46b4ff;
+  --space:#11161f;
+  --space-2:#1c2536;
+  --blue:#1f6fb0;
+  --blue-soft:#3f8fcf;
   --line:#dfe5ee;
   --muted:#6b7585;
-  --grid:rgba(30,155,255,0.10);
+  --grid:rgba(31,111,176,0.07);
   max-width:210mm;
   min-height:297mm;
   margin:0 auto;
@@ -107,14 +107,14 @@ const template: TemplateData = {
   content:"";
   position:absolute;
   top:0; bottom:0; left:10mm;
-  width:2px;
-  background:linear-gradient(var(--blue), rgba(30,155,255,0.15));
+  width:1.5px;
+  background:linear-gradient(var(--blue), rgba(31,111,176,0.12));
 }
 
 /* ===== HEADER ===== */
 .resume.robotics-engineer header {
   background:
-    radial-gradient(120% 140% at 88% -20%, rgba(30,155,255,0.35), transparent 60%),
+    radial-gradient(120% 140% at 88% -20%, rgba(63,143,207,0.28), transparent 60%),
     linear-gradient(125deg, var(--space) 0%, var(--space-2) 100%);
   color:#eef3fb;
   padding:16mm 18mm 11mm 18mm;
@@ -125,10 +125,10 @@ const template: TemplateData = {
   content:"";
   position:absolute; inset:0;
   background-image:
-    linear-gradient(rgba(70,180,255,0.12) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(70,180,255,0.12) 1px, transparent 1px);
+    linear-gradient(rgba(120,170,210,0.10) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(120,170,210,0.10) 1px, transparent 1px);
   background-size:7mm 7mm;
-  opacity:0.55;
+  opacity:0.5;
   pointer-events:none;
 }
 .resume.robotics-engineer .hdr-grid {
@@ -148,10 +148,10 @@ const template: TemplateData = {
 }
 .resume.robotics-engineer .role {
   margin-top:2mm;
-  font-size:11pt;
+  font-size:10.5pt;
   font-weight:500;
   letter-spacing:3px;
-  color:var(--blue-glow);
+  color:var(--blue-soft);
   text-transform:uppercase;
 }
 /* joint node graphic top-right */
@@ -162,23 +162,23 @@ const template: TemplateData = {
 }
 .resume.robotics-engineer .node-ring {
   position:absolute; inset:0;
-  border:1.5px solid rgba(70,180,255,0.5);
+  border:1.5px solid rgba(120,170,210,0.45);
   border-radius:50%;
-  box-shadow:inset 0 0 0 4mm rgba(30,155,255,0.04);
+  box-shadow:inset 0 0 0 4mm rgba(31,111,176,0.05);
 }
 .resume.robotics-engineer .node-ring::after {
   content:"";
   position:absolute; inset:3mm;
-  border:1px dashed rgba(70,180,255,0.45);
+  border:1px dashed rgba(120,170,210,0.4);
   border-radius:50%;
 }
 .resume.robotics-engineer .node-dot {
   position:absolute; top:50%; left:50%;
   width:5mm; height:5mm;
   margin:-2.5mm 0 0 -2.5mm;
-  background:var(--blue);
+  background:var(--blue-soft);
   border-radius:50%;
-  box-shadow:0 0 0 2mm rgba(30,155,255,0.18), 0 0 6mm rgba(70,180,255,0.7);
+  box-shadow:0 0 0 2mm rgba(31,111,176,0.18);
 }
 .resume.robotics-engineer .contact {
   position:relative;
@@ -198,7 +198,7 @@ const template: TemplateData = {
   content:"";
   position:absolute; left:0; top:50%;
   width:2mm; height:2mm; margin-top:-1mm;
-  background:var(--blue);
+  background:var(--blue-soft);
   transform:rotate(45deg);
 }
 
@@ -235,8 +235,8 @@ const template: TemplateData = {
   font-weight:700;
   font-style:italic;
   color:var(--blue);
-  background:rgba(30,155,255,0.10);
-  border:1px solid rgba(30,155,255,0.35);
+  background:rgba(31,111,176,0.09);
+  border:1px solid rgba(31,111,176,0.32);
   border-radius:50%;
 }
 
@@ -266,7 +266,7 @@ const template: TemplateData = {
   background:#fff;
   border:1.3px solid var(--blue);
   border-radius:50%;
-  box-shadow:0 0 0 1.4mm rgba(30,155,255,0.10);
+  box-shadow:0 0 0 1.4mm rgba(31,111,176,0.10);
 }
 .resume.robotics-engineer .entry-head {
   display:flex;
@@ -331,13 +331,14 @@ const template: TemplateData = {
   transform:rotate(45deg);
 }
 
-/* summary */
+/* summary — full hairline frame with micro-tint (no colored side-stripe) */
 .resume.robotics-engineer .sum-body {
   font-size:10pt;
   color:#39414f;
   padding:4mm 5mm;
-  border-left:2px solid var(--blue);
-  background:rgba(30,155,255,0.04);
+  border:1px solid var(--line);
+  border-radius:1mm;
+  background:rgba(31,111,176,0.035);
 }
 
 /* project description */
@@ -356,15 +357,21 @@ const template: TemplateData = {
 .resume.robotics-engineer .skill-chip {
   display:inline-flex;
   align-items:center;
-  gap:1.5mm;
-  padding:1.6mm 3.5mm;
+  gap:1.8mm;
+  padding:1.6mm 3.5mm 1.6mm 3mm;
   font-size:9pt;
   font-weight:600;
   color:var(--space);
   background:#f3f7fc;
   border:1px solid var(--line);
-  border-left:2px solid var(--blue);
   border-radius:1mm;
+}
+.resume.robotics-engineer .skill-chip::before {
+  content:"";
+  width:1.8mm; height:1.8mm;
+  flex:0 0 auto;
+  background:var(--blue);
+  transform:rotate(45deg);
 }
 .resume.robotics-engineer .sk-lvl {
   font-size:8pt;

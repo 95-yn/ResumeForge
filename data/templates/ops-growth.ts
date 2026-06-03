@@ -32,8 +32,8 @@ const template: TemplateData = {
       <svg viewBox="0 0 120 80" preserveAspectRatio="none">
         <defs>
           <linearGradient id="ogGrad" x1="0" y1="1" x2="1" y2="0">
-            <stop offset="0" stop-color="#ff4d2e"/>
-            <stop offset="1" stop-color="#ffb020"/>
+            <stop offset="0" stop-color="#e23b1f"/>
+            <stop offset="1" stop-color="#e8920f"/>
           </linearGradient>
         </defs>
         <path class="og-area" d="M0,78 C30,72 50,52 70,34 C88,18 102,12 120,4 L120,80 L0,80 Z"/>
@@ -82,11 +82,12 @@ const template: TemplateData = {
   line-height:1.5;
   color:#241a16;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
-  --og-red:#ff4d2e;
-  --og-orange:#ffb020;
+  --og-red:#e23b1f;
+  --og-orange:#e8920f;
   --og-ink:#241a16;
   --og-muted:#7a6f69;
   --og-line:#f0e4de;
+  --og-soft:#fdf2ec;
 }
 
 /* ===== Header ===== */
@@ -114,9 +115,10 @@ const template: TemplateData = {
   font-size:11pt;
   font-weight:700;
   color:#fff;
-  background:linear-gradient(95deg,var(--og-red),var(--og-orange));
+  background:var(--og-red);
   padding:3px 12px;
   border-radius:2px 10px 2px 10px;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
 }
 .resume.ops-growth .contact {
   margin-top:11px;
@@ -144,7 +146,7 @@ const template: TemplateData = {
   align-self:flex-end;
 }
 .resume.ops-growth .hd-curve svg { width:100%; height:100%; display:block; }
-.resume.ops-growth .og-area { fill:url(#ogGrad); opacity:.16; }
+.resume.ops-growth .og-area { fill:url(#ogGrad); opacity:.14; }
 .resume.ops-growth .og-line { fill:none; stroke:url(#ogGrad); stroke-width:3; stroke-linecap:round; }
 .resume.ops-growth .og-dot { fill:var(--og-red); stroke:#fff; stroke-width:1.5; }
 
@@ -168,14 +170,14 @@ const template: TemplateData = {
   background:linear-gradient(180deg,var(--og-red),var(--og-orange));
 }
 
-/* ===== Summary ===== */
+/* ===== Summary — tinted full panel, no side stripe ===== */
 .resume.ops-growth .summary .sm-body {
   font-size:10pt;
   color:#3c302b;
-  background:linear-gradient(180deg,#fff6f1,#fffaf4);
-  border-left:3px solid var(--og-red);
+  background:var(--og-soft);
+  border:1px solid var(--og-line);
   padding:10px 14px;
-  border-radius:0 8px 8px 0;
+  border-radius:8px;
 }
 
 /* ===== Experience funnel ===== */
@@ -209,7 +211,7 @@ const template: TemplateData = {
   align-items:center;
   justify-content:center;
   z-index:1;
-  box-shadow:0 2px 5px rgba(255,77,46,.3);
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
 }
 .resume.ops-growth .entry-body { flex:1 1 auto; min-width:0; }
 
@@ -245,23 +247,33 @@ const template: TemplateData = {
   color:#3c302b;
 }
 .resume.ops-growth li::before {
-  content:'';
+  content:"\\25B8";
   position:absolute;
-  left:1px; top:6.5px;
-  width:0; height:0;
-  border-left:5px solid var(--og-red);
-  border-top:3px solid transparent;
-  border-bottom:3px solid transparent;
+  left:0; top:0;
+  color:var(--og-red);
+  font-size:9pt;
+  line-height:inherit;
+  -webkit-print-color-adjust:exact;
+  print-color-adjust:exact;
 }
 
-/* ===== Projects ===== */
+/* ===== Projects — full frame card, leading dot, no colored side bar ===== */
 .resume.ops-growth .proj-entry {
-  padding:9px 13px;
+  position:relative;
+  padding:9px 13px 9px 18px;
   margin-bottom:9px;
   border:1px solid var(--og-line);
-  border-left:3px solid var(--og-orange);
-  border-radius:0 7px 7px 0;
+  border-radius:7px;
   background:#fffdfb;
+}
+.resume.ops-growth .proj-entry::before {
+  content:'';
+  position:absolute;
+  left:9px; top:13px;
+  width:6px; height:6px;
+  border-radius:50%;
+  background:var(--og-orange);
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
 }
 .resume.ops-growth .proj-entry:last-child { margin-bottom:0; }
 .resume.ops-growth .proj-entry h3 {
@@ -277,6 +289,7 @@ const template: TemplateData = {
   padding:1px 8px;
   border-radius:9px;
   vertical-align:1px;
+  -webkit-print-color-adjust:exact; print-color-adjust:exact;
 }
 .resume.ops-growth .proj-desc {
   margin-top:4px;
@@ -299,8 +312,8 @@ const template: TemplateData = {
   color:var(--og-ink);
   padding:4px 11px;
   border-radius:20px;
-  background:#fff4ee;
-  border:1px solid #ffd9c9;
+  background:var(--og-soft);
+  border:1px solid #f1d3c5;
 }
 .resume.ops-growth .skill-tag .lvl {
   font-size:8pt;

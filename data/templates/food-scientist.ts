@@ -83,25 +83,29 @@ const template: TemplateData = {
 .resume.food-scientist * { word-wrap:break-word; overflow-wrap:break-word; }
 
 .resume.food-scientist {
+  --berry:#b01e3c;
+  --berry-deep:#8a1730;
+  --berry-soft:#d96b80;
+  --ink:#33272a;
+  --muted:#6a565a;
+  --line:#e8d2d7;
+  --card-tint:#fbf1f3;
   max-width:210mm;
   min-height:297mm;
   margin:0 auto;
   padding:18mm 17mm;
-  background:#fffaf4;
-  color:#3a2b2b;
+  background:#fffaf6;
+  color:var(--ink);
   font-size:10pt;
   line-height:1.55;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
-  background-image:
-    radial-gradient(circle at 12% 8%, rgba(213,63,86,0.05) 0, transparent 22%),
-    radial-gradient(circle at 90% 96%, rgba(213,63,86,0.045) 0, transparent 24%);
 }
 
 /* ===== header / masthead ===== */
 .resume.food-scientist header {
   margin-bottom:9mm;
   padding-bottom:5mm;
-  border-bottom:2px dashed #e8b9c2;
+  border-bottom:2px solid var(--berry);
   position:relative;
 }
 .resume.food-scientist .fs-mast {
@@ -114,25 +118,25 @@ const template: TemplateData = {
   font-size:25pt;
   font-weight:800;
   letter-spacing:1px;
-  color:#c0223e;
+  color:var(--berry-deep);
   line-height:1.1;
 }
 .resume.food-scientist .fs-title {
-  font-size:11pt;
-  font-weight:600;
-  color:#7a5a5f;
-  padding:1.5mm 3.5mm;
-  background:#fdeef0;
-  border:1px solid #f0c9d1;
-  border-radius:20px;
+  font-size:10.5pt;
+  font-weight:700;
+  color:#fff;
+  padding:1.5mm 4mm;
+  background:var(--berry);
+  border-radius:4px;
+  letter-spacing:1px;
 }
 .resume.food-scientist .fs-contact {
   margin-top:3.5mm;
   display:flex;
   flex-wrap:wrap;
-  gap:2mm 4mm;
+  gap:2mm 5mm;
   font-size:9pt;
-  color:#7a6a6a;
+  color:var(--muted);
 }
 .resume.food-scientist .fs-contact span {
   position:relative;
@@ -147,36 +151,35 @@ const template: TemplateData = {
   width:5px;
   height:5px;
   border-radius:50%;
-  background:#d53f56;
+  background:var(--berry);
 }
 
 /* ===== section cards (recipe cards) ===== */
 .resume.food-scientist .fs-card {
   margin-bottom:6.5mm;
   background:#ffffff;
-  border:1px solid #f3dce0;
-  border-radius:10px;
+  border:1px solid var(--line);
+  border-radius:8px;
   padding:5mm 6mm 5.5mm;
-  box-shadow:0 1px 0 #f6e6e9;
 }
 .resume.food-scientist .fs-card h2 {
   font-size:12pt;
   font-weight:800;
-  color:#3a2b2b;
+  color:var(--ink);
   display:flex;
   align-items:center;
   gap:3mm;
   margin-bottom:4mm;
   padding-bottom:2.5mm;
-  border-bottom:1px solid #f1e3e5;
+  border-bottom:1px solid var(--line);
   letter-spacing:0.5px;
 }
 .resume.food-scientist .fs-tag {
-  font-size:7.5pt;
+  font-size:8pt;
   font-weight:700;
   color:#fff;
-  background:#d53f56;
-  padding:1mm 2.6mm;
+  background:var(--berry);
+  padding:1.2mm 3mm;
   border-radius:4px;
   letter-spacing:1px;
   white-space:nowrap;
@@ -185,29 +188,29 @@ const template: TemplateData = {
 /* ===== summary ===== */
 .resume.food-scientist .fs-body {
   font-size:10pt;
-  color:#4d3d3d;
+  color:#4a3a3d;
   line-height:1.65;
 }
 
-/* ===== entries ===== */
+/* ===== entries — numbered dot, framed tint ===== */
 .resume.food-scientist .fs-entry {
-  padding:3mm 0 3mm 5mm;
   position:relative;
-  border-left:2px solid #f3d3d9;
+  padding:3.5mm 4mm 3.5mm 9mm;
+  border-radius:6px;
 }
 .resume.food-scientist .fs-entry + .fs-entry {
-  margin-top:1mm;
+  margin-top:3mm;
 }
 .resume.food-scientist .fs-entry::before {
   content:"";
   position:absolute;
-  left:-5px;
-  top:4.5mm;
+  left:3mm;
+  top:5mm;
   width:8px;
   height:8px;
   border-radius:50%;
-  background:#fffaf4;
-  border:2px solid #d53f56;
+  background:#fff;
+  border:2px solid var(--berry);
 }
 .resume.food-scientist .fs-entry-head {
   display:flex;
@@ -219,30 +222,30 @@ const template: TemplateData = {
 .resume.food-scientist .fs-entry h3 {
   font-size:11pt;
   font-weight:700;
-  color:#2c2020;
+  color:#2c2022;
   display:flex;
   align-items:baseline;
   flex-wrap:wrap;
   gap:2.5mm;
 }
-.resume.food-scientist .fs-co { color:#c0223e; }
+.resume.food-scientist .fs-co { color:var(--berry-deep); }
 .resume.food-scientist .fs-pos {
   font-size:9.5pt;
   font-weight:600;
-  color:#7a5a5f;
+  color:var(--berry);
 }
 .resume.food-scientist .fs-pos::before {
   content:"·";
   margin-right:2.5mm;
-  color:#d9aeb6;
+  color:var(--berry-soft);
 }
 .resume.food-scientist .fs-date {
   font-size:8.5pt;
   font-weight:600;
-  color:#9a8388;
+  color:#fff;
   white-space:nowrap;
-  background:#fdf0f2;
-  padding:0.8mm 2.5mm;
+  background:var(--berry-soft);
+  padding:1mm 2.8mm;
   border-radius:4px;
 }
 
@@ -254,9 +257,9 @@ const template: TemplateData = {
 .resume.food-scientist .fs-list li {
   position:relative;
   padding-left:5mm;
-  margin-bottom:1.4mm;
+  margin-bottom:1.6mm;
   font-size:9.5pt;
-  color:#4d3d3d;
+  color:#4a3a3d;
   line-height:1.55;
 }
 .resume.food-scientist .fs-list li::before {
@@ -266,7 +269,7 @@ const template: TemplateData = {
   top:2.4mm;
   width:6px;
   height:6px;
-  background:#d53f56;
+  background:var(--berry);
   border-radius:2px 6px 2px 6px;
 }
 
@@ -274,7 +277,7 @@ const template: TemplateData = {
 .resume.food-scientist .fs-desc {
   margin-top:1.5mm;
   font-size:9.5pt;
-  color:#5d4d4d;
+  color:#5a4a4d;
   line-height:1.55;
 }
 
@@ -288,27 +291,27 @@ const template: TemplateData = {
   display:inline-flex;
   align-items:baseline;
   gap:1.5mm;
-  padding:1.4mm 3.5mm;
-  background:#fdeef0;
-  border:1px solid #f0c9d1;
+  padding:1.6mm 4mm;
+  background:var(--card-tint);
+  border:1px solid var(--line);
   border-radius:6px;
-  font-size:9pt;
+  font-size:9.3pt;
 }
 .resume.food-scientist .fs-skill-name {
-  font-weight:600;
-  color:#3a2b2b;
+  font-weight:700;
+  color:var(--ink);
 }
 .resume.food-scientist .fs-skill-lv {
-  font-size:8pt;
-  color:#c0223e;
-  font-weight:600;
+  font-size:8.3pt;
+  color:var(--berry);
+  font-weight:700;
 }
 
 /* ===== education ===== */
 .resume.food-scientist .fs-edu-meta {
   margin-top:1mm;
   font-size:9pt;
-  color:#6d5a5a;
+  color:var(--muted);
 }
 
 /* ===== contract-required tail ===== */
