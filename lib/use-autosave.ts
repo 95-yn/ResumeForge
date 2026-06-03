@@ -14,4 +14,19 @@ export function useAutoSave(delayMs = 3000) {
     timerRef.current = setTimeout(() => { save(); }, delayMs);
     return () => clearTimeout(timerRef.current);
   }, [isDirty, save, delayMs]);
+
+  // 兜底立即保存：关闭/刷新页面、或切到后台标签页时，绕过 3s 防抖直接落盘，
+  // 避免「改完几秒内关页就丢失」。save() 内部按 isDirty 判断，无脏数据则空操作。
+  useEffect(() => {
+    const flush = () => { useEditorStore.getState().save(); };
+    const onVisibility = () => { if (document.visibilityState === 'hidden') flush(); };
+    window.addEventListener('beforeunload', flush);
+    window.addEventListener('pagehide', flush);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      window.removeEventListener('beforeunload', flush);
+      window.removeEventListener('pagehide', flush);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, []);
 }
