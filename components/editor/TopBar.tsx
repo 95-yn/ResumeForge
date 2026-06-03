@@ -217,8 +217,10 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
     margin: 0 !important;
     padding: 0 !important;${userBg ? `\n    background: ${userBg} !important;` : ''}
   }
-  /* 关闭浏览器的「缩小以适应」，确保 1:1 输出 */
-  .resume { width: 210mm !important; transform: none !important; zoom: 1 !important; }
+  /* 不强制 .resume 宽度：@page margin:0 下它会自然铺满 A4(210mm)。
+     模板根元素有的是 content-box，强制 width:210mm 会把内边距叠加到外面 → 超出 A4 被裁。
+     这里只兜底关掉任何可能的缩放/变换，保持 1:1。 */
+  .resume { transform: none !important; zoom: 1 !important; }
 }
 </style></head><body style="margin:0;${userBg ? `background:${userBg};` : ''}">${body}</body></html>`;
 
