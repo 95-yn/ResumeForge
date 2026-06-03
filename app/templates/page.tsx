@@ -647,19 +647,21 @@ function StickyFilterBar({ styleFilter, professionFilter, query, onStyleChange, 
       {/* Divider */}
       <div className={styles.filterDivider} aria-hidden="true" />
 
-      {/* Profession group（职业多，占据剩余宽度并横向滚动，避免撑爆筛选栏） */}
+      {/* Profession group：标签静止 + chip 在内层横向滚动（职业多，避免撑爆筛选栏） */}
       <div className={`${styles.filterGroup} ${styles.filterGroupScroll}`} role="group" aria-label="Profession filter">
         <span className={styles.filterGroupLabel}>Profession</span>
-        {PROFESSION_FILTERS.map((f) => (
-          <button
-            key={f.key}
-            className={`${styles.filterBtnProf}${professionFilter === f.key ? ` ${styles.active}` : ''}`}
-            onClick={() => onProfessionChange(f.key)}
-            aria-pressed={professionFilter === f.key}
-          >
-            {f.label}
-          </button>
-        ))}
+        <div className={styles.filterScroll}>
+          {PROFESSION_FILTERS.map((f) => (
+            <button
+              key={f.key}
+              className={`${styles.filterBtnProf}${professionFilter === f.key ? ` ${styles.active}` : ''}`}
+              onClick={() => onProfessionChange(f.key)}
+              aria-pressed={professionFilter === f.key}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className={styles.filterDivider} aria-hidden="true" />

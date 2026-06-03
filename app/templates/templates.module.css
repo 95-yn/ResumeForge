@@ -145,19 +145,30 @@
   flex-shrink: 0;
 }
 
-/* 职业组：占据剩余宽度，按钮多时横向滚动（隐藏滚动条 + 右侧渐隐提示），不撑爆筛选栏 */
+/* 职业组：占据剩余宽度。标签静止在最左，只有 chip 在内层 .filterScroll 里横向滚动。
+   （把渐隐/滚动放到内层，避免 mask 作用于粘性标签导致底下 chip 透出来的"重影"问题。） */
 .filterGroupScroll {
   flex: 1 1 0;
   min-width: 0;
+  display: flex;
+  align-items: center;
+}
+.filterScroll {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
   overflow-x: auto;
   flex-wrap: nowrap;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
-  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 30px), transparent 100%);
-  mask-image: linear-gradient(to right, #000 calc(100% - 30px), transparent 100%);
+  /* 右内边距让最后一个标签能滚过右侧渐隐区、不被遮挡 */
+  padding-right: 30px;
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 26px), transparent 100%);
+  mask-image: linear-gradient(to right, #000 calc(100% - 26px), transparent 100%);
 }
-.filterGroupScroll::-webkit-scrollbar { display: none; }
-.filterGroupScroll .filterGroupLabel { position: sticky; left: 0; background: var(--arch-parchment); z-index: 1; padding-right: 12px; }
+.filterScroll::-webkit-scrollbar { display: none; }
+.filterGroupScroll .filterGroupLabel { flex-shrink: 0; padding-right: 12px; }
 
 /* Group label */
 .filterGroupLabel {
