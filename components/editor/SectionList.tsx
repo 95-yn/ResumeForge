@@ -883,13 +883,28 @@ function ArrayPanel({ sectionKey, items, addLabel, addArrayItem, removeArrayItem
                         ))}
                         <button
                           onClick={() => updateArrayItem(sectionKey, idx, f.key, [...arr, ''])}
+                          aria-label={`添加${f.label}`}
                           style={{
-                            marginTop: 3, border: '1px dashed #E7E5E4', borderRadius: 4,
-                            background: 'none', color: '#A8A29E', fontSize: 10,
-                            padding: '2px 0', width: '100%', cursor: 'pointer',
+                            marginTop: 5, border: '1px dashed #D6D3D1', borderRadius: 5,
+                            background: '#FAFAF9', color: '#78716C', fontSize: 11, fontWeight: 500,
+                            padding: '5px 0', width: '100%', cursor: 'pointer',
                             fontFamily: 'inherit', outline: 'none',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5,
+                            transition: 'background 160ms ease-out, border-color 160ms ease-out, color 160ms ease-out',
                           }}
-                        >+</button>
+                          onMouseEnter={e => {
+                            e.currentTarget.style.borderColor = '#1C1917';
+                            e.currentTarget.style.borderStyle = 'solid';
+                            e.currentTarget.style.background = '#F0EAE0';
+                            e.currentTarget.style.color = '#1C1917';
+                          }}
+                          onMouseLeave={e => {
+                            e.currentTarget.style.borderColor = '#D6D3D1';
+                            e.currentTarget.style.borderStyle = 'dashed';
+                            e.currentTarget.style.background = '#FAFAF9';
+                            e.currentTarget.style.color = '#78716C';
+                          }}
+                        ><PlusOutlined style={{ fontSize: 10 }} /> 添加{f.label}</button>
                       </div>
                     );
                   }
