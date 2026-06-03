@@ -171,10 +171,19 @@ const template: TemplateData = {
 
 /* ===== Summary ===== */
 .resume.it-golang .summary {
+  position:relative;
   color:var(--muted);
   font-size:9.8pt;
-  padding-left:12px;
-  border-left:2px solid var(--gopher);
+  padding-left:16px;
+}
+.resume.it-golang .summary::before {
+  content:'›';
+  position:absolute;
+  left:2px;
+  top:0;
+  color:var(--gopher);
+  font-weight:700;
+  font-family:'SF Mono','Menlo',Consolas,monospace;
 }
 
 /* ===== Entry ===== */

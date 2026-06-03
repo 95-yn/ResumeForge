@@ -287,9 +287,19 @@ const template: TemplateData = {
   line-height: 1.65;
 }
 .resume.it-ml .ml-summary-sec .ml-summary {
+  position: relative;
   padding-left: 16px;
-  border-left: 2px solid;
-  border-image: linear-gradient(180deg, #4F46E5, #9333EA) 1;
+}
+.resume.it-ml .ml-summary-sec .ml-summary::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 5px;
+  width: 6px;
+  height: 6px;
+  background: linear-gradient(135deg, #4F46E5, #9333EA);
+  border-radius: 1.5px;
+  transform: rotate(45deg);
 }
 
 .resume.it-ml .ml-list {

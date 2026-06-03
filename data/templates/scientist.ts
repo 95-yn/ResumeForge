@@ -172,7 +172,8 @@ const template: TemplateData = {
 }
 
 /* Abstract */
-.resume.scientist .abstract-block { background:var(--paper-tint); border-left:3px solid var(--indigo); padding:4mm 5mm; }
+.resume.scientist .abstract-block { position:relative; background:var(--paper-tint); border:1px solid var(--line); padding:4mm 5mm 4mm 8mm; }
+.resume.scientist .abstract-block::after { content:''; position:absolute; left:3mm; top:4.5mm; width:2.4mm; height:2.4mm; background:var(--indigo); transform:rotate(45deg); }
 .resume.scientist .abstract-block h2 { border-bottom:none; margin-bottom:2.5mm; padding-bottom:0; }
 .resume.scientist .abstract { font-size:9.5pt; color:var(--ink); text-align:justify; line-height:1.6; }
 

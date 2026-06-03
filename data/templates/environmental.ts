@@ -170,10 +170,17 @@ const template: TemplateData = {
 
 /* summary */
 .resume.environmental .env-summary-text {
-  background:#fff; border-left:3px solid var(--water);
-  border-radius:0 8px 8px 0;
-  padding:10px 14px; font-size:10pt; color:#3a4a4a; line-height:1.65;
+  background:#fff;
+  border-radius:8px;
+  padding:10px 14px 10px 18px; font-size:10pt; color:#3a4a4a; line-height:1.65;
   box-shadow:0 2px 10px rgba(31,107,110,.05);
+  position:relative;
+}
+.resume.environmental .env-summary-text::before {
+  content:''; position:absolute; left:9px; top:13px;
+  width:7px; height:7px;
+  border-radius:50% 50% 50% 0; transform:rotate(45deg);
+  background:var(--water);
 }
 
 /* timeline / entries */
@@ -248,8 +255,14 @@ const template: TemplateData = {
 .resume.environmental .env-skill {
   display:inline-flex; align-items:center; gap:6px;
   background:#fff; border:1px solid var(--sand-deep);
-  border-left:3px solid var(--water);
-  border-radius:6px; padding:5px 11px; font-size:9.5pt;
+  border-radius:6px; padding:5px 11px 5px 15px; font-size:9.5pt;
+  position:relative;
+}
+.resume.environmental .env-skill::before {
+  content:''; position:absolute; left:7px; top:50%;
+  width:5px; height:5px; margin-top:-2.5px;
+  border-radius:50% 50% 50% 0; transform:rotate(45deg);
+  background:var(--water);
 }
 .resume.environmental .env-skill-name { font-weight:600; color:var(--ink); }
 .resume.environmental .env-skill-level {

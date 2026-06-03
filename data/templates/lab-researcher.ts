@@ -220,12 +220,20 @@ const template: TemplateData = {
 
 /* ===== Summary ===== */
 .resume.lab-researcher .sum-body {
+  position:relative;
   font-size:9.5pt;
   color:var(--slate);
   line-height:1.7;
-  border-left:2px solid var(--teal);
-  padding:1mm 0 1mm 4mm;
+  padding:1mm 0 1mm 5mm;
   background:linear-gradient(90deg,var(--teal-wash),transparent 60%);
+}
+.resume.lab-researcher .sum-body::before {
+  content:'';
+  position:absolute;
+  left:0; top:.55em;
+  width:6px; height:6px;
+  background:var(--teal);
+  transform:rotate(45deg);
 }
 .resume.lab-researcher .sum-body p { margin-bottom:1.5mm; }
 .resume.lab-researcher .sum-body p:last-child { margin-bottom:0; }
@@ -243,17 +251,26 @@ const template: TemplateData = {
   display:none;
 }
 .resume.lab-researcher .date {
+  position:relative;
   font-family:'SFMono-Regular','Consolas',monospace;
   font-size:8pt;
   color:var(--teal-deep);
   letter-spacing:.02em;
   white-space:nowrap;
   display:inline-block;
-  padding:1.5mm 2mm;
+  padding:1.5mm 2mm 1.5mm 4mm;
   background:var(--bg-grid);
   border:1px solid var(--line-soft);
-  border-left:2px solid var(--teal);
   line-height:1.4;
+}
+.resume.lab-researcher .date::before {
+  content:'';
+  position:absolute;
+  left:1.5mm; top:50%;
+  width:4px; height:4px;
+  margin-top:-2px;
+  background:var(--teal);
+  transform:rotate(45deg);
 }
 .resume.lab-researcher .date .dash { margin:0 4px; color:var(--grey); }
 
@@ -341,10 +358,18 @@ const template: TemplateData = {
 
 /* ===== Projects ===== */
 .resume.lab-researcher .proj-entry {
+  position:relative;
   border:1px solid var(--line-soft);
-  border-left:2px solid var(--teal);
-  padding:3mm 4mm;
+  padding:3mm 4mm 3mm 6mm;
   background:#fff;
+}
+.resume.lab-researcher .proj-entry::before {
+  content:'';
+  position:absolute;
+  left:2.5mm; top:3.8mm;
+  width:6px; height:6px;
+  background:var(--teal);
+  transform:rotate(45deg);
 }
 .resume.lab-researcher .proj-name { font-weight:700; }
 .resume.lab-researcher .proj-role {

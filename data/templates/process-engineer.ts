@@ -243,11 +243,20 @@ const template: TemplateData = {
 
 /* ============ SUMMARY ============ */
 .resume.process-engineer .summary-block .flow-body {
+  position:relative;
   color:var(--muted);
   font-size:9.6pt;
   line-height:1.7;
-  border-left:2px solid var(--line);
-  padding-left:12px;
+  padding-left:14px;
+}
+.resume.process-engineer .summary-block .flow-body::before {
+  content:"";
+  position:absolute;
+  left:0; top:0.55em;
+  width:6px; height:6px;
+  border-top:1.6px solid var(--pipe);
+  border-right:1.6px solid var(--pipe);
+  transform:rotate(45deg);
 }
 
 /* ============ ENTRY w/ node numbers ============ */

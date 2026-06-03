@@ -67,7 +67,7 @@ const template: TemplateData = {
 /* ---------- Header ---------- */
 .resume.it-sre header {
   background:linear-gradient(135deg,#161b22 0%,#0d1117 100%);
-  border:1px solid var(--line); border-left:3px solid var(--orange);
+  border:1px solid var(--line); border-top:3px solid var(--orange);
   border-radius:6px; padding:16px 20px; margin-bottom:18px;
   position:relative; overflow:hidden;
 }
@@ -152,11 +152,11 @@ const template: TemplateData = {
   background:var(--orange); border-radius:2px; opacity:.7;
 }
 .resume.it-sre .summary {
-  color:#adbac7; line-height:1.65; border-left:0;
+  color:#adbac7; line-height:1.65;
+  background:rgba(255,123,26,.05);
 }
-.resume.it-sre .summary::before { display:none; }
-.resume.it-sre .summary {
-  border-left:3px solid var(--orange);
+.resume.it-sre .summary::before {
+  background:var(--orange); opacity:.9;
 }
 
 /* entry */
@@ -198,10 +198,15 @@ const template: TemplateData = {
 .resume.it-sre .skills { display:flex; flex-wrap:wrap; gap:7px; }
 .resume.it-sre .skill-chip {
   display:inline-flex; align-items:center;
-  background:var(--panel); border:1px solid var(--line); border-left:2px solid var(--orange);
-  border-radius:4px; padding:4px 11px;
+  position:relative;
+  background:var(--panel); border:1px solid var(--line);
+  border-radius:4px; padding:4px 11px 4px 16px;
   font-size:9pt; color:#dde3ea;
   font-family:'SF Mono','Consolas',monospace;
+}
+.resume.it-sre .skill-chip::before {
+  content:''; position:absolute; left:8px; top:50%; transform:translateY(-50%);
+  width:4px; height:4px; background:var(--orange); border-radius:1px;
 }
 .resume.it-sre .skill-chip .lvl { color:var(--orange-soft); font-weight:600; }
 

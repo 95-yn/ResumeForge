@@ -183,7 +183,12 @@ const template: TemplateData = {
 
 .resume.energy-engineer .summary {
   color:#33415c; font-size:9.8pt; line-height:1.65;
-  border-left:3px solid var(--volt); padding-left:11px;
+  padding-left:16px; position:relative;
+}
+.resume.energy-engineer .summary::before {
+  content:""; position:absolute; left:0; top:5px;
+  width:7px; height:7px;
+  background:var(--volt); clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);
 }
 
 /* ===== Timeline (电网走线) ===== */

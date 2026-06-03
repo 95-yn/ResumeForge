@@ -226,14 +226,25 @@ const template: TemplateData = {
 
 /* summary */
 .resume.fin-quant .summary .formula {
+  position:relative;
   font-family:'SF Mono','Roboto Mono',Consolas,monospace;
   font-size:8pt;
   color:var(--green-d);
   background:rgba(22,193,114,0.07);
-  border-left:2px solid var(--green);
-  padding:2px 9px;
+  border:1px solid rgba(22,193,114,0.18);
+  padding:2px 9px 2px 16px;
   margin-bottom:3mm;
   letter-spacing:0.5px;
+}
+.resume.fin-quant .summary .formula::before {
+  content:'';
+  position:absolute;
+  left:7px;
+  top:50%;
+  transform:translateY(-50%);
+  width:4px;
+  height:4px;
+  background:var(--green);
 }
 .resume.fin-quant .summary .body { color:#34403a; }
 

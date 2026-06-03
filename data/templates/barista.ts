@@ -196,14 +196,24 @@ const template: TemplateData = {
 
 /* ===== Summary card ===== */
 .resume.barista .note-card {
+  position:relative;
   background:rgba(255,250,242,0.55);
-  border-left:3px solid #7a4a28;
-  border-radius:0 6px 6px 0;
-  padding:11px 14px;
+  border:1px solid #c8a878;
+  border-radius:6px;
+  padding:11px 14px 11px 19px;
   font-size:9.7pt;
   line-height:1.7;
   color:#43291a;
   box-shadow:1px 1px 0 rgba(74,44,24,0.08);
+}
+.resume.barista .note-card::before {
+  content:'';
+  position:absolute;
+  left:9px; top:15px;
+  width:6px; height:6px;
+  border-radius:50% 50% 50% 0;
+  background:#7a4a28;
+  transform:rotate(45deg);
 }
 
 /* ===== Entries ===== */

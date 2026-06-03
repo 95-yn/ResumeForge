@@ -111,7 +111,15 @@ const template: TemplateData = {
   font-weight:700;
   padding:2px 12px 2px 0;
   margin-right:10px;
-  border-right:3px solid #0a0a0a;
+  position:relative;
+}
+.resume.brutalist header .contact span:not(:last-child)::after {
+  content:"/";
+  position:absolute;
+  right:-3px;
+  top:2px;
+  font-weight:900;
+  color:#0a0a0a;
 }
 .resume.brutalist header .contact span:last-child {
   border-right:none;

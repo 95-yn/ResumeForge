@@ -178,13 +178,24 @@ const template: TemplateData = {
 
 /* ===== Summary ===== */
 .resume.success-manager .summary .sum-body {
+  position:relative;
   background:var(--purple-soft);
-  border-left:3px solid var(--purple-light);
-  border-radius:0 10px 10px 0;
-  padding:11px 15px;
+  border:1px solid #e3d8f8;
+  border-radius:10px;
+  padding:11px 15px 11px 19px;
   font-size:9.6pt;
   color:#3d3658;
   line-height:1.65;
+}
+.resume.success-manager .summary .sum-body::before {
+  content:"";
+  position:absolute;
+  left:8px;
+  top:13px;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--purple);
 }
 
 /* ===== Customer journey timeline ===== */
@@ -327,9 +338,19 @@ const template: TemplateData = {
 
 /* education */
 .resume.success-manager .e-entry {
+  position:relative;
   margin-bottom:11px;
   padding-left:13px;
-  border-left:2px solid var(--purple-soft);
+}
+.resume.success-manager .e-entry::before {
+  content:"";
+  position:absolute;
+  left:0;
+  top:5px;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:var(--purple-light);
 }
 .resume.success-manager .e-entry:last-child { margin-bottom:0; }
 .resume.success-manager .e-entry h3 { font-size:10pt; font-weight:600; color:var(--purple-deep); }

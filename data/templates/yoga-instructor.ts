@@ -188,13 +188,22 @@ const template: TemplateData = {
 
 /* Summary */
 .resume.yoga-instructor .summary-body {
+  position:relative;
   background:var(--cream);
-  border-left:3px solid var(--sage-soft);
-  border-radius:0 14px 14px 0;
-  padding:6mm 7mm;
+  border-radius:14px;
+  padding:6mm 7mm 6mm 9mm;
   color:var(--ink-soft);
   font-size:9.7pt;
   line-height:1.75;
+}
+.resume.yoga-instructor .summary-body::before {
+  content:"";
+  position:absolute;
+  left:4mm; top:6.5mm;
+  width:9px; height:9px;
+  background:var(--sage);
+  border-radius:0 65% 0 65%;
+  transform:rotate(-10deg);
 }
 
 /* Timeline / entries */

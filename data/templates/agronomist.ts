@@ -250,12 +250,22 @@ const template: TemplateData = {
 
 /* ===== Summary ===== */
 .resume.agronomist .summary-body {
+  position:relative;
   background:#f6edd6;
-  border-left:3px solid var(--wheat);
-  padding:9px 13px;
-  border-radius:0 4px 4px 0;
+  border:1px solid var(--wheat-soft);
+  padding:9px 13px 9px 18px;
+  border-radius:4px;
   color:#4a3c28;
   font-size:9.5pt;
+}
+.resume.agronomist .summary-body::before {
+  content:'';
+  position:absolute;
+  left:8px; top:12px;
+  width:6px; height:8px;
+  background:var(--wheat);
+  border-radius:50% 50% 50% 50% / 65% 65% 35% 35%;
+  transform:rotate(-12deg);
 }
 
 /* ===== Entries ===== */

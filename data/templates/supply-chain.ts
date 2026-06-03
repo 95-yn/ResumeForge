@@ -211,12 +211,24 @@ const template: TemplateData = {
 
 /* ---------- Summary ---------- */
 .resume.supply-chain .sc-summary-body {
+  position:relative;
   background:var(--sc-bg-soft);
-  border-left:3px solid var(--sc-amber);
-  padding:11px 14px;
-  border-radius:0 6px 6px 0;
+  border:1px solid var(--sc-line);
+  padding:11px 14px 11px 20px;
+  border-radius:6px;
   color:#2c3c46;
   font-size:9.5pt;
+}
+.resume.supply-chain .sc-summary-body::before {
+  content:"";
+  position:absolute;
+  left:9px;
+  top:14px;
+  width:7px;
+  height:7px;
+  border-radius:2px;
+  transform:rotate(45deg);
+  background:var(--sc-amber);
 }
 
 /* ---------- Experience flow timeline ---------- */
@@ -338,14 +350,25 @@ const template: TemplateData = {
   gap:8px;
 }
 .resume.supply-chain .sc-skill {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
   font-size:9pt;
   padding:4px 12px;
   border-radius:5px;
   background:var(--sc-bg-soft);
   border:1px solid var(--sc-line);
-  border-left:3px solid var(--sc-amber);
   color:var(--sc-steel-deep);
   font-weight:600;
+}
+.resume.supply-chain .sc-skill::before {
+  content:"";
+  flex:0 0 auto;
+  width:6px;
+  height:6px;
+  border-radius:1px;
+  transform:rotate(45deg);
+  background:var(--sc-amber);
 }
 .resume.supply-chain .sc-skill-lv { color:var(--sc-muted); font-weight:500; }
 

@@ -239,7 +239,6 @@ const template: TemplateData = {
   gap:11px;
   padding:10px 12px 10px 11px;
   border:1px solid #161616;
-  border-left:4px solid #161616;
   background:
     repeating-linear-gradient(45deg, #fafafa 0, #fafafa 6px, #f3f3f3 6px, #f3f3f3 7px);
   margin-bottom:9px;

@@ -189,15 +189,26 @@ const template: TemplateData = {
   color: #3a4763;
   line-height: 1.65;
   background: #f5f7fb;
-  border-left: 3px solid #f5841f;
-  padding: 8px 12px;
-  border-radius: 0 4px 4px 0;
+  border: 1px solid #e2e8f3;
+  padding: 8px 12px 8px 16px;
+  border-radius: 4px;
+  position: relative;
+}
+.resume.cs-manager .cs-summary::before {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 11px;
+  width: 5px;
+  height: 14px;
+  background: #f5841f;
+  border-radius: 1px;
 }
 
 /* ===== Entries: management dashboard feel ===== */
 .resume.cs-manager .cs-entry {
   padding: 7px 0 7px 12px;
-  border-left: 2px solid #e2e8f3;
+  border-left: 1px solid #e2e8f3;
   margin-bottom: 6px;
   position: relative;
 }

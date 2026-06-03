@@ -221,11 +221,20 @@ const template: TemplateData = {
 
 /* summary */
 .resume.athlete-pro .summary-block div {
+  position:relative;
   font-size:10pt;
   color:var(--steel);
   line-height:1.65;
-  padding-left:14px;
-  border-left:4px solid var(--bolt);
+  padding-left:18px;
+}
+.resume.athlete-pro .summary-block div::before {
+  content:"";
+  position:absolute;
+  left:0; top:5px;
+  width:9px; height:9px;
+  background:var(--bolt);
+  transform:skewX(-12deg);
+  border:1px solid var(--ink);
 }
 
 /* ===== ENTRIES ===== */
@@ -233,12 +242,12 @@ const template: TemplateData = {
   position:relative;
   padding:9px 0 9px 16px;
   margin-bottom:6px;
-  border-left:3px solid var(--line);
+  border-left:1px solid var(--line);
 }
 .resume.athlete-pro .entry::before {
   content:"";
   position:absolute;
-  left:-3px; top:9px;
+  left:-1px; top:9px;
   width:3px; height:18px;
   background:var(--flame);
 }
@@ -320,7 +329,7 @@ const template: TemplateData = {
   font-weight:700;
   letter-spacing:0.3px;
   transform:skewX(-10deg);
-  border-left:3px solid var(--bolt);
+  border-bottom:3px solid var(--bolt);
 }
 .resume.athlete-pro .skill-chip > * { display:inline-block; transform:skewX(10deg); }
 .resume.athlete-pro .skill-chip .lvl { color:var(--bolt); font-weight:800; }

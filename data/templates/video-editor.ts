@@ -199,12 +199,23 @@ const template: TemplateData = {
 
 /* ===== Summary clip ===== */
 .resume.video-editor .ve-clip {
+  position:relative;
   background:var(--ve-track);
-  border-left:3px solid var(--ve-cyan);
-  padding:11px 14px;
-  border-radius:0 5px 5px 0;
+  border:1px solid var(--ve-line);
+  padding:11px 14px 11px 20px;
+  border-radius:5px;
   color:#c4cad6;
   font-size:9.4pt;
+}
+.resume.video-editor .ve-clip::before {
+  content:'';
+  position:absolute;
+  left:9px;
+  top:15px;
+  width:7px;
+  height:7px;
+  background:var(--ve-cyan);
+  transform:rotate(45deg);
 }
 
 /* ===== Timeline tracks ===== */

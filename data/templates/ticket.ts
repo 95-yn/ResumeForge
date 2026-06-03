@@ -265,9 +265,12 @@ const template: TemplateData = {
 .resume.ticket h3 .company,
 .resume.ticket h3 .proj-name { margin-right:0; }
 .resume.ticket h3 .position {
-  margin-left:3mm; padding-left:3mm;
-  border-left:2px solid #c0392b;
+  margin-left:3mm; padding-left:3mm; position:relative;
   color:#c0392b; font-weight:600; font-size:9.5pt;
+}
+.resume.ticket h3 .position::before {
+  content:'·'; position:absolute; left:0; top:-0.1em;
+  color:#c0392b; font-weight:800;
 }
 .resume.ticket h3 .proj-role {
   color:#c0392b; font-weight:600;

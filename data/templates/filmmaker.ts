@@ -196,9 +196,18 @@ const template: TemplateData = {
 .resume.filmmaker .summary .body {
   font-size:9.6pt;
   color:var(--ink-soft);
-  padding:3mm 4mm;
-  border-left:3px solid var(--amber);
+  padding:3mm 4mm 3mm 7mm;
   background:linear-gradient(90deg,#fbf6ea 0%, #fff 70%);
+  position:relative;
+}
+.resume.filmmaker .summary .body::before {
+  content:'';
+  position:absolute;
+  left:3mm; top:3mm;
+  width:8px; height:8px;
+  background:var(--amber);
+  border-radius:50%;
+  box-shadow:inset 0 0 0 1.5px #fff, inset 0 0 0 3px var(--amber);
 }
 
 /* ===== Entries ===== */
@@ -206,7 +215,7 @@ const template: TemplateData = {
   position:relative;
   padding:0 0 4mm 14px;
   margin-bottom:3mm;
-  border-left:2px solid var(--line);
+  border-left:1px solid var(--line);
 }
 .resume.filmmaker .entry:last-child { margin-bottom:0; padding-bottom:0; }
 .resume.filmmaker .entry::before {

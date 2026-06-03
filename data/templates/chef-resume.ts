@@ -264,9 +264,17 @@ const template: TemplateData = {
   font-size:10pt;
   color:#34302a;
   line-height:1.7;
-  padding:3px 0 0 16px;
-  border-left:2px solid #b08247;
+  padding:3px 0 0 18px;
+  position:relative;
   font-style:italic;
+}
+.resume.chef-resume .summary::before {
+  content:"❧";
+  position:absolute;
+  left:0; top:3px;
+  color:#b08247;
+  font-size:10pt;
+  font-style:normal;
 }
 
 /* ===== Projects ===== */

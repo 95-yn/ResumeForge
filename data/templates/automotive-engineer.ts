@@ -100,14 +100,13 @@ const template: TemplateData = {
 .resume.automotive-engineer header {
   position:relative;
   border:1px solid #2a2a2c;
-  border-left:5px solid #e10600;
   background:linear-gradient(135deg,#161617 0%,#0f0f10 100%);
   padding:16px 18px 14px;
   margin-bottom:18px;
   overflow:hidden;
 }
 .resume.automotive-engineer .hud-rail {
-  position:absolute; top:0; left:5px; right:0; height:6px;
+  position:absolute; top:0; left:0; right:0; height:6px;
   background:repeating-linear-gradient(90deg,#e10600 0 2px,transparent 2px 9px);
   opacity:.55;
 }
@@ -207,8 +206,14 @@ const template: TemplateData = {
 }
 
 .resume.automotive-engineer .summary div {
+  position:relative;
   color:#c4c4c7; font-size:9.6pt; line-height:1.65;
-  border-left:2px solid #303032; padding:2px 0 2px 12px;
+  padding:2px 0 2px 14px;
+}
+.resume.automotive-engineer .summary div::before {
+  content:""; position:absolute; left:0; top:.5em;
+  width:6px; height:6px; transform:rotate(45deg);
+  background:#e10600; box-shadow:0 0 5px rgba(225,6,0,.55);
 }
 
 /* entry */
@@ -269,7 +274,7 @@ const template: TemplateData = {
 .resume.automotive-engineer .skill-chip {
   display:inline-flex; align-items:center; gap:6px;
   font-size:8.8pt; color:#e2e2e4; font-weight:600; letter-spacing:.02em;
-  background:#161617; border:1px solid #2c2c2e; border-left:3px solid #e10600;
+  background:#161617; border:1px solid #2c2c2e;
   padding:4px 11px; border-radius:2px;
 }
 .resume.automotive-engineer .skill-chip .dot {

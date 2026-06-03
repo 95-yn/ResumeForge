@@ -187,12 +187,21 @@ const template: TemplateData = {
 
 /* ===== summary ===== */
 .resume.pm-b2b .summary-body {
+  position:relative;
   font-size:9.5pt;
   color:var(--slate);
   line-height:1.65;
-  padding:10px 13px;
+  padding:10px 13px 10px 20px;
   background:var(--gb-soft);
-  border-left:3px solid var(--gb);
+  border:1px solid var(--gb-soft2);
+}
+.resume.pm-b2b .summary-body::before {
+  content:"";
+  position:absolute;
+  left:9px; top:13px;
+  width:5px; height:5px;
+  background:var(--gb);
+  transform:rotate(45deg);
 }
 
 /* ===== experience flow ===== */
@@ -288,7 +297,7 @@ const template: TemplateData = {
   left:0; top:7px;
   width:5px; height:5px;
   background:var(--gb-soft2);
-  border-left:2px solid var(--gb);
+  border:1px solid var(--gb);
 }
 
 /* ===== projects ===== */

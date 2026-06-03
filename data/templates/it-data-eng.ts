@@ -187,28 +187,46 @@ const template: TemplateData = {
   margin-left:4px;
 }
 .resume.it-data-eng .node-tag {
-  display:inline-block;
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
   font-family:'SF Mono','Consolas',monospace;
   font-size:7pt;
   font-weight:700;
   letter-spacing:1px;
   color:#fff;
   background:var(--slate);
-  padding:3px 7px;
+  padding:3px 8px 3px 7px;
   border-radius:3px;
-  border-left:3px solid var(--cyan);
   line-height:1;
+}
+.resume.it-data-eng .node-tag::before {
+  content:'';
+  width:5px; height:5px;
+  border-radius:50%;
+  background:var(--cyan);
+  box-shadow:0 0 4px rgba(6,182,212,.7);
+  flex:0 0 auto;
 }
 
 /* ===== Summary ===== */
 .resume.it-data-eng .summary {
+  position:relative;
   font-size:9.5pt;
   color:var(--slate-2);
   line-height:1.7;
-  padding:4mm 5mm;
+  padding:4mm 5mm 4mm 7mm;
   background:linear-gradient(180deg,#f8fafc,#f1f5f9);
-  border-left:3px solid var(--cyan);
-  border-radius:0 6px 6px 0;
+  border:1px solid var(--line);
+  border-radius:6px;
+}
+.resume.it-data-eng .summary::before {
+  content:'';
+  position:absolute;
+  left:3.5mm; top:4mm; bottom:4mm;
+  width:2px;
+  background:repeating-linear-gradient(180deg,var(--cyan) 0 5px,transparent 5px 10px);
 }
 
 /* ===== Experience pipeline ===== */
@@ -338,13 +356,21 @@ const template: TemplateData = {
 .resume.it-data-eng .skill-chip {
   display:inline-flex;
   align-items:center;
+  gap:6px;
   font-size:9pt;
-  padding:4px 11px;
+  padding:4px 11px 4px 9px;
   background:linear-gradient(135deg,var(--slate-deep),var(--slate-2));
   color:#e2e8f0;
   border-radius:4px;
-  border-left:3px solid var(--cyan);
   font-weight:500;
+}
+.resume.it-data-eng .skill-chip::before {
+  content:'';
+  width:5px; height:5px;
+  border-radius:50%;
+  background:var(--cyan);
+  box-shadow:0 0 4px rgba(6,182,212,.7);
+  flex:0 0 auto;
 }
 .resume.it-data-eng .skill-chip .lvl {
   font-family:'SF Mono','Consolas',monospace;

@@ -137,7 +137,7 @@ const template: TemplateData = {
   text-shadow:0 1px 0 var(--gold), 0 0 18px rgba(232,197,115,.45);
 }
 .resume.broadcaster header h1::before,
-.resume.broadcaster header h1::after { content:"\\2726"; color:var(--gold-bright); font-size:14pt; vertical-align:middle; opacity:.85; margin:0 .35em; }
+.resume.broadcaster header h1::after { content:"\\\\2726"; color:var(--gold-bright); font-size:14pt; vertical-align:middle; opacity:.85; margin:0 .35em; }
 .resume.broadcaster header p {
   margin-top:6px;
   font-size:11pt;
@@ -202,11 +202,20 @@ const template: TemplateData = {
 
 /* summary */
 .resume.broadcaster .summary div {
-  padding:10px 14px;
-  border-left:3px solid var(--gold);
+  position:relative;
+  padding:10px 14px 10px 20px;
   background:linear-gradient(90deg, rgba(201,162,75,.10), transparent);
-  border-radius:0 6px 6px 0;
+  border-radius:6px;
   color:#3a2a2c;
+}
+.resume.broadcaster .summary div::before {
+  content:"";
+  position:absolute;
+  left:9px; top:14px;
+  width:8px; height:8px;
+  border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, var(--gold-bright), var(--gold) 60%, var(--crimson) 100%);
+  box-shadow:0 0 6px 1px rgba(232,197,115,.6);
 }
 
 /* entries */

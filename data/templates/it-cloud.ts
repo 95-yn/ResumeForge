@@ -157,9 +157,16 @@ const template: TemplateData = {
 
 /* summary card */
 .resume.it-cloud .card {
+  position:relative;
   background:linear-gradient(180deg,#f0f9ff,#fff);
-  border:1px solid var(--sky-line); border-left:4px solid var(--sky);
-  border-radius:8px; padding:11px 14px; color:#334155; font-size:9.5pt;
+  border:1px solid var(--sky-line);
+  border-radius:8px; padding:11px 14px 11px 18px; color:#334155; font-size:9.5pt;
+}
+.resume.it-cloud .card::before {
+  content:''; position:absolute; left:8px; top:14px;
+  width:7px; height:7px; border-radius:2px;
+  background:var(--sky); transform:rotate(45deg);
+  box-shadow:0 0 0 3px var(--sky-soft);
 }
 
 /* ===== topo entries ===== */

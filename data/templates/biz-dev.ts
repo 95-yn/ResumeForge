@@ -234,11 +234,21 @@ const template: TemplateData = {
 
 /* ===== Summary ===== */
 .resume.biz-dev .bd-summary-body {
-  padding:9px 13px;
+  position:relative;
+  padding:9px 13px 9px 18px;
   background:var(--bd-bg-soft);
-  border-left:3px solid var(--bd-copper);
-  border-radius:0 6px 6px 0;
+  border:1px solid var(--bd-line);
+  border-radius:6px;
   color:var(--bd-ink);
+}
+.resume.biz-dev .bd-summary-body::before {
+  content:"";
+  position:absolute;
+  left:8px; top:.95em;
+  width:5px; height:5px;
+  border-radius:1px;
+  background:var(--bd-copper);
+  transform:rotate(45deg);
 }
 
 /* ===== Timeline / entries ===== */
@@ -328,11 +338,19 @@ const template: TemplateData = {
 
 /* projects */
 .resume.biz-dev .bd-entry-proj {
-  padding:10px 13px;
+  position:relative;
+  padding:10px 13px 10px 18px;
   background:var(--bd-bg-soft);
   border-radius:7px;
   border:1px solid var(--bd-line);
-  border-left:3px solid var(--bd-green-2);
+}
+.resume.biz-dev .bd-entry-proj::before {
+  content:"";
+  position:absolute;
+  left:8px; top:14px;
+  width:6px; height:6px;
+  border-radius:50%;
+  background:var(--bd-green-2);
 }
 .resume.biz-dev .bd-proj-name { font-size:11pt; font-weight:700; color:var(--bd-green-deep); }
 .resume.biz-dev .bd-proj-role {

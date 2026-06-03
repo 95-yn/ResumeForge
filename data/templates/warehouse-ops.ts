@@ -165,9 +165,17 @@ const template: TemplateData = {
   text-align:right;
 }
 .resume.warehouse-ops .contact span {
-  border-left:3px solid var(--amber);
-  padding-left:8px;
+  position:relative;
+  padding-left:11px;
   color:#e8e6e1;
+}
+.resume.warehouse-ops .contact span::before {
+  content:"";
+  position:absolute;
+  left:0; top:50%;
+  transform:translateY(-50%);
+  width:4px; height:4px;
+  background:var(--amber);
 }
 
 /* ===== SECTION BLOCKS ===== */
@@ -206,10 +214,17 @@ const template: TemplateData = {
 }
 
 .resume.warehouse-ops .summary .body {
+  position:relative;
   font-size:10pt;
   color:#33312c;
-  border-left:4px solid var(--amber);
-  padding-left:12px;
+  padding-left:16px;
+}
+.resume.warehouse-ops .summary .body::before {
+  content:"";
+  position:absolute;
+  left:0; top:3px; bottom:3px;
+  width:4px;
+  background:repeating-linear-gradient(-45deg, var(--ink) 0, var(--ink) 4px, var(--amber) 4px, var(--amber) 8px);
 }
 
 /* ===== ENTRIES ===== */
@@ -308,14 +323,21 @@ const template: TemplateData = {
   gap:7px;
 }
 .resume.warehouse-ops .skill-chip {
-  display:inline-block;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
   background:#faf6ea;
   border:1.5px solid var(--ink);
-  border-left:5px solid var(--amber);
   padding:3px 10px;
   font-size:9pt;
   font-weight:700;
   color:var(--ink);
+}
+.resume.warehouse-ops .skill-chip::before {
+  content:"";
+  flex:0 0 auto;
+  width:7px; height:7px;
+  background:var(--amber);
 }
 .resume.warehouse-ops .skill-chip .lvl {
   font-weight:600;

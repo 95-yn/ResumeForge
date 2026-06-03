@@ -93,7 +93,7 @@ const template: TemplateData = {
   color:#fff;
   padding:9mm 10mm;
   border-radius:6px;
-  border-left:6px solid #d93025;
+  border-top:6px solid #d93025;
   margin-bottom:9mm;
   overflow:hidden;
 }
@@ -204,13 +204,24 @@ const template: TemplateData = {
 
 /* ===== Summary ===== */
 .resume.logistics-coord .summary-sec > div {
+  position:relative;
   background:rgba(255,255,255,0.7);
   border:1px dashed #b9bec7;
-  border-left:4px solid #d93025;
-  padding:10px 14px;
+  padding:10px 14px 10px 22px;
   border-radius:4px;
   color:#454b55;
   font-size:9.5pt;
+}
+.resume.logistics-coord .summary-sec > div::before {
+  content:"";
+  position:absolute;
+  left:11px;
+  top:14px;
+  width:7px;
+  height:7px;
+  background:#d93025;
+  border-radius:50% 50% 50% 0;
+  transform:rotate(-45deg);
 }
 
 /* ===== Route line (milestone nodes) ===== */
@@ -330,15 +341,26 @@ const template: TemplateData = {
   gap:7px;
 }
 .resume.logistics-coord .skill-chip {
+  position:relative;
   display:inline-block;
   font-size:8.8pt;
   font-weight:500;
   color:#363b45;
   background:#fff;
   border:1px solid #cfd3da;
-  border-left:3px solid #d93025;
-  padding:4px 11px;
+  padding:4px 11px 4px 17px;
   border-radius:3px;
+}
+.resume.logistics-coord .skill-chip::before {
+  content:"";
+  position:absolute;
+  left:8px;
+  top:50%;
+  transform:translateY(-50%) rotate(-45deg);
+  width:6px;
+  height:6px;
+  background:#d93025;
+  border-radius:50% 50% 50% 0;
 }
 
 /* ===== inline & nowrap contract ===== */

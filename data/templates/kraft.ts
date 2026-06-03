@@ -163,13 +163,21 @@ const template: TemplateData = {
 
 /* ---------- summary 便签 ---------- */
 .resume.kraft .note {
-  padding:5mm 6mm;
+  position:relative;
+  padding:5mm 6mm 5mm 9mm;
   background:#f4ecdd;
   border:1px solid #b89c6e;
-  border-left:4px solid #8a6a3e;
   box-shadow:2px 2px 0 rgba(58,44,28,0.18);
   font-size:9.6pt;
   color:#473a28;
+}
+.resume.kraft .note::before {
+  content:'❖';
+  position:absolute;
+  left:4mm;
+  top:5mm;
+  color:#8a6a3e;
+  font-size:9pt;
 }
 
 /* ---------- card 卡片 ---------- */
@@ -207,11 +215,22 @@ const template: TemplateData = {
 }
 .resume.kraft .company { font-weight:800; }
 .resume.kraft .position {
+  position:relative;
   margin-left:9px;
-  padding-left:9px;
+  padding-left:11px;
   font-weight:600;
   color:#7a5e36;
-  border-left:2px solid #c4a36e;
+}
+.resume.kraft .position::before {
+  content:'';
+  position:absolute;
+  left:0;
+  top:50%;
+  transform:translateY(-50%);
+  width:4px;
+  height:4px;
+  background:#c4a36e;
+  border-radius:50%;
 }
 .resume.kraft .date {
   font-size:8.5pt;

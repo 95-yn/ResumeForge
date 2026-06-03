@@ -202,9 +202,19 @@ const template: TemplateData = {
 
 /* ===== Entries ===== */
 .resume.sommelier .entry {
+  position:relative;
   margin-bottom:5mm;
   padding-left:5mm;
-  border-left:2px solid var(--gold-light);
+}
+.resume.sommelier .entry::before {
+  content:'';
+  position:absolute;
+  left:0;
+  top:1.6mm;
+  width:1.8mm; height:1.8mm;
+  background:var(--wine);
+  border:1px solid var(--gold);
+  transform:rotate(45deg);
 }
 .resume.sommelier .entry:last-child { margin-bottom:0; }
 .resume.sommelier .entry-head {

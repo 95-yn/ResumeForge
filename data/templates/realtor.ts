@@ -183,24 +183,40 @@ const template: TemplateData = {
 
 /* ===== Summary ===== */
 .resume.realtor .rt-summary .rt-body {
+  position:relative;
   background:var(--paper);
-  border-left:3px solid var(--gold);
-  padding:4mm 5mm;
-  border-radius:0 3px 3px 0;
+  border:1px solid var(--line);
+  padding:4mm 5mm 4mm 9mm;
+  border-radius:3px;
   color:var(--ink);
   font-size:9.6pt;
   line-height:1.65;
+}
+.resume.realtor .rt-summary .rt-body::before {
+  content:"";
+  position:absolute;
+  left:4mm; top:5mm;
+  width:5px; height:5px;
+  background:var(--gold);
+  transform:rotate(45deg);
 }
 
 /* ===== Cards (listing style) ===== */
 .resume.realtor .rt-card {
   background:var(--paper);
   border:1px solid var(--line);
-  border-left:3px solid var(--navy);
   border-radius:3px;
-  padding:4mm 5mm;
+  padding:4mm 5mm 4mm 9mm;
   margin-bottom:3.5mm;
   position:relative;
+}
+.resume.realtor .rt-card-head::before {
+  content:"";
+  position:absolute;
+  left:4mm; top:1.5mm;
+  width:5px; height:5px;
+  background:var(--navy);
+  transform:rotate(45deg);
 }
 .resume.realtor .rt-card::after {
   content:"";

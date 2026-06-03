@@ -167,12 +167,20 @@ const template: TemplateData = {
 
 /* Summary panel */
 .resume.procurement .panel {
+  position:relative;
   background:var(--cream);
   border:1px solid var(--line-soft);
-  border-left:3px solid var(--green);
-  padding:3mm 4mm;
+  padding:3mm 4mm 3mm 8mm;
   font-size:9.5pt;
   color:var(--text);
+}
+.resume.procurement .panel::before {
+  content:'';
+  position:absolute;
+  left:3mm; top:4mm;
+  width:2.4mm; height:2.4mm;
+  background:var(--green);
+  transform:rotate(45deg);
 }
 
 /* Entries — ledger / table-line feel */

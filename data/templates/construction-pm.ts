@@ -211,10 +211,19 @@ const template: TemplateData = {
   font-size:9.6pt;
   color:var(--gray);
   line-height:1.65;
-  padding:9px 12px;
+  padding:9px 12px 9px 16px;
   background:var(--bg-soft);
-  border-left:3px solid var(--orange);
-  border-radius:0 3px 3px 0;
+  border:1px solid var(--line);
+  border-radius:3px;
+  position:relative;
+}
+.resume.construction-pm .summary-body::before {
+  content:'';
+  position:absolute; left:6px; top:11px;
+  width:6px; height:6px;
+  background:var(--orange);
+  transform:rotate(45deg);
+  border-radius:1px;
 }
 
 /* ===== Experience / Gantt timeline ===== */
@@ -311,11 +320,20 @@ const template: TemplateData = {
 
 /* ===== Projects ===== */
 .resume.construction-pm .proj-item {
-  padding:9px 12px;
+  padding:9px 12px 9px 16px;
   margin-bottom:9px;
   background:var(--bg-soft);
   border-radius:3px;
-  border-left:3px solid var(--char);
+  border:1px solid var(--line);
+  position:relative;
+}
+.resume.construction-pm .proj-item::before {
+  content:'';
+  position:absolute; left:6px; top:13px;
+  width:6px; height:6px;
+  background:var(--char);
+  transform:rotate(45deg);
+  border-radius:1px;
 }
 .resume.construction-pm .proj-item:last-child { margin-bottom:0; }
 .resume.construction-pm .proj-item h3 {
@@ -393,9 +411,17 @@ const template: TemplateData = {
 
 /* ===== Education ===== */
 .resume.construction-pm .edu-item {
-  padding-left:12px;
-  border-left:2px solid var(--orange);
+  padding-left:14px;
+  position:relative;
   margin-bottom:10px;
+}
+.resume.construction-pm .edu-item::before {
+  content:'';
+  position:absolute; left:0; top:5px;
+  width:6px; height:6px;
+  background:var(--orange);
+  transform:rotate(45deg);
+  border-radius:1px;
 }
 .resume.construction-pm .edu-item:last-child { margin-bottom:0; }
 .resume.construction-pm .edu-item h3 {

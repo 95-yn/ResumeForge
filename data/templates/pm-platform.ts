@@ -186,10 +186,19 @@ const template: TemplateData = {
   grid-template-columns:1fr 1fr;
 }
 .resume.pm-platform .block-summary .cell {
+  position:relative;
   color:var(--ink);
   font-size:9.6pt;
   line-height:1.7;
-  border-left:2px solid var(--accent);
+  padding-left:7mm;
+}
+.resume.pm-platform .block-summary .cell::before {
+  content:'';
+  position:absolute;
+  left:4mm; top:4.2mm;
+  width:1.6mm; height:1.6mm;
+  background:var(--accent);
+  transform:rotate(45deg);
 }
 
 /* ---------- Entry head ---------- */

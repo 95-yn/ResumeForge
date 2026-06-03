@@ -116,7 +116,13 @@ const template: TemplateData = {
   align-items:stretch;
   justify-content:space-between;
 }
-.resume.civil-engineer .head-id { padding-left:14px; border-left:5px solid var(--cement); }
+.resume.civil-engineer .head-id { padding-left:14px; position:relative; }
+.resume.civil-engineer .head-id::before {
+  content:"";
+  position:absolute; left:0; top:3px; bottom:3px;
+  width:5px;
+  background:var(--cement);
+}
 .resume.civil-engineer h1 {
   font-size:30pt;
   line-height:1.05;
@@ -216,7 +222,7 @@ const template: TemplateData = {
   position:relative;
   padding:0 0 0 16px;
   margin-bottom:14px;
-  border-left:2px solid var(--line);
+  border-left:1px solid var(--line);
 }
 .resume.civil-engineer .entry::before {
   content:"";
@@ -243,11 +249,17 @@ const template: TemplateData = {
 .resume.civil-engineer .company { font-weight:900; }
 .resume.civil-engineer .position {
   margin-left:9px;
-  padding-left:9px;
-  border-left:2px solid var(--orange);
+  padding-left:13px;
+  position:relative;
   font-size:10pt;
   font-weight:700;
   color:var(--orange-deep);
+}
+.resume.civil-engineer .position::before {
+  content:"";
+  position:absolute; left:0; top:50%;
+  width:5px; height:5px; margin-top:-2.5px;
+  background:var(--orange);
 }
 .resume.civil-engineer .date {
   font-size:8.5pt;
@@ -298,13 +310,20 @@ const template: TemplateData = {
 }
 .resume.civil-engineer .skill-chip {
   display:inline-block;
-  padding:4px 11px;
+  padding:4px 11px 4px 16px;
   background:#eceeef;
   border:1px solid var(--line);
-  border-left:3px solid var(--orange);
+  position:relative;
   font-size:9.3pt;
   font-weight:700;
   color:var(--cement-dark);
+}
+.resume.civil-engineer .skill-chip::before {
+  content:"";
+  position:absolute; left:7px; top:50%;
+  width:5px; height:5px; margin-top:-2.5px;
+  background:var(--orange);
+  clip-path:polygon(0 0, 100% 50%, 0 100%);
 }
 .resume.civil-engineer .skill-lvl {
   font-weight:600;

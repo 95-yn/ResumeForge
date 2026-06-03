@@ -271,7 +271,7 @@ const template: TemplateData = {
   color: var(--orange);
   margin-left: 8px;
   padding-left: 8px;
-  border-left: 2px solid var(--line);
+  border-left: 1px solid var(--line);
 }
 
 .resume.fitness-coach .date {

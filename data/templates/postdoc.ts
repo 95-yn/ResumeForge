@@ -166,9 +166,19 @@ const template: TemplateData = {
 
 /* ===== Entries ===== */
 .resume.postdoc .entry {
+  position:relative;
   margin-bottom:5mm;
   padding-left:5mm;
-  border-left:2px solid var(--rule);
+}
+.resume.postdoc .entry::before {
+  content:'';
+  position:absolute;
+  left:0;
+  top:1.5mm;
+  width:1.6mm;
+  height:1.6mm;
+  background:var(--wine);
+  transform:rotate(45deg);
 }
 .resume.postdoc .entry:last-child { margin-bottom:0; }
 .resume.postdoc .entry-head {

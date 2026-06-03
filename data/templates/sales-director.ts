@@ -238,12 +238,21 @@ const template: TemplateData = {
 
 /* ===== Summary: 看板引言 ===== */
 .resume.sales-director .sd-summary-body {
+  position: relative;
   background: #f7f6f2;
-  border-left: 4px solid var(--sd-gold);
-  padding: 9px 13px;
+  border: 1px solid var(--sd-line);
+  padding: 9px 13px 9px 22px;
   font-size: 9.6pt;
   color: #3a3d44;
   line-height: 1.7;
+}
+.resume.sales-director .sd-summary-body::before {
+  content: '';
+  position: absolute;
+  left: 11px; top: 13px;
+  width: 7px; height: 7px;
+  background: var(--sd-gold);
+  transform: rotate(45deg);
 }
 
 /* ===== Entry ===== */

@@ -328,8 +328,17 @@ const template: TemplateData = {
   color: var(--navy);
   background: rgba(31, 158, 196, 0.07);
   border: 1px solid var(--line);
-  border-left: 2px solid var(--cyan);
   padding: 1.2mm 3mm;
+}
+.resume.blueprint-engineer .chip::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  margin-right: 6px;
+  flex: none;
+  background: #fff;
+  border: 1.4px solid var(--cyan);
+  transform: rotate(45deg);
 }
 .resume.blueprint-engineer .chip .lv {
   font-family: 'JetBrains Mono', 'SF Mono', monospace;

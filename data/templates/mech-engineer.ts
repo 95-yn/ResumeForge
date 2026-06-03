@@ -259,12 +259,20 @@ const template: TemplateData = {
 /* summary callout */
 .resume.mech-engineer .me-callout {
   position:relative;
-  padding:3.5mm 4mm 3.5mm 6mm;
+  padding:3.5mm 4mm 3.5mm 7mm;
   background:var(--me-panel);
-  border-left:3px solid var(--me-orange);
+  border:1px solid var(--me-faint);
   color:var(--me-gray);
   font-size:10pt;
   line-height:1.65;
+}
+.resume.mech-engineer .me-callout::before {
+  content:"";
+  position:absolute;
+  left:3mm; top:4mm;
+  width:2.2mm; height:2.2mm;
+  background:var(--me-orange);
+  transform:rotate(45deg);
 }
 
 /* ===== ENTRIES ===== */
@@ -366,15 +374,24 @@ const template: TemplateData = {
   gap:2.5mm;
 }
 .resume.mech-engineer .me-skill-chip {
+  position:relative;
   display:inline-flex;
   align-items:baseline;
   gap:1mm;
-  padding:1.5mm 3mm;
+  padding:1.5mm 3mm 1.5mm 5mm;
   background:var(--me-panel);
   border:1px solid var(--me-line);
-  border-left:2px solid var(--me-steel);
   font-family:'SFMono-Regular',Consolas,'Courier New',monospace;
   font-size:9pt;
+}
+.resume.mech-engineer .me-skill-chip::before {
+  content:"";
+  position:absolute;
+  left:2mm; top:50%;
+  width:1.6mm; height:1.6mm;
+  margin-top:-0.8mm;
+  background:var(--me-orange);
+  transform:rotate(45deg);
 }
 .resume.mech-engineer .me-skill-name {
   font-weight:600;

@@ -102,11 +102,15 @@ const template: TemplateData = {
 }
 .resume.it-java .hd-bar { margin-bottom:6px; position:relative; z-index:1; }
 .resume.it-java .hd-tag {
-  display:inline-block; font-family:'SF Mono','Consolas',monospace;
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:'SF Mono','Consolas',monospace;
   font-size:8pt; letter-spacing:0.5px;
   color:#fdeee8; background:rgba(0,0,0,0.22);
-  padding:2px 9px; border-radius:3px;
-  border-left:2px solid #f3b8a4;
+  padding:2px 9px 2px 8px; border-radius:3px;
+}
+.resume.it-java .hd-tag::before {
+  content:''; width:5px; height:5px; border-radius:50%;
+  background:#f3b8a4; flex:0 0 auto;
 }
 .resume.it-java header h1 {
   font-size:25pt; font-weight:800; letter-spacing:2px;
@@ -147,11 +151,20 @@ const template: TemplateData = {
   flex:none; white-space:nowrap;
 }
 .resume.it-java .layer-body {
+  position:relative;
   background:var(--card);
   border:1px solid var(--line);
-  border-left:3px solid var(--brick-l);
   border-radius:5px;
-  padding:9px 13px;
+  padding:9px 13px 9px 16px;
+}
+.resume.it-java .layer-body::before {
+  content:'';
+  position:absolute;
+  left:8px; top:11px;
+  width:5px; height:5px;
+  background:var(--brick-l);
+  border-radius:1px;
+  transform:rotate(45deg);
 }
 
 /* ============ Entry ============ */

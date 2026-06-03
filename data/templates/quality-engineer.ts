@@ -161,16 +161,29 @@ const template: TemplateData = {
 
 /* ===== Summary ===== */
 .resume.quality-engineer .qe-summary div {
+  position:relative;
   background:var(--qe-bg-soft);
-  border-left:3px solid var(--qe-green);
-  padding:3mm 4mm; font-size:9.5pt; color:#2c3a35;
+  border:1px solid var(--qe-line);
+  padding:3mm 4mm 3mm 8mm; font-size:9.5pt; color:#2c3a35;
+}
+.resume.quality-engineer .qe-summary div::before {
+  content:"\\2713";
+  position:absolute;
+  left:3mm; top:3mm;
+  color:var(--qe-green); font-weight:700; font-size:9pt; line-height:1;
 }
 
 /* ===== Experience / Projects rows ===== */
 .resume.quality-engineer .qe-row {
+  position:relative;
   border:1px solid var(--qe-line);
-  border-left:3px solid var(--qe-green);
-  padding:3mm 4mm; margin-bottom:3mm;
+  padding:3mm 4mm 3mm 8mm; margin-bottom:3mm;
+}
+.resume.quality-engineer .qe-row::before {
+  content:"\\2713";
+  position:absolute;
+  left:3mm; top:3mm;
+  color:var(--qe-green); font-weight:700; font-size:9pt; line-height:1;
 }
 .resume.quality-engineer .qe-row-head {
   display:flex; align-items:baseline; justify-content:space-between;

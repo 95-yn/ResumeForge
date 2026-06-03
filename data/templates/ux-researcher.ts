@@ -171,14 +171,26 @@ const template: TemplateData = {
 
 /* ===== Summary ===== */
 .resume.ux-researcher .ux-summary-body {
+  position: relative;
   background: #FBF8F1;
   border: 1px solid #E3D9C5;
-  border-left: 4px solid #C8A24B;
   border-radius: 4px;
-  padding: 9px 13px;
+  padding: 9px 13px 9px 19px;
   font-size: 9.6pt;
   color: #4A4536;
   line-height: 1.65;
+}
+.resume.ux-researcher .ux-summary-body::before {
+  content: '';
+  position: absolute;
+  left: 8px;
+  top: 12px;
+  width: 6px;
+  height: 6px;
+  background: #C8A24B;
+  transform: rotate(45deg);
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
 }
 
 /* ===== Journey (experience) ===== */

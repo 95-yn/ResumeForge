@@ -183,7 +183,12 @@ const template: TemplateData = {
 /* ===== Summary ===== */
 .resume.sports-coach .sc-summary-body {
   font-size:10pt; color:#2c3e58; line-height:1.7;
-  padding-left:4mm; border-left:3px solid var(--sc-track);
+  padding-left:5mm; position:relative;
+}
+.resume.sports-coach .sc-summary-body::before {
+  content:""; position:absolute; left:0; top:2px; bottom:2px; width:3px;
+  border-radius:2px;
+  background:repeating-linear-gradient(to bottom, var(--sc-track) 0 4px, var(--sc-yellow) 4px 8px);
 }
 
 /* ===== Entries / Timeline ===== */

@@ -130,8 +130,15 @@ const template: TemplateData = {
   font-size:8.5pt; color:#9399b2; padding:3px 14px 3px 26px;
 }
 .resume.it-react .sb-file.sb-active {
+  position:relative;
   color:#89b4fa; background:#1e1e2e;
-  border-left:2px solid #89dceb; padding-left:24px;
+  padding-left:26px;
+}
+.resume.it-react .sb-file.sb-active::before {
+  content:''; position:absolute; left:14px; top:50%;
+  transform:translateY(-50%);
+  width:4px; height:4px; border-radius:50%;
+  background:#89dceb;
 }
 .resume.it-react .ide-editor { flex:1; min-width:0; padding:16mm 14mm; }
 
@@ -179,9 +186,15 @@ const template: TemplateData = {
 .resume.it-react .tag-name { color:#f38ba8; font-size:9.5pt; }
 
 .resume.it-react .summary {
+  position:relative;
   color:#bac2de; font-size:10pt; line-height:1.65;
-  background:#181825; border-left:2px solid #cba6f7;
-  padding:9px 14px; border-radius:0 6px 6px 0;
+  background:#181825; border:1px solid #313244;
+  padding:9px 14px 9px 18px; border-radius:6px;
+}
+.resume.it-react .summary::before {
+  content:''; position:absolute; left:8px; top:13px;
+  width:5px; height:5px; border-radius:50%;
+  background:#cba6f7;
 }
 
 .resume.it-react .entry {

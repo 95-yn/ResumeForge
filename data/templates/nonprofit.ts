@@ -197,13 +197,23 @@ const template: TemplateData = {
 
 /* ============ SUMMARY ============ */
 .resume.nonprofit .summary .note {
+  position:relative;
   background:#fbf7ec;
-  border-left:3px solid #7b8e49;
-  border-radius:0 4px 4px 0;
-  padding:7px 12px;
+  border:1px solid #cbbf99;
+  border-radius:4px;
+  padding:7px 12px 7px 22px;
   font-size:9.5pt;
   color:#4a4430;
   box-shadow:1px 2px 0 rgba(95,108,57,0.1);
+}
+.resume.nonprofit .summary .note::before {
+  content:"\\\\2713";
+  position:absolute;
+  left:9px;
+  top:7px;
+  color:#7b8e49;
+  font-weight:700;
+  font-size:9pt;
 }
 
 /* ============ ENTRY ============ */
@@ -270,7 +280,7 @@ const template: TemplateData = {
   color:#4a4430;
 }
 .resume.nonprofit li::before {
-  content:"\\2713";
+  content:"\\\\2713";
   position:absolute;
   left:0;
   top:0;
