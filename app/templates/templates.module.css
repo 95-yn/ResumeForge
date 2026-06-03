@@ -96,6 +96,13 @@
   padding-bottom: 6px;
 }
 
+/* 筛选时高亮匹配数量 */
+.subtitleCount {
+  color: var(--arch-brick);
+  font-weight: 700;
+  font-size: 12px;
+}
+
 /* Staggered reveal animations */
 .titleDisplay {
   opacity: 0;

@@ -531,7 +531,11 @@ export default function TemplatesPage() {
         <div className={`${styles.titleDisplay}${titlePhase >= 1 ? ` ${titlePhaseClass}` : ''}`}>
           <h1 className={styles.displayTitle}>Templates</h1>
         </div>
-        <span className={styles.subtitle}>A curated archive of {total} specimens</span>
+        <span className={styles.subtitle} aria-live="polite">
+          {(styleFilter !== 'all' || professionFilter !== 'all' || query.trim() !== '')
+            ? <><strong className={styles.subtitleCount}>{filtered.length}</strong> of {total} specimens</>
+            : <>A curated archive of {total} specimens</>}
+        </span>
       </div>
 
       {/* ── 3. Sticky filter bar ── */}
