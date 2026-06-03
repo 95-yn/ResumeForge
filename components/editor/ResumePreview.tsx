@@ -517,44 +517,6 @@ export function ResumePreview() {
         </div>
       )}
 
-      {/* 首次引导：点击即可编辑（编辑器 chrome，浮于纸面之上，不注入 iframe 文档） */}
-      {showCoachmark && !iframeLoading && (
-        <div
-          role="status"
-          style={{
-            position: 'sticky', top: 0, alignSelf: 'center', zIndex: 6,
-            marginBottom: -38, // 不挤占纸张布局，悬浮即可
-            display: 'flex', alignItems: 'center', gap: 10,
-            background: '#1C1917', color: '#FAFAF9',
-            borderRadius: 999, padding: '7px 10px 7px 14px',
-            fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
-            fontSize: 12, fontWeight: 500, letterSpacing: '-0.1px',
-            boxShadow: '0 8px 28px rgba(28,25,23,0.28), 0 2px 8px rgba(28,25,23,0.16)',
-            animation: 'rpCoachIn 360ms cubic-bezier(0.16,1,0.3,1)',
-          }}
-        >
-          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}>
-            <span style={{
-              width: 5, height: 5, borderRadius: '50%', background: '#B0463A',
-              boxShadow: '0 0 0 3px rgba(176,70,58,0.28)', flexShrink: 0,
-              animation: 'rpCoachPulse 1.8s ease-in-out infinite',
-            }} />
-            点击简历上的任意文字，即可直接编辑
-          </span>
-          <button
-            onClick={dismissCoachmark}
-            aria-label="知道了，关闭提示"
-            style={{
-              border: 'none', background: 'transparent', color: '#A8A29E',
-              cursor: 'pointer', fontSize: 15, lineHeight: 1, padding: '0 2px',
-              fontFamily: 'inherit', outline: 'none', flexShrink: 0,
-            }}
-            onMouseEnter={e => { e.currentTarget.style.color = '#FAFAF9'; }}
-            onMouseLeave={e => { e.currentTarget.style.color = '#A8A29E'; }}
-          >×</button>
-        </div>
-      )}
-
       <div style={{
         transformOrigin: 'top center',
         transform: `scale(${zoom})`,
@@ -629,15 +591,73 @@ export function ResumePreview() {
           from { opacity: 0; transform: translateY(-8px); }
           to   { opacity: 1; transform: translateY(0); }
         }
+        @keyframes rpCoachPop {
+          from { opacity: 0; transform: translateY(10px) scale(0.92); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
         @keyframes rpCoachPulse {
           0%, 100% { box-shadow: 0 0 0 3px rgba(176,70,58,0.28); }
           50%      { box-shadow: 0 0 0 5px rgba(176,70,58,0.10); }
+        }
+        @keyframes rpCursorTap {
+          0%, 100% { transform: translate(0, 0); }
+          50%      { transform: translate(2px, 2px); }
         }
         @media (prefers-reduced-motion: reduce) {
           * { transition-duration: 0ms !important; animation-duration: 0ms !important; }
           @keyframes rpSpin { to { transform: none; } }
         }
       `}</style>
+      {/* 首次引导：点击即可编辑。绝对定位浮层，居中悬浮于预览视口顶部留白区（名字上方），
+          完全脱离文档流，不挤占/不推动纸张布局，也不遮挡正文；容器 pointerEvents:none 不挡简历点击，卡片本身可交互。 */}
+      {showCoachmark && !iframeLoading && (
+        <div style={{
+          position: 'absolute', inset: 0, zIndex: 6,
+          display: 'flex', justifyContent: 'center', alignItems: 'flex-start',
+          paddingTop: 12, pointerEvents: 'none',
+        }}>
+          <div
+            role="status"
+            style={{
+              display: 'flex', alignItems: 'center', gap: 13,
+              background: '#1C1917', color: '#FAFAF9',
+              borderRadius: 16, padding: '13px 14px 13px 16px',
+              border: '1px solid rgba(255,255,255,0.08)',
+              fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
+              fontSize: 14, fontWeight: 600, letterSpacing: '-0.1px',
+              boxShadow: '0 18px 50px rgba(28,25,23,0.34), 0 4px 14px rgba(28,25,23,0.20)',
+              animation: 'rpCoachPop 420ms cubic-bezier(0.16,1,0.3,1)',
+              pointerEvents: 'auto',
+            }}
+          >
+            {/* 光标图标 + 脉冲圈，强化「点一下就能改」 */}
+            <span style={{
+              width: 30, height: 30, borderRadius: 9, flexShrink: 0,
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              background: 'rgba(176,70,58,0.18)', color: '#F08C7E',
+              animation: 'rpCoachPulse 1.8s ease-in-out infinite',
+            }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"
+                style={{ animation: 'rpCursorTap 1.8s ease-in-out infinite' }} aria-hidden="true">
+                <path d="M5.5 3.2l13.4 6.6c.7.35.6 1.38-.16 1.58l-5.2 1.4-2.1 5.05c-.3.72-1.33.66-1.55-.09L5.5 3.2z" />
+              </svg>
+            </span>
+            <span>点击简历上的任意文字，即可直接编辑</span>
+            <button
+              onClick={dismissCoachmark}
+              aria-label="知道了，关闭提示"
+              style={{
+                border: 'none', background: 'rgba(255,255,255,0.06)', color: '#A8A29E',
+                cursor: 'pointer', fontSize: 16, lineHeight: 1, padding: '5px 8px',
+                borderRadius: 8, fontFamily: 'inherit', outline: 'none', flexShrink: 0,
+                transition: 'color 0.12s, background 0.12s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.color = '#FAFAF9'; e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; }}
+              onMouseLeave={e => { e.currentTarget.style.color = '#A8A29E'; e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
+            >×</button>
+          </div>
+        </div>
+      )}
     </div>
     <ZoomControl zoom={zoom} setZoom={setZoom} />
     </div>
