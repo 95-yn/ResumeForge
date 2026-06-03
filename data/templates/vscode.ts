@@ -146,7 +146,7 @@ const template: TemplateData = {
 .vs-tag { font-size: 8.5pt; color: #1E1E1E; background: #4EC9B0; padding: 1px 7px; border-radius: 2px; }
 .vs-tag-lv { color: #0A3D3D; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.vscode { margin: 0; print-color-adjust: exact; -webkit-print-color-adjust: exact; } .vs-activity-bar { display: none; } }
+@media print { .resume.vscode { margin: 0; print-color-adjust: exact; -webkit-print-color-adjust: exact; } }
 
 
 /* skill-no-wrap */

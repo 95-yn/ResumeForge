@@ -204,19 +204,21 @@ body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; 
 h1, h2, h3, h4 { page-break-after: avoid; break-after: avoid-page; }
 li, tr { page-break-inside: avoid; break-inside: avoid-page; }
 
-/* Page margins live ONLY in @page — body must be 0 0 or padding stacks.
-   8mm / 10mm 是现代简历常用紧凑边距（约 0.31" / 0.39"），比 Word narrow
-   (0.5") 紧、比印刷 editorial (6mm) 松，平衡阅读舒适和单页容纳。
+/* 1:1 打印：模板本身就是 210mm（A4 满宽）+ 自带内边距，所以 @page 边距必须为 0，
+   否则 210mm 内容塞进更窄的可打印区，浏览器会整体缩放 → 打印比屏幕窄。
+   margin:0 让简历精确铺满 A4，与屏幕所见完全一致；视觉留白由模板自身 padding 提供。
    不渲染任何页脚/页码，避免第二页底部出现多余信息。 */
 @page {
   size: A4;
-  margin: 8mm 10mm;
+  margin: 0;
 }
 @media print {
   html, body {
     margin: 0 !important;
     padding: 0 !important;${userBg ? `\n    background: ${userBg} !important;` : ''}
   }
+  /* 关闭浏览器的「缩小以适应」，确保 1:1 输出 */
+  .resume { width: 210mm !important; transform: none !important; zoom: 1 !important; }
 }
 </style></head><body style="margin:0;${userBg ? `background:${userBg};` : ''}">${body}</body></html>`;
 
