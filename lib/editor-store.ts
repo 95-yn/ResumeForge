@@ -23,6 +23,18 @@ const PROFESSION_SLUG_MAP: Record<string, string> = {
   '人力行政': 'hr',
   '法律合规': 'legal',
   '校招': 'campus',
+  '工程制造': 'engineering',
+  '政府事业': 'government',
+  '客户服务': 'service',
+  '物流供应链': 'logistics',
+  '酒店餐饮': 'hospitality',
+  '建筑地产': 'realestate',
+  '科研学术': 'research',
+  '传媒影视': 'media',
+  '销售商务': 'sales',
+  '环境能源': 'energy',
+  '农业食品': 'agriculture',
+  '体育健身': 'sports',
 };
 
 export interface Toast {
