@@ -396,6 +396,36 @@
   border-radius: 2px;
 }
 
+/* 收藏星标：默认随卡片 hover 浮现；已收藏(★)常驻可见 */
+.cardFav {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  background: rgba(248, 246, 241, 0.85);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  color: var(--arch-stone-mid);
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transform: scale(0.88);
+  transition: opacity 160ms ease-out, transform 160ms cubic-bezier(0.16,1,0.3,1), color 120ms;
+  box-shadow: 0 1px 5px rgba(28,25,23,0.10);
+}
+.card:hover .cardFav,
+.card:focus-within .cardFav { opacity: 1; transform: scale(1); }
+.cardFav:hover { color: var(--arch-brick); transform: scale(1.1); }
+.cardFavOn { opacity: 1; transform: scale(1); color: var(--arch-brick); }
+
 .cardMarginalia {
   margin-bottom: 8px;
 }

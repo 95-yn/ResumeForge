@@ -243,6 +243,7 @@ function getQuote(slug: string, idx: number): string {
 /* ─── Filter categories ────────────────────────────────────── */
 const STYLE_FILTERS = [
   { key: 'all',        label: 'All' },
+  { key: 'saved',      label: '★ Saved' },
   { key: 'business',   label: 'Business' },
   { key: 'creative',   label: 'Creative' },
   { key: 'minimal',    label: 'Minimal' },
@@ -322,12 +323,14 @@ interface MasonryCardProps {
   t: { slug: string; name: string; category: string };
   idx: number;
   onCardClick: (slug: string) => void;
+  isFav: boolean;
+  onToggleFav: (slug: string) => void;
 }
 
 // /editor 路由的 JS chunk 与 ?template 参数无关，全站共用，预取一次即可（浏览器 HTTP 缓存跨标签共享）。
 let editorPrefetched = false;
 
-function MasonryCard({ t, idx, onCardClick }: MasonryCardProps) {
+function MasonryCard({ t, idx, onCardClick, isFav, onToggleFav }: MasonryCardProps) {
   const ref = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const [visible, setVisible] = useState(false);
@@ -377,6 +380,16 @@ function MasonryCard({ t, idx, onCardClick }: MasonryCardProps) {
       onKeyDown={(e) => e.key === 'Enter' && onCardClick(t.slug)}
       aria-label={`使用模板：${t.name}`}
     >
+      {/* 收藏星标（点击不触发进编辑器） */}
+      <button
+        type="button"
+        className={`${styles.cardFav}${isFav ? ` ${styles.cardFavOn}` : ''}`}
+        onClick={(e) => { e.stopPropagation(); onToggleFav(t.slug); }}
+        aria-label={isFav ? '取消收藏' : '收藏'}
+        aria-pressed={isFav}
+        title={isFav ? '取消收藏' : '收藏'}
+      >{isFav ? '★' : '☆'}</button>
+
       {/* Marginalia */}
       <div className={styles.cardMarginalia}>
         <div className={styles.cardNum}>№ {num}</div>
@@ -424,6 +437,20 @@ export default function TemplatesPage() {
   const [query, setQuery]                       = useState<string>('');
   const deferredQuery                           = useDeferredValue(query);
 
+  // 收藏（localStorage 持久化）：星标模板，可用 ★ 筛选只看收藏
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    try { const raw = localStorage.getItem('resumeforge_favorites'); if (raw) setFavorites(new Set(JSON.parse(raw))); } catch { /* ignore */ }
+  }, []);
+  const toggleFavorite = useCallback((slug: string) => {
+    setFavorites(prev => {
+      const next = new Set(prev);
+      if (next.has(slug)) next.delete(slug); else next.add(slug);
+      try { localStorage.setItem('resumeforge_favorites', JSON.stringify([...next])); } catch { /* ignore */ }
+      return next;
+    });
+  }, []);
+
   // 返回顶部按钮：滚动超过一屏后浮现
   const [showTop, setShowTop] = useState(false);
 
@@ -451,7 +478,9 @@ export default function TemplatesPage() {
     const q = deferredQuery.trim().toLowerCase();
     return templates
       .filter(t => {
-        const styleMatch = styleFilter === 'all' || t.category === styleFilter;
+        const styleMatch = styleFilter === 'saved'
+          ? favorites.has(t.slug)
+          : (styleFilter === 'all' || t.category === styleFilter);
         const meta = TEMPLATE_META[t.slug];
         const profMatch = professionFilter === 'all' || (meta && meta.profession === professionFilter);
         if (!styleMatch || !profMatch) return false;
@@ -465,7 +494,7 @@ export default function TemplatesPage() {
         );
       });
     // 顺序直接沿用 templates（已类别交错、确定性），过滤保留相对顺序，不再额外排序。
-  }, [templates, styleFilter, professionFilter, deferredQuery]);
+  }, [templates, styleFilter, professionFilter, deferredQuery, favorites]);
 
   const isStale = query !== deferredQuery;
 
@@ -570,6 +599,8 @@ export default function TemplatesPage() {
                 t={t}
                 idx={idx}
                 onCardClick={handleCardClick}
+                isFav={favorites.has(t.slug)}
+                onToggleFav={toggleFavorite}
               />
             ))}
           </div>
