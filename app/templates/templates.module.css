@@ -145,6 +145,20 @@
   flex-shrink: 0;
 }
 
+/* 职业组：占据剩余宽度，按钮多时横向滚动（隐藏滚动条 + 右侧渐隐提示），不撑爆筛选栏 */
+.filterGroupScroll {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 30px), transparent 100%);
+  mask-image: linear-gradient(to right, #000 calc(100% - 30px), transparent 100%);
+}
+.filterGroupScroll::-webkit-scrollbar { display: none; }
+.filterGroupScroll .filterGroupLabel { position: sticky; left: 0; background: var(--arch-parchment); z-index: 1; padding-right: 12px; }
+
 /* Group label */
 .filterGroupLabel {
   font-family: 'JetBrains Mono', 'Courier New', monospace;

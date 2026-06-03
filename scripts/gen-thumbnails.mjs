@@ -42,6 +42,8 @@ let ok = 0; const fail = [];
 for (const { slug, profession } of targets) {
   const page = await browser.newPage({ viewport: { width: 1200, height: 1500 }, deviceScaleFactor: 2 });
   page.setDefaultTimeout(15000);
+  // 预置「已看过引导」标记，避免首次引导浮层（点击即可编辑）被截进封面
+  await page.addInitScript(() => { try { localStorage.setItem('resumeforge_coachmark_seen', '1'); } catch { /* ignore */ } });
   try {
     await page.goto(`${BASE}/editor?template=${slug}&profession=${encodeURIComponent(profession)}`, { waitUntil: 'commit' });
     await page.waitForTimeout(2500);
