@@ -117,14 +117,12 @@ const template: TemplateData = {
 .md-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .md-tag { background: #F3F4F6; color: #374151; padding: 3px 10px; border-radius: 20px; font-size: 9pt; border: 1px solid #E5E7EB; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.media { margin: 0; background: #fff; } .md-header { padding: 18mm 20mm 12mm; } .md-content { padding: 14px 20mm 18mm; } .md-card { box-shadow: none; } }
+@media print { .resume.media { margin: 0; background: #fff; } .md-card { box-shadow: none; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "media",

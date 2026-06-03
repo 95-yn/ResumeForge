@@ -365,10 +365,8 @@ const template: TemplateData = {
 .resume.motion-designer li p, .resume.motion-designer li div { margin: 0; padding: 0; display: inline; }
 .resume.motion-designer .skills span, .resume.motion-designer [class*='skill'] span { white-space: nowrap; word-break: keep-all; }
 
-@media print {
-  .resume.motion-designer { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  @page { margin: 0; size: A4; }
-}`,
+@media print { .resume.motion-designer { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  @page { margin: 0; size: A4; } }`,
     schema: {
       "templateId": "motion-designer",
       "version": "1.0.0",

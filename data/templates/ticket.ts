@@ -341,10 +341,8 @@ const template: TemplateData = {
 .resume.ticket li p, .resume.ticket li div { margin:0; padding:0; display:inline; }
 .resume.ticket .skills span, .resume.ticket [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.ticket { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.ticket { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "ticket",
       "version": "1.0.0",

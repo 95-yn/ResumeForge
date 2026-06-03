@@ -252,10 +252,8 @@ const template: TemplateData = {
 .resume.letterpress li p, .resume.letterpress li div { margin:0; padding:0; display:inline; }
 .resume.letterpress .skills span, .resume.letterpress [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.letterpress { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.letterpress { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "letterpress",
       "version": "1.0.0",

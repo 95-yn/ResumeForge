@@ -385,12 +385,10 @@ const template: TemplateData = {
 .resume.biz-dev li p, .resume.biz-dev li div { margin:0; padding:0; display:inline; }
 .resume.biz-dev .skills span, .resume.biz-dev [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.biz-dev { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+@media print { .resume.biz-dev { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   @page { margin:0; size:A4; }
   .resume.biz-dev section { page-break-inside:avoid; }
-  .resume.biz-dev .bd-entry { page-break-inside:avoid; }
-}`,
+  .resume.biz-dev .bd-entry { page-break-inside:avoid; } }`,
     schema: {
       "templateId": "biz-dev",
       "version": "1.0.0",

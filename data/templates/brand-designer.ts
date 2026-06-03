@@ -239,10 +239,8 @@ const template: TemplateData = {
 .resume.brand-designer li p, .resume.brand-designer li div { margin:0; padding:0; display:inline; }
 .resume.brand-designer .skills span, .resume.brand-designer [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.brand-designer { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.brand-designer { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "brand-designer",
       "version": "1.0.0",

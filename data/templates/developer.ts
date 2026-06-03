@@ -244,15 +244,11 @@ const template: TemplateData = {
 
 li p, li div { margin: 0; padding: 0; display: inline; }
 
-@media print {
-  .resume.developer {
-    margin: 0;
+@media print { .resume.developer { margin: 0;
     background: #0A0A0A;
     -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  @page { margin: 0; size: A4; }
-}
+    print-color-adjust: exact; }
+  @page { margin: 0; size: A4; } }
 
 
 /* skill-no-wrap */

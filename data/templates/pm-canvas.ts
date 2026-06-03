@@ -222,10 +222,8 @@ const template: TemplateData = {
 
 .resume.pm-canvas li p, .resume.pm-canvas li div { margin: 0; padding: 0; display: inline; }
 
-@media print {
-  .resume.pm-canvas { margin: 0; padding: 16mm 18mm; }
-  @page { margin: 0; size: A4; }
-}
+@media print { .resume.pm-canvas { margin: 0; }
+  @page { margin: 0; size: A4; } }
 
 
 /* skill-no-wrap */

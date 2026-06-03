@@ -193,9 +193,7 @@ const template: TemplateData = {
   line-height: 1.5;
 }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print {
-  @page { margin: 0; size: A4; }
-}
+@media print { @page { margin: 0; size: A4; } }
 
 /* skill-no-wrap */
 .tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {

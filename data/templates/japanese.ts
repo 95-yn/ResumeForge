@@ -124,14 +124,12 @@ const template: TemplateData = {
 .jp-skill { display: flex; justify-content: space-between; font-size: 9.5pt; border-bottom: 1px solid #F5F5F4; padding-bottom: 5px; }
 .jp-lv { font-size: 9pt; color: #A8A29E; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.japanese { margin: 0; padding: 22mm 26mm; } }
+@media print { .resume.japanese { margin: 0; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "japanese",

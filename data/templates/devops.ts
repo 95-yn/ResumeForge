@@ -133,14 +133,12 @@ const template: TemplateData = {
 .dv-tag { font-size: 8.5pt; color: #172554; background: #3B82F6; padding: 2px 8px; border-radius: 3px; }
 .dv-lv { color: #1E3A8A; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.devops { margin: 0; } .dv-header { padding: 12mm 18mm 10mm; } .dv-section { margin: 12px 18mm 0; } }
+@media print { .resume.devops { margin: 0; } .dv-section { margin: 12px 18mm 0; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "devops",

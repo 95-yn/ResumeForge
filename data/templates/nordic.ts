@@ -118,14 +118,12 @@ const template: TemplateData = {
 .nd-skill { font-size: 9.5pt; color: #475569; border: 1px solid #CBD5E1; padding: 3px 12px; border-radius: 4px; }
 .nd-skill-lv { color: #94A3B8; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.nordic { margin: 0; padding: 22mm 22mm; background: #fff; } }
+@media print { .resume.nordic { margin: 0;  background: #fff; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "nordic",

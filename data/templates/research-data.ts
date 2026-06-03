@@ -398,10 +398,8 @@ const template: TemplateData = {
 .resume.research-data .skills span, .resume.research-data [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
 /* ===== Print ===== */
-@media print {
-  .resume.research-data { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.research-data { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "research-data",
       "version": "1.0.0",

@@ -373,16 +373,12 @@ const template: TemplateData = {
 .resume.electrical-engineer [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
 /* ===== Print ===== */
-@media print {
-  .resume.electrical-engineer {
-    margin:0;
+@media print { .resume.electrical-engineer { margin:0;
     -webkit-print-color-adjust:exact;
-    print-color-adjust:exact;
-  }
+    print-color-adjust:exact; }
   .resume.electrical-engineer .ee-entry,
   .resume.electrical-engineer .ee-section { break-inside:avoid; }
-  @page { margin:0; size:A4; }
-}`,
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "electrical-engineer",
       "version": "1.0.0",

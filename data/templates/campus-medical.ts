@@ -326,10 +326,8 @@ const template: TemplateData = {
 .resume.campus-medical li p, .resume.campus-medical li div { margin:0; padding:0; display:inline; }
 .resume.campus-medical .skills span, .resume.campus-medical [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.campus-medical { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.campus-medical { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "campus-medical",
       "version": "1.0.0",

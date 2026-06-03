@@ -240,12 +240,10 @@ const template: TemplateData = {
 .resume.it-cloud li p, .resume.it-cloud li div { margin:0; padding:0; display:inline; }
 .resume.it-cloud .skills span, .resume.it-cloud [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.it-cloud { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+@media print { .resume.it-cloud { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   .resume.it-cloud section { break-inside:avoid; }
   .resume.it-cloud .entry { break-inside:avoid; }
-  @page { margin:0; size:A4; }
-}`,
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "it-cloud",
       "version": "1.0.0",

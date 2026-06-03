@@ -297,10 +297,8 @@ const template: TemplateData = {
 .resume.sommelier li p, .resume.sommelier li div { margin:0; padding:0; display:inline; }
 .resume.sommelier .skills span, .resume.sommelier [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.sommelier { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.sommelier { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "sommelier",
       "version": "1.0.0",

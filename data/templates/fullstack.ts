@@ -122,14 +122,12 @@ const template: TemplateData = {
 .fs-skill { font-size: 9pt; color: #334155; background: #F1F5F9; border: 1px solid #E2E8F0; padding: 2px 10px; border-radius: 4px; }
 .fs-lv { color: #64748B; font-size: 8.5pt; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.fullstack { margin: 0; } .fs-header { padding: 14mm 20mm 12mm; } .fs-body { padding: 0 20mm; } }
+@media print { .resume.fullstack { margin: 0; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "fullstack",

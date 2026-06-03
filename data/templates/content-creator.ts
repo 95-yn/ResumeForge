@@ -375,10 +375,8 @@ const template: TemplateData = {
 .resume.content-creator li p, .resume.content-creator li div { margin:0; padding:0; display:inline; }
 .resume.content-creator .skills span, .resume.content-creator [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.content-creator { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.content-creator { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "content-creator",
       "version": "1.0.0",

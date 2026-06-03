@@ -407,12 +407,10 @@ const template: TemplateData = {
 .resume.pm-data li p, .resume.pm-data li div { margin:0; padding:0; display:inline; }
 .resume.pm-data .skills span, .resume.pm-data [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.pm-data { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+@media print { .resume.pm-data { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   .resume.pm-data .entry, .resume.pm-data .panel { break-inside:avoid; }
   .resume.pm-data section { break-inside:avoid; }
-  @page { margin:0; size:A4; }
-}`,
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "pm-data",
       "version": "1.0.0",

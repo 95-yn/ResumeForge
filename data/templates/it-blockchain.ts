@@ -245,12 +245,10 @@ const template: TemplateData = {
 .resume.it-blockchain li p, .resume.it-blockchain li div { margin:0; padding:0; display:inline; }
 .resume.it-blockchain .skills span, .resume.it-blockchain [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.it-blockchain { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+@media print { .resume.it-blockchain { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   @page { margin:0; size:A4; }
   .resume.it-blockchain section { page-break-inside:avoid; }
-  .resume.it-blockchain .block { page-break-inside:avoid; }
-}`,
+  .resume.it-blockchain .block { page-break-inside:avoid; } }`,
     schema: {
       "templateId": "it-blockchain",
       "version": "1.0.0",

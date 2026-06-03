@@ -370,14 +370,10 @@ const template: TemplateData = {
 .resume.process-engineer .skills span,
 .resume.process-engineer [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.process-engineer {
-    margin:0;
+@media print { .resume.process-engineer { margin:0;
     -webkit-print-color-adjust:exact;
-    print-color-adjust:exact;
-  }
-  @page { margin:0; size:A4; }
-}`,
+    print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "process-engineer",
       "version": "1.0.0",

@@ -314,11 +314,9 @@ const template: TemplateData = {
 .resume.fin-vc li p, .resume.fin-vc li div { margin:0; padding:0; display:inline; }
 .resume.fin-vc .skills span, .resume.fin-vc [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.fin-vc { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+@media print { .resume.fin-vc { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   .resume.fin-vc .entry { break-inside:avoid; }
-  @page { margin:0; size:A4; }
-}`,
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "fin-vc",
       "version": "1.0.0",

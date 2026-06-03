@@ -308,10 +308,8 @@ const template: TemplateData = {
 .resume.nonprofit li p, .resume.nonprofit li div { margin:0; padding:0; display:inline; }
 .resume.nonprofit .skills span, .resume.nonprofit [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.nonprofit { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.nonprofit { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "nonprofit",
       "version": "1.0.0",

@@ -254,10 +254,8 @@ const template: TemplateData = {
 .resume.phd-academic li p, .resume.phd-academic li div { margin:0; padding:0; display:inline; }
 .resume.phd-academic .skills span, .resume.phd-academic [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.phd-academic { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.phd-academic { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "phd-academic",
       "version": "1.0.0",

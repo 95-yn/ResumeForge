@@ -333,10 +333,8 @@ const template: TemplateData = {
 .resume.fin-quant li p, .resume.fin-quant li div { margin:0; padding:0; display:inline; }
 .resume.fin-quant .skills span, .resume.fin-quant [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.fin-quant { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.fin-quant { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "fin-quant",
       "version": "1.0.0",

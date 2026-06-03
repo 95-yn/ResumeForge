@@ -125,14 +125,12 @@ const template: TemplateData = {
 .gh-skill-tag { font-size: 8.5pt; color: #166534; background: #DCFCE7; border: 1px solid #BBF7D0; padding: 2px 10px; border-radius: 20px; }
 .gh-skill-lv { color: #15803D; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.github { margin: 0; border: none; padding: 14mm 18mm; } }
+@media print { .resume.github { margin: 0; border: none; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "github",

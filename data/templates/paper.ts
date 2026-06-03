@@ -106,14 +106,12 @@ const template: TemplateData = {
 .pp-list li { font-size: 10pt; color: #44403C; margin-bottom: 3px; }
 .pp-skills { font-size: 10pt; color: #44403C; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.paper { margin: 0; padding: 20mm 22mm; background: #FEFCE8; } }
+@media print { .resume.paper { margin: 0;  background: #FEFCE8; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "paper",

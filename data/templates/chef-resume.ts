@@ -311,10 +311,8 @@ const template: TemplateData = {
 .resume.chef-resume li p, .resume.chef-resume li div { margin:0; padding:0; display:inline; }
 .resume.chef-resume .skills span, .resume.chef-resume [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.chef-resume { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.chef-resume { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "chef-resume",
       "version": "1.0.0",

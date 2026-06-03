@@ -228,10 +228,8 @@ const template: TemplateData = {
 .resume.it-react li p, .resume.it-react li div { margin:0; padding:0; display:inline; }
 .resume.it-react .skills span, .resume.it-react [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.it-react { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.it-react { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "it-react",
       "version": "1.0.0",

@@ -247,15 +247,11 @@ const template: TemplateData = {
 
 li p, li div { margin: 0; padding: 0; display: inline; }
 
-@media print {
-  .resume.tech { margin: 0; }
-  .tc-header {
-    background: #1C1917;
+@media print { .resume.tech { margin: 0; }
+  .tc-header { background: #1C1917;
     -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  @page { margin: 0; size: A4; }
-}
+    print-color-adjust: exact; }
+  @page { margin: 0; size: A4; } }
 
 
 /* skill-no-wrap */

@@ -275,10 +275,8 @@ const template: TemplateData = {
 .resume.procurement .skills span,
 .resume.procurement [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.procurement { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.procurement { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "procurement",
       "version": "1.0.0",

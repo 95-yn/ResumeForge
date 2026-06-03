@@ -279,10 +279,8 @@ const template: TemplateData = {
 .resume.kraft li p, .resume.kraft li div { margin:0; padding:0; display:inline; }
 .resume.kraft .skills span, .resume.kraft [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.kraft { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.kraft { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "kraft",
       "version": "1.0.0",

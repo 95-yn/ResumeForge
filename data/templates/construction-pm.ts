@@ -419,10 +419,8 @@ const template: TemplateData = {
 .resume.construction-pm li p, .resume.construction-pm li div { margin:0; padding:0; display:inline; }
 .resume.construction-pm .skills span, .resume.construction-pm [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.construction-pm { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.construction-pm { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "construction-pm",
       "version": "1.0.0",

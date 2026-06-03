@@ -161,10 +161,8 @@ section p {
 
 li p, li div { margin: 0; padding: 0; display: inline; }
 
-@media print {
-  .resume.minimal { margin: 0; padding: 20mm 22mm; }
-  @page { margin: 0; size: A4; }
-}
+@media print { .resume.minimal { margin: 0; }
+  @page { margin: 0; size: A4; } }
 
 
 /* skill-no-wrap */

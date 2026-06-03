@@ -316,10 +316,8 @@ const template: TemplateData = {
 .resume.bauhaus .skills span,
 .resume.bauhaus [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.bauhaus { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.bauhaus { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "bauhaus",
       "version": "1.0.0",

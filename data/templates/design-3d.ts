@@ -304,10 +304,8 @@ const template: TemplateData = {
 .resume.design-3d li p, .resume.design-3d li div { margin:0; padding:0; display:inline; }
 .resume.design-3d .skills span, .resume.design-3d [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.design-3d { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.design-3d { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "design-3d",
       "version": "1.0.0",

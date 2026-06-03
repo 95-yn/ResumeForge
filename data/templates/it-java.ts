@@ -208,10 +208,8 @@ const template: TemplateData = {
 .resume.it-java li p, .resume.it-java li div { margin:0; padding:0; display:inline; }
 .resume.it-java .skills span, .resume.it-java [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.it-java { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.it-java { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "it-java",
       "version": "1.0.0",

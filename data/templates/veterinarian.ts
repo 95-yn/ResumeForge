@@ -298,10 +298,8 @@ const template: TemplateData = {
 .resume.veterinarian li p, .resume.veterinarian li div { margin:0; padding:0; display:inline; }
 .resume.veterinarian .skills span, .resume.veterinarian [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.veterinarian { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.veterinarian { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "veterinarian",
       "version": "1.0.0",

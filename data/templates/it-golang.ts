@@ -291,11 +291,9 @@ const template: TemplateData = {
 .resume.it-golang li p, .resume.it-golang li div { margin:0; padding:0; display:inline; }
 .resume.it-golang .skills span, .resume.it-golang [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.it-golang { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+@media print { .resume.it-golang { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   .resume.it-golang .entry, .resume.it-golang .skill-chip { break-inside:avoid; }
-  @page { margin:0; size:A4; }
-}`,
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "it-golang",
       "version": "1.0.0",

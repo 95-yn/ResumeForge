@@ -118,14 +118,12 @@ const template: TemplateData = {
 .corp-skill-name { color: #1E293B; font-weight: 500; }
 .corp-skill-level { color: #1E40AF; font-size: 9pt; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.corporate { margin: 0; } .corp-section { padding: 0 20mm; } .corp-header { padding: 16mm 20mm 12mm; } }
+@media print { .resume.corporate { margin: 0; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "corporate",

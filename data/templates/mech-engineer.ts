@@ -406,10 +406,8 @@ const template: TemplateData = {
 .resume.mech-engineer li p, .resume.mech-engineer li div { margin:0; padding:0; display:inline; }
 .resume.mech-engineer .skills span, .resume.mech-engineer [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.mech-engineer { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.mech-engineer { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "mech-engineer",
       "version": "1.0.0",

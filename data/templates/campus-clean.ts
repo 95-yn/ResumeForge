@@ -204,10 +204,8 @@ const template: TemplateData = {
 
 .resume.campus-clean li p, .resume.campus-clean li div { margin: 0; padding: 0; display: inline; }
 
-@media print {
-  .resume.campus-clean { margin: 0; padding: 14mm 16mm; }
-  @page { margin: 0; size: A4; }
-}
+@media print { .resume.campus-clean { margin: 0; }
+  @page { margin: 0; size: A4; } }
 
 
 /* skill-no-wrap */

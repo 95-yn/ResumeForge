@@ -368,10 +368,8 @@ const template: TemplateData = {
 .resume.product-designer li p, .resume.product-designer li div { margin: 0; padding: 0; display: inline; }
 .resume.product-designer .skills span, .resume.product-designer [class*='skill'] span { white-space: nowrap; word-break: keep-all; }
 
-@media print {
-  .resume.product-designer { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  @page { margin: 0; size: A4; }
-}`,
+@media print { .resume.product-designer { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  @page { margin: 0; size: A4; } }`,
     schema: {
       "templateId": "product-designer",
       "version": "1.0.0",

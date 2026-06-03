@@ -309,10 +309,8 @@ const template: TemplateData = {
 .resume.realtor li p, .resume.realtor li div { margin:0; padding:0; display:inline; }
 .resume.realtor .skills span, .resume.realtor [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.realtor { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.realtor { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "realtor",
       "version": "1.0.0",

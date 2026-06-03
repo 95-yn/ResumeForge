@@ -236,15 +236,11 @@ const template: TemplateData = {
 
 li p, li div { margin: 0; padding: 0; display: inline; }
 
-@media print {
-  .resume.professional { margin: 0; }
-  .pro-header {
-    background: #292524;
+@media print { .resume.professional { margin: 0; }
+  .pro-header { background: #292524;
     -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  @page { margin: 0; size: A4; }
-}
+    print-color-adjust: exact; }
+  @page { margin: 0; size: A4; } }
 
 
 /* skill-no-wrap */

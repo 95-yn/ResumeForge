@@ -275,10 +275,8 @@ const template: TemplateData = {
 .resume.policy-analyst li p, .resume.policy-analyst li div { margin:0; padding:0; display:inline; }
 .resume.policy-analyst .skills span, .resume.policy-analyst [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.policy-analyst { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.policy-analyst { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "policy-analyst",
       "version": "1.0.0",

@@ -114,14 +114,12 @@ const template: TemplateData = {
 .ln-skill-item { font-size: 9pt; color: #555; border-bottom: 1px solid #ccc; padding-bottom: 2px; }
 .ln-lv { color: #aaa; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.line { margin: 0; padding: 20mm 20mm; } }
+@media print { .resume.line { margin: 0; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "line",

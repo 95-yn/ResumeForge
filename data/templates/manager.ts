@@ -130,14 +130,12 @@ const template: TemplateData = {
 .mg-skill { display: flex; justify-content: space-between; font-size: 9.5pt; padding: 4px 0; border-bottom: 1px solid #E2E8F0; }
 .mg-level { color: #475569; font-size: 9pt; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.manager { margin: 0; padding: 16mm 20mm; background: #fff; } .mg-entry-content { box-shadow: none; } }
+@media print { .resume.manager { margin: 0;  background: #fff; } .mg-entry-content { box-shadow: none; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "manager",

@@ -351,10 +351,8 @@ const template: TemplateData = {
 .resume.landscape-designer li p, .resume.landscape-designer li div { margin: 0; padding: 0; display: inline; }
 .resume.landscape-designer .skills span, .resume.landscape-designer [class*='skill'] span { white-space: nowrap; word-break: keep-all; }
 
-@media print {
-  .resume.landscape-designer { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  @page { margin: 0; size: A4; }
-}`,
+@media print { .resume.landscape-designer { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  @page { margin: 0; size: A4; } }`,
     schema: {
       "templateId": "landscape-designer",
       "version": "1.0.0",

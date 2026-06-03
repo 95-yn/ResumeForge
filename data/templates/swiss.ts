@@ -258,22 +258,14 @@ const template: TemplateData = {
 
 li p, li div { margin: 0; padding: 0; display: inline; }
 
-@media print {
-  .resume.swiss { margin: 0; }
-  .sw-header { padding: 14mm 18mm 12px; }
-  .sw-body { padding: 14px 18mm 18mm; }
-  .sw-red-block {
-    background: #DC2626;
+@media print { .resume.swiss { margin: 0; }
+  .sw-red-block { background: #DC2626;
     -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  .sw-label {
-    color: #DC2626;
+    print-color-adjust: exact; }
+  .sw-label { color: #DC2626;
     -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  @page { margin: 0; size: A4; }
-}
+    print-color-adjust: exact; }
+  @page { margin: 0; size: A4; } }
 
 
 /* skill-no-wrap */

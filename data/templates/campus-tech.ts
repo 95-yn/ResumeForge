@@ -201,12 +201,9 @@ const template: TemplateData = {
 
 li p, li div { margin: 0; padding: 0; display: inline; }
 
-@media print {
-  .resume.campus-tech { margin: 0; }
+@media print { .resume.campus-tech { margin: 0; }
   .section { margin-left: 18mm; margin-right: 18mm; }
-  .resume-header { padding: 14mm 18mm 12mm; }
-  @page { margin: 0; size: A4; }
-}
+  @page { margin: 0; size: A4; } }
 
 
 /* skill-no-wrap */

@@ -345,10 +345,8 @@ const template: TemplateData = {
 .resume.logistics-coord li p, .resume.logistics-coord li div { margin:0; padding:0; display:inline; }
 .resume.logistics-coord .skills span, .resume.logistics-coord [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.logistics-coord { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.logistics-coord { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "logistics-coord",
       "version": "1.0.0",

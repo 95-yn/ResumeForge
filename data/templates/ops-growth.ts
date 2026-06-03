@@ -336,10 +336,8 @@ const template: TemplateData = {
 .resume.ops-growth li p, .resume.ops-growth li div { margin:0; padding:0; display:inline; }
 .resume.ops-growth .skills span, .resume.ops-growth [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.ops-growth { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.ops-growth { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "ops-growth",
       "version": "1.0.0",

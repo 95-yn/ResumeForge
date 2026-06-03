@@ -126,14 +126,12 @@ const template: TemplateData = {
 .mk-skill-name { color: #1a2233; font-weight: 500; }
 .mk-skill-level { color: #059669; font-size: 9pt; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.marketing { margin: 0; } .mk-header-bg { padding: 16mm 20mm 14mm; } .mk-body { padding: 0 20mm; } }
+@media print { .resume.marketing { margin: 0; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "marketing",

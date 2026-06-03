@@ -313,10 +313,8 @@ const template: TemplateData = {
 .resume.public-affairs li p, .resume.public-affairs li div { margin:0; padding:0; display:inline; }
 .resume.public-affairs .skills span, .resume.public-affairs [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.public-affairs { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.public-affairs { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "public-affairs",
       "version": "1.0.0",

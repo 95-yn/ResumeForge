@@ -316,10 +316,8 @@ const template: TemplateData = {
 .resume.cs-manager .skills span, .resume.cs-manager [class*='skill'] span { white-space: nowrap; word-break: keep-all; }
 .resume.cs-manager .cs-kpi-label span { white-space: normal; }
 
-@media print {
-  .resume.cs-manager { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-  @page { margin: 0; size: A4; }
-}`,
+@media print { .resume.cs-manager { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  @page { margin: 0; size: A4; } }`,
     schema: {
       "templateId": "cs-manager",
       "version": "1.0.0",

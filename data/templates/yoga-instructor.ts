@@ -340,10 +340,8 @@ const template: TemplateData = {
 .resume.yoga-instructor li p, .resume.yoga-instructor li div { margin:0; padding:0; display:inline; }
 .resume.yoga-instructor .skills span, .resume.yoga-instructor [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.yoga-instructor { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.yoga-instructor { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "yoga-instructor",
       "version": "1.0.0",

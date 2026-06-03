@@ -342,14 +342,10 @@ const template: TemplateData = {
 .resume.blueprint-engineer li p, .resume.blueprint-engineer li div { margin: 0; padding: 0; display: inline; }
 .resume.blueprint-engineer .skills span, .resume.blueprint-engineer [class*='skill'] span { white-space: nowrap; word-break: keep-all; }
 
-@media print {
-  .resume.blueprint-engineer {
-    margin: 0;
+@media print { .resume.blueprint-engineer { margin: 0;
     -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  @page { margin: 0; size: A4; }
-}`,
+    print-color-adjust: exact; }
+  @page { margin: 0; size: A4; } }`,
     schema: {
       "templateId": "blueprint-engineer",
       "version": "1.0.0",

@@ -306,10 +306,8 @@ const template: TemplateData = {
 .resume.interior-designer li p, .resume.interior-designer li div { margin:0; padding:0; display:inline; }
 .resume.interior-designer .skills span, .resume.interior-designer [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.interior-designer { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.interior-designer { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "interior-designer",
       "version": "1.0.0",

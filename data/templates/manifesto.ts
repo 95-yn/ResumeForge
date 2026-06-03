@@ -230,10 +230,7 @@ const template: TemplateData = {
   display: inline;
 }
 
-@media print {
-  @page { margin: 0; size: A4; }
-  .resume.manifesto { padding: 22mm 18mm; }
-}
+@media print { @page { margin: 0; size: A4; } }
 `,
     schema: {
       name: '宣言风格',

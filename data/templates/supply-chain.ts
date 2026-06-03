@@ -374,10 +374,8 @@ const template: TemplateData = {
 .resume.supply-chain li p, .resume.supply-chain li div { margin:0; padding:0; display:inline; }
 .resume.supply-chain .skills span, .resume.supply-chain [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.supply-chain { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.supply-chain { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "supply-chain",
       "version": "1.0.0",

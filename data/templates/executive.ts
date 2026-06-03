@@ -120,14 +120,12 @@ const template: TemplateData = {
 .ex-skills { display: flex; flex-wrap: wrap; gap: 8px; }
 .ex-skill-tag { font-size: 9pt; color: #444; border: 1px solid #D4B97A; padding: 2px 10px; border-radius: 2px; font-family: "Helvetica Neue", "Arial", sans-serif; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.executive { margin: 0; padding: 18mm 20mm; } }
+@media print { .resume.executive { margin: 0; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "executive",

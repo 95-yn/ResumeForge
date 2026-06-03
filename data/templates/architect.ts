@@ -120,14 +120,12 @@ const template: TemplateData = {
 .ac-skill { display: flex; justify-content: space-between; font-size: 9pt; padding: 3px 0; border-bottom: 1px solid #F5F5F5; }
 .ac-level { color: #9E9E9E; font-size: 8.5pt; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.architect { margin: 0; } .ac-header { padding: 16mm 18mm 12px; } .ac-grid { padding: 0 18mm; } }
+@media print { .resume.architect { margin: 0; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "architect",

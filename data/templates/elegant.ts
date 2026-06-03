@@ -230,10 +230,8 @@ const template: TemplateData = {
 
 li p, li div { margin: 0; padding: 0; display: inline; }
 
-@media print {
-  .resume.elegant { margin: 0; padding: 18mm 20mm; }
-  @page { margin: 0; size: A4; }
-}
+@media print { .resume.elegant { margin: 0; }
+  @page { margin: 0; size: A4; } }
 
 
 /* skill-no-wrap */

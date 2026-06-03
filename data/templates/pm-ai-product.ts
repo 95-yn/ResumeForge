@@ -261,10 +261,8 @@ const template: TemplateData = {
 .resume.pm-ai-product li p, .resume.pm-ai-product li div { margin:0; padding:0; display:inline; }
 .resume.pm-ai-product .skills span, .resume.pm-ai-product [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.pm-ai-product { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.pm-ai-product { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "pm-ai-product",
       "version": "1.0.0",

@@ -306,11 +306,9 @@ const template: TemplateData = {
 .resume.fin-ib li p, .resume.fin-ib li div { margin:0; padding:0; display:inline; }
 .resume.fin-ib .skills span, .resume.fin-ib [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.fin-ib { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+@media print { .resume.fin-ib { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   .resume.fin-ib .ib-entry { break-inside:avoid; }
-  @page { margin:0; size:A4; }
-}`,
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "fin-ib",
       "version": "1.0.0",

@@ -342,14 +342,10 @@ const template: TemplateData = {
 .resume.fitness-coach li p, .resume.fitness-coach li div { margin: 0; padding: 0; display: inline; }
 .resume.fitness-coach .skills span, .resume.fitness-coach [class*='skill'] span { white-space: nowrap; word-break: keep-all; }
 
-@media print {
-  .resume.fitness-coach {
-    margin: 0;
+@media print { .resume.fitness-coach { margin: 0;
     -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
-  }
-  @page { margin: 0; size: A4; }
-}`,
+    print-color-adjust: exact; }
+  @page { margin: 0; size: A4; } }`,
     schema: {
       "templateId": "fitness-coach",
       "version": "1.0.0",

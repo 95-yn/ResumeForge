@@ -194,10 +194,7 @@ const template: TemplateData = {
 
 li p, li div { margin: 0; padding: 0; display: inline; }
 
-@media print {
-  .resume.finance-banking .resume-body { padding: 14px 18mm 16mm; }
-  @page { margin: 0; size: A4; }
-}
+@media print { @page { margin: 0; size: A4; } }
 
 /* skill-no-wrap */
 .tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {

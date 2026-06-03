@@ -114,14 +114,12 @@ const template: TemplateData = {
 .ph-skill + .ph-skill::before { content: "/"; margin-right: 8px; color: #ccc; }
 .ph-skill-lv { color: #999; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.photographer { margin: 0; } .ph-header { padding: 20mm 20mm 16mm; } .ph-content { padding: 18px 20mm; } }
+@media print { .resume.photographer { margin: 0; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "photographer",

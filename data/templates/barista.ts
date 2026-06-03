@@ -317,10 +317,8 @@ const template: TemplateData = {
 .resume.barista li p, .resume.barista li div { margin:0; padding:0; display:inline; }
 .resume.barista .skills span, .resume.barista [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.barista { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.barista { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "barista",
       "version": "1.0.0",

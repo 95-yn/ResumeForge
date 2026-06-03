@@ -312,12 +312,10 @@ const template: TemplateData = {
 .resume.social-worker li p, .resume.social-worker li div { margin:0; padding:0; display:inline; }
 .resume.social-worker .skills span, .resume.social-worker [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.social-worker { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+@media print { .resume.social-worker { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
   .resume.social-worker header { box-shadow:none; }
   .resume.social-worker .entry { box-shadow:none; }
-  @page { margin:0; size:A4; }
-}`,
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "social-worker",
       "version": "1.0.0",

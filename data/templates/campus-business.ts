@@ -277,10 +277,8 @@ const template: TemplateData = {
 .resume.campus-business li p, .resume.campus-business li div { margin:0; padding:0; display:inline; }
 .resume.campus-business .skills span, .resume.campus-business [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.campus-business { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.campus-business { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "campus-business",
       "version": "1.0.0",

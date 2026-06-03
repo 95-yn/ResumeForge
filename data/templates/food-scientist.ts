@@ -315,10 +315,8 @@ const template: TemplateData = {
 .resume.food-scientist li p, .resume.food-scientist li div { margin:0; padding:0; display:inline; }
 .resume.food-scientist .skills span, .resume.food-scientist [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.food-scientist { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.food-scientist { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "food-scientist",
       "version": "1.0.0",

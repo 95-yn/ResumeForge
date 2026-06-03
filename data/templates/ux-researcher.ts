@@ -378,13 +378,11 @@ const template: TemplateData = {
 .resume.ux-researcher li p, .resume.ux-researcher li div { margin: 0; padding: 0; display: inline; }
 .resume.ux-researcher .skills span, .resume.ux-researcher [class*='skill'] span { white-space: nowrap; word-break: keep-all; }
 
-@media print {
-  .resume.ux-researcher { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+@media print { .resume.ux-researcher { margin: 0; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .resume.ux-researcher .ux-stage,
   .resume.ux-researcher .ux-insight-card,
   .resume.ux-researcher .ux-edu-item { break-inside: avoid; }
-  @page { margin: 0; size: A4; }
-}`,
+  @page { margin: 0; size: A4; } }`,
     schema: {
       "templateId": "ux-researcher",
       "version": "1.0.0",

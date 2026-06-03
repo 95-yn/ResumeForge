@@ -263,10 +263,8 @@ const template: TemplateData = {
 .resume.retail-sales li p, .resume.retail-sales li div { margin:0; padding:0; display:inline; }
 .resume.retail-sales .skills span, .resume.retail-sales [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.retail-sales { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.retail-sales { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "retail-sales",
       "version": "1.0.0",

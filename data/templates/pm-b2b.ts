@@ -393,10 +393,8 @@ const template: TemplateData = {
 .resume.pm-b2b li p, .resume.pm-b2b li div { margin:0; padding:0; display:inline; }
 .resume.pm-b2b .skills span, .resume.pm-b2b [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.pm-b2b { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.pm-b2b { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "pm-b2b",
       "version": "1.0.0",

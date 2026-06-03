@@ -107,14 +107,12 @@ const template: TemplateData = {
 .mn-skills { display: flex; flex-wrap: wrap; gap: 6px; }
 .mn-tag { font-size: 9pt; color: #525252; border: 1px solid #D4D4D4; padding: 2px 10px; border-radius: 3px; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.mono { margin: 0; padding: 20mm 20mm; } }
+@media print { .resume.mono { margin: 0; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "mono",

@@ -380,10 +380,8 @@ const template: TemplateData = {
 .resume.it-data-eng li p, .resume.it-data-eng li div { margin:0; padding:0; display:inline; }
 .resume.it-data-eng .skills span, .resume.it-data-eng [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.it-data-eng { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.it-data-eng { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "it-data-eng",
       "version": "1.0.0",

@@ -108,14 +108,12 @@ const template: TemplateData = {
 .sp-skill { font-size: 10pt; color: #444; }
 .sp-lv { color: #aaa; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.space { margin: 0; padding: 24mm 24mm; } }
+@media print { .resume.space { margin: 0; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "space",

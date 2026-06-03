@@ -339,10 +339,8 @@ const template: TemplateData = {
 .resume.athlete-pro li p, .resume.athlete-pro li div { margin:0; padding:0; display:inline; }
 .resume.athlete-pro .skills span, .resume.athlete-pro [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.athlete-pro { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.athlete-pro { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "athlete-pro",
       "version": "1.0.0",

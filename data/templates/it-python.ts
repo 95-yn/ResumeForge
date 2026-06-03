@@ -283,10 +283,8 @@ const template: TemplateData = {
 .resume.it-python li p, .resume.it-python li div { margin:0; padding:0; display:inline; }
 .resume.it-python .skills span, .resume.it-python [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.it-python { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.it-python { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "it-python",
       "version": "1.0.0",

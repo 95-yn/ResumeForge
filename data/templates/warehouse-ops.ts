@@ -330,10 +330,8 @@ const template: TemplateData = {
 .resume.warehouse-ops .skills span,
 .resume.warehouse-ops [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.warehouse-ops { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.warehouse-ops { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "warehouse-ops",
       "version": "1.0.0",

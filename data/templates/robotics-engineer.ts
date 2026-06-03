@@ -379,10 +379,8 @@ const template: TemplateData = {
 .resume.robotics-engineer li p, .resume.robotics-engineer li div { margin:0; padding:0; display:inline; }
 .resume.robotics-engineer .skills span, .resume.robotics-engineer [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.robotics-engineer { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.robotics-engineer { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "robotics-engineer",
       "version": "1.0.0",

@@ -119,14 +119,12 @@ const template: TemplateData = {
 .cs-skill { display: flex; justify-content: space-between; font-size: 9.5pt; padding: 3px 0; border-bottom: 1px solid #eee; }
 .cs-level { font-size: 9pt; color: #666; }
 li p, li div { margin: 0; padding: 0; display: inline; }
-@media print { .resume.consulting { margin: 0; } .cs-header { padding: 18mm 20mm 12px; } .cs-body { padding: 0 20mm 18mm; } }
+@media print { .resume.consulting { margin: 0; } }
 
 
 /* skill-no-wrap */
-.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] {
-  white-space: nowrap;
-  word-break: keep-all;
-}
+.tag, .skill-tag, .skill, .skills span, .skill-tags > *, [class*='skill'] span, [class*='tag'] { white-space: nowrap;
+  word-break: keep-all; }
 `,
     schema: {
           "templateId": "consulting",

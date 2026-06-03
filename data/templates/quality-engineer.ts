@@ -251,10 +251,8 @@ const template: TemplateData = {
 .resume.quality-engineer li p, .resume.quality-engineer li div { margin:0; padding:0; display:inline; }
 .resume.quality-engineer .skills span, .resume.quality-engineer [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.quality-engineer { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.quality-engineer { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "quality-engineer",
       "version": "1.0.0",

@@ -188,10 +188,8 @@ const template: TemplateData = {
 .resume.illustrator-pro li p, .resume.illustrator-pro li div { margin:0; padding:0; display:inline; }
 .resume.illustrator-pro .skills span, .resume.illustrator-pro [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.illustrator-pro { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.illustrator-pro { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "illustrator-pro",
       "version": "1.0.0",

@@ -228,10 +228,8 @@ const template: TemplateData = {
 .resume.scientist li p, .resume.scientist li div { margin:0; padding:0; display:inline; }
 .resume.scientist .skills span, .resume.scientist [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.scientist { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.scientist { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "scientist",
       "version": "1.0.0",

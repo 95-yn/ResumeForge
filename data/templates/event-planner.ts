@@ -317,10 +317,8 @@ const template: TemplateData = {
 .resume.event-planner li p, .resume.event-planner li div { margin:0; padding:0; display:inline; }
 .resume.event-planner .skills span, .resume.event-planner [class*='skill'] span { white-space:nowrap; word-break:keep-all; }
 
-@media print {
-  .resume.event-planner { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-  @page { margin:0; size:A4; }
-}`,
+@media print { .resume.event-planner { margin:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+  @page { margin:0; size:A4; } }`,
     schema: {
       "templateId": "event-planner",
       "version": "1.0.0",
