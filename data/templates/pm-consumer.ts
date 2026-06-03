@@ -89,18 +89,18 @@ const template: TemplateData = {
   min-height:297mm;
   margin:0 auto;
   padding:18mm;
-  background:#fbf7f4;
+  background:#fbf6f3;
   font-size:10pt;
   line-height:1.7;
-  color:#473f52;
+  color:#3a3340;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
-  --coral:#e8613c;
-  --coral-deep:#c44a28;
-  --ink:#2c2630;
-  --body:#473f52;
-  --sub:#6a6273;
-  --soft:#fbeee8;
-  --line:#f0ddd3;
+  --coral:#e0552f;
+  --coral-deep:#b23d1d;
+  --ink:#241f29;
+  --body:#3a3340;
+  --sub:#5a5360;
+  --soft:#fae6dd;
+  --line:#ecd6ca;
 }
 
 /* ===== HERO ===== */
@@ -121,7 +121,7 @@ const template: TemplateData = {
   height:62px;
   border-radius:50%;
   background:rgba(255,255,255,0.18);
-  border:3px solid rgba(255,255,255,0.7);
+  border:3px solid rgba(255,255,255,0.8);
   display:flex;
   align-items:center;
   justify-content:center;
@@ -143,10 +143,11 @@ const template: TemplateData = {
   display:inline-block;
   margin-top:9px;
   padding:4px 15px;
-  font-size:9.5pt;
+  font-size:10pt;
   font-weight:600;
   border-radius:20px;
-  background:rgba(255,255,255,0.22);
+  background:rgba(255,255,255,0.24);
+  color:#fff;
 }
 .resume.pm-consumer .contact {
   margin-top:13px;
@@ -157,7 +158,7 @@ const template: TemplateData = {
 .resume.pm-consumer .chip {
   display:inline-block;
   padding:4px 13px;
-  font-size:8.5pt;
+  font-size:9pt;
   border-radius:14px;
   background:#fff;
   color:var(--coral-deep);
@@ -224,7 +225,7 @@ const template: TemplateData = {
   box-shadow:0 0 0 3px var(--soft);
 }
 .resume.pm-consumer .entry-card {
-  background:#fffaf8;
+  background:#fff8f4;
   border-radius:14px;
   padding:14px 18px;
   border:1px solid var(--line);
@@ -251,7 +252,7 @@ const template: TemplateData = {
   font-size:10pt;
 }
 .resume.pm-consumer .date {
-  font-size:8.5pt;
+  font-size:9pt;
   color:var(--coral-deep);
   font-weight:700;
   background:var(--soft);
@@ -268,7 +269,7 @@ const template: TemplateData = {
   position:relative;
   padding-left:17px;
   margin-bottom:6px;
-  font-size:9.6pt;
+  font-size:9.8pt;
   color:var(--body);
   line-height:1.65;
 }
@@ -291,7 +292,7 @@ const template: TemplateData = {
   gap:16px;
 }
 .resume.pm-consumer .project-item {
-  background:#fffaf8;
+  background:#fff8f4;
   border-radius:14px;
   padding:15px 18px;
   border:1px solid var(--line);
@@ -304,7 +305,7 @@ const template: TemplateData = {
   line-height:1.4;
 }
 .resume.pm-consumer .proj-role {
-  font-size:8.5pt;
+  font-size:9pt;
   font-weight:600;
   color:var(--coral-deep);
   background:var(--soft);
@@ -312,7 +313,7 @@ const template: TemplateData = {
   border-radius:11px;
 }
 .resume.pm-consumer .proj-desc {
-  font-size:9.4pt;
+  font-size:9.6pt;
   color:var(--body);
   margin-bottom:7px;
   line-height:1.65;
@@ -332,12 +333,12 @@ const template: TemplateData = {
   border-radius:16px;
   background:var(--soft);
   color:var(--coral-deep);
-  font-size:9.2pt;
+  font-size:9.5pt;
   font-weight:700;
   border:1px solid var(--line);
 }
 .resume.pm-consumer .skill-tag .lvl {
-  font-size:8pt;
+  font-size:8.5pt;
   font-weight:600;
   color:#fff;
   background:var(--coral);
@@ -362,7 +363,7 @@ const template: TemplateData = {
   line-height:1.4;
 }
 .resume.pm-consumer .edu-item p {
-  font-size:9.4pt;
+  font-size:9.6pt;
   color:var(--sub);
   margin-top:4px;
 }

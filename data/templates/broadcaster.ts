@@ -19,7 +19,6 @@ const template: TemplateData = {
     category: 'creative',
     html: `<div class="resume broadcaster">
   <header>
-    <div class="spotlight"></div>
     <div class="marquee">
       <span class="bulb"></span>
       <div class="stage-name">
@@ -66,105 +65,78 @@ const template: TemplateData = {
 .resume.broadcaster * { word-wrap:break-word; overflow-wrap:break-word; }
 
 .resume.broadcaster {
-  --crimson:#5a0a14;
-  --crimson-deep:#3d0710;
-  --gold:#c9a24b;
-  --gold-bright:#e8c573;
-  --ink:#2a1a1c;
-  --paper:#fbf7f1;
+  --crimson:#7a1422;
+  --crimson-deep:#5a0f19;
+  --gold:#b08a3c;
+  --ink:#2a2422;
+  --body:#33302e;
+  --paper:#ffffff;
   max-width:210mm;
   min-height:297mm;
   margin:0 auto;
   padding:0 0 18mm;
   background:var(--paper);
-  color:var(--ink);
-  font-size:10pt;
-  line-height:1.55;
+  color:var(--body);
+  font-size:10.5pt;
+  line-height:1.6;
   font-family:'PingFang SC','Microsoft YaHei',sans-serif;
 }
 
-/* ===== Header: stage / curtain ===== */
+/* ===== Header ===== */
 .resume.broadcaster header {
   position:relative;
-  overflow:hidden;
-  padding:18mm 18mm 14mm;
-  background:
-    radial-gradient(120% 90% at 50% -20%, rgba(201,162,75,.28), transparent 60%),
-    repeating-linear-gradient(90deg, var(--crimson-deep) 0 14px, var(--crimson) 14px 28px),
-    var(--crimson);
-  color:var(--paper);
-  border-bottom:3px solid var(--gold);
-}
-.resume.broadcaster header::after {
-  content:"";
-  position:absolute;
-  left:0; right:0; bottom:0;
-  height:7px;
-  background:
-    radial-gradient(8px 7px at 7px 0, var(--crimson) 60%, transparent 62%) repeat-x;
-  background-size:14px 7px;
-  filter:brightness(1.15);
-}
-.resume.broadcaster .spotlight {
-  position:absolute;
-  top:-30mm; left:50%;
-  width:90mm; height:90mm;
-  transform:translateX(-50%);
-  background:radial-gradient(circle at 50% 40%, rgba(255,250,235,.4), rgba(232,197,115,.12) 45%, transparent 70%);
-  pointer-events:none;
+  padding:16mm 18mm 12mm;
+  background:var(--crimson);
+  color:#fff;
+  border-bottom:2px solid var(--gold);
 }
 .resume.broadcaster .marquee {
   position:relative;
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:18px;
+  gap:16px;
 }
 .resume.broadcaster .bulb {
   flex:none;
-  width:10px; height:10px;
+  width:7px; height:7px;
   border-radius:50%;
-  background:radial-gradient(circle at 35% 35%, #fff, var(--gold-bright) 55%, var(--gold) 100%);
-  box-shadow:0 0 10px 2px rgba(232,197,115,.7);
+  background:var(--gold);
 }
 .resume.broadcaster .stage-name { text-align:center; }
 .resume.broadcaster header h1 {
-  font-size:30pt;
+  font-size:27pt;
   font-weight:800;
-  letter-spacing:.12em;
-  line-height:1.1;
+  letter-spacing:.08em;
+  line-height:1.15;
   color:#fff;
-  text-shadow:0 1px 0 var(--gold), 0 0 18px rgba(232,197,115,.45);
 }
-.resume.broadcaster header h1::before,
-.resume.broadcaster header h1::after { content:"\\\\2726"; color:var(--gold-bright); font-size:14pt; vertical-align:middle; opacity:.85; margin:0 .35em; }
 .resume.broadcaster header p {
-  margin-top:6px;
+  margin-top:7px;
   font-size:11pt;
-  letter-spacing:.42em;
-  text-indent:.42em;
-  color:var(--gold-bright);
-  text-transform:uppercase;
+  letter-spacing:.28em;
+  text-indent:.28em;
+  color:#f0d9a6;
 }
 .resume.broadcaster .contact {
   position:relative;
-  margin-top:16px;
+  margin-top:14px;
   display:flex;
   flex-wrap:wrap;
   justify-content:center;
-  gap:10px 0;
-  font-size:9pt;
-  letter-spacing:.04em;
+  gap:8px 0;
+  font-size:9.5pt;
+  letter-spacing:.03em;
 }
 .resume.broadcaster .contact span {
   position:relative;
-  padding:0 16px;
-  color:#f3e6d0;
+  padding:0 15px;
+  color:#f4ece0;
 }
 .resume.broadcaster .contact span + span::before {
   content:"";
   position:absolute; left:0; top:50%;
-  width:4px; height:4px; margin-top:-2px;
+  width:3px; height:3px; margin-top:-1.5px;
   border-radius:50%;
   background:var(--gold);
 }
@@ -172,54 +144,28 @@ const template: TemplateData = {
 /* ===== Sections ===== */
 .resume.broadcaster section {
   padding:0 18mm;
-  margin-top:13px;
+  margin-top:14px;
 }
 .resume.broadcaster section:first-of-type { margin-top:16px; }
 .resume.broadcaster h2 {
   position:relative;
-  font-size:11.5pt;
+  font-size:12pt;
   font-weight:700;
-  letter-spacing:.18em;
+  letter-spacing:.12em;
   color:var(--crimson);
-  padding-left:20px;
-  margin-bottom:10px;
-}
-.resume.broadcaster h2::before {
-  content:"";
-  position:absolute; left:0; top:50%;
-  width:11px; height:11px; margin-top:-5.5px;
-  border-radius:50%;
-  background:radial-gradient(circle at 35% 35%, var(--gold-bright), var(--gold) 60%, var(--crimson) 100%);
-  box-shadow:0 0 0 2px rgba(201,162,75,.25);
-}
-.resume.broadcaster h2::after {
-  content:"";
-  display:block;
-  height:2px;
-  margin-top:4px;
-  background:linear-gradient(90deg, var(--gold) 0, rgba(201,162,75,.15) 70%, transparent);
+  padding-bottom:5px;
+  margin-bottom:11px;
+  border-bottom:1px solid #e2d3bd;
 }
 
 /* summary */
 .resume.broadcaster .summary div {
-  position:relative;
-  padding:10px 14px 10px 20px;
-  background:linear-gradient(90deg, rgba(201,162,75,.10), transparent);
-  border-radius:6px;
-  color:#3a2a2c;
-}
-.resume.broadcaster .summary div::before {
-  content:"";
-  position:absolute;
-  left:9px; top:14px;
-  width:8px; height:8px;
-  border-radius:50%;
-  background:radial-gradient(circle at 35% 35%, var(--gold-bright), var(--gold) 60%, var(--crimson) 100%);
-  box-shadow:0 0 6px 1px rgba(232,197,115,.6);
+  color:var(--body);
+  line-height:1.7;
 }
 
 /* entries */
-.resume.broadcaster .entry { margin-bottom:11px; }
+.resume.broadcaster .entry { margin-bottom:13px; }
 .resume.broadcaster .entry:last-child { margin-bottom:2px; }
 .resume.broadcaster .entry-head {
   display:flex;
@@ -227,33 +173,28 @@ const template: TemplateData = {
   align-items:baseline;
   gap:10px;
   flex-wrap:wrap;
+  margin-bottom:4px;
 }
 .resume.broadcaster h3 {
-  font-size:11pt;
+  font-size:11.5pt;
   font-weight:700;
   color:var(--ink);
 }
 .resume.broadcaster h3 .co { color:var(--crimson); }
 .resume.broadcaster h3 .po {
-  margin-left:10px;
-  padding-left:10px;
+  margin-left:9px;
   font-weight:500;
-  font-size:10pt;
+  font-size:10.5pt;
   color:#6a4a30;
-  border-left:1px solid var(--gold);
 }
 .resume.broadcaster .date {
   flex:none;
-  font-size:8.5pt;
+  font-size:9pt;
   font-weight:600;
-  letter-spacing:.05em;
-  color:#fff;
-  background:var(--crimson);
-  padding:2px 9px;
-  border-radius:20px;
-  box-shadow:inset 0 0 0 1px var(--gold-bright);
+  letter-spacing:.04em;
+  color:var(--crimson);
 }
-.resume.broadcaster .edu-meta { color:#5a4042; margin-top:2px; }
+.resume.broadcaster .edu-meta { color:#5a5048; margin-top:2px; font-size:10pt; }
 
 .resume.broadcaster ul {
   list-style:none;
@@ -261,21 +202,22 @@ const template: TemplateData = {
 }
 .resume.broadcaster li {
   position:relative;
-  padding-left:16px;
-  margin-bottom:3px;
-  color:#3a2a2c;
+  padding-left:15px;
+  margin-bottom:4px;
+  color:var(--body);
+  line-height:1.6;
 }
 .resume.broadcaster li::before {
   content:"";
   position:absolute; left:2px; top:.62em;
-  width:6px; height:6px;
+  width:5px; height:5px;
   transform:rotate(45deg);
   background:var(--gold);
 }
 
 /* projects */
-.resume.broadcaster h3 .role { font-weight:500; font-size:9.5pt; color:#6a4a30; }
-.resume.broadcaster .desc { margin-top:3px; color:#4a3032; }
+.resume.broadcaster h3 .role { font-weight:500; font-size:10pt; color:#6a4a30; }
+.resume.broadcaster .desc { margin-top:3px; color:var(--body); line-height:1.65; }
 
 /* skills */
 .resume.broadcaster .skills {
@@ -286,13 +228,12 @@ const template: TemplateData = {
 .resume.broadcaster .chip {
   display:inline-flex;
   align-items:center;
-  padding:4px 13px;
-  font-size:9pt;
+  padding:3px 13px;
+  font-size:9.5pt;
   color:var(--crimson-deep);
-  background:linear-gradient(180deg, #fff, #f6ecd9);
-  border:1px solid var(--gold);
-  border-radius:20px;
-  box-shadow:0 1px 2px rgba(90,10,20,.08);
+  background:#f7f0e4;
+  border:1px solid #d9c8a8;
+  border-radius:14px;
 }
 .resume.broadcaster .chip .lv { color:#8a6a30; font-weight:600; }
 

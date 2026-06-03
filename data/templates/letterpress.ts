@@ -63,13 +63,13 @@ const template: TemplateData = {
   min-height:297mm;
   margin:0 auto;
   padding:20mm 18mm;
-  background:#f4f0e6;
+  background:#f3eee2;
   background-image:radial-gradient(rgba(120,108,86,0.05) 1px, transparent 1px);
   background-size:4px 4px;
-  color:#2c2722;
+  color:#2a2620;
   font-family:'Songti SC','SimSun','Noto Serif SC',Georgia,'Times New Roman','PingFang SC','Microsoft YaHei',serif;
-  font-size:10pt;
-  line-height:1.55;
+  font-size:10.5pt;
+  line-height:1.6;
 }
 
 /* ---- Header ---- */
@@ -77,7 +77,7 @@ const template: TemplateData = {
   text-align:center;
   padding-bottom:7mm;
   margin-bottom:7mm;
-  border-bottom:1px solid #c9bfa6;
+  border-bottom:1px solid #b8ab8c;
   position:relative;
 }
 .resume.letterpress header::after {
@@ -85,26 +85,24 @@ const template: TemplateData = {
   position:absolute;
   left:50%; bottom:-3px;
   transform:translateX(-50%);
-  width:64px; height:1px;
-  background:#8a7c5c;
+  width:64px; height:2px;
+  background:#6b5e42;
 }
 .resume.letterpress h1 {
   font-size:30pt;
   font-weight:700;
   letter-spacing:0.18em;
-  color:#3a342b;
+  color:#1f1b14;
   text-indent:0.18em;
-  /* letterpress: light from top-left, recessed shadow */
-  text-shadow:0 1px 0 #ffffff, 0 -1px 1px rgba(58,52,43,0.35);
+  text-shadow:0 1px 0 #fdfbf4;
 }
 .resume.letterpress .title {
   margin-top:3mm;
-  font-size:11pt;
+  font-size:11.5pt;
   font-style:italic;
-  letter-spacing:0.22em;
-  text-indent:0.22em;
-  color:#7a6f54;
-  text-shadow:0 1px 0 #fbf8ef;
+  letter-spacing:0.2em;
+  text-indent:0.2em;
+  color:#5a4f38;
 }
 .resume.letterpress .contact {
   margin-top:4mm;
@@ -112,34 +110,31 @@ const template: TemplateData = {
   flex-wrap:wrap;
   justify-content:center;
   gap:5mm;
-  font-size:9pt;
-  letter-spacing:0.06em;
-  color:#5c5446;
+  font-size:9.5pt;
+  letter-spacing:0.05em;
+  color:#46402f;
 }
 .resume.letterpress .contact span {
   position:relative;
-  text-shadow:0 1px 0 #fbf8ef;
 }
 .resume.letterpress .contact span + span::before {
   content:"·";
   position:absolute;
   left:-2.8mm;
-  color:#b3a886;
+  color:#8a7d5c;
 }
 
 /* ---- Section ---- */
 .resume.letterpress .block { margin-bottom:6.5mm; }
 .resume.letterpress h2 {
-  font-size:10.5pt;
+  font-size:11.5pt;
   font-weight:700;
-  letter-spacing:0.28em;
-  text-indent:0.28em;
-  color:#5a4f3a;
-  text-transform:uppercase;
-  padding-bottom:1.5mm;
+  letter-spacing:0.22em;
+  text-indent:0.22em;
+  color:#3d3525;
+  padding-bottom:1.8mm;
   margin-bottom:4mm;
-  border-bottom:1px solid #cdc3aa;
-  text-shadow:0 1px 0 #ffffff, 0 -1px 0 rgba(90,79,58,0.18);
+  border-bottom:1px solid #b8ab8c;
 }
 
 /* ---- Entry ---- */
@@ -150,45 +145,44 @@ const template: TemplateData = {
   justify-content:space-between;
   align-items:baseline;
   gap:4mm;
+  margin-bottom:1mm;
 }
 .resume.letterpress h3 {
-  font-size:11pt;
+  font-size:11.5pt;
   font-weight:700;
-  color:#312b22;
+  color:#221e16;
   letter-spacing:0.02em;
-  text-shadow:0 1px 0 #fbf8ef;
 }
-.resume.letterpress .company { color:#312b22; }
+.resume.letterpress .company { color:#221e16; }
 .resume.letterpress .position {
   font-weight:400;
   font-style:italic;
-  color:#7a6f54;
+  color:#5a4f38;
 }
 .resume.letterpress .position::before {
   content:"，";
   font-style:normal;
-  color:#a99c79;
+  color:#8a7d5c;
 }
 .resume.letterpress .date {
   flex-shrink:0;
-  font-size:8.5pt;
+  font-size:9pt;
   font-style:italic;
-  letter-spacing:0.05em;
-  color:#8a7d60;
+  letter-spacing:0.04em;
+  color:#6b5f44;
   white-space:nowrap;
-  text-shadow:0 1px 0 #fbf8ef;
 }
 
 .resume.letterpress .edu-meta {
   margin-top:1mm;
-  font-size:9.5pt;
-  color:#5c5446;
+  font-size:10pt;
+  color:#46402f;
 }
 
 .resume.letterpress .summary {
-  font-size:10pt;
-  color:#4a4338;
-  line-height:1.7;
+  font-size:10.5pt;
+  color:#2f2a20;
+  line-height:1.75;
   text-align:justify;
 }
 
@@ -200,30 +194,30 @@ const template: TemplateData = {
 }
 .resume.letterpress li {
   position:relative;
-  margin-bottom:1.5mm;
-  font-size:9.5pt;
-  color:#453e33;
-  line-height:1.6;
+  margin-bottom:1.8mm;
+  font-size:10pt;
+  color:#2f2a20;
+  line-height:1.65;
   text-align:justify;
 }
 .resume.letterpress li::before {
   content:"—";
   position:absolute;
   left:-5mm;
-  color:#a8996f;
+  color:#8a7d5c;
 }
 
 /* ---- Projects ---- */
 .resume.letterpress .proj-role {
   font-weight:400;
   font-style:italic;
-  color:#7a6f54;
+  color:#5a4f38;
 }
 .resume.letterpress .proj-desc {
   margin-top:1mm;
-  font-size:9.5pt;
-  color:#4a4338;
-  line-height:1.6;
+  font-size:10pt;
+  color:#2f2a20;
+  line-height:1.65;
   text-align:justify;
 }
 
@@ -235,18 +229,16 @@ const template: TemplateData = {
 }
 .resume.letterpress .skill-chip {
   display:inline-block;
-  padding:1mm 3.5mm;
-  font-size:9pt;
+  padding:1.2mm 3.5mm;
+  font-size:9.5pt;
   letter-spacing:0.03em;
-  color:#4a4234;
-  background:#efe9da;
-  border:1px solid #d2c7ac;
+  color:#34301f;
+  background:#ece4d2;
+  border:1px solid #c2b594;
   border-radius:2px;
-  /* pressed-in plate effect */
   box-shadow:inset 0 1px 2px rgba(120,108,86,0.18), 0 1px 0 #fdfbf4;
-  text-shadow:0 1px 0 #fcf9f0;
 }
-.resume.letterpress .skill-chip .lv { color:#8a7d60; font-style:italic; }
+.resume.letterpress .skill-chip .lv { color:#6b5f44; font-style:italic; }
 
 /* ---- print-safe inline rules ---- */
 .resume.letterpress li p, .resume.letterpress li div { margin:0; padding:0; display:inline; }
