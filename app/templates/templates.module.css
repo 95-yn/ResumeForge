@@ -329,7 +329,9 @@
   .content { padding: 24px 24px 0; }
 }
 
-/* ── Small screen filter wrap ── */
+/* ── Small screen filter wrap ──
+   窄屏：整栏分行堆叠。Style 组项少、允许换行；职业组项多(21)、保持横向滚动
+   并独占一行(否则换行会与搜索框挤成乱块)；搜索框也独占一行。 */
 @media (max-width: 900px) {
   .filterBar {
     height: auto;
@@ -338,7 +340,10 @@
     gap: 12px;
   }
   .filterDivider { display: none; }
-  .filterGroup { flex-wrap: wrap; }
+  /* 只有非滚动组(Style)换行；职业滚动组保持 nowrap+横滚 */
+  .filterGroup:not(.filterGroupScroll) { flex-wrap: wrap; }
+  .filterGroupScroll { flex: 1 1 100%; min-width: 0; }
+  .searchWrap { flex: 1 1 100%; }
 }
 
 /* ── Regular card ── */
