@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Logo } from '@/components/Logo';
 import { asset } from '@/lib/base-path';
 import { TEMPLATE_LIST } from '@/data/template-list';
+import { MobileStickyCTA } from '@/components/MobileStickyCTA';
 import styles from './faq.module.css';
 
 // 模板总数动态读取，避免新增模板后文案过期
@@ -112,12 +113,12 @@ export default function FaqPage() {
             <span className={`${styles.statLabel} ${styles.mono}`}>永久免费</span>
           </div>
           <div className={styles.stat}>
-            <span className={`${styles.statNum} ${styles.display}`}>0</span>
-            <span className={`${styles.statLabel} ${styles.mono}`}>数据上传</span>
+            <span className={`${styles.statNum} ${styles.display}`}>∞</span>
+            <span className={`${styles.statLabel} ${styles.mono}`}>导出无限制</span>
           </div>
           <div className={styles.stat}>
             <span className={`${styles.statNum} ${styles.display}`}>0</span>
-            <span className={`${styles.statLabel} ${styles.mono}`}>需要的账号</span>
+            <span className={`${styles.statLabel} ${styles.mono}`}>注册门槛</span>
           </div>
         </div>
       </section>
@@ -236,6 +237,8 @@ export default function FaqPage() {
           <Link href="/editor" className={styles.footerLink}>Editor</Link>
         </span>
       </footer>
+
+      <MobileStickyCTA href="/templates" label="开始创建 →" />
     </div>
   );
 }

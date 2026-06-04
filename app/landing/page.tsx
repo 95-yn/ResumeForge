@@ -5,6 +5,7 @@ import { useEffect, useRef } from 'react';
 import { Logo } from '@/components/Logo';
 import { asset } from '@/lib/base-path';
 import { TEMPLATE_LIST } from '@/data/template-list';
+import { MobileStickyCTA } from '@/components/MobileStickyCTA';
 import styles from './landing.module.css';
 
 // 模板总数动态读取，避免新增模板后文案过期
@@ -311,6 +312,7 @@ export default function LandingPage() {
         </span>
       </footer>
 
+      <MobileStickyCTA href="/templates" label="开始创建 →" />
     </div>
   );
 }
