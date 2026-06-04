@@ -111,6 +111,9 @@ export function TopBar() {
     templateHtml, templateCss, resume, resetToDefault, pushToast, sectionOrder,
   } = useEditorStore();
   const [scrolled, setScrolled] = useState(false);
+  // handlePrint 在每次渲染重建（依赖 resume 等），用 ref 保存最新引用，
+  // 让一次性注册的 Cmd/Ctrl+P 监听始终调到最新的打印逻辑。
+  const handlePrintRef = useRef<() => void>(() => {});
 
   // 把编译后的 body 按用户拖拽/键盘重排后的 sectionOrder 重排,确保「导出/打印 === 所见」。
   const reorderBody = useCallback((bodyHtml: string): string => {
@@ -140,6 +143,21 @@ export function TopBar() {
       return () => clearTimeout(t);
     }
   }, [saveStatus, clearSaveError]);
+
+  // 拦截 Cmd/Ctrl+P：浏览器原生打印会渲染整个编辑器页面（巨大 iframe + 纸纹 SVG 滤镜
+  // + 多个富文本编辑器），按打印分辨率重新光栅化极慢、卡顿。改为走 App 内的干净打印：
+  // 只在隐藏 iframe 里渲染简历本身，与「打印」按钮完全一致，所见即所得且秒开。
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && !e.altKey && (e.key === 'p' || e.key === 'P')) {
+        e.preventDefault();
+        e.stopPropagation();
+        handlePrintRef.current();
+      }
+    };
+    window.addEventListener('keydown', onKey, { capture: true });
+    return () => window.removeEventListener('keydown', onKey, { capture: true });
+  }, []);
 
   // 文件名（用于 PDF 默认名 / HTML 下载名）：连字符拼接，避免「· 」中点在文件名里观感怪。
   // 例：李然-运营经理-简历 / 李然-简历 / 简历
@@ -260,6 +278,8 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
     if (cd.readyState === 'complete') doPrint();
     else iframe.onload = doPrint;
   };
+  // 让 Cmd/Ctrl+P 监听始终指向最新的 handlePrint。
+  handlePrintRef.current = handlePrint;
 
   const statusText =
     saveStatus === 'saved'   ? '已保存' :
