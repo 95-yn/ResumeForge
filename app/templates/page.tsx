@@ -404,6 +404,7 @@ function MasonryCard({ t, idx, onCardClick, isFav, onToggleFav }: MasonryCardPro
           </div>
         ) : (
           <picture>
+            <source srcSet={asset(`/thumbnails/${t.slug}.avif`)} type="image/avif" />
             <source srcSet={asset(`/thumbnails/${t.slug}.webp`)} type="image/webp" />
             <img
               src={asset(`/thumbnails/${t.slug}.png`)}
