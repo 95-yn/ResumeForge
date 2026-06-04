@@ -141,11 +141,12 @@ export default function FaqPage() {
               {p.shots.map((slug, si) => (
                 <img
                   key={slug}
-                  src={asset(`/thumbnails/${slug}.png`)}
+                  src={asset(`/thumbnails/${slug}.webp`)}
                   alt=""
                   className={styles.shot}
                   style={{ ['--si' as string]: si }}
                   loading="lazy"
+                  decoding="async"
                   onError={(e) => { e.currentTarget.style.visibility = 'hidden'; }}
                 />
               ))}

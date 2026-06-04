@@ -12,3 +12,6 @@ coverage/
 
 # 小红书配图等本地素材，不入库
 doc/
+
+# 缩略图 PNG 仅作本地生成中间产物（gen-thumbnails 截图→optimize-images 转 webp/avif），不入库；线上只用 webp/avif
+public/thumbnails/*.png

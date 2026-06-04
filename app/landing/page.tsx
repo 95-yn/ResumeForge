@@ -214,15 +214,17 @@ export default function LandingPage() {
               <Link href="/" className={styles.specimenCard} data-specimen-card key={item.slug} aria-label={`查看 ${item.label} 模板`}>
                 <span className={`${styles.specimenNum} ${styles.display}`}>{item.num}</span>
                 <img
-                  src={asset(`/thumbnails/${item.slug}.png`)}
+                  src={asset(`/thumbnails/${item.slug}.webp`)}
                   alt={`${item.label} resume template preview`}
                   className={styles.specimenThumb}
+                  loading="lazy"
+                  decoding="async"
                   onError={(e) => {
                     const img = e.currentTarget;
                     // Try elegant as fallback
                     if (!img.dataset.fallback) {
                       img.dataset.fallback = '1';
-                      img.src = asset('/thumbnails/elegant.png');
+                      img.src = asset('/thumbnails/elegant.webp');
                       return;
                     }
                     // Both failed: show placeholder
