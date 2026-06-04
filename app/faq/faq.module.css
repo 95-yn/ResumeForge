@@ -67,6 +67,24 @@
   color: var(--ink-mid);
 }
 
+/* 跳转锚点：来找答案的人可一键直达问答区，不必滚过落地内容 */
+.heroJump {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink-faint);
+  padding-bottom: 3px;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.heroJump:hover {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
 .heroStats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);

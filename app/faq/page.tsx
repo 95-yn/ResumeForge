@@ -101,6 +101,7 @@ export default function FaqPage() {
           ResumeForge 是一个永久免费、数据只留在本地的在线简历工具。
           没有账号，没有上传，没有收费墙——你只管写，剩下的我们替你想好了。
         </p>
+        <a href="#qa" className={`${styles.heroJump} ${styles.mono}`}>↓ 直接看常见问答</a>
         <div className={styles.heroStats}>
           <div className={styles.stat}>
             <span className={`${styles.statNum} ${styles.display}`}>{TPL_COUNT}</span>
@@ -176,7 +177,7 @@ export default function FaqPage() {
       </section>
 
       {/* ── FAQ（手风琴） ────────────────────────────────── */}
-      <section className={styles.faq}>
+      <section className={styles.faq} id="qa" style={{ scrollMarginTop: 24 }}>
         <div className={styles.faqHead}>
           <span className={`${styles.kicker} ${styles.mono}`}>§ Frequently Asked — 常见问题</span>
           <h2 className={`${styles.faqTitle} ${styles.display}`}>Questions &amp; Answers</h2>
