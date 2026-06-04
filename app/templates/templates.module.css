@@ -339,6 +339,8 @@
 @media (max-width: 640px) {
   .archive { columns: 1; }
   .header { padding: 20px 24px; }
+  /* 头部计数与副标题「archive of 176」信息重复，窄屏隐藏以清爽，仅留 Logo + Q&A */
+  .meta { display: none; }
   .titleArea {
     padding: 28px 24px 20px;
     flex-wrap: wrap;
@@ -358,8 +360,9 @@
     gap: 12px;
   }
   .filterDivider { display: none; }
-  /* 只有非滚动组(Style)换行；职业滚动组保持 nowrap+横滚 */
-  .filterGroup:not(.filterGroupScroll) { flex-wrap: wrap; }
+  /* Style 组独占整行并换行（约束到视口宽才会 wrap，否则按内容撑成一行被裁）；
+     职业滚动组独占一行保持横滚；搜索独占一行。 */
+  .filterGroup:not(.filterGroupScroll) { flex: 1 1 100%; flex-wrap: wrap; row-gap: 6px; }
   .filterGroupScroll { flex: 1 1 100%; min-width: 0; }
   .searchWrap { flex: 1 1 100%; }
 }
