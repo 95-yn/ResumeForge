@@ -441,14 +441,19 @@ export function ResumePreview() {
 
   return (
     <div style={{ flex: 1, position: 'relative', display: 'flex', minHeight: 0 }}>
+    {/* 纸纹纹理：放在「不滚动」的固定层。SVG feTurbulence 是 CPU 光栅化滤镜，
+        若放在滚动容器背景上会随滚动反复重绘 → 卡顿。固定层只绘一次，内容滚动其上不再重绘。 */}
+    <div aria-hidden style={{
+      position: 'absolute', inset: 0, zIndex: 0, pointerEvents: 'none',
+      background: `#F5F2EB url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.85' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.24 0 0 0 0 0.16 0 0 0 0 0.10 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+    }} />
     <div
       data-preview-scroller
       style={{
         flex: 1, display: 'flex', justifyContent: 'center',
         alignItems: 'flex-start', padding: 28, overflowY: 'auto', height: '100%',
-        position: 'relative',
-        // 纸纹背景：石灰白 + SVG 噪点
-        background: `#F5F2EB url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.85' numOctaves='2' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.24 0 0 0 0 0.16 0 0 0 0 0.10 0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        position: 'relative', zIndex: 1,
+        background: 'transparent',
       }}>
       {/* Loading spinner — shows while iframe content is loading, paper-ash bg prevents white flash */}
       {iframeLoading && (
