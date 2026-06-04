@@ -111,6 +111,9 @@ export function TopBar() {
     templateHtml, templateCss, resume, resetToDefault, pushToast, sectionOrder,
   } = useEditorStore();
   const [scrolled, setScrolled] = useState(false);
+  // 打印忙碌态：点击后即时把按钮切到「生成预览中…」，给原生 print() 冻结前一个反馈画面。
+  const [printing, setPrinting] = useState(false);
+  const printingRef = useRef(false);
   // handlePrint 在每次渲染重建（依赖 resume 等），用 ref 保存最新引用，
   // 让一次性注册的 Cmd/Ctrl+P 监听始终调到最新的打印逻辑。
   const handlePrintRef = useRef<() => void>(() => {});
@@ -199,6 +202,20 @@ body { margin: 0; }
 
   const handlePrint = () => {
     if (!templateHtml || !templateCss || !resume) return;
+    if (printingRef.current) return;
+    // 先把按钮切到「生成预览中…」并让出两帧绘制，再触发会冻结主线程的原生 print()。
+    // 否则点击瞬间同步冻结、毫无反馈，体感像卡死。
+    printingRef.current = true;
+    setPrinting(true);
+    // 兜底：万一某些浏览器 iframe onload 不回调导致 doPrint 没执行，3.5s 后强制复位，
+    // 避免按钮永久卡在「生成预览中…」。正常路径会在 print() 返回时提前复位。
+    const safety = setTimeout(() => { printingRef.current = false; setPrinting(false); }, 3500);
+    requestAnimationFrame(() => requestAnimationFrame(() => runPrint(safety)));
+  };
+
+  const runPrint = (safety?: ReturnType<typeof setTimeout>) => {
+    const done = () => { if (safety) clearTimeout(safety); printingRef.current = false; setPrinting(false); };
+    if (!templateHtml || !templateCss || !resume) { done(); return; }
     const compiled = compileTemplate(templateHtml);
     const body = reorderBody(compiled(resume));
     // 用户没主动选背景色时，不覆盖，让模板自带背景生效；选了才强制覆盖。
@@ -261,7 +278,7 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
     document.body.appendChild(iframe);
     const cw = iframe.contentWindow;
     const cd = iframe.contentDocument;
-    if (!cw || !cd) { iframe.remove(); return; }
+    if (!cw || !cd) { iframe.remove(); done(); return; }
     cd.open();
     cd.write(html);
     cd.close();
@@ -272,6 +289,8 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
       const prevTitle = document.title;
       document.title = pdfTitle;
       try { cw.focus(); cw.print(); } catch (err) { console.error('print failed:', err); pushToast('打印失败，请重试或检查浏览器设置', 'error'); }
+      // print() 返回即说明预览已弹出/冻结结束，立刻复位按钮忙碌态。
+      done();
       // Cleanup after a short delay — print() is sync in Chrome but async in Safari.
       setTimeout(() => { document.title = prevTitle; iframe.remove(); }, 1500);
     };
@@ -461,25 +480,28 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
         <Tooltip title="打印或另存为 PDF（建议关闭页眉页脚 + 勾选背景图形）">
           <button
             onClick={handlePrint}
+            disabled={printing}
             style={{
               display: 'flex', alignItems: 'center', gap: 6,
               padding: '0 16px', height: 32, borderRadius: 6,
               border: 'none',
               background: '#1C1917', color: '#FFFFFF',
               fontSize: 12, fontWeight: 600,
-              cursor: 'pointer',
-              transition: 'background 0.12s, box-shadow 0.12s',
+              cursor: printing ? 'progress' : 'pointer',
+              opacity: printing ? 0.72 : 1,
+              transition: 'background 0.12s, box-shadow 0.12s, opacity 0.12s',
               fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
               outline: 'none',
             }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#292524'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(28,25,23,0.18)'; }}
+            onMouseEnter={e => { if (!printing) { e.currentTarget.style.background = '#292524'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(28,25,23,0.18)'; } }}
             onMouseLeave={e => { e.currentTarget.style.background = '#1C1917'; e.currentTarget.style.boxShadow = 'none'; }}
             onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
             onBlur={e => { e.currentTarget.style.outline = 'none'; }}
             aria-label="打印或另存为 PDF"
+            aria-busy={printing}
           >
             <PrinterOutlined style={{ fontSize: 12 }} />
-            打印 / 导出 PDF
+            {printing ? '生成预览中…' : '打印 / 导出 PDF'}
           </button>
         </Tooltip>
       </div>
