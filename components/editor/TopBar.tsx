@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import { ArrowLeftOutlined, PrinterOutlined, UndoOutlined, RedoOutlined, RollbackOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/Logo';
 import { compileTemplate } from '@/lib/mini-template';
+import { applySectionReorder } from '@/lib/reorder-sections';
 import { useEditorStore } from '@/lib/editor-store';
 import { confirmDialog } from './ConfirmDialog';
 import { Tooltip } from './Tooltip';
@@ -107,9 +108,19 @@ export function TopBar() {
   const {
     save, saveStatus, saveErrorMessage, clearSaveError,
     undo, redo, historyIndex, history,
-    templateHtml, templateCss, resume, resetToDefault, pushToast,
+    templateHtml, templateCss, resume, resetToDefault, pushToast, sectionOrder,
   } = useEditorStore();
   const [scrolled, setScrolled] = useState(false);
+
+  // 把编译后的 body 按用户拖拽/键盘重排后的 sectionOrder 重排,确保「导出/打印 === 所见」。
+  const reorderBody = useCallback((bodyHtml: string): string => {
+    if (typeof window === 'undefined' || !resume) return bodyHtml;
+    try {
+      const doc = new DOMParser().parseFromString(bodyHtml, 'text/html');
+      applySectionReorder(doc, sectionOrder, resume.basics as Record<string, string> | undefined);
+      return doc.body.innerHTML;
+    } catch { return bodyHtml; }
+  }, [sectionOrder, resume]);
 
   // Scroll-shadow: listen on the preview scroller (closest scrollable ancestor in the editor layout)
   useEffect(() => {
@@ -143,7 +154,7 @@ export function TopBar() {
     if (!templateHtml || !templateCss || !resume) return;
     try {
       const compiled = compileTemplate(templateHtml);
-      const body = compiled(resume);
+      const body = reorderBody(compiled(resume));
       const userBg = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor;
       const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${buildFilename()}</title>
 <style>
@@ -171,7 +182,7 @@ body { margin: 0; }
   const handlePrint = () => {
     if (!templateHtml || !templateCss || !resume) return;
     const compiled = compileTemplate(templateHtml);
-    const body = compiled(resume);
+    const body = reorderBody(compiled(resume));
     // 用户没主动选背景色时，不覆盖，让模板自带背景生效；选了才强制覆盖。
     const userBg = (resume.settings as { backgroundColor?: string } | undefined)?.backgroundColor;
 

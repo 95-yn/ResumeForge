@@ -4,6 +4,7 @@ import { useEffect, useRef, useMemo, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { compileTemplate } from '@/lib/mini-template';
+import { applySectionReorder } from '@/lib/reorder-sections';
 import { useEditorStore } from '@/lib/editor-store';
 
 // FloatingEditor 只在点击字段进入编辑时才挂载，且自带一整套 TipTap 扩展
@@ -323,59 +324,8 @@ export function ResumePreview() {
   const reorderedHtml = useMemo(() => {
     if (!renderedHtml || isEmpty) return renderedHtml;
     try {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(renderedHtml, 'text/html');
-
-      // —— 注入缺失的联系方式字段 ——
-      // 克隆模板原生的联系项元素（邮箱/电话/城市），继承其 class → 自动对齐 + 同色 +
-      // 同样的分隔符；并写上 data-field → EDIT_SCRIPT 会把它变成可点击编辑的字段。
-      const b = resume?.basics as Record<string, string> | undefined;
-      if (b) {
-        const ref = doc.querySelector('[data-field="basics.email"]')
-          || doc.querySelector('[data-field="basics.phone"]')
-          || doc.querySelector('[data-field="basics.location"]');
-        if (ref && ref.parentElement) {
-          const extras = (['website', 'linkedin', 'github', 'wechat'] as const)
-            .filter(k => b[k] && b[k].trim() && !doc.querySelector(`[data-field="basics.${k}"]`));
-          let anchor: Element = ref;
-          for (const k of extras) {
-            const node = ref.cloneNode(false) as Element;
-            node.setAttribute('data-field', `basics.${k}`);
-            node.removeAttribute('id');
-            node.textContent = b[k];
-            anchor.parentElement!.insertBefore(node, anchor.nextSibling);
-            anchor = node;
-          }
-        }
-      }
-
-      const allSections = doc.querySelectorAll('[data-section]');
-      if (allSections.length === 0) return '<!DOCTYPE html>' + doc.documentElement.outerHTML;
-
-      const parentMap = new Map<Element, Map<string, Element>>();
-      allSections.forEach(el => {
-        const parent = el.parentElement;
-        if (!parent) return;
-        if (!parentMap.has(parent)) parentMap.set(parent, new Map());
-        parentMap.get(parent)!.set(el.getAttribute('data-section')!, el);
-      });
-
-      const draggableOrder = sectionOrder.filter(k => k !== 'basics');
-      parentMap.forEach((sectionsMap, container) => {
-        draggableOrder.forEach(key => {
-          const el = sectionsMap.get(key);
-          if (!el) return;
-          // 有些模板（如 manifesto）把区块标题 <h2 class="section-title"> 放在
-          // [data-section] 元素的「前一个兄弟」，而不是包在里面。只移动 data-section
-          // 会把标题留在原地、内容堆到末尾。所以若紧邻前一个兄弟是标题，则一并移动。
-          const prev = el.previousElementSibling;
-          if (prev && (/^H[1-6]$/.test(prev.tagName) || (typeof prev.className === 'string' && /title/i.test(prev.className)))) {
-            container.appendChild(prev);
-          }
-          container.appendChild(el);
-        });
-      });
-
+      const doc = new DOMParser().parseFromString(renderedHtml, 'text/html');
+      applySectionReorder(doc, sectionOrder, resume?.basics as Record<string, string> | undefined);
       return '<!DOCTYPE html>' + doc.documentElement.outerHTML;
     } catch {
       return renderedHtml;
