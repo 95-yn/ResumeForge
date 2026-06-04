@@ -451,6 +451,16 @@ export default function TemplatesPage() {
     });
   }, []);
 
+  // 浏览密度：舒展(大卡看全貌) ↔ 紧凑(小封面一屏看更多)，localStorage 记住偏好
+  const [density, setDensity] = useState<'comfortable' | 'compact'>('comfortable');
+  useEffect(() => {
+    try { const d = localStorage.getItem('resumeforge_density'); if (d === 'compact') setDensity('compact'); } catch { /* ignore */ }
+  }, []);
+  const changeDensity = useCallback((d: 'comfortable' | 'compact') => {
+    setDensity(d);
+    try { localStorage.setItem('resumeforge_density', d); } catch { /* ignore */ }
+  }, []);
+
   // 返回顶部按钮：滚动超过一屏后浮现
   const [showTop, setShowTop] = useState(false);
 
@@ -565,6 +575,22 @@ export default function TemplatesPage() {
             ? <><strong className={styles.subtitleCount}>{filtered.length}</strong> of {total} specimens</>
             : <>A curated archive of {total} specimens</>}
         </span>
+        {/* 浏览密度切换：舒展 ↔ 紧凑 */}
+        <div className={styles.densityToggle} role="group" aria-label="浏览密度">
+          <button
+            type="button"
+            className={`${styles.densityBtn}${density === 'comfortable' ? ` ${styles.densityActive}` : ''}`}
+            onClick={() => changeDensity('comfortable')}
+            aria-pressed={density === 'comfortable'}
+          >舒展</button>
+          <span className={styles.densitySep} aria-hidden="true">/</span>
+          <button
+            type="button"
+            className={`${styles.densityBtn}${density === 'compact' ? ` ${styles.densityActive}` : ''}`}
+            onClick={() => changeDensity('compact')}
+            aria-pressed={density === 'compact'}
+          >紧凑</button>
+        </div>
       </div>
 
       {/* ── 3. Sticky filter bar ── */}
@@ -592,7 +618,7 @@ export default function TemplatesPage() {
           </div>
         ) : (
           /* ── Masonry archive ── */
-          <div className={styles.archive}>
+          <div className={`${styles.archive}${density === 'compact' ? ` ${styles.archiveCompact}` : ''}`}>
             {filtered.map((t, idx) => (
               <MasonryCard
                 key={t.slug}

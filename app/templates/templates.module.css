@@ -103,6 +103,40 @@
   font-size: 12px;
 }
 
+/* 浏览密度切换(舒展/紧凑)——杂志式内联文字开关,右对齐于标题区底部 */
+.densityToggle {
+  margin-left: auto;
+  align-self: flex-end;
+  padding-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.densityBtn {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--arch-stone-mid);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.55;
+  transition: opacity 0.15s ease, color 0.15s ease;
+  outline: none;
+}
+.densityBtn:hover { opacity: 0.85; }
+.densityBtn.densityActive {
+  opacity: 1;
+  color: var(--arch-chestnut);
+  text-decoration: underline;
+  text-decoration-color: var(--arch-brick);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.densitySep { color: var(--arch-stone-light); font-size: 11px; }
+
 /* Staggered reveal animations */
 .titleDisplay {
   opacity: 0;
@@ -330,6 +364,25 @@
 .archive {
   columns: 3;
   column-gap: 48px;
+}
+
+/* 紧凑模式：列数更多、小封面、去掉边注与描述,一屏看更多 */
+.archiveCompact {
+  columns: 4;
+  column-gap: 28px;
+}
+.archiveCompact .card { margin-bottom: 22px !important; }
+.archiveCompact .cardMarginalia,
+.archiveCompact .cardDesc { display: none; }
+.archiveCompact .cardBody { padding-top: 9px; }
+.archiveCompact .cardName { font-size: 14px; }
+.archiveCompact .cardTags { font-size: 9px; margin-top: 3px; }
+@media (max-width: 1100px) {
+  .archiveCompact { columns: 3; }
+}
+@media (max-width: 640px) {
+  .archiveCompact { columns: 2; column-gap: 14px; }
+  .archiveCompact .card { margin-bottom: 14px !important; }
 }
 
 @media (max-width: 1100px) {
