@@ -123,7 +123,12 @@ export function TopBar() {
     if (typeof window === 'undefined' || !resume) return bodyHtml;
     try {
       const doc = new DOMParser().parseFromString(bodyHtml, 'text/html');
-      applySectionReorder(doc, sectionOrder, resume.basics as Record<string, string> | undefined);
+      applySectionReorder(
+        doc,
+        sectionOrder,
+        resume.basics as Record<string, string> | undefined,
+        resume.settings as { avatarVisible?: boolean; avatarPos?: { x: number; y: number } } | undefined,
+      );
       return doc.body.innerHTML;
     } catch { return bodyHtml; }
   }, [sectionOrder, resume]);

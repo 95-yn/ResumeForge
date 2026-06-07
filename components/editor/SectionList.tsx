@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 import { useRouter } from 'next/navigation';
 import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
 import { useEditorStore } from '@/lib/editor-store';
+import { DEFAULT_AVATAR } from '@/lib/reorder-sections';
 import { InlineRichText } from './InlineRichText';
 import { confirmDialog } from './ConfirmDialog';
 
@@ -83,10 +84,14 @@ const SECTION_META: Record<string, { iconName: string; label: string; addLabel: 
 const BASICS_FIELDS = [
   { key: 'name',     label: '姓名',     required: true },
   { key: 'title',    label: '职位头衔' },
+  { key: 'gender',   label: '性别' },
   { key: 'email',    label: '邮箱',     required: true },
   { key: 'phone',    label: '电话' },
   { key: 'location', label: '所在城市' },
 ];
+
+/** 性别可选项(空 = 不展示) */
+const GENDER_OPTIONS = ['男', '女'];
 
 const EXTRA_FIELDS = [
   { key: 'website',  label: '个人网站' },
@@ -99,6 +104,7 @@ const EXTRA_FIELDS = [
 const BASICS_PLACEHOLDERS: Record<string, string> = {
   name:     '你的真实姓名',
   title:    '目标职位，如：前端工程师 / 产品经理',
+  gender:   '',
   email:    '常用邮箱，招聘方将通过此联系你',
   phone:    '11 位手机号',
   location: '求职城市，如：北京 / 上海',
@@ -444,6 +450,7 @@ export function SectionList() {
                       setShowAddField={setShowAddField}
                       setVisibleFields={setVisibleFields}
                       updateField={updateField}
+                      updateSettings={updateSettings}
                     />
                   ) : (
                     <ArrayPanel
@@ -669,14 +676,177 @@ function PortalDropdown({ anchorRef, open, onClose, children }: {
   );
 }
 
+/* ---- Avatar Upload ---- */
+/**
+ * 读取图片文件 → 等比降采样到最长边 ≤ maxEdge → 返回 JPEG dataURL。
+ * 自动保存写 localStorage，原图(可能数 MB)会撑爆配额，故上传即压缩。
+ */
+function fileToScaledDataUrl(file: File, maxEdge = 480, quality = 0.82): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('读取失败'));
+    reader.onload = () => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('图片解析失败'));
+      img.onload = () => {
+        const scale = Math.min(1, maxEdge / Math.max(img.width, img.height));
+        const w = Math.round(img.width * scale);
+        const h = Math.round(img.height * scale);
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return reject(new Error('canvas 不可用'));
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.src = reader.result as string;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+/** 小开关 */
+function Toggle({ on, onChange, label }: { on: boolean; onChange: (v: boolean) => void; label: string }) {
+  return (
+    <button
+      role="switch"
+      aria-checked={on}
+      aria-label={label}
+      onClick={() => onChange(!on)}
+      style={{
+        width: 32, height: 18, borderRadius: 10, border: 'none', padding: 2, cursor: 'pointer',
+        background: on ? '#1C1917' : '#D6D3D1', flexShrink: 0, outline: 'none',
+        transition: 'background 0.15s', display: 'inline-flex', alignItems: 'center',
+      }}
+    >
+      <span style={{
+        width: 14, height: 14, borderRadius: '50%', background: '#fff',
+        transform: on ? 'translateX(14px)' : 'translateX(0)',
+        transition: 'transform 0.15s cubic-bezier(0.16,1,0.3,1)',
+        boxShadow: '0 1px 2px rgba(0,0,0,0.2)',
+      }} />
+    </button>
+  );
+}
+
+function AvatarUpload({ value, onChange, visible, onToggleVisible, hasPos, onResetPos }: {
+  value: string;
+  onChange: (url: string) => void;
+  visible: boolean;
+  onToggleVisible: (v: boolean) => void;
+  hasPos: boolean;
+  onResetPos: () => void;
+}) {
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+
+  const pick = () => inputRef.current?.click();
+
+  const onFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // 允许重复选同一文件
+    if (!file) return;
+    if (!file.type.startsWith('image/')) return;
+    setBusy(true);
+    try {
+      onChange(await fileToScaledDataUrl(file));
+      onToggleVisible(true); // 上传即显示
+    } catch {
+      /* 忽略：解析失败则不更新 */
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const thumb = value || DEFAULT_AVATAR; // 没上传时显示默认占位图
+
+  return (
+    <div style={{ marginBottom: 10 }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 4 }}>
+        <label style={{ fontSize: 10, color: '#A8A29E', fontFamily: "'JetBrains Mono', 'SF Mono', monospace", letterSpacing: '0.06em', textTransform: 'uppercase' }}>照片</label>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <span style={{ fontSize: 10, color: visible ? '#1C1917' : '#A8A29E' }}>{visible ? '显示' : '隐藏'}</span>
+          <Toggle on={visible} onChange={onToggleVisible} label="在简历上显示照片" />
+        </div>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, opacity: visible ? 1 : 0.5, transition: 'opacity 0.15s' }}>
+        <button
+          onClick={pick}
+          title={value ? '点击更换照片' : '点击上传照片'}
+          aria-label={value ? '更换照片' : '上传照片'}
+          style={{
+            width: 54, height: 72, flexShrink: 0, padding: 0,
+            borderRadius: 6, cursor: 'pointer', overflow: 'hidden',
+            border: value ? '1px solid #E7E5E4' : '1.5px dashed #D6D3D1',
+            background: `center/cover no-repeat url("${thumb}")`,
+            display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+            color: '#A8A29E', fontSize: 18, lineHeight: 1, outline: 'none',
+            transition: 'border-color 0.12s',
+          }}
+          onMouseEnter={e => { if (!value) e.currentTarget.style.borderColor = '#1C1917'; }}
+          onMouseLeave={e => { if (!value) e.currentTarget.style.borderColor = '#D6D3D1'; }}
+        />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+          <button
+            onClick={pick}
+            style={{
+              border: '1px solid #E7E5E4', background: '#FFF', color: '#44403C',
+              borderRadius: 5, padding: '4px 10px', fontSize: 11, cursor: 'pointer',
+              fontFamily: 'inherit', outline: 'none',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = '#F0EAE0'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#FFF'; }}
+          >{busy ? '处理中…' : value ? '更换照片' : '上传照片'}</button>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {value && (
+              <button
+                onClick={() => onChange('')}
+                style={{
+                  border: 'none', background: 'none', color: '#A8A29E',
+                  fontSize: 11, cursor: 'pointer', fontFamily: 'inherit', outline: 'none',
+                  padding: '0 2px',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#B0463A'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#A8A29E'; }}
+              >删除</button>
+            )}
+            {hasPos && (
+              <button
+                onClick={onResetPos}
+                title="恢复到右上角默认位置"
+                style={{
+                  border: 'none', background: 'none', color: '#A8A29E',
+                  fontSize: 11, cursor: 'pointer', fontFamily: 'inherit', outline: 'none',
+                  padding: '0 2px',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.color = '#1C1917'; }}
+                onMouseLeave={e => { e.currentTarget.style.color = '#A8A29E'; }}
+              >重置位置</button>
+            )}
+          </div>
+          <span style={{ fontSize: 9, color: '#C7C2BB', fontFamily: 'inherit' }}>在预览里可拖动照片</span>
+        </div>
+      </div>
+      <input ref={inputRef} type="file" accept="image/*" onChange={onFile} style={{ display: 'none' }} />
+    </div>
+  );
+}
+
 /* ---- Basics Panel ---- */
-function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, setVisibleFields, updateField }: {
+function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, setVisibleFields, updateField, updateSettings }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   resume: any; visibleFields: string[]; showAddField: boolean;
   setShowAddField: (v: boolean) => void; setVisibleFields: (fn: (p: string[]) => string[]) => void;
   updateField: (s: string, f: string, v: unknown) => void;
+  updateSettings: (key: string, value: unknown) => void;
 }) {
   const basics = resume.basics || {};
+  const settings = resume.settings || {};
+  const avatarVal = (basics.avatar as string) || '';
+  // 默认隐藏：仅在显式开启时为真（上传照片会自动开启）
+  const avatarVisible = settings.avatarVisible === true;
+  const hasAvatarPos = !!settings.avatarPos;
   const addFieldBtnRef = useRef<HTMLButtonElement>(null);
 
   const removeField = (fKey: string) => {
@@ -688,6 +858,14 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
 
   return (
     <div style={{ padding: '4px 12px' }}>
+      <AvatarUpload
+        value={avatarVal}
+        onChange={url => updateField('basics', 'avatar', url)}
+        visible={avatarVisible}
+        onToggleVisible={v => updateSettings('avatarVisible', v)}
+        hasPos={hasAvatarPos}
+        onResetPos={() => updateSettings('avatarPos', undefined)}
+      />
       {visibleFields.map(fKey => {
         const def = [...BASICS_FIELDS, ...EXTRA_FIELDS].find(f => f.key === fKey);
         if (!def) return null;
@@ -711,14 +889,27 @@ function BasicsPanel({ resume, visibleFields, showAddField, setShowAddField, set
                 <DeleteOutlined style={{ fontSize: 10 }} />
               </button>
             </div>
-            <input
-              value={val}
-              onChange={e => updateField('basics', fKey, e.target.value)}
-              placeholder={BASICS_PLACEHOLDERS[fKey] ?? `填写${def.label}`}
-              style={inputCss}
-              onFocus={e => { e.currentTarget.style.borderColor = '#1C1917'; e.currentTarget.style.background = '#FFF'; }}
-              onBlur={e => { e.currentTarget.style.borderColor = '#E7E5E4'; e.currentTarget.style.background = '#FAFAF9'; }}
-            />
+            {fKey === 'gender' ? (
+              <select
+                value={val}
+                onChange={e => updateField('basics', fKey, e.target.value)}
+                style={{ ...inputCss, cursor: 'pointer' }}
+                onFocus={e => { e.currentTarget.style.borderColor = '#1C1917'; e.currentTarget.style.background = '#FFF'; }}
+                onBlur={e => { e.currentTarget.style.borderColor = '#E7E5E4'; e.currentTarget.style.background = '#FAFAF9'; }}
+              >
+                <option value="">不展示</option>
+                {GENDER_OPTIONS.map(g => <option key={g} value={g}>{g}</option>)}
+              </select>
+            ) : (
+              <input
+                value={val}
+                onChange={e => updateField('basics', fKey, e.target.value)}
+                placeholder={BASICS_PLACEHOLDERS[fKey] ?? `填写${def.label}`}
+                style={inputCss}
+                onFocus={e => { e.currentTarget.style.borderColor = '#1C1917'; e.currentTarget.style.background = '#FFF'; }}
+                onBlur={e => { e.currentTarget.style.borderColor = '#E7E5E4'; e.currentTarget.style.background = '#FAFAF9'; }}
+              />
+            )}
           </div>
         );
       })}

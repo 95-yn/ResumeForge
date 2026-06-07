@@ -147,6 +147,45 @@ const EDIT_SCRIPT = `
       activeEl = null;
     }
   });
+
+  // —— 照片拖动定位 ——
+  var avatar = document.querySelector('[data-rf-avatar]');
+  if (avatar) {
+    avatar.style.cursor = 'move';
+    avatar.setAttribute('draggable', 'false');
+    avatar.setAttribute('title', '拖动调整照片位置');
+    avatar.addEventListener('dragstart', function(e) { e.preventDefault(); });
+    avatar.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var startX = e.clientX, startY = e.clientY;
+      var startLeft = avatar.offsetLeft, startTop = avatar.offsetTop;
+      var root = avatar.offsetParent || document.querySelector('.resume') || document.body;
+      // 切到 left/top 定位（默认可能用的是 right/top）
+      avatar.style.right = 'auto';
+      avatar.style.left = startLeft + 'px';
+      avatar.style.top = startTop + 'px';
+      avatar.style.opacity = '0.85';
+      function move(ev) {
+        var nx = startLeft + (ev.clientX - startX);
+        var ny = startTop + (ev.clientY - startY);
+        var maxX = root.clientWidth - avatar.offsetWidth;
+        var maxY = Math.max(root.clientHeight, root.scrollHeight) - avatar.offsetHeight;
+        nx = Math.max(0, Math.min(nx, maxX));
+        ny = Math.max(0, Math.min(ny, maxY));
+        avatar.style.left = nx + 'px';
+        avatar.style.top = ny + 'px';
+      }
+      function up() {
+        document.removeEventListener('mousemove', move);
+        document.removeEventListener('mouseup', up);
+        avatar.style.opacity = '1';
+        parent.postMessage({ type: 'avatar-moved', x: avatar.offsetLeft, y: avatar.offsetTop }, '*');
+      }
+      document.addEventListener('mousemove', move);
+      document.addEventListener('mouseup', up);
+    });
+  }
 })();
 `;
 
@@ -264,7 +303,7 @@ export function ResumePreview() {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const isEditingRef = useRef(false);
   const hasAnimatedRef = useRef(false); // only animate first load
-  const { resume, templateHtml, templateCss, updateByPath, zoom, setZoom, sectionOrder, addArrayItem, removeArrayItem } = useEditorStore();
+  const { resume, templateHtml, templateCss, updateByPath, zoom, setZoom, sectionOrder, addArrayItem, removeArrayItem, updateSettings } = useEditorStore();
   const [editingField, setEditingField] = useState<EditingField | null>(null);
   const [iframeRect, setIframeRect] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
   const [iframeReady, setIframeReady] = useState(false);
@@ -325,7 +364,12 @@ export function ResumePreview() {
     if (!renderedHtml || isEmpty) return renderedHtml;
     try {
       const doc = new DOMParser().parseFromString(renderedHtml, 'text/html');
-      applySectionReorder(doc, sectionOrder, resume?.basics as Record<string, string> | undefined);
+      applySectionReorder(
+        doc,
+        sectionOrder,
+        resume?.basics as Record<string, string> | undefined,
+        resume?.settings as { avatarVisible?: boolean; avatarPos?: { x: number; y: number } } | undefined,
+      );
       return '<!DOCTYPE html>' + doc.documentElement.outerHTML;
     } catch {
       return renderedHtml;
@@ -420,11 +464,17 @@ export function ResumePreview() {
         if (section && ARRAY_SECTIONS.includes(section) && typeof index === 'number') removeArrayItem(section, index);
         return;
       }
+
+      if (event.data.type === 'avatar-moved') {
+        const { x, y } = event.data as { x: number; y: number };
+        if (Number.isFinite(x) && Number.isFinite(y)) updateSettings('avatarPos', { x, y });
+        return;
+      }
     };
 
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [updateByPath, addArrayItem, removeArrayItem]);
+  }, [updateByPath, addArrayItem, removeArrayItem, updateSettings]);
 
   if (renderError) {
     return (
