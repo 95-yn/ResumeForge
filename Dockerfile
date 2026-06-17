@@ -35,6 +35,22 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV PORT=3000
 ENV HOSTNAME=0.0.0.0
 
+# PDF 导出（/api/pdf）依赖系统 Chromium —— puppeteer-core 不自带浏览器，
+# 这里用 apk 装 chromium，并装中文/西文字体保证简历 PDF 正常渲染（否则中文是豆腐块）。
+# 通过 PUPPETEER_EXECUTABLE_PATH 告诉 puppeteer-core 浏览器位置。
+RUN apk add --no-cache \
+      chromium \
+      nss \
+      freetype \
+      harfbuzz \
+      ca-certificates \
+      ttf-freefont \
+      font-noto-cjk \
+      wqy-zenhei \
+ && fc-cache -f
+ENV PUPPETEER_SKIP_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
+
 # 非 root 用户运行
 RUN addgroup -g 1001 -S nodejs && adduser -S nextjs -u 1001
 

@@ -23,6 +23,7 @@
     "@tiptap/react": "^3.23.6",
     "@tiptap/starter-kit": "^3.23.6",
     "next": "^15.0.0",
+    "puppeteer-core": "^23.11.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "zustand": "^5.0.5"

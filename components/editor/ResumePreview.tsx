@@ -299,10 +299,13 @@ function ZoomControl({ zoom, setZoom }: { zoom: number; setZoom: (z: number) => 
   );
 }
 
-export function ResumePreview() {
+export function ResumePreview({ mobile = false }: { mobile?: boolean } = {}) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const isEditingRef = useRef(false);
   const hasAnimatedRef = useRef(false); // only animate first load
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  // 移动端：把 A4(210mm) 自动缩放到容器宽度（桌面仍用 store 里的 zoom）。
+  const [fitScale, setFitScale] = useState(1);
   const { resume, templateHtml, templateCss, updateByPath, zoom, setZoom, sectionOrder, addArrayItem, removeArrayItem, updateSettings } = useEditorStore();
   const [editingField, setEditingField] = useState<EditingField | null>(null);
   const [iframeRect, setIframeRect] = useState<{ top: number; left: number; width: number; height: number } | null>(null);
@@ -312,6 +315,30 @@ export function ResumePreview() {
 
   const isEmpty = !resume?.basics?.name && !resume?.basics?.email;
 
+  // 移动端自适应缩放：A4 宽度按容器实测宽度等比缩小，铺满又不溢出；随窗口/旋转重算。
+  useEffect(() => {
+    if (!mobile) return;
+    const el = scrollerRef.current;
+    if (!el) return;
+    const A4_PX = (210 * 96) / 25.4; // 210mm → px ≈ 793.7
+    const PAD = 24; // 容器左右内边距合计
+    const compute = () => {
+      const w = el.clientWidth;
+      if (w > 0) setFitScale(Math.min(1, (w - PAD) / A4_PX));
+    };
+    compute();
+    let ro: ResizeObserver | undefined;
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(compute);
+      ro.observe(el);
+    }
+    window.addEventListener('orientationchange', compute);
+    return () => { ro?.disconnect(); window.removeEventListener('orientationchange', compute); };
+  }, [mobile]);
+
+  // 生效缩放：移动端用自适应 fitScale，桌面用用户设定的 zoom。
+  const scale = mobile ? fitScale : zoom;
+
   const dismissCoachmark = useCallback(() => {
     setShowCoachmark(false);
     try { localStorage.setItem('resumeforge_coachmark_seen', '1'); } catch { /* ignore */ }
@@ -319,11 +346,11 @@ export function ResumePreview() {
 
   // 首次进入预填模板时显示「点击即可编辑」引导（空状态已有自带提示，无需重复）。
   useEffect(() => {
-    if (!iframeReady || isEmpty) return;
+    if (!iframeReady || isEmpty || mobile) return; // 移动端只读预览，不显示「点击编辑」引导
     try {
       if (!localStorage.getItem('resumeforge_coachmark_seen')) setShowCoachmark(true);
     } catch { /* ignore */ }
-  }, [iframeReady, isEmpty]);
+  }, [iframeReady, isEmpty, mobile]);
 
   // 一旦用户开始编辑任意字段，引导即完成使命，自动消失。
   useEffect(() => {
@@ -378,8 +405,9 @@ export function ResumePreview() {
 
   const finalHtml = useMemo(() => {
     if (!reorderedHtml || isEmpty) return reorderedHtml;
+    if (mobile) return reorderedHtml; // 移动端只读预览：不注入点击编辑脚本（编辑走「编辑」Tab）
     return reorderedHtml.replace('</body>', `<script>${EDIT_SCRIPT}<\/script></body>`);
-  }, [reorderedHtml, isEmpty]);
+  }, [reorderedHtml, isEmpty, mobile]);
 
   useEffect(() => {
     if (editingField) return;
@@ -490,7 +518,7 @@ export function ResumePreview() {
   }
 
   return (
-    <div style={{ flex: 1, position: 'relative', display: 'flex', minHeight: 0 }}>
+    <div style={{ flex: 1, position: 'relative', display: 'flex', minHeight: 0, minWidth: 0 }}>
     {/* 纸纹纹理：放在「不滚动」的固定层。SVG feTurbulence 是 CPU 光栅化滤镜，
         若放在滚动容器背景上会随滚动反复重绘 → 卡顿。固定层只绘一次，内容滚动其上不再重绘。 */}
     <div aria-hidden style={{
@@ -499,10 +527,13 @@ export function ResumePreview() {
     }} />
     <div
       data-preview-scroller
+      ref={scrollerRef}
       style={{
         flex: 1, display: 'flex', justifyContent: 'center',
-        alignItems: 'flex-start', padding: 28, overflowY: 'auto', height: '100%',
-        position: 'relative', zIndex: 1,
+        alignItems: 'flex-start', padding: mobile ? '14px 12px' : 28, overflowY: 'auto', height: '100%',
+        position: 'relative', zIndex: 1, minWidth: 0,
+        // 移动端横向也允许滚动兜底（极窄屏放不下时），桌面保持原行为。
+        overflowX: mobile ? 'auto' : undefined,
         background: 'transparent',
       }}>
       {/* Loading spinner — shows while iframe content is loading, paper-ash bg prevents white flash */}
@@ -523,11 +554,17 @@ export function ResumePreview() {
       )}
 
       <div style={{
-        transformOrigin: 'top center',
-        transform: `scale(${zoom})`,
-        flexShrink: 0,
-        marginBottom: `calc(297mm * ${zoom} - 297mm)`,
-        position: 'relative', zIndex: 1,
+        flexShrink: 0, position: 'relative', zIndex: 1,
+        // 移动端用 zoom 而非 transform:scale —— transform 缩放 iframe 在真机上会被
+        // 合成器按 1× 光栅化后拉伸而发虚；zoom 会真正改变布局尺寸并按设备像素比重绘 → 清晰。
+        // 桌面端仍用 transform（配合负 marginBottom 抵消未改变的布局盒高度）。
+        ...(mobile
+          ? { zoom: scale }
+          : {
+              transformOrigin: 'top center',
+              transform: `scale(${scale})`,
+              marginBottom: `calc(297mm * ${scale} - 297mm)`,
+            }),
       }}>
         <iframe
           ref={iframeRef}
@@ -579,7 +616,7 @@ export function ResumePreview() {
         />
       </div>
 
-      {iframeReady && editingField && (
+      {iframeReady && editingField && !mobile && (
         <FloatingEditor
           editingField={editingField}
           iframeRect={iframeRect}
@@ -664,7 +701,7 @@ export function ResumePreview() {
         </div>
       )}
     </div>
-    <ZoomControl zoom={zoom} setZoom={setZoom} />
+    {!mobile && <ZoomControl zoom={zoom} setZoom={setZoom} />}
     </div>
   );
 }

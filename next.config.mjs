@@ -7,6 +7,9 @@ export default {
   typescript: { ignoreBuildErrors: false },
   // standalone：构建出自带最小依赖的 .next/standalone，用于 Docker 小镜像（node server.js 即可跑）。
   output: 'standalone',
+  // puppeteer-core 含动态 require，必须作为外部包在运行时从 node_modules 解析，
+  // 不能被打包；这样也能被 standalone 的依赖追踪正确拷贝进产物。
+  serverExternalPackages: ['puppeteer-core'],
   basePath: basePath || undefined,
   env: { NEXT_PUBLIC_BASE_PATH: basePath },
   // 构建优化：对图标库做按需打包（tree-shaking），缩小编辑器首屏 JS。

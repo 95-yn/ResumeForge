@@ -3,7 +3,7 @@
 import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { EditorLayout } from '@/components/editor/EditorLayout';
-import { MobileGate } from '@/components/editor/MobileGate';
+import { MobileEditorLayout } from '@/components/editor/MobileEditorLayout';
 import { useEditorStore } from '@/lib/editor-store';
 
 /** 窄屏（手机/小平板竖屏）检测：编辑器仅支持电脑端。null = 尚未判定（SSR/首帧）。 */
@@ -137,16 +137,15 @@ function EditorContent() {
     }
   }, [templateSlug, profession, loadTemplate]);
 
-  // 窄屏（手机）不进编辑器，给友好提示引导用电脑打开。
-  if (isNarrow) {
-    return <MobileGate />;
-  }
-
   if (templateNotFound) {
     return <TemplateNotFound slug={templateSlug} />;
   }
 
-  if (!resume) return <EditorSkeleton />;
+  // isNarrow 首帧为 null（待 mq 判定）：先显示骨架，避免在手机上先闪一帧桌面布局。
+  if (!resume || isNarrow === null) return <EditorSkeleton />;
+
+  // 窄屏（手机/小平板竖屏）走移动端布局；其余走桌面双栏编辑器。
+  if (isNarrow) return <MobileEditorLayout />;
   return <EditorLayout />;
 }
 

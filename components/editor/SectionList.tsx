@@ -34,6 +34,33 @@ function GripDots() {
   );
 }
 
+/** 移动端模块排序：上移/下移箭头按钮（触屏替代鼠标拖拽）。 */
+function MoveArrowBtn({ dir, disabled, onClick, label }: {
+  dir: 'up' | 'down'; disabled: boolean; onClick: () => void; label: string;
+}) {
+  return (
+    <button
+      onClick={e => { e.stopPropagation(); if (!disabled) onClick(); }}
+      disabled={disabled}
+      aria-label={label}
+      style={{
+        width: 30, height: 30, flexShrink: 0, padding: 0,
+        border: '1px solid #E7E5E4', borderRadius: 7,
+        background: disabled ? '#FAFAF9' : '#FFF',
+        color: disabled ? '#D6D3D1' : '#57534E',
+        cursor: disabled ? 'default' : 'pointer',
+        display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+        outline: 'none', WebkitTapHighlightColor: 'transparent',
+      }}
+    >
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+        style={{ transform: dir === 'down' ? 'rotate(180deg)' : 'none' }}>
+        <path d="M12 19V5M5 12l7-7 7 7" />
+      </svg>
+    </button>
+  );
+}
+
 /** Chevron that rotates 90deg with spring easing */
 function CollapseChevron({ open }: { open: boolean }) {
   return (
@@ -213,12 +240,23 @@ function CollapsiblePanel({ open, children }: { open: boolean; children: React.R
   );
 }
 
-export function SectionList() {
+export function SectionList({ mobile = false }: { mobile?: boolean } = {}) {
   const {
     sectionOrder, activeSection, setActiveSection, resume,
     reorderSections, addArrayItem, removeArrayItem, updateField,
     updateArrayItem, addCustomSection, updateSettings, removeSection,
   } = useEditorStore();
+
+  // 移动端排序：把模块在「可排序序列」里与相邻可排序项交换（不与「基本信息」等固定项换位）。
+  const moveSection = useCallback((key: string, dir: -1 | 1) => {
+    const order = [...sectionOrder];
+    const i = order.indexOf(key);
+    const j = i + dir;
+    if (i === -1 || j < 0 || j >= order.length) return;
+    if (!(DRAGGABLE.has(order[j]) || !SECTION_META[order[j]])) return; // 目标位不可被交换
+    [order[i], order[j]] = [order[j], order[i]];
+    reorderSections(order);
+  }, [sectionOrder, reorderSections]);
 
   const router = useRouter();
   const [expanded, setExpanded] = useState<Set<string>>(new Set(['basics']));
@@ -305,6 +343,10 @@ export function SectionList() {
           const isArray = !isBasics;
           const items = isArray ? ((resume[key] as Record<string, unknown>[]) || []) : [];
           const isDrop = dropTarget?.key === key;
+          // 移动端上移/下移可用性：相邻项也必须可参与排序。
+          const idx = sectionOrder.indexOf(key);
+          const canMoveUp = isDraggable && idx > 0 && (DRAGGABLE.has(sectionOrder[idx - 1]) || !SECTION_META[sectionOrder[idx - 1]]);
+          const canMoveDown = isDraggable && idx < sectionOrder.length - 1 && (DRAGGABLE.has(sectionOrder[idx + 1]) || !SECTION_META[sectionOrder[idx + 1]]);
 
           return (
             <div key={key}>
@@ -370,7 +412,7 @@ export function SectionList() {
                   if (btn) btn.style.opacity = '0';
                 }}
               >
-                {isDraggable && (
+                {isDraggable && !mobile && (
                   <span
                     className="section-grip"
                     style={{
@@ -411,6 +453,12 @@ export function SectionList() {
                     {items.length}
                   </span>
                 )}
+                {mobile && isDraggable && (
+                  <span style={{ display: 'inline-flex', gap: 4, flexShrink: 0 }}>
+                    <MoveArrowBtn dir="up" disabled={!canMoveUp} onClick={() => moveSection(key, -1)} label={`上移 ${label}`} />
+                    <MoveArrowBtn dir="down" disabled={!canMoveDown} onClick={() => moveSection(key, 1)} label={`下移 ${label}`} />
+                  </span>
+                )}
                 {!isBasics && (
                   <button
                     onClick={async e => {
@@ -424,16 +472,21 @@ export function SectionList() {
                     title="删除模块"
                     aria-label={`删除 ${label}`}
                     style={{
-                      border: 'none', background: 'none', color: '#D6D3D1', cursor: 'pointer',
-                      padding: '0 2px', fontSize: 12, opacity: 0,
+                      border: mobile ? '1px solid #E7E5E4' : 'none',
+                      borderRadius: mobile ? 7 : 0,
+                      width: mobile ? 30 : undefined, height: mobile ? 30 : undefined,
+                      background: mobile ? '#FFF' : 'none', color: mobile ? '#A8A29E' : '#D6D3D1', cursor: 'pointer',
+                      padding: mobile ? 0 : '0 2px', fontSize: 12, opacity: mobile ? 1 : 0,
                       transition: 'opacity 0.15s, color 0.1s',
                       lineHeight: 1, flexShrink: 0,
+                      display: mobile ? 'inline-flex' : undefined,
+                      alignItems: mobile ? 'center' : undefined, justifyContent: mobile ? 'center' : undefined,
                     }}
                     className="section-delete-btn"
                     onMouseEnter={e => { e.currentTarget.style.color = '#B0463A'; e.currentTarget.style.opacity = '1'; }}
-                    onMouseLeave={e => { e.currentTarget.style.color = '#D6D3D1'; e.currentTarget.style.opacity = '0'; }}
+                    onMouseLeave={e => { if (!mobile) { e.currentTarget.style.color = '#D6D3D1'; e.currentTarget.style.opacity = '0'; } }}
                   >
-                    <DeleteOutlined style={{ fontSize: 11 }} />
+                    <DeleteOutlined style={{ fontSize: mobile ? 13 : 11 }} />
                   </button>
                 )}
                 <CollapseChevron open={isOpen} />
