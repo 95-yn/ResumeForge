@@ -5,8 +5,12 @@
 #   PORT=8080 ./deploy.sh    # 指定端口
 #   ./deploy.sh --build-only # 只构建、不启动（用于 CI / 由进程管理器接管启动）
 #
-# 这是一个纯前端 Next.js 应用：数据只存浏览器 localStorage，无需数据库/后端。
-# 只要部署机器有 Node ≥ 18，本脚本即可完成「装依赖 → 构建 → 起生产服务」。
+# 数据只存浏览器 localStorage，无需数据库。只要部署机器有 Node ≥ 18，本脚本即可完成
+# 「装依赖 → 构建 → 起生产服务」。
+#
+# 注意：PDF 导出(/api/pdf)是服务端路由，依赖系统 Chromium + 中文字体。裸机部署需先装一次：
+#   sudo apt-get install -y chromium fonts-noto-cjk   # 包名或为 chromium-browser
+# 并发调参(PDF_MAX_CONCURRENCY/PDF_MAX_QUEUE)与排障详见 PDF-EXPORT.md。
 
 set -euo pipefail
 cd "$(dirname "$0")"

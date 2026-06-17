@@ -4,6 +4,9 @@
 #   ./docker-deploy.sh            # 默认 3000 端口
 #   PORT=8080 ./docker-deploy.sh  # 自定义端口
 #   ./docker-deploy.sh --logs     # 部署完跟随日志
+#
+# PDF 导出服务（Chromium 依赖、并发调参 PDF_MAX_CONCURRENCY/PDF_MAX_QUEUE、排障）见 PDF-EXPORT.md。
+# 镜像已内置 Chromium + 中文字体，无需额外操作。
 set -euo pipefail
 
 IMAGE="resumeforge"
