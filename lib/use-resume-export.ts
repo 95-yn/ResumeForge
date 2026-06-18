@@ -179,8 +179,43 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
     requestAnimationFrame(() => requestAnimationFrame(() => runPrint(safety)));
   }, [templateHtml, templateCss, resume, runPrint]);
 
+  // 把生成好的文件交付给用户。
+  // 移动端（尤其 iOS Safari）用 <a download> 下 blob 体验很差：常常直接内联打开 PDF、
+  // 没有保存入口，用户不知道怎么存。优先用 Web Share API 唤起系统分享面板，可选
+  // 「存储到“文件”」/存相册/AirDrop；不支持时（桌面浏览器）回退到 <a download> 下载。
+  // 返回值：'shared' 已唤起分享 | 'downloaded' 已触发下载 | 'cancelled' 用户取消分享。
+  const deliverFile = useCallback(async (
+    blob: Blob, filename: string, mime: string,
+  ): Promise<'shared' | 'downloaded' | 'cancelled'> => {
+    const file = new File([blob], filename, { type: mime });
+    const canShareFiles =
+      typeof navigator !== 'undefined' &&
+      typeof navigator.share === 'function' &&
+      typeof navigator.canShare === 'function' &&
+      navigator.canShare({ files: [file] });
+    if (canShareFiles) {
+      try {
+        await navigator.share({ files: [file], title: filename });
+        return 'shared';
+      } catch (err) {
+        // 用户主动取消分享：不算失败，也不再回退下载。
+        if (err instanceof Error && err.name === 'AbortError') return 'cancelled';
+        // 其它原因（如 gesture 失效）：落到下方下载兜底。
+      }
+    }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    return 'downloaded';
+  }, []);
+
   // 服务端导出 PDF：把与所见 1:1 的自包含 HTML 发给 /api/pdf，由无头 Chromium 渲染，
-  // 直接拿到 PDF 下载——不弹系统打印框，跨浏览器/设备排版一致，背景底纹默认保留。
+  // 直接拿到 PDF——不弹系统打印框，跨浏览器/设备排版一致，背景底纹默认保留。
   // 服务繁忙（503，渲染队列已满）时自动排队重试，避免高峰期直接报失败。
   const handleExportPdf = useCallback(async () => {
     if (pdfBusyRef.current) return;
@@ -218,15 +253,9 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
         }
 
         const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${pdfTitle}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-        pushToast('已导出 PDF', 'success');
+        const how = await deliverFile(blob, `${pdfTitle}.pdf`, 'application/pdf');
+        if (how === 'cancelled') return; // 用户取消分享，不提示
+        pushToast(how === 'shared' ? 'PDF 已生成，请在分享面板选「存储到“文件”」' : '已导出 PDF', 'success');
         return;
       }
       if (lastErr === 'BUSY') {

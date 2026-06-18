@@ -339,6 +339,31 @@ export function ResumePreview({ mobile = false }: { mobile?: boolean } = {}) {
   // 生效缩放：移动端用自适应 fitScale，桌面用用户设定的 zoom。
   const scale = mobile ? fitScale : zoom;
 
+  // onLoad 闭包会捕获渲染时的 scale，用 ref 保证回调里总能读到最新值。
+  const scaleRef = useRef(scale);
+  scaleRef.current = scale;
+
+  // 移动端「清晰且不裁切」的关键：不在外层缩放 iframe —— zoom 作用在「含 iframe 的容器」上时，
+  // iOS Safari 会按原尺寸渲染 iframe 内容再裁切（→ 简历被切掉一截）；transform 缩放则在真机上发虚。
+  // 改为把缩放作用到 iframe 内部文档（documentElement.zoom），并把 iframe 元素尺寸设成缩放后的
+  // 显示尺寸 —— iframe 按显示尺寸 × 设备像素比光栅化，既完整不裁切、又清晰。
+  const applyMobileFit = useCallback((f: HTMLIFrameElement | null) => {
+    if (!mobile || !f) return;
+    const doc = f.contentDocument;
+    if (!doc?.documentElement) return;
+    const A4_PX = (210 * 96) / 25.4;
+    const s = scaleRef.current;
+    doc.documentElement.style.zoom = String(s);
+    f.style.width = Math.round(A4_PX * s) + 'px';
+    const h = doc.body?.scrollHeight ?? 0;
+    if (h) f.style.height = h + 'px';
+  }, [mobile]);
+
+  // 缩放值变化（旋转 / 拖分隔条改变宽度）时，重新套用到已加载的 iframe。
+  useEffect(() => {
+    if (mobile) applyMobileFit(iframeRef.current);
+  }, [mobile, scale, iframeReady, applyMobileFit]);
+
   const dismissCoachmark = useCallback(() => {
     setShowCoachmark(false);
     try { localStorage.setItem('resumeforge_coachmark_seen', '1'); } catch { /* ignore */ }
@@ -555,11 +580,10 @@ export function ResumePreview({ mobile = false }: { mobile?: boolean } = {}) {
 
       <div style={{
         flexShrink: 0, position: 'relative', zIndex: 1,
-        // 移动端用 zoom 而非 transform:scale —— transform 缩放 iframe 在真机上会被
-        // 合成器按 1× 光栅化后拉伸而发虚；zoom 会真正改变布局尺寸并按设备像素比重绘 → 清晰。
-        // 桌面端仍用 transform（配合负 marginBottom 抵消未改变的布局盒高度）。
+        // 移动端不在此处缩放 iframe（缩放改由 applyMobileFit 作用到 iframe 内部文档，见上方注释，
+        // 避免 iOS 裁切 / 发虚）；桌面端用 transform，配合负 marginBottom 抵消未改变的布局盒高度。
         ...(mobile
-          ? { zoom: scale }
+          ? {}
           : {
               transformOrigin: 'top center',
               transform: `scale(${scale})`,
@@ -574,6 +598,8 @@ export function ResumePreview({ mobile = false }: { mobile?: boolean } = {}) {
             const doc = f.contentDocument;
             if (!doc) return;
             const updateHeight = () => {
+              // 移动端：套用内部缩放并按缩放后内容高度设 iframe 高（无 1123 下限，否则底部留白）。
+              if (mobile) { applyMobileFit(f); return; }
               const h = Math.max(doc.body?.scrollHeight ?? 0, 1123);
               f.style.height = h + 'px';
             };
@@ -599,7 +625,8 @@ export function ResumePreview({ mobile = false }: { mobile?: boolean } = {}) {
             setIframeLoading(false);
           }}
           style={{
-            width: '210mm', minHeight: '297mm', background: '#fff', border: 'none',
+            // 移动端尺寸由 applyMobileFit 接管（缩放后的 px）；桌面端固定 A4。
+            width: '210mm', minHeight: mobile ? undefined : '297mm', background: '#fff', border: 'none',
             // Deepen paper shadow when in editing state (active field selected)
             boxShadow: editingField ? [
               '0 12px 50px rgba(28,25,23,0.14)',
