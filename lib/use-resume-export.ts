@@ -187,8 +187,21 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
   const deliverFile = useCallback(async (
     blob: Blob, filename: string, mime: string,
   ): Promise<'shared' | 'downloaded' | 'cancelled'> => {
+    // 空 blob = 服务端渲染异常（或被代理截断）。交付会得到打不开的 0 字节文件，
+    // 直接抛错让上层走失败提示，而不是让用户拿到坏文件。
+    if (!blob || blob.size === 0) throw new Error('生成的文件为空');
+
     const file = new File([blob], filename, { type: mime });
+    // 只在「触屏为主」的设备（手机 / 平板）优先用 Web Share：那里 <a download> 体验差
+    // （iOS 常内联打开、无保存入口），分享面板能「存储到文件 / 相册 / AirDrop」。
+    // 桌面（含带触屏的 Windows 笔记本，hover:hover）即使 canShare 为 true 也走直接下载——
+    // 这才是 PC 上「一键下载」的预期，避免误弹系统分享面板。
+    const touchPrimary =
+      typeof window !== 'undefined' &&
+      typeof window.matchMedia === 'function' &&
+      window.matchMedia('(hover: none) and (pointer: coarse)').matches;
     const canShareFiles =
+      touchPrimary &&
       typeof navigator !== 'undefined' &&
       typeof navigator.share === 'function' &&
       typeof navigator.canShare === 'function' &&
@@ -199,8 +212,13 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
         return 'shared';
       } catch (err) {
         // 用户主动取消分享：不算失败，也不再回退下载。
-        if (err instanceof Error && err.name === 'AbortError') return 'cancelled';
-        // 其它原因（如 gesture 失效）：落到下方下载兜底。
+        // 各浏览器取消时抛的 error 不一致：iOS/标准是 AbortError，部分安卓抛 message 含 cancel/abort。
+        const e = err as Error;
+        const cancelled =
+          e?.name === 'AbortError' ||
+          /cancel|abort|user denied|dismiss/i.test(e?.message ?? '');
+        if (cancelled) return 'cancelled';
+        // 其它原因（如 gesture 失效 / 不支持文件分享）：落到下方下载兜底。
       }
     }
     const url = URL.createObjectURL(blob);
@@ -217,6 +235,13 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
   // 服务端导出 PDF：把与所见 1:1 的自包含 HTML 发给 /api/pdf，由无头 Chromium 渲染，
   // 直接拿到 PDF——不弹系统打印框，跨浏览器/设备排版一致，背景底纹默认保留。
   // 服务繁忙（503，渲染队列已满）时自动排队重试，避免高峰期直接报失败。
+  //
+  // 设备容错（PC / H5 都要好用）：
+  //  - 弱网/冷启动可能让请求久挂，加 AbortController 超时（PDF_TIMEOUT_MS），到点中止并提示，
+  //    而不是让按钮永远卡在「生成中…」；
+  //  - 区分「网络层连不上（断网/服务没起/被拒）」「超时」「服务端 500」「持续繁忙」四类失败，
+  //    分别给出可操作的提示，并统一引导用户改用本地「打印 / 导出 HTML」兜底——这两条不依赖
+  //    服务端 Chromium，任何设备/环境都能用。
   const handleExportPdf = useCallback(async () => {
     if (pdfBusyRef.current) return;
     const pdfTitle = buildFilename();
@@ -227,14 +252,40 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
 
     const sleep = (ms: number) => new Promise(r => setTimeout(r, ms));
     const MAX_RETRY = 4; // 503 时最多重试次数（首发 + 4 次 ≈ 高峰期约 15s 内自动消化）
-    try {
-      let lastErr: string | null = null;
-      for (let attempt = 0; attempt <= MAX_RETRY; attempt++) {
-        const res = await fetch(asset('/api/pdf'), {
+    const PDF_TIMEOUT_MS = 45_000; // 单次请求超时上限：覆盖 Chromium 冷启动 + 渲染，再久判定异常。
+
+    // 带超时的 fetch：到点 abort，避免移动端弱网下无限挂起。
+    const fetchPdf = async (): Promise<Response> => {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), PDF_TIMEOUT_MS);
+      try {
+        return await fetch(asset('/api/pdf'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ html, filename: pdfTitle }),
+          signal: ctrl.signal,
         });
+      } finally {
+        clearTimeout(timer);
+      }
+    };
+
+    type FailKind = 'BUSY' | 'TIMEOUT' | 'NETWORK' | 'SERVER';
+    let lastErr: FailKind | null = null;
+    let serverDetail = '';
+    try {
+      for (let attempt = 0; attempt <= MAX_RETRY; attempt++) {
+        let res: Response;
+        try {
+          res = await fetchPdf();
+        } catch (err) {
+          // AbortError = 我们的超时；其余为网络层失败（断网 / 服务未启动 / 连接被拒）。
+          if (err instanceof Error && err.name === 'AbortError') { lastErr = 'TIMEOUT'; break; }
+          lastErr = 'NETWORK';
+          // 网络抖动可能是瞬时的，留一次短重试再放弃。
+          if (attempt < MAX_RETRY) { await sleep(1500); continue; }
+          break;
+        }
 
         // 503：服务繁忙，渲染队列已满。按 Retry-After 退避后自动重试。
         if (res.status === 503 && attempt < MAX_RETRY) {
@@ -247,9 +298,9 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
 
         if (!res.ok) {
           if (res.status === 503) { lastErr = 'BUSY'; break; } // 重试用尽仍繁忙
-          let detail = '';
-          try { detail = (await res.json())?.error ?? ''; } catch { /* ignore */ }
-          throw new Error(detail || `HTTP ${res.status}`);
+          try { serverDetail = (await res.json())?.error ?? ''; } catch { /* ignore */ }
+          lastErr = 'SERVER';
+          break;
         }
 
         const blob = await res.blob();
@@ -258,17 +309,30 @@ li, tr { page-break-inside: avoid; break-inside: avoid-page; }
         pushToast(how === 'shared' ? 'PDF 已生成，请在分享面板选「存储到“文件”」' : '已导出 PDF', 'success');
         return;
       }
-      if (lastErr === 'BUSY') {
-        pushToast('服务繁忙，请稍后再试，或先用「导出 HTML / 打印」', 'error');
+
+      // 走到这里说明失败了：按类型给可操作提示，统一引导本地兜底出口。
+      const fallback = '可改用「打印 / 导出 HTML」兜底';
+      switch (lastErr) {
+        case 'BUSY':
+          pushToast(`服务繁忙，请稍后再试，或${fallback}`, 'error');
+          break;
+        case 'TIMEOUT':
+          pushToast(`PDF 生成超时，请重试，或${fallback}`, 'error');
+          break;
+        case 'NETWORK':
+          pushToast(`连不上 PDF 服务，请检查网络后重试，或${fallback}`, 'error');
+          break;
+        default:
+          pushToast(serverDetail ? `导出 PDF 失败：${serverDetail}` : `导出 PDF 失败，请重试，或${fallback}`, 'error');
       }
     } catch (err) {
       console.error('export pdf failed:', err);
-      pushToast('导出 PDF 失败，请重试', 'error');
+      pushToast('导出 PDF 失败，请重试，或改用「打印 / 导出 HTML」兜底', 'error');
     } finally {
       pdfBusyRef.current = false;
       setPdfBusy(false);
     }
-  }, [buildFilename, buildPrintHtml, pushToast]);
+  }, [buildFilename, buildPrintHtml, deliverFile, pushToast]);
 
   return {
     buildFilename,

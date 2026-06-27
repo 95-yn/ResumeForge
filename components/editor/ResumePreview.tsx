@@ -343,20 +343,26 @@ export function ResumePreview({ mobile = false }: { mobile?: boolean } = {}) {
   const scaleRef = useRef(scale);
   scaleRef.current = scale;
 
-  // 移动端「清晰且不裁切」的关键：不在外层缩放 iframe —— zoom 作用在「含 iframe 的容器」上时，
-  // iOS Safari 会按原尺寸渲染 iframe 内容再裁切（→ 简历被切掉一截）；transform 缩放则在真机上发虚。
-  // 改为把缩放作用到 iframe 内部文档（documentElement.zoom），并把 iframe 元素尺寸设成缩放后的
-  // 显示尺寸 —— iframe 按显示尺寸 × 设备像素比光栅化，既完整不裁切、又清晰。
+  // 移动端缩放：必须「先按 A4 宽度排好版，再整体缩小成一张图」，否则会出问题：
+  //  - zoom（无论作用在外层容器还是 iframe 内部文档）会触发 reflow → 内容按窄视口重排，
+  //    每行字变少、左右两栏布局被挤坏；
+  //  - 外层 transform 缩放 iframe 元素在 iOS 上会发虚（合成器按 1× 光栅化再拉伸）。
+  // 解法：iframe 元素设为缩放后的「显示尺寸」（保证 iOS 按设备像素比清晰光栅化），内部对 body
+  // 设 width=A4 宽 + transform:scale —— transform 不 reflow，行宽/分栏与 A4/PDF 逐像素一致。
   const applyMobileFit = useCallback((f: HTMLIFrameElement | null) => {
     if (!mobile || !f) return;
     const doc = f.contentDocument;
-    if (!doc?.documentElement) return;
-    const A4_PX = (210 * 96) / 25.4;
+    if (!doc?.body || !doc.documentElement) return;
+    const A4_PX = (210 * 96) / 25.4; // 210mm → px ≈ 793.7
     const s = scaleRef.current;
-    doc.documentElement.style.zoom = String(s);
+    const body = doc.body;
+    doc.documentElement.style.zoom = ''; // 清除旧版本可能残留的 zoom
+    body.style.width = A4_PX + 'px';     // 按 A4 宽度排版，不随 iframe 变窄而 reflow
+    body.style.transformOrigin = 'top left';
+    body.style.transform = `scale(${s})`;
     f.style.width = Math.round(A4_PX * s) + 'px';
-    const h = doc.body?.scrollHeight ?? 0;
-    if (h) f.style.height = h + 'px';
+    const h = body.scrollHeight;         // transform 不改布局盒，scrollHeight 为未缩放高度
+    if (h) f.style.height = Math.round(h * s) + 'px';
   }, [mobile]);
 
   // 缩放值变化（旋转 / 拖分隔条改变宽度）时，重新套用到已加载的 iframe。

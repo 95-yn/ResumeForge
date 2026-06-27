@@ -1,13 +1,18 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeftOutlined, PrinterOutlined, UndoOutlined, RedoOutlined, RollbackOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, PrinterOutlined, UndoOutlined, RedoOutlined, RollbackOutlined, DownloadOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useRouter } from 'next/navigation';
 import { Logo } from '@/components/Logo';
 import { useEditorStore } from '@/lib/editor-store';
 import { useResumeExport } from '@/lib/use-resume-export';
 import { confirmDialog } from './ConfirmDialog';
 import { Tooltip } from './Tooltip';
+
+// 工作坊房间统一的状态过渡缓动（ease-out-expo，DESIGN：120–200ms）。
+// 导出/打印按钮原先用 0.12s 线性，与「保存」按钮的曲线不一致，这里收口为同一条。
+const EASE = 'cubic-bezier(0.16, 1, 0.3, 1)';
+const SANS = "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif";
 
 type UndoRedoBtnProps = {
   disabled: boolean;
@@ -313,15 +318,15 @@ export function TopBar() {
               display: 'inline-flex', alignItems: 'center',
               padding: '0 14px', height: 32, borderRadius: 6,
               border: '1px solid #E7E5E4',
-              background: 'transparent', color: '#78716C',
+              background: 'transparent', color: '#57534E',
               fontSize: 12, fontWeight: 500,
               cursor: 'pointer',
-              transition: 'background 0.12s, color 0.12s',
-              fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
+              transition: `background 150ms ${EASE}, color 150ms ${EASE}`,
+              fontFamily: SANS,
               outline: 'none',
             }}
             onMouseEnter={e => { e.currentTarget.style.background = '#F0EAE0'; e.currentTarget.style.color = '#1C1917'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#57534E'; }}
             onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
             onBlur={e => { e.currentTarget.style.outline = 'none'; }}
             aria-label="导出为 HTML"
@@ -330,57 +335,61 @@ export function TopBar() {
           </button>
         </Tooltip>
 
-        <Tooltip title="服务端生成 PDF（无需打印框，一键下载，排版跨设备一致）">
-          <button
-            onClick={handleExportPdf}
-            disabled={pdfBusy}
-            style={{
-              display: 'inline-flex', alignItems: 'center',
-              padding: '0 14px', height: 32, borderRadius: 6,
-              border: '1px solid #E7E5E4',
-              background: 'transparent', color: '#78716C',
-              fontSize: 12, fontWeight: 500,
-              cursor: pdfBusy ? 'progress' : 'pointer',
-              opacity: pdfBusy ? 0.72 : 1,
-              transition: 'background 0.12s, color 0.12s, opacity 0.12s',
-              fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
-              outline: 'none',
-            }}
-            onMouseEnter={e => { if (!pdfBusy) { e.currentTarget.style.background = '#F0EAE0'; e.currentTarget.style.color = '#1C1917'; } }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#78716C'; }}
-            onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
-            onBlur={e => { e.currentTarget.style.outline = 'none'; }}
-            aria-label="导出为 PDF"
-          >
-            {pdfBusy ? '生成中…' : '导出 PDF'}
-          </button>
-        </Tooltip>
-
-        <Tooltip title="打印或另存为 PDF（建议关闭页眉页脚 + 勾选背景图形）">
+        {/* 打印：通用兜底出口（不依赖服务端），降为次级 ghost 按钮。 */}
+        <Tooltip title="调用系统打印，也可另存为 PDF（建议关闭页眉页脚 + 勾选背景图形）">
           <button
             onClick={handlePrint}
             disabled={printing}
             style={{
-              display: 'flex', alignItems: 'center', gap: 6,
-              padding: '0 16px', height: 32, borderRadius: 6,
-              border: 'none',
-              background: '#1C1917', color: '#FFFFFF',
-              fontSize: 12, fontWeight: 600,
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              padding: '0 14px', height: 32, borderRadius: 6,
+              border: '1px solid #E7E5E4',
+              background: 'transparent', color: '#57534E',
+              fontSize: 12, fontWeight: 500,
               cursor: printing ? 'progress' : 'pointer',
               opacity: printing ? 0.72 : 1,
-              transition: 'background 0.12s, box-shadow 0.12s, opacity 0.12s',
-              fontFamily: "'Plus Jakarta Sans', -apple-system, 'PingFang SC', sans-serif",
+              transition: `background 150ms ${EASE}, color 150ms ${EASE}, opacity 150ms ${EASE}`,
+              fontFamily: SANS,
               outline: 'none',
             }}
-            onMouseEnter={e => { if (!printing) { e.currentTarget.style.background = '#292524'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(28,25,23,0.18)'; } }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#1C1917'; e.currentTarget.style.boxShadow = 'none'; }}
+            onMouseEnter={e => { if (!printing) { e.currentTarget.style.background = '#F0EAE0'; e.currentTarget.style.color = '#1C1917'; } }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#57534E'; }}
             onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
             onBlur={e => { e.currentTarget.style.outline = 'none'; }}
             aria-label="打印或另存为 PDF"
             aria-busy={printing}
           >
-            <PrinterOutlined style={{ fontSize: 12 }} />
-            {printing ? '生成预览中…' : '打印 / 导出 PDF'}
+            {printing ? <LoadingOutlined style={{ fontSize: 12 }} /> : <PrinterOutlined style={{ fontSize: 12 }} />}
+            {printing ? '生成预览中…' : '打印'}
+          </button>
+        </Tooltip>
+
+        {/* 导出 PDF：服务端一键下载、跨设备一致——本编辑器推荐的主导出动作，承载主 CTA 视觉权重。 */}
+        <Tooltip title="服务端生成 PDF（无需打印框，一键下载，排版跨设备一致）">
+          <button
+            onClick={handleExportPdf}
+            disabled={pdfBusy}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6,
+              padding: '0 16px', height: 32, borderRadius: 6,
+              border: 'none',
+              background: '#1C1917', color: '#FAFAF9',
+              fontSize: 12, fontWeight: 600,
+              cursor: pdfBusy ? 'progress' : 'pointer',
+              opacity: pdfBusy ? 0.72 : 1,
+              transition: `background 150ms ${EASE}, box-shadow 150ms ${EASE}, opacity 150ms ${EASE}`,
+              fontFamily: SANS,
+              outline: 'none',
+            }}
+            onMouseEnter={e => { if (!pdfBusy) { e.currentTarget.style.background = '#292524'; e.currentTarget.style.boxShadow = '0 1px 3px rgba(28,25,23,0.18)'; } }}
+            onMouseLeave={e => { e.currentTarget.style.background = '#1C1917'; e.currentTarget.style.boxShadow = 'none'; }}
+            onFocus={e => { e.currentTarget.style.outline = '1px solid #1C1917'; e.currentTarget.style.outlineOffset = '2px'; }}
+            onBlur={e => { e.currentTarget.style.outline = 'none'; }}
+            aria-label="导出为 PDF"
+            aria-busy={pdfBusy}
+          >
+            {pdfBusy ? <LoadingOutlined style={{ fontSize: 12 }} /> : <DownloadOutlined style={{ fontSize: 12 }} />}
+            {pdfBusy ? '生成中…' : '导出 PDF'}
           </button>
         </Tooltip>
       </div>
