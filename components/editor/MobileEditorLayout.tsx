@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeftOutlined, UndoOutlined, RedoOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, UndoOutlined, RedoOutlined, LoadingOutlined } from '@ant-design/icons';
 import { useEditorStore } from '@/lib/editor-store';
 import { useResumeExport } from '@/lib/use-resume-export';
 import { useAutoSave } from '@/lib/use-autosave';
@@ -148,11 +148,13 @@ export function MobileEditorLayout() {
             disabled={exporting}
             style={{
               height: 34, padding: '0 14px', borderRadius: 8, border: 'none',
-              background: '#1C1917', color: '#FFFFFF', fontSize: 13, fontWeight: 600,
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              background: '#1C1917', color: '#FAFAF9', fontSize: 13, fontWeight: 600,
               cursor: exporting ? 'progress' : 'pointer', opacity: exporting ? 0.7 : 1,
               fontFamily: SANS, flexShrink: 0, outline: 'none', WebkitTapHighlightColor: 'transparent',
             }}
           >
+            {exporting && <LoadingOutlined style={{ fontSize: 12 }} />}
             {exporting ? '生成中…' : '导出'}
           </button>
         </div>
@@ -219,10 +221,16 @@ export function MobileEditorLayout() {
             }}
           >
             <div style={{ width: 36, height: 4, borderRadius: 2, background: '#E7E5E4', margin: '8px auto 14px' }} />
+            <div style={{
+              fontSize: 10, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase',
+              color: '#A8A29E', fontFamily: "'JetBrains Mono', 'SF Mono', monospace",
+              padding: '0 4px 10px',
+            }}>导出简历</div>
             <SheetItem
               title="导出 PDF"
               desc="服务端生成，一键下载，排版跨设备一致"
               busy={pdfBusy}
+              recommended
               onClick={async () => { await handleExportPdf(); setShowExport(false); }}
             />
             <SheetItem
@@ -254,8 +262,12 @@ export function MobileEditorLayout() {
       <style>{`
         @keyframes mobSheetFade { from { opacity: 0; } to { opacity: 1; } }
         @keyframes mobSheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        /* 触屏按压反馈：tap 高亮被关掉后，用 :active 给一个明确的按下态（暖底 + 轻微缩放）。 */
+        .mob-sheet-item { transition: background 160ms cubic-bezier(0.16,1,0.3,1), transform 160ms cubic-bezier(0.16,1,0.3,1); }
+        .mob-sheet-item:active:not(:disabled) { background: #F0EAE0; transform: scale(0.985); }
         @media (prefers-reduced-motion: reduce) {
           [style*="mobSheet"] { animation: none !important; }
+          .mob-sheet-item { transition: none !important; }
         }
       `}</style>
 
@@ -265,24 +277,33 @@ export function MobileEditorLayout() {
   );
 }
 
-/** 导出弹层里的一个操作项。 */
-function SheetItem({ title, desc, busy, onClick }: {
-  title: string; desc: string; busy?: boolean; onClick: () => void;
+/** 导出弹层里的一个操作项。recommended 项加一个 mono「推荐」标签，与桌面端主 CTA 呼应。 */
+function SheetItem({ title, desc, busy, recommended, onClick }: {
+  title: string; desc: string; busy?: boolean; recommended?: boolean; onClick: () => void;
 }) {
   return (
     <button
+      className="mob-sheet-item"
       onClick={onClick}
       disabled={busy}
       style={{
         width: '100%', textAlign: 'left', padding: '12px 14px', marginBottom: 6,
-        borderRadius: 10, border: '1px solid #E7E5E4', background: '#FFFFFF',
+        borderRadius: 10, border: '1px solid #E7E5E4', background: '#FEFEFE',
         cursor: busy ? 'progress' : 'pointer', opacity: busy ? 0.7 : 1,
-        display: 'flex', flexDirection: 'column', gap: 2,
+        display: 'flex', flexDirection: 'column', gap: 3,
         fontFamily: SANS, outline: 'none', WebkitTapHighlightColor: 'transparent',
       }}
     >
-      <span style={{ fontSize: 15, fontWeight: 600, color: '#1C1917' }}>
+      <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 15, fontWeight: 600, color: '#1C1917' }}>
+        {busy && <LoadingOutlined style={{ fontSize: 13 }} />}
         {busy ? '生成中…' : title}
+        {recommended && !busy && (
+          <span style={{
+            fontSize: 9, fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase',
+            color: '#1C1917', background: '#F0EAE0', padding: '1px 6px', borderRadius: 4,
+            fontFamily: "'JetBrains Mono', 'SF Mono', monospace",
+          }}>推荐</span>
+        )}
       </span>
       <span style={{ fontSize: 12, color: '#A8A29E' }}>{desc}</span>
     </button>

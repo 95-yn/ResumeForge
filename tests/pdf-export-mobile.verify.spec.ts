@@ -13,8 +13,8 @@ async function openMobileEditor(page: Page) {
 // 移动端布局底部「导出」→ 弹层「导出 PDF」。
 async function triggerMobilePdf(page: Page) {
   await page.getByRole('button', { name: '导出', exact: true }).first().click().catch(() => {});
-  // 弹层项
-  const item = page.getByText('导出 PDF', { exact: true });
+  // 弹层项（按 sheet item 容器定位，避免「推荐」子标签影响精确文本匹配）
+  const item = page.locator('.mob-sheet-item').filter({ hasText: '导出 PDF' });
   await item.click();
 }
 
